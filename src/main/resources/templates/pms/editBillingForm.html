@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>청구 정보 수정 및 수금</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container { max-width: 800px; margin-top: 50px; }
+        .card-header { background-color: #0d6efd; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header">
+            <h4 class="mb-0">청구 정보 수정 및 수금 확인 (ID: <span th:text="${billing.billId}"></span>)</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/billing/edit/{id}(id=${billing.billId})}" th:object="${billing}" method="post">
+                <input type="hidden" th:field="*{billId}">
+                
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-bold">프로젝트</label>
+                        <select th:field="*{projectId}" class="form-select">
+                            <option th:each="p : ${projects}" th:value="${p.projId}" th:text="${p.projNm}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">청구 회차/명칭</label>
+                        <input type="text" th:field="*{billTitle}" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">청구 금액(원)</label>
+                        <input type="number" th:field="*{billAmt}" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">계산서 발행일</label>
+                        <input type="date" th:field="*{taxBillDt}" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-primary">입금 완료 여부</label>
+                        <select th:field="*{isPaid}" class="form-select border-primary">
+                            <option value="N">미입금</option>
+                            <option value="Y">입금완료</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">입금 예정일</label>
+                        <input type="date" th:field="*{payDt}" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold text-success">실제 입금 확인일</label>
+                        <input type="date" th:field="*{actualPayDt}" class="form-control border-success">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">비고</label>
+                        <textarea th:field="*{billRemark}" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <a th:href="@{/billing/delete/{id}(id=${billing.billId})}" 
+                       class="btn btn-outline-danger" 
+                       onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                    <div>
+                        <a th:href="@{/billing}" class="btn btn-light border px-4">취소</a>
+                        <button type="submit" class="btn btn-primary px-4">저장 및 수금확인</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

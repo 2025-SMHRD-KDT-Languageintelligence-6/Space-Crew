@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>계약 정보 수정</title>
+    <style>
+        .container { width: 600px; margin: 50px auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        .btn-area { margin-top: 20px; text-align: right; }
+        .readonly-field { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>계약 정보 수정</h2>
+    <form th:action="@{/contracts/edit/{id}(id=${contract.contId})}" th:object="${contract}" method="post">
+        
+        <div class="form-group">
+            <label>계약 번호(ID)</label>
+            <input type="text" th:field="*{contId}" class="readonly-field" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>계약 명칭</label>
+            <input type="text" th:field="*{contNm}" required>
+        </div>
+
+        <div class="form-group">
+            <label>계약 금액(원)</label>
+            <input type="number" th:field="*{contAmt}">
+        </div>
+
+        <div class="form-group">
+            <label>계약 시작일</label>
+            <input type="date" th:field="*{startDt}">
+        </div>
+
+        <div class="form-group">
+            <label>계약 종료일</label>
+            <input type="date" th:field="*{endDt}">
+        </div>
+
+        <div class="form-group">
+            <label>내부 계약 담당자</label>
+            <select th:field="*{picUserId}">
+                <option value="">-- 담당자 선택 --</option>
+                <option th:each="user : ${users}" 
+                        th:value="${user.userId}" 
+                        th:text="${user.userNm} + ' (' + ${user.deptNm} + ')'"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>계약 상태</label>
+            <select th:field="*{contStatus}">
+                <option value="대기">대기</option>
+                <option value="진행">진행</option>
+                <option value="완료">완료</option>
+                <option value="파기">파기</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>특이사항</label>
+            <textarea th:field="*{contRemark}" rows="4"></textarea>
+        </div>
+
+        <div class="btn-area">
+            <button type="submit">수정 완료</button>
+            <a th:href="@{/contracts}">취소</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

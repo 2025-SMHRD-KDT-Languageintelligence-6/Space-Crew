@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>계약 관리 시스템</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container { max-width: 1200px; margin-top: 50px; }
+        .table th { background-color: #f8f9fa; }
+        .status-badge { font-size: 0.85em; }
+    </style>
+</head>
+<body class="container">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+	    <div class="container-fluid">
+	        <a class="navbar-brand" th:href="@{/}">🏠 PMS HOME</a>
+	        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+	            <span class="navbar-toggler-icon"></span>
+	        </button>
+	        <div class="collapse navbar-collapse" id="navbarNav">
+	            <ul class="navbar-nav">
+	                <li class="page-item"><a class="nav-link" th:href="@{/users}">직원</a></li>
+	                <li class="page-item"><a class="nav-link" th:href="@{/customers}">고객사</a></li>
+	                <li class="page-item"><a class="nav-link" th:href="@{/sales}">영업</a></li>
+	                <li class="page-item"><a class="nav-link" th:href="@{/contracts}">계약</a></li>
+	                <li class="page-item"><a class="nav-link" th:href="@{/projects}">프로젝트</a></li>
+	                <li class="page-item"><a class="nav-link" th:href="@{/billing}">청구</a></li>
+	            </ul>
+	        </div>
+	    </div>
+	</nav>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>계약 목록</h2>
+        <a th:href="@{/contracts/new}" class="btn btn-primary">신규 계약 등록</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/contracts}" method="get" class="row g-3">
+                <div class="col-auto">
+                    <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="계약 명칭 검색">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-secondary">검색</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-hover border">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>계약 명칭</th>
+                <th>금액(원)</th>
+                <th>기간</th>
+                <th>담당자</th>
+                <th>상태</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${contracts}">
+                <td th:text="${c.contId}">1</td>
+                <td th:text="${c.contNm}" class="fw-bold">계약명</td>
+                <td th:text="${#numbers.formatInteger(c.contAmt, 3, 'COMMA')} + '원'">0원</td>
+                <td>
+                    <span th:text="${c.startDt}">2025-01-01</span> ~ 
+                    <span th:text="${c.endDt}">2025-12-31</span>
+                </td>
+                
+                <td th:text="${c.picUserName ?: '미지정'}">담당자</td>
+                
+                <td>
+                    <span class="badge status-badge" 
+                          th:classappend="${c.contStatus == '진행' ? 'bg-success' : (c.contStatus == '완료' ? 'bg-primary' : 'bg-warning')}"
+                          th:text="${c.contStatus}">상태</span>
+                </td>
+                <td>
+                    <a th:href="@{/contracts/edit/{id}(id=${c.contId})}" class="btn btn-sm btn-outline-primary">수정</a>
+                    <a th:href="@{/contracts/delete/{id}(id=${c.contId})}" 
+                       class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(contracts)}">
+                <td colspan="7" class="text-center py-5 text-muted">등록된 계약 정보가 없습니다.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-item page-link" 
+                   th:href="@{/contracts(page=${i}, keyword=${keyword})}" 
+                   th:text="${i + 1}">1</a>
+            </li>
+        </ul>
+    </nav>
+
+</body>
+</html>

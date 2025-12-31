@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <h2>신규 직원 등록</h2>
+    <form th:action="@{/users/new}" th:object="${user}" method="post">
+        <div>
+            <label>사번(ID):</label>
+            <input type="text" th:field="*{userId}" required placeholder="예: 2025001">
+        </div>
+        <div>
+            <label>성명:</label>
+            <input type="text" th:field="*{userNm}" required>
+        </div>
+        <div>
+            <label>비밀번호:</label>
+            <input type="password" th:field="*{userPwd}" required>
+        </div>
+        <div>
+            <label>부서:</label>
+            <input type="text" th:field="*{deptNm}">
+        </div>
+        <div>
+            <label>직급:</label>
+            <input type="text" th:field="*{positionNm}">
+        </div>
+        <div>
+            <label>경력 연수:</label>
+            <input type="number" th:field="*{careerYears}">
+        </div>
+        <div>
+            <label>입사일:</label>
+            <input type="date" th:field="*{joinDt}">
+        </div>
+        <div class="col-md-6">
+		    <label class="form-label fw-bold">재직 여부</label>
+		    <select th:field="*{useYn}" class="form-select">
+		        <option value="Y">재직</option>
+		        <option value="N">퇴사</option>
+		    </select>
+		</div>
+        <button type="submit">등록 완료</button>
+        <a href="/users">취소</a>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>프로젝트 정보 수정</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container { max-width: 900px; margin-top: 50px; }
+        .card-header { background-color: #0d6efd; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header">
+            <h4 class="mb-0">프로젝트 정보 수정 (ID: <span th:text="${project.projId}"></span>)</h4>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/projects/edit/{id}(id=${project.projId})}" th:object="${project}" method="post">
+                <input type="hidden" th:field="*{projId}">
+                
+                <div class="row g-3">
+                    
+                    <div class="col-12">
+                        <label class="form-label fw-bold">연결 계약</label>
+                        <select th:field="*{contractId}" class="form-select" required>
+                            <option value="">-- 프로젝트의 계약을 선택하세요 --</option>
+                            <option th:each="c : ${contractList}" 
+                                    th:value="${c.contId}" 
+                                    th:text="${c.contNm} + ' (계약일: ' + ${c.contDt} + ')'"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">프로젝트명</label>
+                        <input type="text" th:field="*{projNm}" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">유형</label>
+                        <select th:field="*{projType}" class="form-select">
+                            <option value="일반용역">일반용역</option>
+                            <option value="하자보수">하자보수</option>
+                            <option value="유지보수">유지보수</option>
+                            <option value="R&D">R&D</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">상태</label>
+                        <select th:field="*{status}" class="form-select">
+                            <option value="준비">준비</option>
+                            <option value="진행">진행</option>
+                            <option value="보류">보류</option>
+                            <option value="준공대기">준공대기</option>
+                            <option value="종료">종료</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">주 담당자 (PM)</label>
+                        <select th:field="*{mainManagerId}" class="form-select" required>
+                            <option value="">-- 주 담당자 선택 --</option>
+                            <option th:each="user : ${userList}" 
+                                    th:value="${user.userId}" 
+                                    th:text="${user.userNm} + ' (' + ${user.deptNm} + ')'"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">부 담당자 (PL)</label>
+                        <select th:field="*{subManagerId}" class="form-select">
+                            <option value="">-- 부 담당자 선택 --</option>
+                            <option th:each="user : ${userList}" 
+                                    th:value="${user.userId}" 
+                                    th:text="${user.userNm} + ' (' + ${user.deptNm} + ')'"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">수행 시작일</label>
+                        <input type="date" th:field="*{startDt}" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">수행 종료일</label>
+                        <input type="date" th:field="*{endDt}" class="form-control">
+                    </div>
+
+                     <div class="col-md-6">
+                        <label class="form-label fw-bold">진행률 (%)</label>
+                        <input type="number" th:field="*{progressRate}" class="form-control" min="0" max="100">
+                   </div>
+                   <div class="col-md-6">
+                        <label class="form-label fw-bold">난이도 점수</label>
+                        <input type="number" th:field="*{complexityScore}" class="form-control">
+                   </div>
+                </div>
+
+                <div class="mt-4 d-flex justify-content-between">
+                    <a th:href="@{/projects/delete/{id}(id=${project.projId})}" 
+                       class="btn btn-outline-danger" 
+                       onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                    <div>
+                        <a th:href="@{/projects}" class="btn btn-light border px-4">취소</a>
+                        <button type="submit" class="btn btn-primary px-4">수정 완료</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

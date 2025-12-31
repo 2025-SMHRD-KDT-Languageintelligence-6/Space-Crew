@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>신규 영업 등록</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container { max-width: 800px; margin-top: 50px; }
+        .card-header { background-color: #0d6efd; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header">
+            <h4 class="mb-0">새로운 영업 기회 등록</h4>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/sales/new}" th:object="${sales}" method="post">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-bold">영업 건명</label>
+                        <input type="text" th:field="*{salesTitle}" class="form-control" placeholder="프로젝트 명칭 또는 영업 건명을 입력하세요" required>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">고객사 선택</label>
+                        <select th:field="*{customerId}" class="form-select" required>
+                            <option value="">-- 고객사 선택 --</option>
+                            <option th:each="c : ${customers}" th:value="${c.custId}" th:text="${c.custNm}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">영업 담당자</label>
+                        <select th:field="*{salesUserId}" class="form-select" required>
+                            <option value="">-- 담당자 선택 --</option>
+                            <option th:each="u : ${users}" th:value="${u.userId}" th:text="${u.userNm} + ' (' + ${u.deptNm} + ')'"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">예상 수주금액(원)</label>
+                        <input type="number" th:field="*{expectedAmt}" class="form-control" placeholder="0">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">수주 확률(%)</label>
+                        <input type="number" th:field="*{probability}" class="form-control" min="0" max="100">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">영업 상태</label>
+                        <select th:field="*{status}" class="form-select">
+                            <option value="영업중">영업중</option>
+                            <option value="계약전">계약전</option>
+                            <option value="영업완료">영업완료</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">예상 수주시기</label>
+                        <input type="date" th:field="*{expectedDt}" class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">상세 추진 내용</label>
+                        <textarea th:field="*{salesContent}" class="form-control" rows="5" placeholder="미팅 내용이나 특이사항을 기록하세요"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-primary px-4">영업 등록</button>
+                    <a th:href="@{/sales}" class="btn btn-light border px-4">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

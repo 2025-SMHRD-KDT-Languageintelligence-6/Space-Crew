@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <h2>고객사 정보 수정</h2>
+    <form th:action="@{/customers/edit/{id}(id=${customer.custId})}" th:object="${customer}" method="post">
+
+        <div>
+            <label>고객사 명칭:</label>
+            <input type="text" th:field="*{custNm}" required>
+        </div>
+        <div>
+            <label>사업자 등록번호:</label>
+            <input type="text" th:field="*{bizRegNo}">
+        </div>
+        <div>
+            <label>대표자명:</label>
+            <input type="text" th:field="*{ceoNm}">
+        </div>
+        <div>
+            <label>고객측 담당자:</label>
+            <input type="text" th:field="*{picNm}">
+        </div>
+        <div>
+            <label>담당자 연락처:</label>
+            <input type="text" th:field="*{picTel}">
+        </div>
+        <div>
+            <label>담당자 이메일:</label>
+            <input type="email" th:field="*{picEmail}">
+        </div>
+        <div>
+            <label>고객사 주소:</label>
+            <input type="text" th:field="*{custAddr}">
+        </div>
+        <div>
+            <label>특이사항:</label>
+            <textarea th:field="*{custRemark}" rows="5" style="width: 100%;"></textarea>
+        </div>
+
+        <button type="submit">등록 완료</button>
+        <a href="/customers">취소</a>
+    </form>
+</div>
+</body>
+</html>
