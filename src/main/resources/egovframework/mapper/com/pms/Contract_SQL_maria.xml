@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.com.pms.service.impl.ContractMapper">
+
+    <select id="selectContractList" parameterType="egovframework.com.pms.service.ContractVO" resultType="egovframework.com.pms.service.ContractVO">
+        SELECT 
+              A.CONT_ID       AS contId
+            , A.SALES_ID      AS salesId
+            , A.CONT_NM       AS contNm
+            , A.CONT_AMT      AS contAmt
+            , A.START_DT      AS startDt
+            , A.END_DT        AS endDt
+            , A.CONT_DT       AS contDt
+            , A.PIC_USER_ID   AS picUserId
+            , B.USER_NM       AS picUserName
+            , A.CONT_STATUS   AS contStatus
+        FROM TB_CONTRACT A
+        LEFT JOIN TB_USER B ON A.PIC_USER_ID = B.USER_ID
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND A.CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY A.CONT_ID DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectContractListTotCnt" parameterType="egovframework.com.pms.service.ContractVO" resultType="int">
+        SELECT COUNT(*) FROM TB_CONTRACT
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+    </select>
+
+    <select id="selectContractDetail" parameterType="long" resultType="egovframework.com.pms.service.ContractVO">
+        SELECT 
+              CONT_ID       AS contId
+            , SALES_ID      AS salesId
+            , CONT_NM       AS contNm
+            , CONT_AMT      AS contAmt
+            , START_DT      AS startDt
+            , END_DT        AS endDt
+            , CONT_DT       AS contDt
+            , PIC_USER_ID   AS picUserId
+            , CONT_STATUS   AS contStatus
+            , CONT_REMARK   AS contRemark
+        FROM TB_CONTRACT 
+        WHERE CONT_ID = #{contId}
+    </select>
+
+    <insert id="insertContract" parameterType="egovframework.com.pms.service.ContractVO">
+        INSERT INTO TB_CONTRACT (
+            SALES_ID, CONT_NM, CONT_AMT, START_DT, END_DT, CONT_DT, PIC_USER_ID, CONT_STATUS, CONT_REMARK
+        ) VALUES (
+            #{salesId}, #{contNm}, #{contAmt}, #{startDt}, #{endDt}, #{contDt}, #{picUserId}, #{contStatus}, #{contRemark}
+        )
+    </insert>
+
+    <update id="updateContract" parameterType="egovframework.com.pms.service.ContractVO">
+        UPDATE TB_CONTRACT SET
+              SALES_ID = #{salesId}
+            , CONT_NM = #{contNm}
+            , CONT_AMT = #{contAmt}
+            , START_DT = #{startDt}
+            , END_DT = #{endDt}
+            , CONT_DT = #{contDt}
+            , PIC_USER_ID = #{picUserId}
+            , CONT_STATUS = #{contStatus}
+            , CONT_REMARK = #{contRemark}
+        WHERE CONT_ID = #{contId}
+    </update>
+
+    <delete id="deleteContract" parameterType="long">
+        DELETE FROM TB_CONTRACT WHERE CONT_ID = #{contId}
+    </delete>
+
+</mapper>

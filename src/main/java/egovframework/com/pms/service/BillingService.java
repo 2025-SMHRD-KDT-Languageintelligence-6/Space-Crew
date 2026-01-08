@@ -1,0 +1,16 @@
+package egovframework.com.pms.service;
+
+import java.util.List;
+
+public interface BillingService {
+
+    List<BillingVO> selectBillingList(BillingVO vo) throws Exception;
+
+    int selectBillingListTotCnt(BillingVO vo) throws Exception;
+
+    BillingVO selectBillingDetail(Long id) throws Exception;
+
+    void saveBilling(BillingVO vo) throws Exception;
+
+    void deleteBilling(Long id) throws Exception;
+}

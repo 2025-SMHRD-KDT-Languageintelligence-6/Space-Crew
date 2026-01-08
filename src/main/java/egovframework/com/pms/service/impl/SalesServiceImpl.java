@@ -1,0 +1,44 @@
+package egovframework.com.pms.service.impl;
+
+import java.util.List;
+import javax.annotation.Resource;
+import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.springframework.stereotype.Service;
+import egovframework.com.pms.service.SalesService;
+import egovframework.com.pms.service.SalesVO;
+
+@Service("salesService")
+public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesService {
+
+    @Resource(name="salesMapper")
+    private SalesMapper salesMapper;
+
+    @Override
+    public List<SalesVO> selectSalesList(SalesVO vo) throws Exception {
+        return salesMapper.selectSalesList(vo);
+    }
+
+    @Override
+    public int selectSalesListTotCnt(SalesVO vo) throws Exception {
+        return salesMapper.selectSalesListTotCnt(vo);
+    }
+
+    @Override
+    public void saveSales(SalesVO vo) throws Exception {
+        if (vo.getSalesId() == null || vo.getSalesId() == 0) {
+            salesMapper.insertSales(vo);
+        } else {
+            salesMapper.updateSales(vo);
+        }
+    }
+
+    @Override
+    public SalesVO selectSalesDetail(Long id) throws Exception {
+        return salesMapper.selectSalesDetail(id);
+    }
+
+    @Override
+    public void deleteSales(Long id) throws Exception {
+        salesMapper.deleteSales(id);
+    }
+}

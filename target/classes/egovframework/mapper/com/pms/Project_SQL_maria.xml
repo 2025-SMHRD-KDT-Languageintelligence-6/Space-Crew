@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.com.pms.service.impl.ProjectMapper">
+
+    <select id="selectProjectList" parameterType="egovframework.com.pms.service.ProjectVO" resultType="egovframework.com.pms.service.ProjectVO">
+        SELECT 
+              A.PROJ_ID           AS projId
+            , A.PROJ_NM           AS projNm
+            , A.PROJ_TYPE         AS projType
+            , A.STATUS            AS status
+            , A.START_DT          AS startDt
+            , A.END_DT            AS endDt
+            , A.PROGRESS_RATE     AS progressRate
+            , B.CONT_NM           AS contractName
+            , C.USER_NM           AS mainManagerName
+        FROM TB_PROJECT A
+        LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
+        LEFT OUTER JOIN COMVNUSERMASTER C ON A.MAIN_MGR_ID = C.ESNTL_ID
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <if test="searchCondition == 0">
+                AND A.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+        </if>
+        ORDER BY A.PROJ_ID DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectProjectListTotCnt" parameterType="egovframework.com.pms.service.ProjectVO" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_PROJECT A
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <if test="searchCondition == 0">
+                AND A.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+            </if>
+        </if>
+    </select>
+	
+	<insert id="insertProject" parameterType="egovframework.com.pms.service.ProjectVO">
+	    INSERT INTO TB_PROJECT (
+	        PROJ_NM, PROJ_TYPE, STATUS, START_DT, END_DT, PROGRESS_RATE
+	    ) VALUES (
+	        #{projNm}, #{projType}, #{status}, #{startDt}, #{endDt}, 0.0
+	    )
+	</insert>
+	
+	<select id="selectProjectDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.ProjectVO">
+	    SELECT 
+	          PROJ_ID           AS projId
+	        , PROJ_NM           AS projNm
+	        , PROJ_TYPE         AS projType
+	        , STATUS            AS status
+	        , START_DT          AS startDt
+	        , END_DT            AS endDt
+	    FROM TB_PROJECT
+	    WHERE PROJ_ID = #{projId}
+	</select>
+	
+	<update id="updateProject" parameterType="egovframework.com.pms.service.ProjectVO">
+	    UPDATE TB_PROJECT SET
+	          PROJ_NM = #{projNm}
+	        , PROJ_TYPE = #{projType}
+	        , STATUS = #{status}
+	        , START_DT = #{startDt}
+	        , END_DT = #{endDt}
+	    WHERE PROJ_ID = #{projId}
+	</update>
+	
+	<delete id="deleteProject" parameterType="long">
+	    DELETE FROM TB_PROJECT 
+	    WHERE PROJ_ID = #{projId}
+	</delete>
+	
+</mapper>

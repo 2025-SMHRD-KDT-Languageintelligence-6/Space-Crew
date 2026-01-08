@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.com.pms.service.impl.UserMapper">
+
+    <select id="selectUserList" parameterType="egovframework.com.pms.service.UserVO" resultType="egovframework.com.pms.service.UserVO">
+        SELECT 
+              USER_ID       AS userId
+            , USER_NM       AS userNm
+            , DEPT_NM       AS deptNm
+            , JOB_ROLE      AS jobRole
+            , POSITION_NM   AS positionNm
+            , CAREER_YEARS  AS careerYears
+            , CURRENT_LOAD  AS currentLoad
+            , JOIN_DT       AS joinDt
+            , AUTH_LEVEL    AS authLevel
+            , USE_YN        AS useYn
+        FROM TB_USER
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY JOIN_DT DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectUserListTotCnt" parameterType="egovframework.com.pms.service.UserVO" resultType="int">
+        SELECT COUNT(*) FROM TB_USER
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+    </select>
+
+    <insert id="insertUser" parameterType="egovframework.com.pms.service.UserVO">
+        INSERT INTO TB_USER (
+            USER_ID, USER_NM, USER_PWD, DEPT_NM, JOB_ROLE, POSITION_NM, 
+            CAREER_YEARS, JOB_FIELD, CURRENT_LOAD, JOIN_DT, AUTH_LEVEL, USE_YN
+        ) VALUES (
+            #{userId}, #{userNm}, #{userPwd}, #{deptNm}, #{jobRole}, #{positionNm}, 
+            #{careerYears}, #{jobField}, #{currentLoad}, #{joinDt}, #{authLevel}, #{useYn}
+        )
+    </insert>
+
+    <select id="selectUserDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.UserVO">
+        SELECT * FROM TB_USER WHERE USER_ID = #{userId}
+    </select>
+
+</mapper>
