@@ -15,5 +15,6 @@ public class PmsDashController {
         // WEB-INF/jsp/와 .jsp 사이의 경로만 리턴합니다.
         // 설정된 ViewResolver에 따라 경로가 완성됩니다.
         return "egovframework/com/pms/dash/main_own";
+
     }
 }
