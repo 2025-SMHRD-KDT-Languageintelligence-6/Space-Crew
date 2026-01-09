@@ -13,6 +13,7 @@
         <li><a href="<c:url value='/pms/billingList.do'/>">💳 청구/정산 관리</a></li>
         <li><a href="<c:url value='/pms/userList.do'/>">👥 직원 관리</a></li>
     </ul>
+    <a href="<c:url value='/uat/uia/actionLogout.do'/>" class="logout-btn">로그아웃</a>
 </div>
 
 <style>

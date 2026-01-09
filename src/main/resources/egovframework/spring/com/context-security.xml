@@ -24,10 +24,10 @@
  	<security:http pattern="/js/**" security="none"/>
  	<security:http pattern="/resource/**" security="none"/>
  	<security:http pattern="\A/WEB-INF/jsp/.*\Z" request-matcher="regex" security="none"/>
-
+	
     <egov-security:config id="securityConfig"
 		loginUrl="/uat/uia/egovLoginUsr.do"
-		logoutSuccessUrl="/EgovContent.do"
+		logoutSuccessUrl="/uat/uia/egovLoginUsr.do"
 		loginFailureUrl="/uat/uia/egovLoginUsr.do?login_error=1"
 		accessDeniedUrl="/sec/ram/accessDenied.do"
 
@@ -46,10 +46,10 @@
 		hashBase64="false"
 
 		concurrentMaxSessons="1"
-		concurrentExpiredUrl="/EgovContent.do"
+		concurrentExpiredUrl="/uat/uia/egovLoginUsr.do"
 		errorIfMaximumExceeded="false"
 
-		defaultTargetUrl="/EgovContent.do"
+		defaultTargetUrl="/pms/main.do"
 		alwaysUseDefaultTargetUrl="true"
 
 		sniff="true"
