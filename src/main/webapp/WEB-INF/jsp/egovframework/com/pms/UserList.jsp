@@ -49,7 +49,7 @@
 	            <c:forEach var="result" items="${resultList}" varStatus="status">
 	                <tr>
 	                    <td>
-	                        <a href="<c:url value='/pms/updateUserView.do'/>?selectedId=${result.userId}">
+	                        <a href="javascript:void(0);" onclick="fn_open_user_popup('${result.userId}', '${result.userNm}');" style="font-weight:bold; color:#007bff;">
 	                            <c:out value="${result.userId}"/>
 	                        </a>
 	                    </td>
@@ -59,8 +59,12 @@
 	                    <td><c:out value="${result.currentLoad}"/> %</td>
 	                    <td><c:out value="${result.joinDt}"/></td>
 	                    <td>
+		                    <a href="<c:url value='/pms/updateUserView.do'/>?selectedId=${result.userId}" 
+     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
+     						   
 	                        <a href="<c:url value='/pms/deleteUser.do'/>?selectedId=${result.userId}" 
-	                           onclick="return confirm('이 사용자를 삭제하시겠습니까?');" style="color:red;">삭제</a>
+	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
+	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
@@ -86,6 +90,13 @@
 	            document.listForm.pageIndex.value = pageNo;
 	            document.listForm.action = "<c:url value='/pms/userList.do'/>";
 	            document.listForm.submit();
+	        }
+	        
+	        function fn_open_customer_popup(userId, userNm) {
+	            var windowName = "user_pop_" + custId;
+	            var url = "<c:url value='/pms/userDetailPopup.do'/>?selectedId=" + userId;
+	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	            window.open(url, windowName, options);
 	        }
 	    </script>
     </div>

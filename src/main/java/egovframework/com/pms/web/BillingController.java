@@ -1,6 +1,7 @@
 package egovframework.com.pms.web;
 
 import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
@@ -91,5 +92,12 @@ public class BillingController {
         }
     	billingService.deleteBilling(billingVO);
         return "redirect:/pms/billingList.do";
+    }
+    
+    @RequestMapping(value = "/pms/billingDetailPopup.do")
+    public String billingDetailPopup(@RequestParam("selectedId") Long id, Model model) throws Exception {
+        BillingVO result = billingService.selectBillingDetail(id);
+        model.addAttribute("billingVO", result);
+        return "egovframework/com/pms/BillingDetailPopup";
     }
 }

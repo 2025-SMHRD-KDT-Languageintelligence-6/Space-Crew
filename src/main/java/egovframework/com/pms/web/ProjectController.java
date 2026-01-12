@@ -1,17 +1,20 @@
 package egovframework.com.pms.web;
 
 import java.util.List;
+
 import javax.annotation.Resource;
 
+import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
-import egovframework.com.pms.service.ProjectVO;
 import egovframework.com.pms.service.ProjectService;
-import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import egovframework.com.pms.service.ProjectVO;
 
 @Controller
 public class ProjectController {
@@ -83,5 +86,12 @@ public class ProjectController {
         }
     	projectService.deleteProject(projectVO);
         return "redirect:/pms/projectList.do";
+    }
+    
+    @RequestMapping(value = "/pms/projectDetailPopup.do")
+    public String projectDetailPopup(@RequestParam("selectedId") Long id, Model model) throws Exception {
+        ProjectVO result = projectService.selectProjectDetail(id);
+        model.addAttribute("projectVO", result);
+        return "egovframework/com/pms/ProjectDetailPopup";
     }
 }

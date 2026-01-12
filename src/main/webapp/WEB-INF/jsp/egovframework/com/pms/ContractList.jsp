@@ -52,7 +52,7 @@
 	                <tr>
 	                    <td><c:out value="${result.contId}"/></td>
 	                    <td class="text-left">
-	                        <a href="<c:url value='/pms/updateContractView.do'/>?selectedId=${result.contId}">
+	                        <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');" style="font-weight:bold; color:#007bff;">
 	                            <c:out value="${result.contNm}"/>
 	                        </a>
 	                    </td>
@@ -63,9 +63,12 @@
 	                    <td><c:out value="${result.contStatus}"/></td>
 	                    <td><c:out value="${result.contDt}"/></td>
 	                    <td>
+	                        <a href="<c:url value='/pms/updateContractView.do'/>?selectedId=${result.contId}" 
+     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
+     						   
 	                        <a href="<c:url value='/pms/deleteContract.do'/>?selectedId=${result.contId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
@@ -92,6 +95,13 @@
 	            document.listForm.pageIndex.value = pageNo;
 	            document.listForm.action = "<c:url value='/pms/contractList.do'/>";
 	            document.listForm.submit();
+	        }
+	        
+	        function fn_open_customer_popup(contId, contNm) {
+	            var windowName = "contract_pop_" + custId;
+	            var url = "<c:url value='/pms/contractDetailPopup.do'/>?selectedId=" + contId;
+	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	            window.open(url, windowName, options);
 	        }
 	    </script>
     </div>

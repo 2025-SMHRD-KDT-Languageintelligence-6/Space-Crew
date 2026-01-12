@@ -26,16 +26,19 @@
 	                <tr>
 	                    <td><c:out value="${result.projId}"/></td>
 	                    <td>
-						    <a href="<c:url value='/pms/updateProjectView.do'/>?selectedId=${result.projId}">
+						    <a href="javascript:void(0);" onclick="fn_open_project_popup('${result.projId}', '${result.projNm}');" style="font-weight:bold; color:#007bff;">
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
 	                    <td><c:out value="${result.status}"/></td>
 	                    <td><c:out value="${result.startDt}"/></td>
 	                    <td>
-						    <a href="<c:url value='/pms/deleteProject.do'/>?selectedId=${result.projId}" 
-						       onclick="return confirm('정말 삭제하시겠습니까?');" 
-						       style="color:red;">삭제</a>
+						    <a href="<c:url value='/pms/updateProjectView.do'/>?selectedId=${result.projId}" 
+     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
+     						   
+	                        <a href="<c:url value='/pms/deleteProject.do'/>?selectedId=${result.projId}" 
+	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
+	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
 						</td>
 	                </tr>
 	            </c:forEach>
@@ -50,6 +53,20 @@
 	    <div style="margin-top: 20px;">
 	   		<a href="<c:url value='/pms/addProjectView.do'/>" style="padding: 10px; background: blue; color: white; text-decoration: none;">신규 프로젝트 등록</a>
 		</div>
+		<script type="text/javascript">
+	        function fn_egov_link_page(pageNo){
+	            document.listForm.pageIndex.value = pageNo;
+	            document.listForm.action = "<c:url value='/pms/projectList.do'/>";
+	            document.listForm.submit();
+	        }
+	        
+	        function fn_open_customer_popup(projId, projNm) {
+	            var windowName = "project_pop_" + custId;
+	            var url = "<c:url value='/pms/projectDetailPopup.do'/>?selectedId=" + projId;
+	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	            window.open(url, windowName, options);
+	        }
+	    </script>
 	</div>
 </body>
 </html>
