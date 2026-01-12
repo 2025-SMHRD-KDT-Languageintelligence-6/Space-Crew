@@ -41,8 +41,9 @@
 	                <th width="15%">고객사</th>
 	                <th width="10%">담당자</th>
 	                <th width="15%">예상금액</th>
-	                <th width="10%">확률</th>
-	                <th width="15%">상태</th>
+	                <th width="5%">확률</th>
+	                <th width="10%">상태</th>
+	                <th width="10%">관리</th>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -50,13 +51,23 @@
 	                <tr>
 	                    <td>${result.salesId}</td>
 	                    <td class="text-left">
-	                        <a href="<c:url value='/pms/updateSalesView.do'/>?selectedId=${result.salesId}">${result.salesTitle}</a>
+	                        <a href="javascript:void(0);" onclick="fn_open_sales_popup('${result.salesId}', '${result.salesTitle}');" style="font-weight:bold; color:#007bff;">
+	                            <c:out value="${result.salesTitle}"/>
+	                        </a>
 	                    </td>
 	                    <td>${result.customerName}</td>
 	                    <td>${result.salesUserName}</td>
 	                    <td><fmt:formatNumber value="${result.expectedAmt}" pattern="#,###"/>원</td>
 	                    <td>${result.probability}%</td>
 	                    <td>${result.status}</td>
+	                    <td>
+		                    <a href="<c:url value='/pms/updateSalesView.do'/>?selectedId=${result.salesId}" 
+     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
+     						   
+	                        <a href="<c:url value='/pms/deleteSales.do'/>?selectedId=${result.salesId}" 
+	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
+	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
+	                    </td>
 	                </tr>
 	            </c:forEach>
 	        </tbody>
@@ -73,7 +84,15 @@
 	    <script>
 	        function fn_egov_link_page(pageNo){
 	            document.listForm.pageIndex.value = pageNo;
+	            document.listForm.action = "<c:url value='/pms/salesList.do'/>";
 	            document.listForm.submit();
+	        }
+	        
+	        function fn_open_customer_popup(salesId, salesTitle) {
+	            var windowName = "sales_pop_" + custId;
+	            var url = "<c:url value='/pms/salesDetailPopup.do'/>?selectedId=" + salesId;
+	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	            window.open(url, windowName, options);
 	        }
 	    </script>
     </div>

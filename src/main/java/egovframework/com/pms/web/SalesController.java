@@ -110,4 +110,11 @@ public class SalesController {
     	salesService.deleteSales(salesVO);
         return "redirect:/pms/salesList.do";
     }
+    
+    @RequestMapping(value = "/pms/salesDetailPopup.do")
+    public String salesDetailPopup(@RequestParam("selectedId") Long id, Model model) throws Exception {
+    	SalesVO result = salesService.selectSalesDetail(id);
+        model.addAttribute("salesVO", result);
+        return "egovframework/com/pms/SalesDetailPopup";
+    }
 }

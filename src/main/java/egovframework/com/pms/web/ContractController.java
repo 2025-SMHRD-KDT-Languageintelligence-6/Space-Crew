@@ -1,12 +1,15 @@
 package egovframework.com.pms.web;
 
 import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -93,6 +96,13 @@ public class ContractController {
         }
         contractService.deleteContract(contractVO);
         return "redirect:/pms/contractList.do";
+    }
+    
+    @RequestMapping(value = "/pms/contractDetailPopup.do")
+    public String contractDetailPopup(@RequestParam("selectedId") Long id, Model model) throws Exception {
+        ContractVO result = contractService.selectContractDetail(id);
+        model.addAttribute("contractVO", result);
+        return "egovframework/com/pms/ContractDetailPopup";
     }
     
 }

@@ -51,7 +51,7 @@
 	                <tr>
 	                    <td><c:out value="${result.custId}"/></td>
 	                    <td class="text-left">
-	                        <a href="<c:url value='/pms/updateCustomerView.do'/>?selectedId=${result.custId}">
+	                        <a href="javascript:void(0);" onclick="fn_open_customer_popup('${result.custId}', '${result.custNm}');" style="font-weight:bold; color:#007bff;">
 	                            <c:out value="${result.custNm}"/>
 	                        </a>
 	                    </td>
@@ -60,6 +60,9 @@
 	                    <td><c:out value="${result.picNm}"/></td>
 	                    <td><c:out value="${result.picTel}"/></td>
 	                    <td>
+	                    	<a href="<c:url value='/pms/updateCustomerView.do'/>?selectedId=${result.custId}" 
+      						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
+      						   
 	                        <a href="<c:url value='/pms/deleteCustomer.do'/>?selectedId=${result.custId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
 	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
@@ -85,11 +88,17 @@
 	    </div>
 	
 	    <script type="text/javascript">
-	        /* 페이징 페이지 이동 script */
 	        function fn_egov_link_page(pageNo){
 	            document.listForm.pageIndex.value = pageNo;
 	            document.listForm.action = "<c:url value='/pms/customerList.do'/>";
 	            document.listForm.submit();
+	        }
+	        
+	        function fn_open_customer_popup(custId, custNm) {
+	            var windowName = "customer_pop_" + custId;
+	            var url = "<c:url value='/pms/customerDetailPopup.do'/>?selectedId=" + custId;
+	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	            window.open(url, windowName, options);
 	        }
 	    </script>
     </div>

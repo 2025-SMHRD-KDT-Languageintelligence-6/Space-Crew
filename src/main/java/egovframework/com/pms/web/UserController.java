@@ -83,4 +83,11 @@ public class UserController {
     	userService.deleteUser(userVO);
         return "redirect:/pms/userList.do";
     }
+    
+    @RequestMapping(value = "/pms/userDetailPopup.do")
+    public String userDetailPopup(@RequestParam("selectedId") String id, Model model) throws Exception {
+        UserVO result = userService.selectUserDetail(id);
+        model.addAttribute("userVO", result);
+        return "egovframework/com/pms/UserDetailPopup";
+    }
 }

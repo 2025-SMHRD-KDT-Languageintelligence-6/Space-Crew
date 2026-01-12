@@ -82,4 +82,11 @@ public class CustomerController {
     	customerService.deleteCustomer(customerVO);
         return "redirect:/pms/customerList.do";
     }
+    
+    @RequestMapping(value = "/pms/customerDetailPopup.do")
+    public String customerDetailPopup(@RequestParam("selectedId") Integer id, Model model) throws Exception {
+        CustomerVO result = customerService.selectCustomerDetail(id);
+        model.addAttribute("customerVO", result);
+        return "egovframework/com/pms/CustomerDetailPopup";
+    }
 }
