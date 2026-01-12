@@ -17,7 +17,7 @@
             , A.CONT_STATUS   AS contStatus
         FROM TB_CONTRACT A
         LEFT JOIN TB_USER B ON A.PIC_USER_ID = B.USER_ID
-        WHERE 1=1
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -27,7 +27,7 @@
 
     <select id="selectContractListTotCnt" parameterType="egovframework.com.pms.service.ContractVO" resultType="int">
         SELECT COUNT(*) FROM TB_CONTRACT
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -47,6 +47,7 @@
             , CONT_REMARK   AS contRemark
         FROM TB_CONTRACT 
         WHERE CONT_ID = #{contId}
+        AND DEL_YN = 'N'
     </select>
 
     <insert id="insertContract" parameterType="egovframework.com.pms.service.ContractVO">
@@ -62,17 +63,25 @@
               SALES_ID = #{salesId}
             , CONT_NM = #{contNm}
             , CONT_AMT = #{contAmt}
-            , START_DT = #{startDt}
-            , END_DT = #{endDt}
-            , CONT_DT = #{contDt}
+            , START_DT = NULLIF(#{startDt}, '')
+            , END_DT = NULLIF(#{endDt}, '')
+            , CONT_DT = NULLIF(#{contDt}, '')
             , PIC_USER_ID = #{picUserId}
             , CONT_STATUS = #{contStatus}
             , CONT_REMARK = #{contRemark}
+            , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
         WHERE CONT_ID = #{contId}
     </update>
 
-    <delete id="deleteContract" parameterType="long">
-        DELETE FROM TB_CONTRACT WHERE CONT_ID = #{contId}
-    </delete>
+    <update id="deleteContract" parameterType="egovframework.com.pms.service.ContractVO">
+	    UPDATE TB_CONTRACT SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE CONT_ID = #{contId}
+	</update>
+    
+    
 
 </mapper>

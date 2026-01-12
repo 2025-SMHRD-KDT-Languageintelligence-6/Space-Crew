@@ -11,5 +11,5 @@ public interface CustomerMapper {
     CustomerVO selectCustomerDetail(Integer id) throws Exception;
     void insertCustomer(CustomerVO vo) throws Exception;
     void updateCustomer(CustomerVO vo) throws Exception;
-    void deleteCustomer(Integer id) throws Exception;
+	void deleteCustomer(CustomerVO vo) throws Exception;
 }

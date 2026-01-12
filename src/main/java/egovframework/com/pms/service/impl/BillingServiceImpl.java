@@ -38,7 +38,12 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
     }
 
     @Override
-    public void deleteBilling(Long id) throws Exception {
-        billingMapper.deleteBilling(id);
+    public void deleteBilling(BillingVO vo) throws Exception {
+        billingMapper.deleteBilling(vo);
+    }
+    
+    @Override
+    public void updateBilling(BillingVO vo) throws Exception {
+        billingMapper.updateBilling(vo);
     }
 }

@@ -12,5 +12,7 @@ public interface BillingService {
 
     void saveBilling(BillingVO vo) throws Exception;
 
-    void deleteBilling(Long id) throws Exception;
+    void deleteBilling(BillingVO vo) throws Exception;
+    
+    void updateBilling(BillingVO vo) throws Exception;
 }

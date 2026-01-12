@@ -19,4 +19,5 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private String isPaid;
     private String actualPayDt;
     private String billRemark;
+    private String lastUpdusrId;
 }

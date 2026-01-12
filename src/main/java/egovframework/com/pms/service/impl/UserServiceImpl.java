@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 import egovframework.com.pms.service.UserService;
 import egovframework.com.pms.service.UserVO;
 
@@ -24,22 +25,27 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
     }
 
     @Override
+    public void saveUser(UserVO vo) throws Exception {
+    	UserVO check = userMapper.selectUserDetail(vo.getUserId());
+    	if (check == null) {
+    		userMapper.insertUser(vo);
+    	} else {
+    		userMapper.updateUser(vo);
+    	}
+    }
+    
+    @Override
     public UserVO selectUserDetail(String id) throws Exception {
         return userMapper.selectUserDetail(id);
     }
 
     @Override
-    public void saveUser(UserVO vo) throws Exception {
-        UserVO check = userMapper.selectUserDetail(vo.getUserId());
-        if (check == null) {
-            userMapper.insertUser(vo);
-        } else {
-            userMapper.updateUser(vo);
-        }
+    public void deleteUser(UserVO vo) throws Exception {
+        userMapper.deleteUser(vo);
     }
     
     @Override
-    public void deleteUser(String id) throws Exception {
-        userMapper.deleteUser(id);
+    public void updateUser(UserVO vo) throws Exception {
+        userMapper.updateUser(vo);
     }
 }

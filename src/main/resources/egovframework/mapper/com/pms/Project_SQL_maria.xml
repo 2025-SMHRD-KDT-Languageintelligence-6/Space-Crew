@@ -17,7 +17,7 @@
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
         LEFT OUTER JOIN COMVNUSERMASTER C ON A.MAIN_MGR_ID = C.ESNTL_ID
-        WHERE 1=1
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 0">
                 AND A.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -30,7 +30,7 @@
     <select id="selectProjectListTotCnt" parameterType="egovframework.com.pms.service.ProjectVO" resultType="int">
         SELECT COUNT(*)
         FROM TB_PROJECT A
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 0">
                 AND A.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -56,6 +56,7 @@
 	        , END_DT            AS endDt
 	    FROM TB_PROJECT
 	    WHERE PROJ_ID = #{projId}
+	    AND DEL_YN = 'N'
 	</select>
 	
 	<update id="updateProject" parameterType="egovframework.com.pms.service.ProjectVO">
@@ -63,14 +64,21 @@
 	          PROJ_NM = #{projNm}
 	        , PROJ_TYPE = #{projType}
 	        , STATUS = #{status}
-	        , START_DT = #{startDt}
-	        , END_DT = #{endDt}
+	        , START_DT = NULLIF(#{startDt},'')
+	        , END_DT = NULLIF(#{endDt},'')
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE PROJ_ID = #{projId}
 	</update>
 	
-	<delete id="deleteProject" parameterType="long">
-	    DELETE FROM TB_PROJECT 
+    <update id="deleteProject" parameterType="egovframework.com.pms.service.ProjectVO">
+	    UPDATE TB_PROJECT SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE PROJ_ID = #{projId}
-	</delete>
+	</update>
+	
+	
 	
 </mapper>

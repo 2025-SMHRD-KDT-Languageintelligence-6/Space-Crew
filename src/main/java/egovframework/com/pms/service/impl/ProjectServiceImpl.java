@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
 
@@ -23,15 +24,7 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
     public int selectProjectListTotCnt(ProjectVO vo) throws Exception {
         return projectMapper.selectProjectListTotCnt(vo);
     }
-
-    @Override
-    public ProjectVO selectProjectDetail(String id) throws Exception {
-        ProjectVO resultVO = projectMapper.selectProjectDetail(id);
-        if (resultVO == null)
-            throw processException("info.nodata.msg");
-        return resultVO;
-    }
-
+    
     @Override
     public void saveProject(ProjectVO vo) throws Exception {
         if (vo.getProjId() == null || vo.getProjId() == 0) {
@@ -40,9 +33,22 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
             projectMapper.updateProject(vo);
         }
     }
+    
+    @Override
+    public ProjectVO selectProjectDetail(Long id) throws Exception {
+        ProjectVO resultVO = projectMapper.selectProjectDetail(id);
+        if (resultVO == null)
+            throw processException("info.nodata.msg");
+        return resultVO;
+    }
 
     @Override
-    public void deleteProject(Long id) throws Exception {
-        projectMapper.deleteProject(id);
+    public void deleteProject(ProjectVO vo) throws Exception {
+        projectMapper.deleteProject(vo);
+    }
+    
+    @Override
+    public void updateProject(ProjectVO vo) throws Exception {
+        projectMapper.updateProject(vo);
     }
 }

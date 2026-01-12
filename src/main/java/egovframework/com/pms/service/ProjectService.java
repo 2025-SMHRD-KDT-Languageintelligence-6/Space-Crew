@@ -8,9 +8,11 @@ public interface ProjectService {
 
     int selectProjectListTotCnt(ProjectVO vo) throws Exception;
 
-    ProjectVO selectProjectDetail(String id) throws Exception;
+    ProjectVO selectProjectDetail(Long id) throws Exception;
 
     void saveProject(ProjectVO vo) throws Exception;
 
-    void deleteProject(Long id) throws Exception;
+    void deleteProject(ProjectVO vo) throws Exception;
+
+    void updateProject(ProjectVO vo) throws Exception;
 }

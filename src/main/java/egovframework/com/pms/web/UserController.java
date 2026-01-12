@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import egovframework.com.pms.service.UserService;
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.UserVO;
+import egovframework.com.pms.service.UserService;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
@@ -45,7 +47,11 @@ public class UserController {
 
     @RequestMapping(value = "/pms/addUser.do")
     public String insertUser(@ModelAttribute("userVO") UserVO userVO) throws Exception {
-        userService.saveUser(userVO);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user != null) {
+    		userVO.setLastUpdusrId(user.getId());
+    	}
+    	userService.saveUser(userVO);
         return "redirect:/pms/userList.do";
     }
 
@@ -55,10 +61,26 @@ public class UserController {
         model.addAttribute("userVO", result);
         return "egovframework/com/pms/UserUpdt";
     }
-
+    
+    @RequestMapping(value = "/pms/updateUser.do")
+    public String update(@ModelAttribute("userVO") UserVO userVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            userVO.setLastUpdusrId(user.getId());
+        }
+        userService.updateUser(userVO); 
+        return "redirect:/pms/userList.do";
+    }
+    
     @RequestMapping(value = "/pms/deleteUser.do")
-    public String deleteUser(@RequestParam("selectedId") String id) throws Exception {
-        userService.deleteUser(id);
+    public String delete(@RequestParam("selectedId") String id) throws Exception {
+    	UserVO userVO = new UserVO();
+        userVO.setUserId(id);
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            userVO.setLastUpdusrId(user.getId());
+        }
+    	userService.deleteUser(userVO);
         return "redirect:/pms/userList.do";
     }
 }

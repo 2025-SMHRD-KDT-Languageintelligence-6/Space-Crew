@@ -11,5 +11,5 @@ public interface BillingMapper {
     BillingVO selectBillingDetail(Long id) throws Exception;
     void insertBilling(BillingVO vo) throws Exception;
     void updateBilling(BillingVO vo) throws Exception;
-    void deleteBilling(Long id) throws Exception;
+    void deleteBilling(BillingVO vo) throws Exception;
 }

@@ -11,5 +11,5 @@ public interface ContractMapper {
     ContractVO selectContractDetail(Long id) throws Exception;
     void insertContract(ContractVO vo) throws Exception;
     void updateContract(ContractVO vo) throws Exception;
-    void deleteContract(Long id) throws Exception;
+	void deleteContract(ContractVO vo) throws Exception;
 }

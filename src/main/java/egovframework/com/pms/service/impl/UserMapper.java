@@ -11,5 +11,5 @@ public interface UserMapper {
     UserVO selectUserDetail(String id) throws Exception;
     void insertUser(UserVO vo) throws Exception;
     void updateUser(UserVO vo) throws Exception;
-    void deleteUser(String id) throws Exception;
+	void deleteUser(UserVO vo) throws Exception;
 }

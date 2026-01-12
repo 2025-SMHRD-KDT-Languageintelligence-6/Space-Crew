@@ -13,7 +13,7 @@
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
         LEFT JOIN TB_USER C ON A.SALES_USER_ID = C.USER_ID
-        WHERE 1=1
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.SALES_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -32,7 +32,7 @@
 	<select id="selectSalesListTotCnt" parameterType="egovframework.com.pms.service.SalesVO" resultType="int">
         SELECT COUNT(*) 
         FROM TB_SALES A
-        WHERE 1=1
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.SALES_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -56,6 +56,7 @@
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
         LEFT JOIN TB_USER C ON A.SALES_USER_ID = C.USER_ID
         WHERE A.SALES_ID = #{salesId}
+        AND DEL_YN = 'N'
     </select>
 
     <update id="updateSales" parameterType="egovframework.com.pms.service.SalesVO">
@@ -64,18 +65,22 @@
             , SALES_USER_ID = #{salesUserId}
             , SALES_TITLE = #{salesTitle}
             , EXPECTED_AMT = #{expectedAmt}
-            , EXPECTED_DT = #{expectedDt}
+            , EXPECTED_DT = NULLIF(#{expectedDt},'')
             , PROBABILITY = #{probability}
             , STATUS = #{status}
             , SALES_CONTENT = #{salesContent}
+            , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
         WHERE SALES_ID = #{salesId}
     </update>
 
-    <delete id="deleteSales" parameterType="long">
-        DELETE FROM TB_SALES WHERE SALES_ID = #{salesId}
-    </delete>
-	
-	
+    <update id="deleteSales" parameterType="egovframework.com.pms.service.SalesVO">
+	    UPDATE TB_SALES SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE SALES_ID = #{salesId}
+	</update>
 	
 	
 	

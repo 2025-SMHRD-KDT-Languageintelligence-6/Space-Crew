@@ -16,7 +16,7 @@
             , AUTH_LEVEL    AS authLevel
             , USE_YN        AS useYn
         FROM TB_USER
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -26,7 +26,7 @@
 
     <select id="selectUserListTotCnt" parameterType="egovframework.com.pms.service.UserVO" resultType="int">
         SELECT COUNT(*) FROM TB_USER
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -43,7 +43,39 @@
     </insert>
 
     <select id="selectUserDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.UserVO">
-        SELECT * FROM TB_USER WHERE USER_ID = #{userId}
+        SELECT
+	      	  USER_ID       AS userId
+	        , USER_NM       AS userNm
+	        , DEPT_NM       AS deptNm
+	        , JOB_ROLE      AS jobRole
+	        , POSITION_NM   AS positionNm
+        FROM TB_USER
+        WHERE USER_ID = #{userId}
+        AND DEL_YN = 'N'
     </select>
+    
+	<update id="updateUser" parameterType="egovframework.com.pms.service.UserVO">
+	    UPDATE TB_USER SET
+	          USER_NM       = #{userNm}
+	        , DEPT_NM       = #{deptNm}
+	        , JOB_ROLE      = #{jobRole}
+	        , POSITION_NM   = #{positionNm}
+	        , CAREER_YEARS  = #{careerYears}
+	        , CURRENT_LOAD  = #{currentLoad}
+	        , AUTH_LEVEL    = #{authLevel}
+	        , USE_YN        = #{useYn}
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE USER_ID = #{userId}
+	</update>
+
+    <update id="deleteUser" parameterType="egovframework.com.pms.service.UserVO">
+	    UPDATE TB_USER SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE USER_ID = #{userId}
+	</update>
+	
 
 </mapper>

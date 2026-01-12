@@ -7,6 +7,9 @@ import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.ContractService;
 import egovframework.com.pms.service.ContractVO;
 import egovframework.com.pms.service.UserService;
@@ -44,13 +47,20 @@ public class ContractController {
         return "egovframework/com/pms/ContractList";
     }
     
-    
-    
-    
     @RequestMapping(value = "/pms/addContractView.do")
     public String addContractView(@ModelAttribute("contractVO") ContractVO contractVO, Model model) throws Exception {
         model.addAttribute("userList", userService.selectUserList(new UserVO()));
         return "egovframework/com/pms/ContractRegist";
+    }
+    
+    @RequestMapping(value = "/pms/addContract.do")
+    public String save(@ModelAttribute("contractVO") ContractVO contractVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user != null) {
+    		contractVO.setLastUpdusrId(user.getId());
+    	}
+    	contractService.saveContract(contractVO);
+        return "redirect:/pms/contractList.do";
     }
     
     @RequestMapping(value = "/pms/updateContractView.do")
@@ -63,5 +73,26 @@ public class ContractController {
         return "egovframework/com/pms/ContractUpdt";
     }
     
+    @RequestMapping(value = "/pms/updateContract.do")
+    public String update(@ModelAttribute("contractVO") ContractVO contractVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            contractVO.setLastUpdusrId(user.getId());
+        }
+        contractService.updateContract(contractVO); 
+        return "redirect:/pms/contractList.do";
+    }
+    
+    @RequestMapping(value = "/pms/deleteContract.do")
+    public String delete(@RequestParam("selectedId") Long id) throws Exception {
+    	ContractVO contractVO = new ContractVO();
+    	contractVO.setContId(id);
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+        	contractVO.setLastUpdusrId(user.getId());
+        }
+        contractService.deleteContract(contractVO);
+        return "redirect:/pms/contractList.do";
+    }
     
 }

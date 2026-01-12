@@ -24,11 +24,6 @@ public class CustomerServiceImpl extends EgovAbstractServiceImpl implements Cust
     }
 
     @Override
-    public CustomerVO selectCustomerDetail(Integer id) throws Exception {
-        return customerMapper.selectCustomerDetail(id);
-    }
-
-    @Override
     public void saveCustomer(CustomerVO vo) throws Exception {
         if (vo.getCustId() == null || vo.getCustId() == 0) {
             customerMapper.insertCustomer(vo);
@@ -36,9 +31,20 @@ public class CustomerServiceImpl extends EgovAbstractServiceImpl implements Cust
             customerMapper.updateCustomer(vo);
         }
     }
-
+    
     @Override
-    public void deleteCustomer(Integer id) throws Exception {
-        customerMapper.deleteCustomer(id);
+    public CustomerVO selectCustomerDetail(Integer id) throws Exception {
+        return customerMapper.selectCustomerDetail(id);
     }
+    
+    @Override
+    public void deleteCustomer(CustomerVO vo) throws Exception {
+        customerMapper.deleteCustomer(vo);
+    }
+
+	@Override
+	public void updateCustomer(CustomerVO vo) throws Exception {
+		// TODO Auto-generated method stub
+		customerMapper.updateCustomer(vo);
+	}
 }

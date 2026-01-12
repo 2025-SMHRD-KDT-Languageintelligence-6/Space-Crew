@@ -12,14 +12,32 @@
             , B.PROJ_NM       AS projectName
         FROM TB_BILLING A
         LEFT JOIN TB_PROJECT B ON A.PROJ_ID = B.PROJ_ID
-        WHERE 1=1
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.BILL_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
         ORDER BY A.BILL_ID DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
-
+	
+	<select id="selectBillingDetail" parameterType="long" resultType="egovframework.com.pms.service.BillingVO">
+        SELECT 
+              A.BILL_ID         AS billId
+            , A.PROJ_ID         AS projectId
+            , A.BILL_TITLE      AS billTitle
+            , A.BILL_AMT        AS billAmt
+            , A.TAX_BILL_DT     AS taxBillDt
+            , A.PAY_DT          AS payDt
+            , A.IS_PAID         AS isPaid
+            , A.ACTUAL_PAY_DT   AS actualPayDt
+            , A.BILL_REMARK     AS billRemark
+            , B.PROJ_NM         AS projectName
+        FROM TB_BILLING A
+        LEFT JOIN TB_PROJECT B ON A.PROJ_ID = B.PROJ_ID
+        WHERE A.BILL_ID = #{billId}
+          AND A.DEL_YN = 'N' 
+    </select>
+	
     <insert id="insertBilling" parameterType="egovframework.com.pms.service.BillingVO">
         INSERT INTO TB_BILLING (
             PROJ_ID, BILL_TITLE, BILL_AMT, TAX_BILL_DT, PAY_DT, IS_PAID, ACTUAL_PAY_DT, BILL_REMARK
@@ -29,10 +47,36 @@
     </insert>
 
     <select id="selectBillingListTotCnt" resultType="int">
-        SELECT COUNT(*) FROM TB_BILLING WHERE 1=1
+        SELECT COUNT(*) FROM TB_BILLING
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND BILL_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
     </select>
+    
+    <update id="updateBilling" parameterType="egovframework.com.pms.service.BillingVO">
+	    UPDATE TB_BILLING
+	    SET
+	          PROJ_ID = #{projectId}
+	        , BILL_TITLE = #{billTitle}
+	        , BILL_AMT = #{billAmt}
+	        , TAX_BILL_DT = NULLIF(#{taxBillDt}, '')
+	        , PAY_DT = NULLIF(#{payDt}, '')
+	        , IS_PAID = #{isPaid}
+	        , ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, '')
+	        , BILL_REMARK = #{billRemark}
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE BILL_ID = #{billId}
+	</update>
+    
+    <update id="deleteBilling" parameterType="egovframework.com.pms.service.BillingVO">
+	    UPDATE TB_BILLING
+	    SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE BILL_ID = #{billId}
+	</update>
     
     </mapper>

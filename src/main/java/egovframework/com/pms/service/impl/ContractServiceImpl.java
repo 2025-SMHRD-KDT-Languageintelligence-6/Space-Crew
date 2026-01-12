@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+
 import egovframework.com.pms.service.ContractService;
 import egovframework.com.pms.service.ContractVO;
 
@@ -31,14 +32,20 @@ public class ContractServiceImpl extends EgovAbstractServiceImpl implements Cont
             contractMapper.updateContract(vo);
         }
     }
-
-    @Override
-    public void deleteContract(Long id) throws Exception {
-        contractMapper.deleteContract(id);
-    }
-
+    
     @Override
     public ContractVO selectContractDetail(Long id) throws Exception {
         return contractMapper.selectContractDetail(id);
     }
+    
+    @Override
+    public void deleteContract(ContractVO vo) throws Exception {
+        contractMapper.deleteContract(vo);
+    }
+
+    @Override
+    public void updateContract(ContractVO vo) throws Exception {
+        contractMapper.updateContract(vo);
+    }
+    
 }

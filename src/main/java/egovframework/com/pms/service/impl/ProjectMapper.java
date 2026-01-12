@@ -11,8 +11,8 @@ public interface ProjectMapper {
 
     int selectProjectListTotCnt(ProjectVO vo);
 
-    ProjectVO selectProjectDetail(String id) throws Exception;
+    ProjectVO selectProjectDetail(Long id) throws Exception;
     void insertProject(ProjectVO vo) throws Exception;
     void updateProject(ProjectVO vo) throws Exception;
-    void deleteProject(Long id) throws Exception;
+	void deleteProject(ProjectVO vo) throws Exception;
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import egovframework.com.pms.service.SalesService;
 import egovframework.com.pms.service.SalesVO;
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.CustomerService;
 import egovframework.com.pms.service.CustomerVO;
 import egovframework.com.pms.service.UserService;
@@ -65,7 +67,11 @@ public class SalesController {
 
     @RequestMapping(value = "/pms/addSales.do")
     public String save(@ModelAttribute("salesVO") SalesVO salesVO) throws Exception {
-        salesService.saveSales(salesVO);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user != null) {
+    		salesVO.setLastUpdusrId(user.getId());
+    	}
+    	salesService.saveSales(salesVO);
         return "redirect:/pms/salesList.do";
     }
 
@@ -82,10 +88,26 @@ public class SalesController {
 
         return "egovframework/com/pms/SalesUpdt";
     }
-
+    
+    @RequestMapping(value = "/pms/updateSales.do")
+    public String update(@ModelAttribute("salesVO") SalesVO salesVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            salesVO.setLastUpdusrId(user.getId());
+        }
+        salesService.updateSales(salesVO); 
+        return "redirect:/pms/salesList.do";
+    }
+    
     @RequestMapping(value = "/pms/deleteSales.do")
     public String delete(@RequestParam("selectedId") Long id) throws Exception {
-        salesService.deleteSales(id);
+    	SalesVO salesVO = new SalesVO();
+        salesVO.setSalesId(id);
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            salesVO.setLastUpdusrId(user.getId());
+        }
+    	salesService.deleteSales(salesVO);
         return "redirect:/pms/salesList.do";
     }
 }

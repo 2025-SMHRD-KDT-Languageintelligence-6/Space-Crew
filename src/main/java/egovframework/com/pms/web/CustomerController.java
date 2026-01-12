@@ -5,8 +5,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import egovframework.com.pms.service.CustomerService;
+
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.CustomerVO;
+import egovframework.com.pms.service.CustomerService;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
 @Controller
@@ -43,7 +46,11 @@ public class CustomerController {
 
     @RequestMapping(value = "/pms/addCustomer.do")
     public String insertCustomer(@ModelAttribute("customerVO") CustomerVO customerVO) throws Exception {
-        customerService.saveCustomer(customerVO);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user != null) {
+    		customerVO.setLastUpdusrId(user.getId());
+    	}
+    	customerService.saveCustomer(customerVO);
         return "redirect:/pms/customerList.do";
     }
 
@@ -53,10 +60,26 @@ public class CustomerController {
         model.addAttribute("customerVO", result);
         return "egovframework/com/pms/CustomerUpdt";
     }
-
+    
+    @RequestMapping(value = "/pms/updateCustomer.do")
+    public String update(@ModelAttribute("customerVO") CustomerVO customerVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            customerVO.setLastUpdusrId(user.getId());
+        }
+        customerService.updateCustomer(customerVO); 
+        return "redirect:/pms/customerList.do";
+    }
+    
     @RequestMapping(value = "/pms/deleteCustomer.do")
     public String deleteCustomer(@RequestParam("selectedId") Integer id) throws Exception {
-        customerService.deleteCustomer(id);
+        CustomerVO customerVO = new CustomerVO();
+    	customerVO.setCustId(id);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+        	customerVO.setLastUpdusrId(user.getId());
+        }
+    	customerService.deleteCustomer(customerVO);
         return "redirect:/pms/customerList.do";
     }
 }

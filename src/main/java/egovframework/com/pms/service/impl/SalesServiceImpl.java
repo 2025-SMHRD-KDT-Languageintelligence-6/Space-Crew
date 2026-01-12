@@ -4,8 +4,9 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
-import egovframework.com.pms.service.SalesService;
+
 import egovframework.com.pms.service.SalesVO;
+import egovframework.com.pms.service.SalesService;
 
 @Service("salesService")
 public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesService {
@@ -38,7 +39,12 @@ public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesSe
     }
 
     @Override
-    public void deleteSales(Long id) throws Exception {
-        salesMapper.deleteSales(id);
+    public void deleteSales(SalesVO vo) throws Exception {
+        salesMapper.deleteSales(vo);
+    }
+    
+    @Override
+    public void updateSales(SalesVO vo) throws Exception {
+        salesMapper.updateSales(vo);
     }
 }

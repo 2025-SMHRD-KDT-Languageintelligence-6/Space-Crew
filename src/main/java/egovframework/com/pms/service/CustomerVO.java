@@ -19,4 +19,5 @@ public class CustomerVO extends ComDefaultVO implements Serializable {
     private String picEmail;
     private String custAddr;
     private String custRemark;
+    private String lastUpdusrId;
 }

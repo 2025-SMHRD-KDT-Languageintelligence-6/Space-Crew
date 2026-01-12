@@ -13,5 +13,7 @@ public interface UserService {
 
     void saveUser(UserVO vo) throws Exception;
 
-    void deleteUser(String id) throws Exception;
+    void deleteUser(UserVO vo) throws Exception;
+
+	void updateUser(UserVO vo) throws Exception;
 }

@@ -12,7 +12,7 @@
             , PIC_TEL       AS picTel
             , PIC_EMAIL     AS picEmail
         FROM TB_CUSTOMER
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -22,7 +22,7 @@
 
     <select id="selectCustomerListTotCnt" parameterType="egovframework.com.pms.service.CustomerVO" resultType="int">
         SELECT COUNT(*) FROM TB_CUSTOMER
-        WHERE 1=1
+        WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
@@ -41,6 +41,7 @@
             , CUST_REMARK   AS custRemark
         FROM TB_CUSTOMER 
         WHERE CUST_ID = #{custId}
+        AND DEL_YN = 'N'
     </select>
 
     <insert id="insertCustomer" parameterType="egovframework.com.pms.service.CustomerVO">
@@ -61,11 +62,17 @@
             , PIC_EMAIL = #{picEmail}
             , CUST_ADDR = #{custAddr}
             , CUST_REMARK = #{custRemark}
+            , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
         WHERE CUST_ID = #{custId}
     </update>
 
-    <delete id="deleteCustomer" parameterType="java.lang.Integer">
-        DELETE FROM TB_CUSTOMER WHERE CUST_ID = #{custId}
-    </delete>
+    <update id="deleteCustomer" parameterType="egovframework.com.pms.service.CustomerVO">
+	    UPDATE TB_CUSTOMER SET 
+	          DEL_YN = 'Y'
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , LAST_UPDT_PNTTM = NOW()
+	    WHERE CUST_ID = #{custId}
+	</update>
 
 </mapper>

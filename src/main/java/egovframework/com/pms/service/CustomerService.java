@@ -3,6 +3,7 @@ package egovframework.com.pms.service;
 import java.util.List;
 
 public interface CustomerService {
+	
     List<CustomerVO> selectCustomerList(CustomerVO vo) throws Exception;
     
     int selectCustomerListTotCnt(CustomerVO vo) throws Exception;
@@ -11,5 +12,7 @@ public interface CustomerService {
     
     void saveCustomer(CustomerVO vo) throws Exception;
     
-    void deleteCustomer(Integer id) throws Exception;
+    void deleteCustomer(CustomerVO vo) throws Exception;
+
+	void updateCustomer(CustomerVO vo) throws Exception;
 }

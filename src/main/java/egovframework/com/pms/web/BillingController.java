@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.BillingService;
 import egovframework.com.pms.service.BillingVO;
 import egovframework.com.pms.service.ProjectService;
@@ -54,10 +56,14 @@ public class BillingController {
 
     @RequestMapping(value = "/pms/addBilling.do")
     public String save(@ModelAttribute("billingVO") BillingVO billingVO) throws Exception {
-        billingService.saveBilling(billingVO);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user != null) {
+    		billingVO.setLastUpdusrId(user.getId());
+    	}
+    	billingService.saveBilling(billingVO);
         return "redirect:/pms/billingList.do";
     }
-
+        
     @RequestMapping(value = "/pms/updateBillingView.do")
     public String updateView(@RequestParam("selectedId") Long id, Model model) throws Exception {
         model.addAttribute("billingVO", billingService.selectBillingDetail(id));
@@ -65,9 +71,25 @@ public class BillingController {
         return "egovframework/com/pms/BillingUpdt";
     }
 
+    @RequestMapping(value = "/pms/updateBilling.do")
+    public String update(@ModelAttribute("billingVO") BillingVO billingVO) throws Exception {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            billingVO.setLastUpdusrId(user.getId());
+        }
+        billingService.updateBilling(billingVO); 
+        return "redirect:/pms/billingList.do";
+    }
+    
     @RequestMapping(value = "/pms/deleteBilling.do")
     public String delete(@RequestParam("selectedId") Long id) throws Exception {
-        billingService.deleteBilling(id);
+    	BillingVO billingVO = new BillingVO();
+        billingVO.setBillId(id);
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            billingVO.setLastUpdusrId(user.getId());
+        }
+    	billingService.deleteBilling(billingVO);
         return "redirect:/pms/billingList.do";
     }
 }
