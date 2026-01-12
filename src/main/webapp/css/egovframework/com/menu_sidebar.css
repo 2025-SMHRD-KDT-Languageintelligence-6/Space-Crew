@@ -1,7 +1,7 @@
 /* 사이드바 전체 컨테이너 */
 .sidebar {
     width: 220px;
-    background: #2c3e50;
+    background: rgb(15 23 42);
     color: white;
     height: 100vh;
     position: fixed;
@@ -64,4 +64,30 @@
 .sidebar .logout-btn:hover {
     background: #c0392b;
     color: white;
+}
+/* 사이드바 메뉴 기본 스타일 보정 */
+.sidebar ul.nav li {
+    padding: 4px 12px; /* 강조 효과가 들어갈 여백 확보 */
+}
+
+.sidebar ul.nav li a {
+    display: block;
+    padding: 10px 15px;
+    color: #bdc3c7;
+    text-decoration: none;
+    border-radius: 8px; /* 둥근 모서리 */
+    transition: all 0.3s ease;
+}
+
+/* 선택되었을 때(Active) 또는 마우스를 올렸을 때 강조 효과 */
+.sidebar ul.nav li a.active,
+.sidebar ul.nav li a:hover {
+    background-color: #2563eb; /* 이미지와 유사한 파란색 */
+    color: #ffffff !important;  /* 글자색 흰색으로 강조 */
+}
+
+/* 아이콘 색상도 흰색으로 변경 */
+.sidebar ul.nav li a.active i,
+.sidebar ul.nav li a:hover i {
+    color: #ffffff;
 }
