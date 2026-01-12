@@ -48,8 +48,8 @@
 	            </a>
 	
 	            <a href="<c:url value='/pms/projectList.do'/>" class="card">
-	                <h3>🏗️ 프로젝트 관리</h3>
-	                <p>수행 중인 프로젝트 현황</p>
+	                <h3>🏗️ 업무 관리</h3>
+	                <p>수행 중인 업무 현황</p>
 	                <span class="stat">${projectCount}건</span>
 	            </a>
 	

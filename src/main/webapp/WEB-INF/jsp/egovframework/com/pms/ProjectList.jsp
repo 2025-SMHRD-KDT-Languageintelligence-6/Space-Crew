@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>프로젝트 목록</title>
+<title>업무 목록</title>
 	<style>
 		.content-page { margin-left: 220px; padding: 20px; }
 	</style>
@@ -11,12 +11,12 @@
 <body>
 	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
 	<div class="content-page">
-	    <h2>PMS 프로젝트 목록</h2>
+	    <h2>PMS 업무 목록</h2>
 	    <table border="1" style="width:100%; border-collapse:collapse;">
 	        <thead>
 	            <tr>
 	                <th>ID</th>
-	                <th>프로젝트명</th>
+	                <th>업무명</th>
 	                <th>상태</th>
 	                <th>시작일</th>
 	            </tr>

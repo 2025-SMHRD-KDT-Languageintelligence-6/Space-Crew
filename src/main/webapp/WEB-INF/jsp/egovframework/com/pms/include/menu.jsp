@@ -9,7 +9,7 @@
         <li><a href="<c:url value='/pms/customerList.do'/>">🤝 고객 관리</a></li>
         <li><a href="<c:url value='/pms/salesList.do'/>">💰 영업 관리</a></li>
         <li><a href="<c:url value='/pms/contractList.do'/>">📄 계약 관리</a></li>
-        <li><a href="<c:url value='/pms/projectList.do'/>">🏗️ 프로젝트 관리</a></li>
+        <li><a href="<c:url value='/pms/projectList.do'/>">🏗️ 업무 관리</a></li>
         <li><a href="<c:url value='/pms/billingList.do'/>">💳 청구/정산 관리</a></li>
         <li><a href="<c:url value='/pms/userList.do'/>">👥 직원 관리</a></li>
     </ul>

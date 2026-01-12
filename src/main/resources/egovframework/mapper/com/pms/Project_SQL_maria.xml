@@ -42,11 +42,11 @@
 	    INSERT INTO TB_PROJECT (
 	        PROJ_NM, PROJ_TYPE, STATUS, START_DT, END_DT, PROGRESS_RATE
 	    ) VALUES (
-	        #{projNm}, #{projType}, #{status}, #{startDt}, #{endDt}, 0.0
+	        #{projNm}, #{projType}, #{status}, NULLIF(#{startDt},''), NULLIF(#{endDt},''), 0.0
 	    )
 	</insert>
 	
-	<select id="selectProjectDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.ProjectVO">
+	<select id="selectProjectDetail" parameterType="java.lang.Long" resultType="egovframework.com.pms.service.ProjectVO">
 	    SELECT 
 	          PROJ_ID           AS projId
 	        , PROJ_NM           AS projNm
@@ -78,7 +78,5 @@
 	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE PROJ_ID = #{projId}
 	</update>
-	
-	
 	
 </mapper>

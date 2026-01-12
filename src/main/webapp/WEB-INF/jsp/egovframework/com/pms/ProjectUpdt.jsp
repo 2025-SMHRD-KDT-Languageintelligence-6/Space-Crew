@@ -4,16 +4,16 @@
 
 <!DOCTYPE html>
 <html>
-<head><title>프로젝트 수정</title></head>
+<head><title>업무 수정</title></head>
 <body>
-    <h2>프로젝트 수정</h2>
+    <h2>업무 수정</h2>
     <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/addProject.do" method="post">
         
         <form:hidden path="projId" />
 
         <table border="1">
             <tr>
-                <th>프로젝트명</th>
+                <th>업무명</th>
                 <td><form:input path="projNm" /></td>
             </tr>
             <tr>

@@ -25,7 +25,7 @@
         INSERT INTO TB_SALES (
             CUST_ID, SALES_USER_ID, SALES_TITLE, EXPECTED_AMT, EXPECTED_DT, PROBABILITY, STATUS, SALES_CONTENT
         ) VALUES (
-            #{custId}, #{salesUserId}, #{salesTitle}, #{expectedAmt}, #{expectedDt}, #{probability}, #{status}, #{salesContent}
+            #{custId}, #{salesUserId}, #{salesTitle}, #{expectedAmt}, NULLIF(#{expectedDt},''), #{probability}, #{status}, #{salesContent}
         )
     </insert>
 	
