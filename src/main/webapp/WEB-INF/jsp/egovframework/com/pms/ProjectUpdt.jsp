@@ -4,44 +4,73 @@
 
 <!DOCTYPE html>
 <html>
-<head><title>업무 수정</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>업무 수정</title>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
+</head>
 <body>
-    <h2>업무 수정</h2>
-    <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/addProject.do" method="post">
-        
-        <form:hidden path="projId" />
 
-        <table border="1">
-            <tr>
-                <th>업무명</th>
-                <td><form:input path="projNm" /></td>
-            </tr>
-            <tr>
-                <th>유형</th>
-                <td>
-                    <form:select path="projType">
-                        <form:option value="개발" label="개발"/>
-                        <form:option value="유지보수" label="유지보수"/>
-                        <form:option value="인프라" label="인프라"/>
-                    </form:select>
-                </td>
-            </tr>
-            <tr>
-                <th>상태</th>
-                <td><form:input path="status" /></td>
-            </tr>
-            <tr>
-                <th>시작일</th>
-                <td><form:input path="startDt" /></td>
-            </tr>
-            <tr>
-                <th>종료일</th>
-                <td><form:input path="endDt" /></td>
-            </tr>
-        </table>
-        <br>
-        <button type="submit">수정완료</button>
-        <a href="<c:url value='/pms/projectList.do'/>">취소</a>
-    </form:form>
+    <div class="form-container">
+        <h2>업무 수정</h2>
+
+        <%-- 주의: 수정 시에는 updateProject.do와 같은 수정 전용 액션 경로를 확인하세요 --%>
+        <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/updateProject.do" method="post">
+
+            <%-- 필수: 데이터 수정을 위한 키 값 --%>
+            <form:hidden path="projId" />
+
+            <table>
+                <tr>
+                    <th>업무 ID</th>
+                    <td>
+                        <span class="readonly-id">#<c:out value="${projectVO.projId}"/></span>
+                        <small>(자동 생성된 번호입니다)</small>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">업무명</th>
+                    <td><form:input path="projNm" required="required" placeholder="업무명을 입력하세요" /></td>
+                </tr>
+                <tr>
+                    <th class="required">유형</th>
+                    <td>
+                        <form:select path="projType" required="required">
+                            <form:option value="개발" label="개발"/>
+                            <form:option value="유지보수" label="유지보수"/>
+                            <form:option value="인프라" label="인프라"/>
+                        </form:select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>상태</th>
+                    <td>
+                        <form:select path="status">
+                            <form:option value="준비" label="준비"/>
+                            <form:option value="진행" label="진행"/>
+                            <form:option value="테스트" label="테스트"/>
+                            <form:option value="종료" label="종료"/>
+                        </form:select>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">수행 기간</th>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <form:input path="startDt" type="date" style="width: 180px;" />
+                            <span style="color: #adb5bd; font-weight: bold;">~</span>
+                            <form:input path="endDt" type="date" style="width: 180px;" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-area">
+                <button type="submit" class="btn btn-blue">수정완료</button>
+                <a href="<c:url value='/pms/projectList.do'/>" class="btn btn-gray">취소</a>
+            </div>
+        </form:form>
+    </div>
+
 </body>
 </html>

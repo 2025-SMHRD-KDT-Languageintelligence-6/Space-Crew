@@ -8,16 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>청구 및 정산 관리</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-        th { background-color: #f8f9fa; }
-        .btn { padding: 6px 12px; text-decoration: none; cursor: pointer; border: 1px solid #dee2e6; border-radius: 4px; display: inline-block; }
-        .btn-blue { background: #007bff; color: white; border: none; }
-        .status-y { color: blue; font-weight: bold; }
-        .status-n { color: red; font-weight: bold; }
-        .content-page { margin-left: 220px; padding: 20px; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/BillingList.css'/>" >
 </head>
 <body>
 	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -103,5 +94,17 @@
 	        }
 	    </script>
     </div>
+
+    <script>
+        function fn_egov_link_page(pageNo){
+            document.listForm.pageIndex.value = pageNo;
+            document.listForm.submit();
+        }
+
+        function fn_open_billing_popup(projId) {
+            var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
+            window.open(url, "billing_pop_" + projId, "width=900, height=750, resizable=yes, scrollbars=yes");
+        }
+    </script>
 </body>
 </html>

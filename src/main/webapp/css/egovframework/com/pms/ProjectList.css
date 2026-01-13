@@ -19,10 +19,9 @@ h2 {
     font-weight: 700;
     color: #2c3e50;
     margin-bottom: 25px;
-    border-left: 5px solid #007bff;
+    border-left: 5px solid #007bff; /* 메인 테마 블루 */
     padding-left: 15px;
 }
-
 /* =================================================================
    2. 검색 영역 (Search Box)
    ================================================================= */
@@ -55,7 +54,7 @@ h2 {
 }
 
 /* =================================================================
-   3. 테이블 스타일 (Table Style)
+   2. 테이블 스타일 (Table Style)
    ================================================================= */
 table {
     width: 100%;
@@ -65,6 +64,7 @@ table {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-top: 10px;
 }
 
 th {
@@ -74,15 +74,13 @@ th {
     font-size: 13px;
     padding: 15px;
     border-bottom: 2px solid #dee2e6;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 td {
     padding: 15px;
     border-bottom: 1px solid #f1f3f5;
     vertical-align: middle;
-    text-align: center; /* 기본적으로 모든 셀은 가운데 정렬 */
+    text-align: center;
 }
 
 tr:hover td {
@@ -90,9 +88,9 @@ tr:hover td {
 }
 
 /* =================================================================
-   4. 상태 및 등급 배지 (Badges & Status)
+   3. 프로젝트 상태 배지 (Status Badges)
    ================================================================= */
-.badge, .status-badge {
+.status-badge {
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 11px;
@@ -100,25 +98,25 @@ tr:hover td {
     display: inline-block;
 }
 
-/* 고객 등급 배지 (고객사 관리용) */
-.badge-vip { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-.badge-partner { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-.badge-normal { background-color: #e2e3e5; color: #383d41; }
-
-/* 계약 상태 배지 (계약 관리용) */
-.status-active { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.status-end { background-color: #e2e3e5; color: #383d41; }
-.status-waiting { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-
-.pagination-wrapper { text-align: center; margin-top: 20px; }
+/* 상태별 색상 (예시: 대기, 진행, 완료, 지연) */
+.status-ready { background-color: #e2e3e5; color: #383d41; }
+.status-ing { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+.status-done { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.status-delay { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
 /* =================================================================
-   5. 버튼 스타일 (강조형 Buttons)
+   4. 버튼 스타일 (Buttons)
    ================================================================= */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
 .btn {
     padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 600; /* 글자 두께 강화 */
+    font-size: 13px;
+    font-weight: 600;
     border-radius: 6px;
     transition: all 0.2s ease;
     text-align: center;
@@ -126,55 +124,40 @@ tr:hover td {
     display: inline-block;
     cursor: pointer;
     border: none;
-    line-height: 1; /* 수직 중앙 정렬 보정 */
 }
 
-/* 신규 등록 등 주요 버튼 (Blue) */
 .btn-blue {
     background: #007bff;
-    color: #ffffff !important;
+    color: #fff !important;
 }
+
 .btn-blue:hover {
     background: #0056b3;
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,123,255,0.3);
 }
 
-/* 수정 버튼 (Yellow - 배경색 강조형) */
 .btn-yellow {
     background: #ffc107;
     color: #212529 !important;
 }
-.btn-yellow:hover {
-    background: #e0a800;
-    transform: translateY(-1px);
-}
 
-/* 삭제 버튼 (Red - 배경색 강조형) */
 .btn-red {
     background: #dc3545;
-    color: #ffffff !important;
-}
-.btn-red:hover {
-    background: #c82333;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(220,53,69,0.3);
+    color: #fff !important;
 }
 
-/* 목록 내 작은 버튼용 (수정/삭제 칸 전용) */
+.btn-red:hover {
+    background: #c82333;
+}
+
 .btn-sm {
-    padding: 5px 10px;
+    padding: 4px 8px;
     font-size: 12px;
 }
 
-/* 버튼들을 감싸는 그룹 (가운데 정렬 보조) */
-.btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-}
-
-/* 6. 유틸리티 */
+/* =================================================================
+   5. 유틸리티 (Utilities)
+   ================================================================= */
 .text-left { text-align: left !important; }
 .text-right { text-align: right !important; }
 .sales-link { color: #007bff; text-decoration: none; font-weight: 600; }

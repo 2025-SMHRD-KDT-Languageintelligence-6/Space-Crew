@@ -7,14 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>계약 수정</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 10px; }
-        th { background-color: #f4f4f4; width: 20%; }
-        .btn-area { margin-top: 20px; text-align: center; }
-        .btn { padding: 7px 15px; cursor: pointer; text-decoration: none; border: none; border-radius: 3px; }
-        .btn-blue { background: #007bff; color: white; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
 </head>
 <body>
 
