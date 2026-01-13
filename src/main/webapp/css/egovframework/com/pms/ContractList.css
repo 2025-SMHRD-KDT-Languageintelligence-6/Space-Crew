@@ -110,8 +110,6 @@ tr:hover td {
 .status-end { background-color: #e2e3e5; color: #383d41; }
 .status-waiting { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
 
-.pagination-wrapper { text-align: center; margin-top: 20px; }
-
 /* =================================================================
    5. 버튼 스타일 (강조형 Buttons)
    ================================================================= */

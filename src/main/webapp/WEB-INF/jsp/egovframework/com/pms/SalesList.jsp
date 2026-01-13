@@ -29,13 +29,13 @@
 	        <thead>
 	            <tr>
 	                <th width="5%">ID</th>
-	                <th width="25%">영업건명</th>
+	                <th width="23%">영업건명</th>
 	                <th width="15%">고객사</th>
 	                <th width="10%">담당자</th>
 	                <th width="15%">예상금액</th>
 	                <th width="12%">확률</th>
 	                <th width="10%">상태</th>
-	                <th width="8%">관리</th>
+	                <th width="10%">관리</th>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -73,8 +73,10 @@
                             </c:choose>
 	                    </td>
 	                    <td>
-		                   <a href="<c:url value='/pms/updateSalesView.do'/>?selectedId=${result.salesId}" class="btn btn-yellow btn-sm" style="font-size:11px; padding:2px 6px;">수정</a>
-                           <a href="javascript:void(0);" class="btn btn-red btn-sm" style="font-size:11px; padding:2px 6px;" onclick="if(confirm('삭제하시겠습니까?')) location.href='<c:url value='/pms/deleteSales.do'/>?selectedId=${result.salesId}';">삭제</a>
+		                   <a href="<c:url value='/pms/updateSalesView.do'/>?selectedId=${result.salesId}"
+		                    class="btn btn-yellow btn-sm" >수정</a>
+                           <a href="javascript:void(0);"
+                            class="btn btn-red btn-sm"  onclick="if(confirm('삭제하시겠습니까?')) location.href='<c:url value='/pms/deleteSales.do'/>?selectedId=${result.salesId}';">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
