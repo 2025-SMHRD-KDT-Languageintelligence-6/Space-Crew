@@ -1,0 +1,173 @@
+/* =================================================================
+   1. 기본 레이아웃 및 검색 영역
+   ================================================================= */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    color: #333;
+    margin: 0;
+}
+
+.content-page {
+    margin-left: 240px;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    border-left: 5px solid #007bff;
+    padding-left: 15px;
+}
+
+.search-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box label {
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.search-box input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    outline: none;
+    transition: all 0.2s;
+    width: 200px;
+}
+
+/* =================================================================
+   2. 테이블 디자인 (사용자 목록)
+   ================================================================= */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 14px;
+}
+
+tr:hover td {
+    background-color: #fdfdfd;
+}
+
+/* 업무 부하량 프로그레스 바 스타일 */
+.load-container {
+    width: 100px;
+    background: #eee;
+    border-radius: 10px;
+    height: 8px;
+    margin: 5px auto;
+    overflow: hidden;
+}
+
+.load-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+/* 부하량 수치별 색상 */
+.load-low { background: #28a745; }    /* 0~40% */
+.load-medium { background: #ffc107; } /* 41~75% */
+.load-high { background: #dc3545; }   /* 76%~ */
+
+/* =================================================================
+   3. 버튼 및 유틸리티
+   ================================================================= */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-blue { background: #007bff; color: white !important; }
+.btn-yellow { background: #ffc107; color: #212529 !important; }
+.btn-red { background: #dc3545; color: white !important; }
+
+.btn-sm { padding: 4px 8px; font-size: 12px; }
+
+.user-link { color: #007bff; text-decoration: none; font-weight: 700; }
+.user-link:hover { text-decoration: underline; }
+
+/* 게이지 바 컨테이너 */
+.load-container {
+    width: 120px;
+    background: #e9ecef; /* 배경색 명시 */
+    border-radius: 10px;
+    height: 12px;
+    margin: 5px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 베이스 바 스타일 */
+.load-bar-base {
+    height: 100%;
+    position: absolute;
+    left: 0; top: 0;
+    z-index: 1;
+    transition: width 0.4s ease-in-out;
+}
+
+/* 과부하 검은색 바 */
+.load-bar-over {
+    height: 100%;
+    position: absolute;
+    left: 0; top: 0;
+    z-index: 2; /* 베이스 바 위로 */
+    background-color: #212529; /* 검은색 */
+    transition: width 0.4s ease-in-out;
+}
+
+/* 색상 정의 */
+.load-low { background: #28a745; }
+.load-medium { background: #ffc107; }
+.load-high { background: #dc3545; }
+
+/* 100% 초과 텍스트 강조 */
+.text-danger-bold {
+    color: #dc3545;
+    font-weight: bold;
+}

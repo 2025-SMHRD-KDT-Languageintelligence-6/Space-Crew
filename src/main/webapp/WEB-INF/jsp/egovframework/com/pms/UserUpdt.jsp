@@ -7,63 +7,69 @@
 <head>
     <meta charset="UTF-8">
     <title>사용자 정보 수정</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 10px; }
-        th { background-color: #f4f4f4; width: 20%; }
-        .btn-area { margin-top: 20px; text-align: center; }
-        .btn { padding: 7px 15px; cursor: pointer; text-decoration: none; border: none; border-radius: 3px; }
-        .btn-blue { background: #007bff; color: white; }
-        .btn-gray { background: #6c757d; color: white; }
-        .readonly { background-color: #eee; }
-    </style>
+    <%-- 공용 등록/수정 폼 CSS 연결 --%>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
 </head>
 <body>
 
-    <h2>사용자 정보 수정</h2>
+    <div class="form-container">
+        <h2>사용자 정보 수정</h2>
 
-    <form:form modelAttribute="userVO" action="${pageContext.request.contextPath}/pms/addUser.do" method="post">
-        <form:hidden path="userId" />
-        
-        <table>
-            <tr>
-                <th>아이디</th>
-                <td><strong><c:out value="${userVO.userId}"/></strong> (아이디는 수정 불가)</td>
-            </tr>
-            <tr>
-                <th>성명</th>
-                <td><form:input path="userNm" required="required" /></td>
-            </tr>
-            <tr>
-                <th>부서명</th>
-                <td><form:input path="deptNm" /></td>
-            </tr>
-            <tr>
-                <th>직무</th>
-                <td><form:input path="jobRole" /></td>
-            </tr>
-            <tr>
-                <th>직위</th>
-                <td><form:input path="positionNm" /></td>
-            </tr>
-            <tr>
-                <th>업무 부하량(%)</th>
-                <td><form:input path="currentLoad" type="number" step="0.01" /></td>
-            </tr>
-            <tr>
-                <th>사용 여부</th>
-                <td>
-                    <form:radiobutton path="useYn" value="Y" label="사용"/>
-                    <form:radiobutton path="useYn" value="N" label="미사용"/>
-                </td>
-            </tr>
-        </table>
+        <%-- 수정 처리를 위해 action 경로가 updateUser.do인지 확인해 주세요 --%>
+        <form:form modelAttribute="userVO" action="${pageContext.request.contextPath}/pms/updateUser.do" method="post">
 
-        <div class="btn-area">
-            <button type="submit" class="btn btn-blue">수정완료</button>
-            <a href="<c:url value='/pms/userList.do'/>" class="btn btn-gray">취소</a>
-        </div>
-    </form:form>
+            <%-- 필수: 데이터 수정을 위한 키 값 --%>
+            <form:hidden path="userId" />
+
+            <table>
+                <tr>
+                    <th>아이디</th>
+                    <td>
+                        <span class="readonly-id"><c:out value="${userVO.userId}"/></span>
+                        <small style="color: #868e96; margin-left: 10px;">(아이디는 수정할 수 없습니다)</small>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">성명</th>
+                    <td><form:input path="userNm" required="required" placeholder="성명을 입력하세요" /></td>
+                </tr>
+                <tr>
+                    <th>부서명</th>
+                    <td><form:input path="deptNm" placeholder="소속 부서" /></td>
+                </tr>
+                <tr>
+                    <th>직무 / 직위</th>
+                    <td>
+                        <div style="display: flex; gap: 10px;">
+                            <form:input path="jobRole" placeholder="직무 (예: 개발)" style="flex: 1;" />
+                            <form:input path="positionNm" placeholder="직위 (예: 대리)" style="flex: 1;" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>업무 부하량</th>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <form:input path="currentLoad" type="number" step="0.1" style="width: 150px;" />
+                            <span style="margin-left: 10px; font-weight: bold; color: #666;">%</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>사용 여부</th>
+                    <td class="radio-group">
+                        <form:radiobutton path="useYn" value="Y" id="useY" /><label for="useY">사용</label>
+                        <form:radiobutton path="useYn" value="N" id="useN" style="margin-left:20px;" /><label for="useN">미사용</label>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-area">
+                <button type="submit" class="btn btn-blue">수정완료</button>
+                <a href="<c:url value='/pms/userList.do'/>" class="btn btn-gray">취소</a>
+            </div>
+        </form:form>
+    </div>
 
 </body>
 </html>
