@@ -42,7 +42,7 @@
 	                <tr>
 	                    <td><c:out value="${result.contId}"/></td>
 	                    <td class="text-left">
-	                        <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');" style="font-weight:bold; color:#007bff;">
+	                        <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');"  style="font-weight:bold; color:#007bff;">
 	                            <c:out value="${result.contNm}"/>
 	                        </a>
 	                    </td>

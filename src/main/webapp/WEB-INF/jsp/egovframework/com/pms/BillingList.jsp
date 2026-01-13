@@ -8,97 +8,89 @@
 <head>
     <meta charset="UTF-8">
     <title>청구 및 정산 관리</title>
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-        th { background-color: #f8f9fa; }
-        .btn { padding: 6px 12px; text-decoration: none; cursor: pointer; border: 1px solid #dee2e6; border-radius: 4px; display: inline-block; }
-        .btn-blue { background: #007bff; color: white; border: none; }
-        .status-y { color: blue; font-weight: bold; }
-        .status-n { color: red; font-weight: bold; }
-        .content-page { margin-left: 220px; padding: 20px; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/BillingList.css'/>" >
 </head>
 <body>
-	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
-	<div class="content-page">
-	    <h2>청구 및 정산 목록</h2>
-	
-	    <div style="margin-bottom: 20px;">
-	        <form name="listForm" action="<c:url value='/pms/billingList.do'/>" method="post">
-	            <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-	            <label>청구명: </label>
-	            <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" />
-	            <button type="submit" class="btn btn-blue">검색</button>
-	        </form>
-	    </div>
-	
-	    <table>
-	        <thead>
-	            <tr>
-	                <th>ID</th>
-	                <th>프로젝트명</th>
-	                <th>청구회차/명칭</th>
-	                <th>청구금액</th>
-	                <th>발행일</th>
-	                <th>입금여부</th>
-	                <th>관리</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <c:forEach var="result" items="${resultList}">
-	                <tr>
-	                    <td>${result.billId}</td>
-	                    <td>
-						    <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.projId}');" style="font-weight:bold; color:#007bff; text-decoration:underline;">
-						        <c:out value="${result.projNm}"/>
-						    </a>
-						</td>
-						<td style="text-align:left;">
-						    <c:out value="${result.billTitle}"/>
-						</td>
-	                    <td style="text-align:right;"><fmt:formatNumber value="${result.billAmt}" pattern="#,###"/>원</td>
-	                    <td>${result.taxBillDt}</td>
-	                    <td>
-	                        <span class="${result.isPaid == 'Y' ? 'status-y' : 'status-n'}">
-	                            ${result.isPaid == 'Y' ? '입금완료' : '미납'}
-	                        </span>
-	                    </td>
-	                    <td>
-	                    	<a href="<c:url value='/pms/updateBillingView.do'/>?selectedId=${result.billId}" 
-     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
-     						   
-	                        <a href="<c:url value='/pms/deleteBilling.do'/>?selectedId=${result.billId}" 
-	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('청구 정보를 삭제하시겠습니까?');">삭제</a>
-	                    </td>
-	                </tr>
-	            </c:forEach>
-	        </tbody>
-	    </table>
-	
-	    <div style="text-align:center; margin-top:20px;">
-	        <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
-	    </div>
-	
-	    <div style="margin-top: 20px;">
-	        <a href="<c:url value='/pms/addBillingView.do'/>" class="btn btn-blue">신규 청구 등록</a>
-	    </div>
-	
-	    <script>
-	        function fn_egov_link_page(pageNo){
-	            document.listForm.pageIndex.value = pageNo;
-	            document.listForm.action = "<c:url value='/pms/billingList.do'/>";
-	            document.listForm.submit();
-	        }
-	        
-	        function fn_open_billing_popup(projId) {
-	            var windowName = "billing_pop_" + projId;
-	            var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
-	            var options = "width=850, height=700, resizable=yes, scrollbars=yes";
-	            window.open(url, windowName, options);
-	        }
-	    </script>
+    <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
+
+    <div class="content-page">
+        <h2>청구 및 정산 목록</h2>
+
+        <div class="search-box">
+            <form name="listForm" action="<c:url value='/pms/billingList.do'/>" method="post">
+                <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+                <label>청구명</label>
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="청구 또는 프로젝트명 입력" />
+                <button type="submit" class="btn btn-blue">검색</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="8%">ID</th>
+                    <th width="20%">프로젝트명</th>
+                    <th width="25%">청구회차/명칭</th>
+                    <th width="15%">청구금액</th>
+                    <th width="12%">발행일</th>
+                    <th width="10%">상태</th>
+                    <th width="10%">관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="result" items="${resultList}">
+                    <tr>
+                        <td>${result.billId}</td>
+                        <td class="text-left">
+                            <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.projId}');" class="proj-link">
+                                <c:out value="${result.projNm}"/>
+                            </a>
+                        </td>
+                        <td class="text-left"><c:out value="${result.billTitle}"/></td>
+                        <td class="text-right">
+                            <span class="amt-text"><fmt:formatNumber value="${result.billAmt}" pattern="#,###"/>원</span>
+                        </td>
+                        <td>${result.taxBillDt}</td>
+                        <td>
+                            <span class="status-badge ${result.isPaid == 'Y' ? 'status-paid' : 'status-unpaid'}">
+                                ${result.isPaid == 'Y' ? '입금완료' : '미납'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="<c:url value='/pms/updateBillingView.do'/>?selectedId=${result.billId}" class="btn btn-yellow btn-sm">수정</a>
+                                <a href="javascript:void(0);" class="btn btn-red btn-sm" onclick="if(confirm('청구 정보를 삭제하시겠습니까?')) location.href='<c:url value='/pms/deleteBilling.do'/>?selectedId=${result.billId}';">삭제</a>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <c:if test="${empty resultList}">
+                    <tr>
+                        <td colspan="7">조회된 청구 내역이 없습니다.</td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
+
+        <div class="pagination-wrapper">
+            <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
+        </div>
+
+        <div class="action-bar">
+            <a href="<c:url value='/pms/addBillingView.do'/>" class="btn btn-blue">신규 청구 등록</a>
+        </div>
     </div>
+
+    <script>
+        function fn_egov_link_page(pageNo){
+            document.listForm.pageIndex.value = pageNo;
+            document.listForm.submit();
+        }
+
+        function fn_open_billing_popup(projId) {
+            var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
+            window.open(url, "billing_pop_" + projId, "width=900, height=750, resizable=yes, scrollbars=yes");
+        }
+    </script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>고객사 관리 목록</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/CustomerList.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/CustomerList.css'/>" >
 </head>
 <body>
     <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -47,7 +47,7 @@
                         <td><c:out value="${result.custId}"/></td>
                         <td class="text-left">
                             <a href="javascript:void(0);"
-                               onclick="fn_open_customer_popup('${result.custId}', '${result.custNm}');"
+                               onclick="fn_open_customer_popup('${result.custId}', '${result.custNm}');" style="font-weight:bold; color:#007bff;"
                                class="cust-link">
                                 <c:out value="${result.custNm}"/>
                             </a>
