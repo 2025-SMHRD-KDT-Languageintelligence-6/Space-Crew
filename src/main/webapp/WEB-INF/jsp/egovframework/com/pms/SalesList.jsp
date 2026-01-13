@@ -96,8 +96,8 @@
 	            document.listForm.submit();
 	        }
 
-	        function fn_open_customer_popup(salesId, salesTitle) {
-	            var windowName = "sales_pop_" + custId;
+	        function fn_open_sales_popup(salesId, salesTitle) {
+	            var windowName = "sales_pop_" + salesId;
 	            var url = "<c:url value='/pms/salesDetailPopup.do'/>?selectedId=" + salesId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);

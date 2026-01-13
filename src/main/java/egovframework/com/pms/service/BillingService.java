@@ -19,4 +19,8 @@ public interface BillingService {
     List<BillingVO> selectBillingListByProject(BillingVO searchVO) throws Exception;
 
     BillingVO selectProjectBillingSummary(Long projId) throws Exception;
+
+    void updateAutoProjectStatus(Long projId) throws Exception;
+    
+    void updateActualPayDt(BillingVO vo) throws Exception;
 }

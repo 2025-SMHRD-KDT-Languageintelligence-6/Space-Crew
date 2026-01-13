@@ -21,16 +21,60 @@
             <col style="width:70%;">
         </colgroup>
         <tr>
-            <th>고객사 ID</th>
-            <td>${customerVO.custId}</td>
+            <th>고객사명</th>
+            <td></td>
         </tr>
         <tr>
-            <th>대표 연락처</th>
-            <td>${customerVO.picTel}</td>
+            <th>영업건명</th>
+            <td></td>
         </tr>
         <tr>
-            <th>주소</th>
-            <td>${customerVO.custAddr}</td>
+            <th>영업담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약명</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>업무 유형</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>상태</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>주담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>부담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>시작일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>종료일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>진행률</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>난이도</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>요구 기술 사항</th>
+            <td></td>
         </tr>
         </table>
 

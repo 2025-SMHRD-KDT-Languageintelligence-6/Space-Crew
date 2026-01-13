@@ -69,18 +69,29 @@
         </tr>
    	</table>
 
-    <div id="summaryArea" class="summary-box" style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-        <h3>📊 정산 요약</h3>
-        <input type="hidden" id="rawTotalAmt" value="${summary.totalAmt}">
-        
-        <p>총 계약 금액: <strong><fmt:formatNumber value="${summary.totalAmt}" pattern="#,###"/></strong>원</p>
-        <p>기 청구 합계: <span id="totalBilledAmtDisplay" style="font-weight:bold;"><fmt:formatNumber value="${summary.totalBilledAmt}" pattern="#,###"/></span>원</p>
-        <p style="color:red; font-weight:bold; border-top: 1px dashed #ccc; pt-10px; margin-top: 10px;">
-            남은 청구 잔액: <c:set var="total" value="${summary.totalAmt != null ? summary.totalAmt : 0}" />
-						<c:set var="billed" value="${summary.totalBilledAmt != null ? summary.totalBilledAmt : 0}" />
-						<span id="balanceAmtDisplay"><fmt:formatNumber value="${total - billed}" pattern="#,###"/></span>원
-        </p>
-    </div>
+    <div id="summaryArea" class="summary-box" style="background: #f1f3f5; padding: 20px; border-radius: 12px; border: 1px solid #dee2e6; display: flex; justify-content: space-around; text-align: center;">
+	    <input type="hidden" id="rawTotalAmt" value="${summary.totalAmt}"> <div>
+	        <span style="font-size: 14px; color: #666;">총 계약 금액</span><br>
+	        <strong style="font-size: 18px;"><fmt:formatNumber value="${summary.totalAmt}" pattern="#,###"/></strong>원
+	    </div>
+	    
+	    <div style="border-left: 1px solid #ccc; padding-left: 20px;">
+	        <span style="font-size: 14px; color: #666;">누적 청구액</span><br>
+	        <strong id="totalBilledAmtDisplay" style="font-size: 18px; color: #333;"><fmt:formatNumber value="${summary.totalBilledAmt}" pattern="#,###"/></strong>원
+	    </div>
+	
+	    <div style="border-left: 1px solid #ccc; padding-left: 20px;">
+	        <span style="font-size: 14px; color: #666;">실수금 합계</span><br>
+	        <strong id="totalPaidAmtDisplay" style="font-size: 18px; color: #28a745;"><fmt:formatNumber value="${summary.totalPaidAmt}" pattern="#,###"/></strong>원
+	    </div>
+	
+	    <div style="border-left: 1px solid #ccc; padding-left: 20px;">
+	        <span style="font-size: 14px; color: #666;">미수금 잔액</span><br>
+	        <strong id="balanceAmtDisplay" style="font-size: 18px; color: #dc3545;">
+	            <fmt:formatNumber value="${summary.totalAmt - summary.totalPaidAmt}" pattern="#,###"/>
+	        </strong>원
+	    </div>
+	</div>
 	<hr>
 
     <h4>📜 세부 청구 내역</h4>
@@ -90,6 +101,7 @@
                 <th>회차/명칭</th>
                 <th>청구 금액</th>
                 <th>발행일</th>
+                <th>입금 확인일</th>
                 <th>관리</th>
             </tr>
         </thead>
@@ -101,7 +113,26 @@
                         <fmt:formatNumber value="${bill.billAmt}" pattern="#,###"/>원
                     </td>
                     <td>${bill.taxBillDt != null ? bill.taxBillDt : '-'}</td>
-                    <td><button type="button" class="btn_red" style="padding:2px 5px;" onclick="fn_delete_billing('${bill.billId}', ${bill.billAmt})">삭제</button></td>
+                    <td>
+					    <c:choose>
+					        <c:when test="${empty bill.actualPayDt}">
+					            <input type="date" id="payDate_${bill.billId}" style="width:110px; font-size:11px;">
+					            <button type="button" class="btn-blue" style="padding:2px 5px; font-size:11px;" 
+					                    onclick="fn_confirm_payment('${bill.billId}')">확인</button>
+					        </c:when>
+					        <c:otherwise>
+					            <span style="color:blue; font-weight:bold;">${bill.actualPayDt}</span>
+					            <button type="button" style="border:none; background:none; color:gray; cursor:pointer; font-size:11px;" 
+					                    onclick="fn_cancel_payment('${bill.billId}')">[취소]</button>
+					        </c:otherwise>
+					    </c:choose>
+					</td>
+					<td>
+					    <button type="button" class="btn_yellow" style="padding:2px 5px; font-size:11px;" 
+						        onclick="fn_edit_billing('${bill.billId}', '${bill.billTitle}', '${bill.billAmt}', '${bill.taxBillDt}')">수정</button>
+					    <button type="button" class="btn_red" style="padding:2px 5px;" 
+					            onclick="fn_delete_billing('${bill.billId}', ${bill.billAmt})">삭제</button>
+					</td>
                 </tr>
             </c:forEach>
         </tbody>
@@ -109,6 +140,8 @@
 
     <div style="margin-top:20px; padding:15px; border:1px solid #ddd; background:#fffef0;">
         <form id="billingForm">
+        	<input type="hidden" name="billId" id="form_billId" value="">
+        	
             <input type="hidden" name="projId" value="${summary.projId}">
             <input type="hidden" name="lastUpdusrId" value="${loginVO.id}">
             
@@ -122,17 +155,12 @@
 	            <tr>
 	                <td>입금예정: <input type="date" name="payDt" style="width:130px;"></td>
 	                <td>메모: <input type="text" name="billRemark" placeholder="특이사항" style="width:200px;"></td>
-	                <td>
-	                    입금여부: 
-	                    <select name="isPaid">
-	                        <option value="N">미입금</option>
-	                        <option value="Y">입금완료</option>
-	                    </select>
-	                </td>
 	            </tr>
 	        </table>
             <div style="text-align:right; margin-top:10px;">
-            	<button type="button" class="btn-blue" onclick="fn_add_billing();">저장</button>
+            	<button type="button" id="btnSubmit" class="btn-blue" onclick="fn_save_billing();">저장</button>
+    
+   				<button type="button" id="btnCancel" class="btn_red" style="display:none; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="fn_reset_form();">취소</button>
             </div>
         </form>
     </div>
@@ -197,8 +225,25 @@
 
             $("#totalBilledAmtDisplay").text(newBilled.toLocaleString());
             $("#balanceAmtDisplay").text(newBalance.toLocaleString());
+            if (newBalance === 0) {
+                $("#balanceAmtDisplay").css("color", "blue").text("0 (청구완료)");
+                fn_auto_status_update(); 
+            } else if (newBalance < 0) {
+                $("#balanceAmtDisplay").css("color", "red");
+            }
         }
-
+		
+        function fn_auto_status_update() {
+            $.ajax({
+                url: "<c:url value='/pms/updateProjectStatusComplete.do'/>",
+                type: "POST",
+                data: { "projId": "${summary.projId}" },
+                success: function() {
+                    console.log("프로젝트 정산 상태가 자동으로 '완료' 변경되었습니다.");
+                }
+            });
+        }
+        
         function fn_delete_billing(billId, amt) {
             if(!confirm("해당 청구 내역을 삭제하시겠습니까?")) return;
 
@@ -211,6 +256,74 @@
                     alert("삭제되었습니다.");
                     updateSummary(-amt);
                     $("#row_" + billId).remove();
+                }
+            });
+        }
+        
+        function fn_confirm_payment(billId) {
+            var payDate = $("#payDate_" + billId).val();
+            if(!payDate) { alert("입금 날짜를 선택해주세요."); return; }
+
+            if(!confirm("입금 확인 처리를 하시겠습니까?")) return;
+            
+            $.ajax({
+                url: "<c:url value='/pms/updateActualPayDtAjax.do'/>",
+                type: "POST",
+                data: { 
+                    "billId": billId, 
+                    "actualPayDt": payDate,
+                    "projId": "${summary.projId}"
+                },
+                success: function(data) {
+                    alert("입금 확인 처리가 완료되었습니다.");
+                    location.reload();
+                }
+            });
+        }
+        
+        function fn_edit_billing(billId, title, amt, taxDate) {
+            $("#form_billId").val(billId);
+            $("#billTitle").val(title);
+            $("#billAmt").val(amt);
+            $("input[name='taxBillDt']").val(taxDate === '-' ? '' : taxDate);
+            
+            $("#formTitle").text("내역 수정 : ").css("color", "orange");
+            $("#btnSubmit").text("수정하기").removeClass("btn-blue").addClass("btn-yellow");
+            $("#btnCancel").show();
+            
+            $("#billTitle").focus();
+        }
+
+        function fn_reset_form() {
+            $("#form_billId").val("");
+            $("#billingForm")[0].reset();
+            $("#formTitle").text("내역 추가 : ").css("color", "black");
+            $("#btnSubmit").text("저장").removeClass("btn-yellow").addClass("btn-blue");
+            $("#btnCancel").hide();
+        }
+
+        function fn_save_billing() {
+            var billId = $("#form_billId").val();
+            var title = $("#billTitle").val();
+            var amt = parseInt($("#billAmt").val() || 0);
+            
+            if(!title) { alert("청구 명칭을 입력하세요."); return; }
+            if(amt <= 0) { alert("금액을 정확히 입력하세요."); return; }
+            
+            var url = billId ? "<c:url value='/pms/updateBillingAjax.do'/>" : "<c:url value='/pms/addBillingAjax.do'/>";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $("#billingForm").serialize(),
+                dataType: "json",
+                success: function(data) {
+                    if(data.status == "success") {
+                        alert(billId ? "수정되었습니다." : "추가되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("처리 실패: " + data.message);
+                    }
                 }
             });
         }

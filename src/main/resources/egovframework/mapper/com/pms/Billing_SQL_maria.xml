@@ -2,23 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egovframework.com.pms.service.impl.BillingMapper">
 
-    <select id="selectBillingList" resultType="egovframework.com.pms.service.BillingVO">
+    <select id="selectBillingList" parameterType="egovframework.com.pms.service.BillingVO" resultType="egovframework.com.pms.service.BillingVO">
         SELECT 
-              A.BILL_ID       AS billId
-            , A.PROJ_ID       AS projId
-            , A.BILL_TITLE    AS billTitle
-            , A.BILL_AMT      AS billAmt
-            , A.TAX_BILL_DT   AS taxBillDt
-            , A.IS_PAID       AS isPaid
-            , B.PROJ_NM       AS projNm
-        FROM TB_BILLING A
-        LEFT JOIN TB_PROJECT B ON A.PROJ_ID = B.PROJ_ID
-        WHERE A.DEL_YN = 'N'
-        <if test="searchKeyword != null and searchKeyword != ''">
-            AND A.BILL_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
-        </if>
-        ORDER BY A.BILL_ID DESC
-        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+              P.PROJ_ID           AS projId
+	        , P.PROJ_NM           AS projNm
+	        , CONT.CONT_AMT       AS totalAmt
+	        , IFNULL(SUM(B.BILL_AMT), 0) AS totalBilledAmt
+	        , CASE 
+	            WHEN CONT.CONT_AMT > 0 
+	                 AND CONT.CONT_AMT = SUM(IFNULL(B.BILL_AMT, 0))
+	                 AND COUNT(B.BILL_ID) = SUM(CASE WHEN B.ACTUAL_PAY_DT IS NOT NULL THEN 1 ELSE 0 END) 
+	            THEN 'Y' 
+	            ELSE 'N' 
+	          END AS isPaid
+	    FROM TB_PROJECT P
+	    LEFT JOIN TB_CONTRACT CONT ON P.CONT_ID = CONT.CONT_ID
+	    LEFT JOIN TB_BILLING B ON P.PROJ_ID = B.PROJ_ID AND B.DEL_YN = 'N'
+	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND P.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    </if>
+	    GROUP BY P.PROJ_ID, P.PROJ_NM, CONT.CONT_AMT
+	    ORDER BY P.PROJ_ID DESC
+	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 	
 	<select id="selectBillingDetail" parameterType="long" resultType="egovframework.com.pms.service.BillingVO">
@@ -73,17 +79,19 @@
     
     <update id="updateBilling" parameterType="egovframework.com.pms.service.BillingVO">
 	    UPDATE TB_BILLING
-	    SET
-	          PROJ_ID = #{projId}
-	        , BILL_TITLE = #{billTitle}
-	        , BILL_AMT = #{billAmt}
-	        , TAX_BILL_DT = NULLIF(#{taxBillDt}, '')
-	        , PAY_DT = NULLIF(#{payDt}, '')
-	        , IS_PAID = #{isPaid}
-	        , ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, '')
-	        , BILL_REMARK = #{billRemark}
-	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
+	    <set>
+	        <if test="projId != null">PROJ_ID = #{projId},</if>
+	        <if test="billTitle != null">BILL_TITLE = #{billTitle},</if>
+	        <if test="billAmt != null and billAmt != 0">BILL_AMT = #{billAmt},</if>
+	        <if test="taxBillDt != null">TAX_BILL_DT = NULLIF(#{taxBillDt}, ''),</if>
+	        <if test="payDt != null">PAY_DT = NULLIF(#{payDt}, ''),</if>
+	        <if test="isPaid != null">IS_PAID = #{isPaid},</if>
+	        <if test="actualPayDt != null">ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, ''),</if>
+	        <if test="billRemark != null">BILL_REMARK = #{billRemark},</if>
+	        <if test="lastUpdusrId != null">LAST_UPDUSR_ID = #{lastUpdusrId},</if>
+	        LAST_UPDT_PNTTM = NOW()
+	    </set>
+	        
 	    WHERE BILL_ID = #{billId}
 	</update>
     
@@ -97,17 +105,23 @@
 	</update>
     
     <select id="selectProjectBillingSummary" parameterType="long" resultType="egovframework.com.pms.service.BillingVO">
-        SELECT 
-              P.PROJ_ID           AS projId
-            , P.PROJ_NM           AS projNm
-            , IFNULL(C.CONT_AMT, 0) AS totalAmt
-            , (SELECT IFNULL(SUM(BILL_AMT), 0) 
-               FROM TB_BILLING 
-               WHERE PROJ_ID = #{projId} AND DEL_YN = 'N') AS totalBilledAmt
-        FROM TB_PROJECT P
-        LEFT JOIN TB_CONTRACT C ON P.CONT_ID = C.CONT_ID
-        WHERE P.PROJ_ID = #{projId}
-    </select>
+	    SELECT 
+	          P.PROJ_ID           AS projId
+	        , P.PROJ_NM           AS projNm
+	        , IFNULL(C.CONT_AMT, 0) AS totalAmt
+	        , (SELECT IFNULL(SUM(BILL_AMT), 0) 
+	           FROM TB_BILLING 
+	           WHERE PROJ_ID = #{projId} AND DEL_YN = 'N') AS totalBilledAmt
+	        , (SELECT IFNULL(SUM(BILL_AMT), 0) 
+	           FROM TB_BILLING 
+	           WHERE PROJ_ID = #{projId} 
+	             AND DEL_YN = 'N' 
+	             AND ACTUAL_PAY_DT IS NOT NULL 
+	             AND LENGTH(ACTUAL_PAY_DT) > 0) AS totalPaidAmt
+	    FROM TB_PROJECT P
+	    LEFT JOIN TB_CONTRACT C ON P.CONT_ID = C.CONT_ID
+	    WHERE P.PROJ_ID = #{projId}
+	</select>
 	
 	<select id="selectBillingListByProject" parameterType="egovframework.com.pms.service.BillingVO" resultType="egovframework.com.pms.service.BillingVO">
 	    SELECT 
@@ -121,5 +135,34 @@
 	    AND DEL_YN = 'N'
 	    ORDER BY BILL_ID ASC
 	</select>
-    	  
+   	
+   	<select id="selectProjectSettlementStatus" parameterType="long" resultType="map">
+	    SELECT 
+	        COUNT(*) as totalCount,
+	        SUM(CASE 
+	              WHEN ACTUAL_PAY_DT IS NOT NULL AND LENGTH(ACTUAL_PAY_DT) > 0 
+	              THEN 1 
+	              ELSE 0 
+	            END) as paidCount,
+	        (SELECT IFNULL(CONT_AMT, 0) 
+	           FROM TB_CONTRACT 
+	          WHERE CONT_ID = (SELECT CONT_ID FROM TB_PROJECT WHERE PROJ_ID = #{projId})) as totalContAmt,
+	        IFNULL(SUM(BILL_AMT), 0) as totalBilledAmt,
+	        SUM(CASE 
+	              WHEN ACTUAL_PAY_DT IS NOT NULL AND LENGTH(ACTUAL_PAY_DT) > 0 
+	              THEN BILL_AMT 
+	              ELSE 0 
+	            END) as totalPaidAmt
+	    FROM TB_BILLING
+	    WHERE PROJ_ID = #{projId} AND DEL_YN = 'N'
+	</select>
+   	
+   	<update id="updateActualPayDt">
+	    UPDATE TB_BILLING
+	       SET ACTUAL_PAY_DT = #{actualPayDt},
+	           IS_PAID = 'Y',
+	           LAST_UPDT_PNTTM = NOW()
+	     WHERE BILL_ID = #{billId}
+	</update>
+	
 </mapper>

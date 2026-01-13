@@ -79,4 +79,9 @@
 	    WHERE PROJ_ID = #{projId}
 	</update>
 	
+	<update id="updateProjectStatus">
+	    UPDATE TB_PROJECT
+	       SET STATUS = #{status}  WHERE PROJ_ID = #{projId}
+	</update>
+	
 </mapper>

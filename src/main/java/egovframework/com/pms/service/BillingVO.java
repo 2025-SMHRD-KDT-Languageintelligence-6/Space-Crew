@@ -23,4 +23,5 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     
     private Long totalAmt;
     private Long totalBilledAmt;
+    private Long totalPaidAmt;
 }

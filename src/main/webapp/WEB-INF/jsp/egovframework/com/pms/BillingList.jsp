@@ -36,41 +36,44 @@
 	    <table>
 	        <thead>
 	            <tr>
-	                <th>ID</th>
-	                <th>프로젝트명</th>
-	                <th>청구회차/명칭</th>
-	                <th>청구금액</th>
-	                <th>발행일</th>
-	                <th>입금여부</th>
-	                <th>관리</th>
+	                <th width="10">프로젝트ID</th>
+		            <th width="30%">프로젝트명</th>
+		            <th width="25%">계약금액</th>
+		            <th width="25%">누적청구액</th>
+		            <th width="10%">정산여부</th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	            <c:forEach var="result" items="${resultList}">
 	                <tr>
-	                    <td>${result.billId}</td>
+	                    <td>${result.projId}</td>
 	                    <td>
 						    <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.projId}');" style="font-weight:bold; color:#007bff; text-decoration:underline;">
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
-						<td style="text-align:left;">
-						    <c:out value="${result.billTitle}"/>
-						</td>
-	                    <td style="text-align:right;"><fmt:formatNumber value="${result.billAmt}" pattern="#,###"/>원</td>
-	                    <td>${result.taxBillDt}</td>
-	                    <td>
-	                        <span class="${result.isPaid == 'Y' ? 'status-y' : 'status-n'}">
-	                            ${result.isPaid == 'Y' ? '입금완료' : '미납'}
-	                        </span>
+	                    <td style="text-align:right; padding-right:15px;">
+	                   		<fmt:formatNumber value="${result.totalAmt}" pattern="#,###"/>원
+	                    </td>
+	                    <td style="text-align:right; padding-right:15px; color:#28a745; font-weight:bold;">
+	                    	<fmt:formatNumber value="${result.totalBilledAmt}" pattern="#,###"/>원
 	                    </td>
 	                    <td>
-	                    	<a href="<c:url value='/pms/updateBillingView.do'/>?selectedId=${result.billId}" 
-     						   class="btn" style="padding: 2px 5px; font-size: 12px; background:#ffc107;">수정</a>
-     						   
-	                        <a href="<c:url value='/pms/deleteBilling.do'/>?selectedId=${result.billId}" 
-	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('청구 정보를 삭제하시겠습니까?');">삭제</a>
+	                        <c:choose>
+			                    <c:when test="${result.isPaid == 'Y'}">
+			                        <span class="status-y" style="background:#e7f3ff; padding:4px 10px; border-radius:12px; font-size:11px;">정산완료</span>
+			                    </c:when>
+			                    <c:otherwise>
+			                        <c:choose>
+			                            <c:when test="${result.totalAmt == result.totalBilledAmt}">
+			                                <span style="background:#fff3cd; color:#856404; padding:4px 10px; border-radius:12px; font-size:11px;">입금대기</span>
+			                            </c:when>
+			                            <c:otherwise>
+			                                <span class="status-n" style="background:#fff0f0; padding:4px 10px; border-radius:12px; font-size:11px;">청구진행중</span>
+			                            </c:otherwise>
+			                        </c:choose>
+			                    </c:otherwise>
+			                </c:choose>
 	                    </td>
 	                </tr>
 	            </c:forEach>

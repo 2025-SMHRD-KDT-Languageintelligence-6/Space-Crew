@@ -21,16 +21,48 @@
             <col style="width:70%;">
         </colgroup>
         <tr>
-            <th>고객사 ID</th>
-            <td>${customerVO.custId}</td>
+            <th>이름</th>
+            <td></td>
         </tr>
         <tr>
-            <th>대표 연락처</th>
-            <td>${customerVO.picTel}</td>
+            <th>부서</th>
+            <td></td>
         </tr>
         <tr>
-            <th>주소</th>
-            <td>${customerVO.custAddr}</td>
+            <th>직무</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>직급</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>경력연수</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>전문분야</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>업무부하량</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>가입일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>권한레벨</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>재직</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>보유스택</th>
+            <td></td>
         </tr>
         </table>
 

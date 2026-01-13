@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.com.pms.service.BillingVO;
 
@@ -14,4 +16,6 @@ public interface BillingMapper {
     void deleteBilling(BillingVO vo) throws Exception;
 	BillingVO selectProjectBillingSummary(Long projId);
 	List<BillingVO> selectBillingListByProject(BillingVO searchVO);
+	Map<String, Object> selectProjectSettlementStatus(Long projId);
+	void updateActualPayDt(BillingVO vo);
 }

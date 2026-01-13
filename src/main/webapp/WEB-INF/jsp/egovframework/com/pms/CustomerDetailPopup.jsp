@@ -21,17 +21,36 @@
             <col style="width:70%;">
         </colgroup>
         <tr>
-            <th>고객사 ID</th>
-            <td>${customerVO.custId}</td>
+            <th>사업자 번호</th>
+            <td></td>
         </tr>
         <tr>
-            <th>대표 연락처</th>
+            <th>대표자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>연락처</th>
             <td>${customerVO.picTel}</td>
+        </tr>
+        <tr>
+            <th>이메일</th>
+            <td></td>
         </tr>
         <tr>
             <th>주소</th>
             <td>${customerVO.custAddr}</td>
         </tr>
+        <tr>
+            <th>특이사항</th>
+            <td></td>
+        </tr>
+        
+        
+        
         </table>
 
     <div class="btn-close">

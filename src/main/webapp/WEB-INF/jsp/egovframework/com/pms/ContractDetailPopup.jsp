@@ -22,15 +22,43 @@
         </colgroup>
         <tr>
             <th>고객사 ID</th>
-            <td>${customerVO.custId}</td>
+            <td></td>
         </tr>
         <tr>
-            <th>대표 연락처</th>
-            <td>${customerVO.picTel}</td>
+            <th>영업건명</th>
+            <td></td>
         </tr>
         <tr>
-            <th>주소</th>
-            <td>${customerVO.custAddr}</td>
+            <th>영업담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약금액</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약시작일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약종료일</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>상태</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>특이사항</th>
+            <td></td>
         </tr>
         </table>
 

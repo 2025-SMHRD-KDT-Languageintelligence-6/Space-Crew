@@ -144,4 +144,29 @@ public class BillingController {
         return result;
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateActualPayDtAjax.do")
+    public String updateActualPayDtAjax(BillingVO vo) throws Exception {
+        billingService.updateBilling(vo); 
+        
+        billingService.updateAutoProjectStatus(vo.getProjId());
+        
+        return "{\"status\":\"success\"}";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateBillingAjax.do")
+    public Map<String, Object> updateBillingAjax(BillingVO vo) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            billingService.saveBilling(vo); 
+            
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            resultMap.put("status", "fail");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
 }

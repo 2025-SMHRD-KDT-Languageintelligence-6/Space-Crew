@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,10 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
 
     @Resource(name="billingMapper")
     private BillingMapper billingMapper;
-
+    
+    @Resource(name="projectMapper")
+    private ProjectMapper projectMapper;
+    
     @Override
     public List<BillingVO> selectBillingList(BillingVO vo) throws Exception {
         return billingMapper.selectBillingList(vo);
@@ -30,6 +35,7 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
         } else {
             billingMapper.updateBilling(vo);
         }
+        this.updateAutoProjectStatus(vo.getProjId());
     }
 
     @Override
@@ -40,6 +46,8 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
     @Override
     public void deleteBilling(BillingVO vo) throws Exception {
         billingMapper.deleteBilling(vo);
+        
+        this.updateAutoProjectStatus(vo.getProjId());
     }
     
     @Override
@@ -55,5 +63,36 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
     @Override
     public List<BillingVO> selectBillingListByProject(BillingVO searchVO) throws Exception {
         return billingMapper.selectBillingListByProject(searchVO);
+    }
+    
+    @Override
+    public void updateAutoProjectStatus(Long projId) throws Exception {
+        Map<String, Object> status = billingMapper.selectProjectSettlementStatus(projId);
+        
+        if (status == null || status.get("totalContAmt") == null) return;
+
+        long totalCount = Long.parseLong(String.valueOf(status.get("totalCount")));
+        long paidCount = Long.parseLong(String.valueOf(status.get("paidCount")));
+        long totalContAmt = Long.parseLong(String.valueOf(status.get("totalContAmt")));
+        long totalBilledAmt = Long.parseLong(String.valueOf(status.get("totalBilledAmt")));
+
+        String finalStatus = "청구진행중";
+
+        if (totalContAmt > 0 && totalContAmt == totalBilledAmt) {
+            if (totalCount == paidCount && totalCount > 0) {
+                finalStatus = "정산완료";
+            } else {
+                finalStatus = "입금대기";
+            }
+        }
+
+        projectMapper.updateProjectStatus(projId, finalStatus);
+    }
+    
+    @Override
+    public void updateActualPayDt(BillingVO vo) throws Exception {
+        billingMapper.updateActualPayDt(vo);
+        
+        this.updateAutoProjectStatus(vo.getProjId());
     }
 }

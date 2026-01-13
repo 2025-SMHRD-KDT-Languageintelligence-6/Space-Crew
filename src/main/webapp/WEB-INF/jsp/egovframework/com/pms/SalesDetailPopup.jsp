@@ -21,16 +21,36 @@
             <col style="width:70%;">
         </colgroup>
         <tr>
-            <th>고객사 ID</th>
-            <td>${customerVO.custId}</td>
+            <th>고객사</th>
+            <td></td>
         </tr>
         <tr>
-            <th>대표 연락처</th>
-            <td>${customerVO.picTel}</td>
+            <th>영업담당자</th>
+            <td></td>
         </tr>
         <tr>
-            <th>주소</th>
-            <td>${customerVO.custAddr}</td>
+            <th>예상금액</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>예상 수주 시기</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>확률</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>상태</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>영업추진내용</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>등록일시</th>
+            <td></td>
         </tr>
         </table>
 
