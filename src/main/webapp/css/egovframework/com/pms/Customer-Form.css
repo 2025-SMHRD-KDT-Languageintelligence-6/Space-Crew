@@ -1,0 +1,131 @@
+/* 기본 레이아웃 */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    text-align: center;
+    border-bottom: 2px solid #f1f3f5;
+    padding-bottom: 20px;
+}
+
+/* 테이블(폼 필드) 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #fcfcfc;
+    color: #495057;
+    width: 25%;
+    text-align: left;
+    padding: 15px;
+    font-size: 14px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* 입력 요소 스타일 */
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+textarea {
+    resize: vertical; /* 세로로만 조절 가능 */
+}
+
+/* 필수 표시(*) */
+th.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* 버튼 영역 */
+.btn-area {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-blue {
+    background: #007bff;
+    color: white;
+}
+
+.btn-blue:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-gray {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.btn-gray:hover {
+    background: #dee2e6;
+}
+
+/* 수정 페이지 전용: 읽기 전용 ID 스타일 */
+.readonly-id {
+    font-weight: 700;
+    color: #495057;
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+small {
+    color: #868e96;
+    margin-left: 5px;
+}
