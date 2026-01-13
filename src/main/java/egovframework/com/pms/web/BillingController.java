@@ -1,6 +1,8 @@
 package egovframework.com.pms.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -95,9 +98,48 @@ public class BillingController {
     }
     
     @RequestMapping(value = "/pms/billingDetailPopup.do")
-    public String billingDetailPopup(@RequestParam("selectedId") Long id, Model model) throws Exception {
-        BillingVO result = billingService.selectBillingDetail(id);
-        model.addAttribute("billingVO", result);
+    public String billingDetailPopup(@RequestParam("projId") Long projId, Model model) throws Exception {
+        BillingVO summary = billingService.selectProjectBillingSummary(projId);
+        List<BillingVO> billList = billingService.selectBillingListByProject(summary);
+
+        model.addAttribute("summary", summary);
+        model.addAttribute("billList", billList);
         return "egovframework/com/pms/BillingDetailPopup";
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/addBillingAjax.do")
+    public Map<String, Object> addBillingAjax(@ModelAttribute("billingVO") BillingVO billingVO) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+            billingVO.setLastUpdusrId(user.getId());
+            
+            billingService.saveBilling(billingVO);
+            result.put("status", "success");
+        } catch (Exception e) {
+            result.put("status", "fail");
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/deleteBillingAjax.do")
+    public Map<String, Object> deleteBillingAjax(@RequestParam("selectedId") Long id) throws Exception {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            BillingVO billingVO = new BillingVO();
+            billingVO.setBillId(id);
+            LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+            if (user != null) billingVO.setLastUpdusrId(user.getId());
+            
+            billingService.deleteBilling(billingVO);
+            result.put("status", "success");
+        } catch (Exception e) {
+            result.put("status", "fail");
+        }
+        return result;
+    }
+    
 }

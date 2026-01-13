@@ -15,4 +15,8 @@ public interface BillingService {
     void deleteBilling(BillingVO vo) throws Exception;
     
     void updateBilling(BillingVO vo) throws Exception;
+
+    List<BillingVO> selectBillingListByProject(BillingVO searchVO) throws Exception;
+
+    BillingVO selectProjectBillingSummary(Long projId) throws Exception;
 }

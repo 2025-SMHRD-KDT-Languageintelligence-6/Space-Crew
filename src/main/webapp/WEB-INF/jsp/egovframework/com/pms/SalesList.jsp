@@ -66,7 +66,7 @@
      						   
 	                        <a href="<c:url value='/pms/deleteSales.do'/>?selectedId=${result.salesId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
+	                           onclick="return confirm('영업 정보를 삭제하시겠습니까?');">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
@@ -88,8 +88,8 @@
 	            document.listForm.submit();
 	        }
 	        
-	        function fn_open_customer_popup(salesId, salesTitle) {
-	            var windowName = "sales_pop_" + custId;
+	        function fn_open_sales_popup(salesId, salesTitle) {
+	            var windowName = "sales_pop_" + salesId;
 	            var url = "<c:url value='/pms/salesDetailPopup.do'/>?selectedId=" + salesId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);

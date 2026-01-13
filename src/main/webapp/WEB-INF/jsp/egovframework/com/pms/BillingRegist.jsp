@@ -21,7 +21,7 @@
             <tr>
                 <th>연관 프로젝트 *</th>
                 <td>
-                    <form:select path="projectId" required="required">
+                    <form:select path="projId" required="required">
                         <form:option value="" label="-- 프로젝트 선택 --"/>
                         <form:options items="${projectList}" itemValue="projId" itemLabel="projNm"/>
                     </form:select>

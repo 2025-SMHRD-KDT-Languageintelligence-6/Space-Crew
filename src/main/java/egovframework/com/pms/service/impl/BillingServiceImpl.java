@@ -46,4 +46,14 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
     public void updateBilling(BillingVO vo) throws Exception {
         billingMapper.updateBilling(vo);
     }
+    
+    @Override
+    public BillingVO selectProjectBillingSummary(Long projId) throws Exception {
+        return billingMapper.selectProjectBillingSummary(projId);
+    }
+
+    @Override
+    public List<BillingVO> selectBillingListByProject(BillingVO searchVO) throws Exception {
+        return billingMapper.selectBillingListByProject(searchVO);
+    }
 }

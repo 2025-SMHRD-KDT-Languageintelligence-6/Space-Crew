@@ -10,8 +10,8 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long billId;
-    private Long projectId;
-    private String projectName;
+    private Long projId;
+    private String projNm;
     private String billTitle;
     private Long billAmt;
     private String taxBillDt;
@@ -20,4 +20,7 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private String actualPayDt;
     private String billRemark;
     private String lastUpdusrId;
+    
+    private Long totalAmt;
+    private Long totalBilledAmt;
 }

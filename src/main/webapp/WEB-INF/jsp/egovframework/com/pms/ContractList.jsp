@@ -68,7 +68,7 @@
      						   
 	                        <a href="<c:url value='/pms/deleteContract.do'/>?selectedId=${result.contId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
+	                           onclick="return confirm('계약 정보를 삭제하시겠습니까?');">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
@@ -86,8 +86,6 @@
 	
 	    <div style="margin-top: 20px;">
 	        <a href="<c:url value='/pms/addContractView.do'/>" class="btn btn-blue">신규 계약 등록</a>
-	        <a href="<c:url value='/pms/projectList.do'/>" class="btn">프로젝트 목록</a>
-	        <a href="<c:url value='/pms/userList.do'/>" class="btn">사용자 목록</a>
 	    </div>
 	
 	    <script type="text/javascript">
@@ -97,8 +95,8 @@
 	            document.listForm.submit();
 	        }
 	        
-	        function fn_open_customer_popup(contId, contNm) {
-	            var windowName = "contract_pop_" + custId;
+	        function fn_open_contract_popup(contId, contNm) {
+	            var windowName = "contract_pop_" + contId;
 	            var url = "<c:url value='/pms/contractDetailPopup.do'/>?selectedId=" + contId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);

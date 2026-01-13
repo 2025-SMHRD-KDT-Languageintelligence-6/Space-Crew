@@ -49,12 +49,14 @@
 	            <c:forEach var="result" items="${resultList}">
 	                <tr>
 	                    <td>${result.billId}</td>
-	                    <td>${result.projectName}</td>
-	                    <td style="text-align:left;">
-	                        <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.billId}', '${result.billTitle}');" style="font-weight:bold; color:#007bff;">
-							    <c:out value="${result.billTitle}"/>
-							</a>
-	                    </td>
+	                    <td>
+						    <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.projId}');" style="font-weight:bold; color:#007bff; text-decoration:underline;">
+						        <c:out value="${result.projNm}"/>
+						    </a>
+						</td>
+						<td style="text-align:left;">
+						    <c:out value="${result.billTitle}"/>
+						</td>
 	                    <td style="text-align:right;"><fmt:formatNumber value="${result.billAmt}" pattern="#,###"/>원</td>
 	                    <td>${result.taxBillDt}</td>
 	                    <td>
@@ -68,7 +70,7 @@
      						   
 	                        <a href="<c:url value='/pms/deleteBilling.do'/>?selectedId=${result.billId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
+	                           onclick="return confirm('청구 정보를 삭제하시겠습니까?');">삭제</a>
 	                    </td>
 	                </tr>
 	            </c:forEach>
@@ -90,10 +92,10 @@
 	            document.listForm.submit();
 	        }
 	        
-	        function fn_open_customer_popup(billId, billTitle) {
-	            var windowName = "billing_pop_" + custId;
-	            var url = "<c:url value='/pms/billingDetailPopup.do'/>?selectedId=" + billId;
-	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+	        function fn_open_billing_popup(projId) {
+	            var windowName = "billing_pop_" + projId;
+	            var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
+	            var options = "width=850, height=700, resizable=yes, scrollbars=yes";
 	            window.open(url, windowName, options);
 	        }
 	    </script>

@@ -38,7 +38,7 @@
      						   
 	                        <a href="<c:url value='/pms/deleteProject.do'/>?selectedId=${result.projId}" 
 	                           class="btn btn-red" style="padding: 2px 5px; font-size: 12px;"
-	                           onclick="return confirm('고객사 정보를 삭제하시겠습니까?');">삭제</a>
+	                           onclick="return confirm('업무 정보를 삭제하시겠습니까?');">삭제</a>
 						</td>
 	                </tr>
 	            </c:forEach>
@@ -60,8 +60,8 @@
 	            document.listForm.submit();
 	        }
 	        
-	        function fn_open_customer_popup(projId, projNm) {
-	            var windowName = "project_pop_" + custId;
+	        function fn_open_project_popup(projId, projNm) {
+	            var windowName = "project_pop_" + projId;
 	            var url = "<c:url value='/pms/projectDetailPopup.do'/>?selectedId=" + projId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);

@@ -12,4 +12,6 @@ public interface BillingMapper {
     void insertBilling(BillingVO vo) throws Exception;
     void updateBilling(BillingVO vo) throws Exception;
     void deleteBilling(BillingVO vo) throws Exception;
+	BillingVO selectProjectBillingSummary(Long projId);
+	List<BillingVO> selectBillingListByProject(BillingVO searchVO);
 }

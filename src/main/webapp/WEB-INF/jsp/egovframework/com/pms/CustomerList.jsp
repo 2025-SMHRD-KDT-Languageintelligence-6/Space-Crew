@@ -83,8 +83,6 @@
 	
 	    <div style="margin-top: 20px;">
 	        <a href="<c:url value='/pms/addCustomerView.do'/>" class="btn btn-blue">신규 고객 등록</a>
-	        <a href="<c:url value='/pms/projectList.do'/>" class="btn">프로젝트 목록</a>
-	        <a href="<c:url value='/pms/contractList.do'/>" class="btn">계약 목록</a>
 	    </div>
 	
 	    <script type="text/javascript">
