@@ -15,6 +15,60 @@
     </style>
 </head>
 <body>
+	<div class="popup-header">
+        <h2>📂 청구 정보 : </h2>
+    </div>
+	<table class="w3-table-all">
+        <colgroup>
+            <col style="width:30%;">
+            <col style="width:70%;">
+        </colgroup>
+        <tr>
+            <th>고객사명</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>영업건명</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>영업담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약명</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>업무명</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>주담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>부담당자</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>계약금액</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>영업메모</th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>업무메모</th>
+            <td></td>
+        </tr>
+   	</table>
+
     <div id="summaryArea" class="summary-box" style="background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
         <h3>📊 정산 요약</h3>
         <input type="hidden" id="rawTotalAmt" value="${summary.totalAmt}">
