@@ -1,0 +1,173 @@
+/* 기본 레이아웃 구성 */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    color: #333;
+    margin: 0;
+}
+
+.content-page {
+    margin-left: 240px; /* 사이드바 여백 */
+    padding: 30px;
+    min-height: 100vh;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    border-left: 5px solid #007bff;
+    padding-left: 15px;
+}
+
+/* 검색 박스 세련되게 수정 */
+.search-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box label {
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.search-box input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+}
+
+.search-box input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+/* 테이블 디자인 현대화 */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+}
+
+tr:hover td {
+    background-color: #fdfdfd;
+}
+
+/* 버튼 스타일 업그레이드 */
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.btn-blue {
+    background: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-blue:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-red {
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-red:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btn-yellow {
+    background: #ffc107;
+    color: #212529;
+    border: none;
+}
+
+/* 유틸리티 클래스 */
+.cust-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cust-link:hover {
+    text-decoration: underline;
+}
+
+.action-bar {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+/* 등급 배지 공통 스타일 */
+.badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.badge-vip {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.badge-partner {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.badge-normal {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+/* 프로젝트 텍스트 스타일 */
+.project-count {
+    font-size: 13px;
+    color: #666;
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
