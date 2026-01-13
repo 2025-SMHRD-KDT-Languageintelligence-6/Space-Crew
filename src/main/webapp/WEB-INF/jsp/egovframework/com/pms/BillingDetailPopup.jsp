@@ -56,10 +56,30 @@
     <div style="margin-top:20px; padding:15px; border:1px solid #ddd; background:#fffef0;">
         <form id="billingForm">
             <input type="hidden" name="projId" value="${summary.projId}">
-            <strong>➕ 내역 추가: </strong>
-            <input type="text" name="billTitle" id="billTitle" placeholder="예: 2차 중도금" style="width:150px;">
-            <input type="number" name="billAmt" id="billAmt" placeholder="청구 금액" style="width:120px;">
-            <button type="button" class="btn-blue" onclick="fn_add_billing();">저장</button>
+            <input type="hidden" name="lastUpdusrId" value="${loginVO.id}">
+            
+            <strong>내역 추가 : </strong>
+            <table style="width:100%; margin-top:10px;">
+	            <tr>
+	                <td>명칭: <input type="text" name="billTitle" id="billTitle" placeholder="2차 중도금" style="width:120px;"></td>
+	                <td>금액: <input type="number" name="billAmt" id="billAmt" style="width:100px;"></td>
+	                <td>발행일: <input type="date" name="taxBillDt" style="width:130px;"></td>
+	            </tr>
+	            <tr>
+	                <td>입금예정: <input type="date" name="payDt" style="width:130px;"></td>
+	                <td>메모: <input type="text" name="billRemark" placeholder="특이사항" style="width:200px;"></td>
+	                <td>
+	                    입금여부: 
+	                    <select name="isPaid">
+	                        <option value="N">미입금</option>
+	                        <option value="Y">입금완료</option>
+	                    </select>
+	                </td>
+	            </tr>
+	        </table>
+            <div style="text-align:right; margin-top:10px;">
+            	<button type="button" class="btn-blue" onclick="fn_add_billing();">저장</button>
+            </div>
         </form>
     </div>
 

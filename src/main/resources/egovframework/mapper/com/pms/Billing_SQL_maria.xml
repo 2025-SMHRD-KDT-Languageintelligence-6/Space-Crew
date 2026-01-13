@@ -41,9 +41,25 @@
 	
     <insert id="insertBilling" parameterType="egovframework.com.pms.service.BillingVO">
         INSERT INTO TB_BILLING (
-            PROJ_ID, BILL_TITLE, BILL_AMT, TAX_BILL_DT, PAY_DT, IS_PAID, ACTUAL_PAY_DT, BILL_REMARK
+              PROJ_ID
+	        , BILL_TITLE
+	        , BILL_AMT
+	        , TAX_BILL_DT
+	        , PAY_DT
+	        , IS_PAID
+	        , ACTUAL_PAY_DT
+	        , BILL_REMARK
+	        , LAST_UPDUSR_ID
         ) VALUES (
-            #{projId}, #{billTitle}, #{billAmt}, NULLIF(#{taxBillDt},''), NULLIF(#{payDt},''), #{isPaid}, NULLIF(#{actualPayDt},''), #{billRemark}
+	          #{projId}
+	        , #{billTitle}
+	        , #{billAmt}
+	        , NULLIF(#{taxBillDt}, '')
+	        , NULLIF(#{payDt}, '')
+	        , IFNULL(#{isPaid}, 'N')   
+	        , NULLIF(#{actualPayDt}, '')
+	        , #{billRemark}
+	        , #{lastUpdusrId}
         )
     </insert>
 

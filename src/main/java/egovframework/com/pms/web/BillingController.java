@@ -113,7 +113,9 @@ public class BillingController {
         Map<String, Object> result = new HashMap<>();
         try {
             LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
-            billingVO.setLastUpdusrId(user.getId());
+            if (user != null) {
+            	billingVO.setLastUpdusrId(user.getId());
+            }
             
             billingService.saveBilling(billingVO);
             result.put("status", "success");
