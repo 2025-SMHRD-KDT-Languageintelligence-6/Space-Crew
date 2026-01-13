@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>영업 정보 수정</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/SalesForm.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
 </head>
 <body>
     <div class="form-container">

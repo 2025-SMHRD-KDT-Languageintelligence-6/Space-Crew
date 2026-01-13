@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>영업 등록</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Sales-Form.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
 </head>
 <body>
     <div class="form-container">

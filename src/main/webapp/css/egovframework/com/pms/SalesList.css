@@ -115,22 +115,41 @@ tr:hover td {
 
 /* [버튼 스타일 - CustomerList.css와 동일] */
 .btn {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: 500;
     border-radius: 6px;
     transition: all 0.2s ease;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
-    border: 1px solid #dee2e6;
+    text-align: center;
 }
 
-.btn-blue { background: #007bff; color: white; border: none; }
-.btn-yellow { background: #ffc107; color: #212529; border: none; }
-.btn-red { background: #dc3545; color: white; border: none; }
+.btn-blue {
+    background: #007bff;
+    color: #fff;
+    border: none;
+}
 
-.btn-sm { padding: 2px 6px; font-size: 11px; }
+.btn-blue:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-red {
+    background: #fff;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-red:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btn-yellow {
+    background: #ffc107;
+    color: #212529;
+    border: none;
+}
 
 /* 유틸리티 */
 .text-left { text-align: left; }
