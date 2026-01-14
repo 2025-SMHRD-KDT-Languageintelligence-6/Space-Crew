@@ -4,19 +4,24 @@
 
     <select id="selectCustomerList" parameterType="egovframework.com.pms.service.CustomerVO" resultType="egovframework.com.pms.service.CustomerVO">
         SELECT 
-              CUST_ID       AS custId
-            , CUST_NM       AS custNm
-            , BIZ_REG_NO    AS bizRegNo
-            , CEO_NM        AS ceoNm
-            , PIC_NM        AS picNm
-            , PIC_TEL       AS picTel
-            , PIC_EMAIL     AS picEmail
-        FROM TB_CUSTOMER
-        WHERE DEL_YN = 'N'
+              A.CUST_ID       AS custId
+            , A.CUST_NM       AS custNm
+            , A.BIZ_REG_NO    AS bizRegNo
+            , A.CEO_NM        AS ceoNm
+            , A.PIC_NM        AS picNm
+            , A.PIC_TEL       AS picTel
+            , A.PIC_EMAIL     AS picEmail
+            , IF(B.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
+        FROM TB_CUSTOMER A
+        LEFT JOIN TB_FAVORITE B 
+	      ON A.CUST_ID = B.TARGET_ID 
+	     AND B.TARGET_TYPE = 'CUSTOMER'
+	     AND B.USER_ID = #{loginId}
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        ORDER BY CUST_ID DESC
+        ORDER BY favYn DESC, A.CUST_ID DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
@@ -74,5 +79,25 @@
 	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE CUST_ID = #{custId}
 	</update>
-
+	
+	<select id="selectFavoriteCount" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_FAVORITE
+	    WHERE USER_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</select>
+	
+	<insert id="insertFavorite" parameterType="map">
+	    INSERT INTO TB_FAVORITE (USER_ID, TARGET_TYPE, TARGET_ID)
+	    VALUES (#{loginId}, #{targetType}, #{targetId})
+	</insert>
+	
+	<delete id="deleteFavorite" parameterType="map">
+	    DELETE FROM TB_FAVORITE
+	    WHERE USER_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</delete>
+	
 </mapper>

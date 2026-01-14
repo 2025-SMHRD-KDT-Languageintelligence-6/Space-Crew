@@ -179,3 +179,18 @@ tr:hover td {
 .text-right { text-align: right !important; }
 .sales-link { color: #007bff; text-decoration: none; font-weight: 600; }
 .pagination-wrapper { text-align: center; margin-top: 20px; }
+
+
+
+
+
+
+.fav-link {
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+    display: inline-block;
+}
+
+.fav-link:hover {
+    transform: scale(1.2);
+}

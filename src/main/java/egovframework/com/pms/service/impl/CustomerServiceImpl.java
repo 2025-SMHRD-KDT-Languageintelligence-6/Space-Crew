@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -44,7 +46,21 @@ public class CustomerServiceImpl extends EgovAbstractServiceImpl implements Cust
 
 	@Override
 	public void updateCustomer(CustomerVO vo) throws Exception {
-		// TODO Auto-generated method stub
 		customerMapper.updateCustomer(vo);
 	}
+	
+	@Override
+    public int selectFavoriteCount(Map<String, Object> param) throws Exception {
+        return customerMapper.selectFavoriteCount(param);
+    }
+
+    @Override
+    public void insertFavorite(Map<String, Object> param) throws Exception {
+        customerMapper.insertFavorite(param);
+    }
+
+    @Override
+    public void deleteFavorite(Map<String, Object> param) throws Exception {
+        customerMapper.deleteFavorite(param);
+    }
 }

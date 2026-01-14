@@ -32,8 +32,9 @@
         <table>
             <thead>
                 <tr>
-                    <th width="8%">ID</th>
-                    <th width="25%">고객사명</th>
+                	<th width="6%"></th>
+                    <th width="5%">ID</th>
+                    <th width="22%">고객사명</th>
                     <th width="15%">사업자번호</th>
                     <th width="12%">대표자</th>
                     <th width="12%">담당자</th>
@@ -44,6 +45,18 @@
             <tbody>
                 <c:forEach var="result" items="${resultList}" varStatus="status">
                     <tr>
+                    	<td>
+						    <a href="javascript:void(0);" onclick="fn_toggle_favorite('${result.custId}', '${result.favYn}');" id="fav_${result.custId}" class="fav-link">
+						        <c:choose>
+						            <c:when test="${result.favYn eq 'Y'}">
+						                <span style="color: #ffc107; font-size: 18px;">★</span>
+						            </c:when>
+						            <c:otherwise>
+						                <span style="color: #ccc; font-size: 18px;">☆</span>
+						            </c:otherwise>
+						        </c:choose>
+						    </a>
+						</td>
                         <td><c:out value="${result.custId}"/></td>
                         <td class="text-left">
                             <a href="javascript:void(0);"
@@ -91,6 +104,8 @@
             <a href="<c:url value='/pms/addCustomerView.do'/>" class="btn btn-blue">신규 고객 등록</a>
         </div>
 
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
         <script type="text/javascript">
             function fn_egov_link_page(pageNo){
                 document.listForm.pageIndex.value = pageNo;
@@ -103,6 +118,28 @@
                 var url = "<c:url value='/pms/customerDetailPopup.do'/>?selectedId=" + custId;
                 var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
                 window.open(url, windowName, options);
+            }
+            
+            function fn_toggle_favorite(custId, currentFavYn) {
+                $.ajax({
+                    url: "<c:url value='/pms/toggleCustomerFavoriteAjax.do'/>",
+                    type: "POST",
+                    data: { 
+                        "targetId": custId, 
+                        "targetType": "CUSTOMER" 
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status === "success") {
+                            location.reload(); 
+                        } else {
+                            alert("처리 중 문제가 발생했습니다: " + data.message);
+                        }
+                    },
+                    error: function() { 
+                        alert("서버 통신 중 오류가 발생했습니다."); 
+                    }
+                });
             }
         </script>
     </div>

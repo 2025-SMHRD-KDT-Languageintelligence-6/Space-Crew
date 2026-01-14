@@ -1,6 +1,9 @@
 package egovframework.com.pms.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +24,12 @@ public class CustomerController {
     @RequestMapping(value = "/pms/customerList.do")
     public String selectCustomerList(@ModelAttribute("searchVO") CustomerVO customerVO, Model model) throws Exception {
         
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	
+    	if (user != null) {
+            customerVO.setLoginId(user.getUniqId()); 
+        }
+    	
         PaginationInfo paginationInfo = new PaginationInfo();
         paginationInfo.setCurrentPageNo(customerVO.getPageIndex());
         paginationInfo.setRecordCountPerPage(customerVO.getPageUnit());
@@ -88,5 +97,31 @@ public class CustomerController {
         CustomerVO result = customerService.selectCustomerDetail(id);
         model.addAttribute("customerVO", result);
         return "egovframework/com/pms/CustomerDetailPopup";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/toggleCustomerFavoriteAjax.do")
+    public Map<String, Object> toggleCustomerFavoriteAjax(@RequestParam Map<String, Object> param) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        param.put("loginId", user.getUniqId());
+        param.put("targetType", "CUSTOMER");
+
+        try {
+            int count = customerService.selectFavoriteCount(param);
+            
+            if (count > 0) {
+                customerService.deleteFavorite(param);
+                resultMap.put("action", "deleted");
+            } else {
+                customerService.insertFavorite(param);
+                resultMap.put("action", "inserted");
+            }
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            resultMap.put("status", "error");
+        }
+        return resultMap;
     }
 }
