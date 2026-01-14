@@ -115,15 +115,21 @@
                     <td>${bill.taxBillDt != null ? bill.taxBillDt : '-'}</td>
                     <td>
 					    <c:choose>
-					        <c:when test="${empty bill.actualPayDt}">
+					        <c:when test="${bill.actualPayDt == null || bill.actualPayDt == '' || bill.actualPayDt == '-'}">
+					        	<div style="display: flex; gap: 5px; align-items: center;">
 					            <input type="date" id="payDate_${bill.billId}" style="width:110px; font-size:11px;">
 					            <button type="button" class="btn-blue" style="padding:2px 5px; font-size:11px;" 
 					                    onclick="fn_confirm_payment('${bill.billId}')">확인</button>
+					            </div>
 					        </c:when>
 					        <c:otherwise>
-					            <span style="color:blue; font-weight:bold;">${bill.actualPayDt}</span>
+					        	<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 5px;">
+					            <span style="color:blue; font-weight:bold;">
+				            		<i class="fa fa-check-circle"></i>${bill.actualPayDt}
+					            </span>
 					            <button type="button" style="border:none; background:none; color:gray; cursor:pointer; font-size:11px;" 
-					                    onclick="fn_cancel_payment('${bill.billId}')">[취소]</button>
+					                    onclick="fn_cancel_payment('${bill.billId}')">취소</button>
+			                    </div>
 					        </c:otherwise>
 					    </c:choose>
 					</td>
@@ -327,6 +333,17 @@
                 }
             });
         }
+        
+        function fn_cancel_payment(billId) {
+            if(!confirm("입금 확인을 취소하시겠습니까?")) return;
+            $.ajax({
+                url: "<c:url value='/pms/updateActualPayDtAjax.do'/>",
+                type: "POST",
+                data: { "billId": billId, "actualPayDt": "", "projId": "${summary.projId}" },
+                success: function() { location.reload(); }
+            });
+        }
+        
     </script>
 </body>
 </html>

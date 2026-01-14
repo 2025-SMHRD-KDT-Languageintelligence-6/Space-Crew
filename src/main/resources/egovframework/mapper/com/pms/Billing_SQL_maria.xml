@@ -130,6 +130,7 @@
 	        , BILL_AMT            AS billAmt
 	        , TAX_BILL_DT         AS taxBillDt
 	        , IS_PAID             AS isPaid
+	        , ACTUAL_PAY_DT       AS actualPayDt
 	    FROM TB_BILLING
 	    WHERE PROJ_ID = #{projId}
 	    AND DEL_YN = 'N'
