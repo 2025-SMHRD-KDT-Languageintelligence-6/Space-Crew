@@ -1,6 +1,7 @@
 package egovframework.com.pms.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectService {
     
@@ -15,4 +16,6 @@ public interface ProjectService {
     void deleteProject(ProjectVO vo) throws Exception;
 
     void updateProject(ProjectVO vo) throws Exception;
+
+	void updateProjectStatus(Map<String, Object> param) throws Exception;
 }

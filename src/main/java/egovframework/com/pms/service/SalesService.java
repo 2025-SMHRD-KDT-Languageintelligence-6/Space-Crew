@@ -1,6 +1,7 @@
 package egovframework.com.pms.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SalesService {
 	
@@ -15,5 +16,7 @@ public interface SalesService {
     void deleteSales(SalesVO vo) throws Exception;
     
 	void updateSales(SalesVO vo) throws Exception;
+
+	void updateSalesStatus(Map<String, Object> param) throws Exception;
 
 }

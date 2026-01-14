@@ -1,6 +1,7 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
@@ -19,4 +20,6 @@ public interface ProjectMapper {
 	void deleteProject(ProjectVO vo) throws Exception;
 
 	void updateProjectStatus(@Param("projId") Long projId, @Param("status") String status);
+
+	void updateProjectStatusAjax(Map<String, Object> param) throws Exception;
 }

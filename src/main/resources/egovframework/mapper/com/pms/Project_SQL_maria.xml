@@ -84,4 +84,13 @@
 	       SET STATUS = #{status}  WHERE PROJ_ID = #{projId}
 	</update>
 	
+	<update id="updateProjectStatusAjax" parameterType="map">
+	    UPDATE TB_PROJECT
+	       SET STATUS = #{status}
+	         , LAST_UPDT_PNTTM = NOW()
+	         <if test="lastUpdusrId != null">
+	         , LAST_UPDUSR_ID = #{lastUpdusrId}
+	         </if>
+	     WHERE PROJ_ID = #{selectedId}
+	</update>
 </mapper>

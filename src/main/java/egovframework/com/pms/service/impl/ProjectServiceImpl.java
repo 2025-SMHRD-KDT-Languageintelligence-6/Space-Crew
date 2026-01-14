@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -50,5 +52,10 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
     @Override
     public void updateProject(ProjectVO vo) throws Exception {
         projectMapper.updateProject(vo);
+    }
+    
+    @Override
+    public void updateProjectStatus(Map<String, Object> param) throws Exception {
+        projectMapper.updateProjectStatusAjax(param);
     }
 }

@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -46,6 +48,11 @@ public class ContractServiceImpl extends EgovAbstractServiceImpl implements Cont
     @Override
     public void updateContract(ContractVO vo) throws Exception {
         contractMapper.updateContract(vo);
+    }
+    
+    @Override
+    public void updateContractStatus(Map<String, Object> param) throws Exception {
+        contractMapper.updateContractStatus(param);
     }
     
 }

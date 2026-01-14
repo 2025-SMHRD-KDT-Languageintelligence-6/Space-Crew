@@ -1,6 +1,8 @@
 package egovframework.com.pms.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -94,4 +97,21 @@ public class ProjectController {
         model.addAttribute("projectVO", result);
         return "egovframework/com/pms/ProjectDetailPopup";
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateProjectStatusAjax.do")
+    public Map<String, Object> updateProjectStatusAjax(@RequestParam Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            projectService.updateProjectStatus(param);
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            resultMap.put("status", "fail");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
+    
+    
 }

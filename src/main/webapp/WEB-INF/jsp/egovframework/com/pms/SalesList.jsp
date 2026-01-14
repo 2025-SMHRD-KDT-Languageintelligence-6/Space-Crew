@@ -56,22 +56,24 @@
                                 <div class="prob-bar" style="width: ${result.probability}%;"></div>
                             </div>
                         </td>
-	                    <td>
-                            <c:choose>
-                                <c:when test="${result.status eq '영업중'}">
-                                    <span class="status-badge status-won">영업중</span>
-                                </c:when>
-
-                                <c:when test="${result.status eq '수주완료'}">
-                                    <span class="status-badge status-negotiating">수주완료</span>
-                                </c:when>
-
-                                <c:when test="${result.status eq '영업실패'}">
-                                    <span class="status-badge status-lost">영업실패</span>
-                                </c:when>
-
-                            </c:choose>
-	                    </td>
+	                    <td style="position: relative;">
+	                    	<div class="status-container">
+						        <a href="javascript:void(0);" 
+						           class="status-badge ${result.status eq '영업중' ? 'status-won' : result.status eq '수주완료' ? 'status-negotiating' : 'status-lost'}"
+						           onclick="fn_toggle_status_menu('${result.salesId}', event);"
+						           style="cursor:pointer; text-decoration:none; display:inline-block;">
+						            ${result.status} ▼
+						        </a>
+						
+						        <div id="status_menu_${result.salesId}" class="status-menu-layer" style="display:none; position: absolute; z-index: 999; background: #fff; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); width: 100px; left: 50%; transform: translateX(-50%);">
+						            <ul style="list-style:none; padding:0; margin:0;">
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업중')" style="display:block; padding:8px; font-size:12px; color:#333;">영업중</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '수주완료')" style="display:block; padding:8px; font-size:12px; color:#333;">수주완료</a></li>
+						                <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업실패')" style="display:block; padding:8px; font-size:12px; color:#333;">영업실패</a></li>
+						            </ul>
+						        </div>
+						    </div>
+						</td>
 	                    <td>
 		                   <a href="<c:url value='/pms/updateSalesView.do'/>?selectedId=${result.salesId}"
 		                    class="btn btn-yellow btn-sm" >수정</a>
@@ -90,8 +92,10 @@
 	    <div style="margin-top: 20px;">
 	        <a href="<c:url value='/pms/addSalesView.do'/>" class="btn btn-blue">신규 영업 등록</a>
 	    </div>
-
-	    <script>
+	    
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
+	    <script type="text/javascript">
 	        function fn_egov_link_page(pageNo){
 	            document.listForm.pageIndex.value = pageNo;
 	            document.listForm.action = "<c:url value='/pms/salesList.do'/>";
@@ -103,6 +107,39 @@
 	            var url = "<c:url value='/pms/salesDetailPopup.do'/>?selectedId=" + salesId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);
+	        }
+	        
+	        function fn_toggle_status_menu(id, event) {
+	            event.stopPropagation();
+	            $(".status-menu-layer").hide();
+	            $("#status_menu_" + id).toggle();
+	        }
+
+	        $(document).click(function() {
+	            $(".status-menu-layer").hide();
+	        });
+
+	        function fn_update_sales_status(salesId, nextStatus) {
+	            if(!confirm("영업 상태를 [" + nextStatus + "]로 변경하시겠습니까?")) return;
+
+	            $.ajax({
+	                url: "<c:url value='/pms/updateSalesStatusAjax.do'/>",
+	                type: "POST",
+	                data: { 
+	                    "selectedId": salesId, 
+	                    "status": nextStatus 
+	                },
+	                dataType: "json",
+	                success: function(data) {
+	                    if(data.status == "success") {
+	                        alert("영업 상태가 변경되었습니다.");
+	                        location.reload();
+	                    } else {
+	                        alert("변경 실패: " + data.message);
+	                    }
+	                },
+	                error: function() { alert("서버 통신 오류"); }
+	            });
 	        }
 	    </script>
     </div>

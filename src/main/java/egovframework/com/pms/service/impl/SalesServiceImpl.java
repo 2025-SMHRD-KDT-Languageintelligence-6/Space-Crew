@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
@@ -46,5 +48,10 @@ public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesSe
     @Override
     public void updateSales(SalesVO vo) throws Exception {
         salesMapper.updateSales(vo);
+    }
+    
+    @Override
+    public void updateSalesStatus(Map<String, Object> param) throws Exception {
+        salesMapper.updateSalesStatus(param);
     }
 }

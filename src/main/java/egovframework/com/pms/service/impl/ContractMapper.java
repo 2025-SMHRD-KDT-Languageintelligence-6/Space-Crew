@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.com.pms.service.ContractVO;
 
@@ -12,4 +14,5 @@ public interface ContractMapper {
     void insertContract(ContractVO vo) throws Exception;
     void updateContract(ContractVO vo) throws Exception;
 	void deleteContract(ContractVO vo) throws Exception;
+	void updateContractStatus(Map<String, Object> param) throws Exception;
 }

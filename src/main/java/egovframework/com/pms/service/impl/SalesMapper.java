@@ -1,6 +1,8 @@
 package egovframework.com.pms.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import egovframework.com.pms.service.SalesVO;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
@@ -12,4 +14,6 @@ public interface SalesMapper {
     void insertSales(SalesVO vo) throws Exception;
     void updateSales(SalesVO vo) throws Exception;
     void deleteSales(SalesVO vo) throws Exception;
+	void updateSalesStatus(Map<String, Object> param) throws Exception;
 }
+

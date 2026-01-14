@@ -1,6 +1,9 @@
 package egovframework.com.pms.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.com.pms.service.SalesService;
 import egovframework.com.pms.service.SalesVO;
@@ -117,4 +121,21 @@ public class SalesController {
         model.addAttribute("salesVO", result);
         return "egovframework/com/pms/SalesDetailPopup";
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateSalesStatusAjax.do")
+    public Map<String, Object> updateSalesStatusAjax(@RequestParam Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            salesService.updateSalesStatus(param);
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            resultMap.put("status", "fail");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
+    
+    
 }

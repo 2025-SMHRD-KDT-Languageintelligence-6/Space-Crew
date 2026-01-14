@@ -41,7 +41,25 @@
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
-	                    <td><c:out value="${result.status}"/></td>
+	                    <td style="position: relative;">
+						    <div class="status-container">
+						        <a href="javascript:void(0);" 
+						           class="status-badge ${result.status eq '완료' ? 'status-won' : result.status eq '진행중' ? 'status-ing' : 'status-lost'}"
+						           onclick="fn_toggle_status_menu('${result.projId}', event);"
+						           style="cursor:pointer; text-decoration:none; display:inline-block;">
+						            ${result.status} ▼
+						        </a>
+						
+						        <div id="status_menu_${result.projId}" class="status-menu-layer" style="display:none; position: absolute; z-index: 999; background: #fff; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); width: 100px; left: 50%; transform: translateX(-50%);">
+						            <ul style="list-style:none; padding:0; margin:0;">
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '대기')" style="display:block; padding:8px; font-size:12px; color:#333;">대기</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '진행중')" style="display:block; padding:8px; font-size:12px; color:#333;">진행중</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '완료')" style="display:block; padding:8px; font-size:12px; color:#333;">완료</a></li>
+						                <li><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '중단')" style="display:block; padding:8px; font-size:12px; color:#333;">중단</a></li>
+						            </ul>
+						        </div>
+						    </div>
+						</td>
 	                    <td><c:out value="${result.startDt}"/></td>
 	                    <td>
 						    <a href="<c:url value='/pms/updateProjectView.do'/>?selectedId=${result.projId}"
@@ -63,7 +81,9 @@
 	    <div style="margin-top: 20px;">
             <a href="<c:url value='/pms/addProjectView.do'/>" class="btn btn-blue">신규 프로젝트 등록</a>
         </div>
-
+		
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		
 		<script type="text/javascript">
 	        function fn_egov_link_page(pageNo){
 	            document.listForm.pageIndex.value = pageNo;
@@ -76,6 +96,39 @@
 	            var url = "<c:url value='/pms/projectDetailPopup.do'/>?selectedId=" + projId;
 	            var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);
+	        }
+	        
+	        function fn_toggle_status_menu(id, event) {
+	            event.stopPropagation();
+	            $(".status-menu-layer").hide();
+	            $("#status_menu_" + id).toggle();
+	        }
+
+	        $(document).click(function() {
+	            $(".status-menu-layer").hide();
+	        });
+
+	        function fn_update_project_status(projId, nextStatus) {
+	            if(!confirm("업무 상태를 [" + nextStatus + "]로 변경하시겠습니까?")) return;
+
+	            $.ajax({
+	                url: "<c:url value='/pms/updateProjectStatusAjax.do'/>",
+	                type: "POST",
+	                data: { 
+	                    "selectedId": projId, 
+	                    "status": nextStatus 
+	                },
+	                dataType: "json",
+	                success: function(data) {
+	                    if(data.status == "success") {
+	                        alert("업무 상태가 변경되었습니다.");
+	                        location.reload();
+	                    } else {
+	                        alert("변경 실패: " + data.message);
+	                    }
+	                },
+	                error: function() { alert("서버 통신 오류"); }
+	            });
 	        }
 	    </script>
 	</div>

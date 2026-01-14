@@ -1,6 +1,7 @@
 package egovframework.com.pms.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ContractService {
 	
@@ -15,4 +16,6 @@ public interface ContractService {
 	void updateContract(ContractVO vo) throws Exception;
 
 	void deleteContract(ContractVO vo) throws Exception;
+
+	void updateContractStatus(Map<String, Object> param) throws Exception;
 }

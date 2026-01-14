@@ -83,7 +83,12 @@
 	    WHERE SALES_ID = #{salesId}
 	</update>
 	
-	
+	<update id="updateSalesStatus">
+	    UPDATE TB_SALES 
+	       SET STATUS = #{status},
+	           LAST_UPDT_PNTTM = NOW()
+	     WHERE SALES_ID = #{selectedId}
+	</update>
 	
 	
 	

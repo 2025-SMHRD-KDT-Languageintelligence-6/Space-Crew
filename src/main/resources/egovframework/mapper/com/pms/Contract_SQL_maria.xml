@@ -82,6 +82,10 @@
 	    WHERE CONT_ID = #{contId}
 	</update>
     
-    
+    <update id="updateContractStatus">
+	    UPDATE TB_CONTRACT 
+	       SET CONT_STATUS = #{contStatus}
+	     WHERE CONT_ID = #{selectedId}
+	</update>
 
 </mapper>
