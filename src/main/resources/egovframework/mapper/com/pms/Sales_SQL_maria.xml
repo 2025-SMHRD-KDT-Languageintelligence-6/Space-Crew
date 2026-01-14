@@ -8,6 +8,7 @@
             , A.SALES_TITLE    AS salesTitle
             , A.EXPECTED_AMT   AS expectedAmt
             , A.STATUS         AS status
+            , A.PROBABILITY       AS probability
             , B.CUST_NM        AS customerName
             , C.USER_NM        AS salesUserName
         FROM TB_SALES A
