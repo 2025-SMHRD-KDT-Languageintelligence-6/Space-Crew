@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
 
@@ -112,6 +113,57 @@ public class ProjectController {
         return resultMap;
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/pms/saveProjectAssignAjax.do")
+    public Map<String, Object> saveProjectAssignAjax(ProjectAssignVO assignVO, 
+            @RequestParam(value="forceSave", defaultValue="N") String forceSave) throws Exception {
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        String result = projectService.insertProjectAssign(assignVO, forceSave);
+
+        if ("OVERLOAD".equals(result)) {
+            resultMap.put("status", "OVERLOAD");
+            double currentRate = projectService.selectUserCurrentRate(assignVO);
+            resultMap.put("message", "주의! 해당 인원은 현재 기간에 이미 " + (int)(currentRate * 100) + "% 투입 중입니다.");
+        } else {
+            resultMap.put("status", "SUCCESS");
+            resultMap.put("message", "저장되었습니다.");
+        }
+        return resultMap;
+    }
     
+    @ResponseBody
+    @RequestMapping(value = "/pms/selectProjectAssignListAjax.do")
+    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projectId") int projectId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        List<ProjectAssignVO> list = projectService.selectProjectAssignList(projectId);
+        
+        resultMap.put("list", list);
+        return resultMap;
+    }
     
+    @ResponseBody
+    @RequestMapping(value = "/pms/deleteProjectAssignAjax.do")
+    public Map<String, Object> deleteProjectAssignAjax(@RequestParam("assignId") int assignId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            projectService.deleteProjectAssign(assignId);
+            resultMap.put("status", "SUCCESS");
+        } catch (Exception e) {
+            resultMap.put("status", "ERROR");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/searchUserAjax.do")
+    public Map<String, Object> searchUserAjax(@RequestParam("searchNm") String searchNm) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<Map<String, Object>> userList = projectService.selectUserListForPopup(searchNm);
+        resultMap.put("userList", userList);
+        return resultMap;
+    }
 }

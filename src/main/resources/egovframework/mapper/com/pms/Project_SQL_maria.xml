@@ -93,4 +93,86 @@
 	         </if>
 	     WHERE PROJ_ID = #{selectedId}
 	</update>
+	
+	<insert id="insertProjectAssign" parameterType="egovframework.com.pms.service.ProjectAssignVO">
+	    INSERT INTO TB_PROJECT_ASSIGN (
+	        PROJECT_ID, 
+	        USER_ID, 
+	        ASSIGN_TITLE, 
+	        START_DATE, 
+	        END_DATE, 
+	        INPUT_RATE,
+	        LAST_UPDUSR_ID,
+ 	        LAST_UPDT_PNTTM
+	    ) VALUES (
+	        #{projectId}, 
+	        #{userId}, 
+	        #{assignTitle}, 
+	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
+	        #{inputRate},
+	        #{lastUpdusrId},   NOW()
+	    )
+	</insert>
+	
+	<select id="selectProjectAssignList" parameterType="int" resultType="egovframework.com.pms.service.ProjectAssignVO">
+	    SELECT 
+	          A.ASSIGN_ID      AS assignId
+	        , A.PROJECT_ID     AS projectId
+	        , A.USER_ID        AS userId
+	        , B.USER_NM        AS userNm      
+	        , B.DEPT_NM        AS deptNm      
+	        , B.POSITION_NM    AS positionNm  
+	        , A.ASSIGN_TITLE   AS assignTitle
+	        , DATE_FORMAT(A.START_DATE, '%Y-%m-%d') AS startDate
+	        , DATE_FORMAT(A.END_DATE, '%Y-%m-%d')   AS endDate
+	        , A.INPUT_RATE     AS inputRate
+	    FROM TB_PROJECT_ASSIGN A
+	    INNER JOIN TB_USER B ON A.USER_ID = B.USER_ID
+	    WHERE A.PROJECT_ID = #{projectId}
+	      AND A.DEL_YN = 'N'
+	      AND B.USE_YN = 'Y'
+	    ORDER BY A.ASSIGN_ID DESC
+	</select>
+	
+	<update id="deleteProjectAssign" parameterType="int">
+	    UPDATE TB_PROJECT_ASSIGN 
+	       SET DEL_YN = 'Y',
+	           LAST_UPDT_PNTTM = NOW(),
+	           LAST_UPDUSR_ID = #{lastUpdusrId}
+	     WHERE ASSIGN_ID = #{assignId}
+	</update>
+	
+	<select id="selectUserCurrentRate" parameterType="egovframework.com.pms.service.ProjectAssignVO" resultType="double">
+	    SELECT IFNULL(MAX(daily_rate), 0)
+	    FROM (
+	        SELECT SUM(INPUT_RATE) as daily_rate
+	        FROM TB_PROJECT_ASSIGN
+	        WHERE USER_ID = #{userId}
+	          AND DEL_YN = 'N'
+	          AND NOT (END_DATE &lt; #{startDate} OR START_DATE &gt; #{endDate})
+	        GROUP BY USER_ID
+	    ) AS temp
+	</select>
+	
+	<select id="selectUserListForPopup" parameterType="string" resultType="egovMap">
+	    SELECT 
+	          A.USER_ID      AS userId
+	        , A.USER_NM      AS userNm
+	        , A.DEPT_NM      AS deptNm
+	        , A.POSITION_NM  AS positionNm
+	        , (SELECT IFNULL(SUM(SUB.INPUT_RATE), 0) 
+	           FROM TB_PROJECT_ASSIGN SUB 
+	           WHERE TRIM(SUB.USER_ID) = TRIM(A.USER_ID) COLLATE utf8mb4_general_ci
+	             AND SUB.DEL_YN = 'N' 
+	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE
+	          ) AS currentLoad
+	    FROM TB_USER A
+	    WHERE A.USE_YN = 'Y'
+	    <if test="searchNm != null and searchNm != ''">
+	      AND A.USER_NM LIKE CONCAT('%', #{searchNm}, '%')
+	    </if>
+	    ORDER BY A.USER_NM ASC
+	</select>
+	
 </mapper>

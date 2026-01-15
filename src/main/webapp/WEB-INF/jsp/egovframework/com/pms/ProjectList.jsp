@@ -130,6 +130,21 @@
 	                error: function() { alert("서버 통신 오류"); }
 	            });
 	        }
+	        
+	        function fn_delete_assign(assignId) {
+	            if(!confirm("정말 삭제하시겠습니까?")) return;
+	            
+	            $.ajax({
+	                url: "<c:url value='/pms/deleteProjectAssignAjax.do'/>",
+	                type: "POST",
+	                data: { assignId: assignId },
+	                success: function(data) {
+	                    alert("삭제되었습니다.");
+	                    fn_load_assign_list();
+	                }
+	            });
+	        }
+	        
 	    </script>
 	</div>
 </body>

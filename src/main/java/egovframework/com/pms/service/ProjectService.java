@@ -18,4 +18,14 @@ public interface ProjectService {
     void updateProject(ProjectVO vo) throws Exception;
 
 	void updateProjectStatus(Map<String, Object> param) throws Exception;
+
+	String insertProjectAssign(ProjectAssignVO assignVO, String forceSave) throws Exception;
+
+	List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception;
+
+	void deleteProjectAssign(int assignId) throws Exception;
+
+	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
+
+	double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception;
 }

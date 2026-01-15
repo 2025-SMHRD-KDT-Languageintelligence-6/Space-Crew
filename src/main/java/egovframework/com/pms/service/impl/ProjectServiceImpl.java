@@ -2,12 +2,14 @@ package egovframework.com.pms.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
+import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
 
@@ -58,4 +60,37 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
     public void updateProjectStatus(Map<String, Object> param) throws Exception {
         projectMapper.updateProjectStatusAjax(param);
     }
+    
+    public String insertProjectAssign(ProjectAssignVO assignVO, String forceSave) throws Exception {
+    	
+    	double currentRate = projectMapper.selectUserCurrentRate(assignVO);
+        double newTotalRate = currentRate + assignVO.getInputRate();
+        
+        if (newTotalRate > 1.0 && "N".equals(forceSave)) {
+        }
+
+        projectMapper.insertProjectAssign(assignVO);
+        return "SUCCESS";
+    }
+
+	@Override
+	public List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception {
+		return projectMapper.selectProjectAssignList(projectId);
+	}
+
+	@Override
+	public void deleteProjectAssign(int assignId) throws Exception {
+	    projectMapper.deleteProjectAssign(assignId);
+	}
+	
+	@Override
+	public List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception {
+		return projectMapper.selectUserListForPopup(searchNm);
+	}
+	
+	@Override
+	public double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception {
+	    return projectMapper.selectUserCurrentRate(assignVO);
+	}
+	
 }

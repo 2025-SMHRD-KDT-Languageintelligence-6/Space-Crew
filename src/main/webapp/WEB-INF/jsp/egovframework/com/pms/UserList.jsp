@@ -28,7 +28,7 @@
         <table>
             <thead>
                 <tr>
-                    <th width="12%">아이디</th>
+                    <th width="12%">사원번호</th>
                     <th width="12%">성명</th>
                     <th width="15%">부서</th>
                     <th width="15%">직무</th>

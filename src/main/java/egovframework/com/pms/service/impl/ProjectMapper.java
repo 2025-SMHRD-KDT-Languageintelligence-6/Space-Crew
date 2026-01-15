@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
+
+import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectVO;
 
 @Mapper("projectMapper")
@@ -22,4 +24,14 @@ public interface ProjectMapper {
 	void updateProjectStatus(@Param("projId") Long projId, @Param("status") String status);
 
 	void updateProjectStatusAjax(Map<String, Object> param) throws Exception;
+
+	double selectUserCurrentRate(ProjectAssignVO vo) throws Exception;
+
+	void insertProjectAssign(ProjectAssignVO vo) throws Exception;
+
+	void deleteProjectAssign(int assignId) throws Exception;
+
+	List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception;
+
+	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
 }
