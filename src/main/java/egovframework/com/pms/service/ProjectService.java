@@ -3,6 +3,8 @@ package egovframework.com.pms.service;
 import java.util.List;
 import java.util.Map;
 
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+
 public interface ProjectService {
     
     List<ProjectVO> selectProjectList(ProjectVO vo) throws Exception;
@@ -28,4 +30,6 @@ public interface ProjectService {
 	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
 
 	double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception;
+
+	List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
 }

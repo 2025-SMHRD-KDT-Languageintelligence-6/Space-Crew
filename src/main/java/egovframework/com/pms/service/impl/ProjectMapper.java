@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectVO;
@@ -34,4 +35,6 @@ public interface ProjectMapper {
 	List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception;
 
 	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
+
+	List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
 }

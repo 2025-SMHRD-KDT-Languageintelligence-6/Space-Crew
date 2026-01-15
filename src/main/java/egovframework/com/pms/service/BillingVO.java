@@ -16,11 +16,10 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private Long billAmt;
     private String taxBillDt;
     private String payDt;
-    private String isPaid;
     private String actualPayDt;
     private String billRemark;
     private String lastUpdusrId;
-    
+    private String isPaid;
     private Long totalAmt;
     private Long totalBilledAmt;
     private Long totalPaidAmt;

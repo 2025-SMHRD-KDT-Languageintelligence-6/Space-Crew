@@ -35,7 +35,7 @@
             , A.BILL_AMT        AS billAmt
             , A.TAX_BILL_DT     AS taxBillDt
             , A.PAY_DT          AS payDt
-            , A.IS_PAID         AS isPaid
+            , CASE WHEN A.ACTUAL_PAY_DT IS NOT NULL THEN 'Y' ELSE 'N' END AS isPaid
             , A.ACTUAL_PAY_DT   AS actualPayDt
             , A.BILL_REMARK     AS billRemark
             , B.PROJ_NM         AS projNm
@@ -52,7 +52,6 @@
 	        , BILL_AMT
 	        , TAX_BILL_DT
 	        , PAY_DT
-	        , IS_PAID
 	        , ACTUAL_PAY_DT
 	        , BILL_REMARK
 	        , LAST_UPDUSR_ID
@@ -62,7 +61,6 @@
 	        , #{billAmt}
 	        , NULLIF(#{taxBillDt}, '')
 	        , NULLIF(#{payDt}, '')
-	        , IFNULL(#{isPaid}, 'N')   
 	        , NULLIF(#{actualPayDt}, '')
 	        , #{billRemark}
 	        , #{lastUpdusrId}
@@ -85,11 +83,9 @@
 	        <if test="billAmt != null and billAmt != 0">BILL_AMT = #{billAmt},</if>
 	        <if test="taxBillDt != null">TAX_BILL_DT = NULLIF(#{taxBillDt}, ''),</if>
 	        <if test="payDt != null">PAY_DT = NULLIF(#{payDt}, ''),</if>
-	        <if test="isPaid != null">IS_PAID = #{isPaid},</if>
 	        <if test="actualPayDt != null">ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, ''),</if>
 	        <if test="billRemark != null">BILL_REMARK = #{billRemark},</if>
-	        <if test="lastUpdusrId != null">LAST_UPDUSR_ID = #{lastUpdusrId},</if>
-	        LAST_UPDT_PNTTM = NOW()
+	        <if test="lastUpdusrId != null">LAST_UPDUSR_ID = #{lastUpdusrId}</if>
 	    </set>
 	        
 	    WHERE BILL_ID = #{billId}
@@ -100,7 +96,6 @@
 	    SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE BILL_ID = #{billId}
 	</update>
     
@@ -129,7 +124,6 @@
 	        , BILL_TITLE          AS billTitle
 	        , BILL_AMT            AS billAmt
 	        , TAX_BILL_DT         AS taxBillDt
-	        , IS_PAID             AS isPaid
 	        , ACTUAL_PAY_DT       AS actualPayDt
 	    FROM TB_BILLING
 	    WHERE PROJ_ID = #{projId}
@@ -160,9 +154,7 @@
    	
    	<update id="updateActualPayDt">
 	    UPDATE TB_BILLING
-	       SET ACTUAL_PAY_DT = #{actualPayDt},
-	           IS_PAID = 'Y',
-	           LAST_UPDT_PNTTM = NOW()
+	       SET ACTUAL_PAY_DT = #{actualPayDt}
 	     WHERE BILL_ID = #{billId}
 	</update>
 	

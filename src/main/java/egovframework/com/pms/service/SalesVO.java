@@ -18,7 +18,6 @@ public class SalesVO extends ComDefaultVO implements Serializable {
     private Integer probability;
     private String status;
     private String salesContent;
-    private String regDt;
 
     private String customerName;
     private String salesUserName;

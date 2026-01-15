@@ -68,7 +68,6 @@
             , CUST_ADDR = #{custAddr}
             , CUST_REMARK = #{custRemark}
             , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
         WHERE CUST_ID = #{custId}
     </update>
 
@@ -76,7 +75,6 @@
 	    UPDATE TB_CUSTOMER SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE CUST_ID = #{custId}
 	</update>
 	

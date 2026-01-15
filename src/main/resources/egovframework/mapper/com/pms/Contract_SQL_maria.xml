@@ -70,7 +70,6 @@
             , CONT_STATUS = #{contStatus}
             , CONT_REMARK = #{contRemark}
             , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
         WHERE CONT_ID = #{contId}
     </update>
 
@@ -78,7 +77,6 @@
 	    UPDATE TB_CONTRACT SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE CONT_ID = #{contId}
 	</update>
     

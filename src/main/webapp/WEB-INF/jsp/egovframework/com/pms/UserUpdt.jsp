@@ -23,10 +23,10 @@
 
             <table>
                 <tr>
-                    <th>아이디</th>
+                    <th>사원번호</th>
                     <td>
                         <span class="readonly-id"><c:out value="${userVO.userId}"/></span>
-                        <small style="color: #868e96; margin-left: 10px;">(아이디는 수정할 수 없습니다)</small>
+                        <small style="color: #868e96; margin-left: 10px;">(사원번호는 수정할 수 없습니다)</small>
                     </td>
                 </tr>
                 <tr>
@@ -47,19 +47,10 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>업무 부하량</th>
-                    <td>
-                        <div style="display: flex; align-items: center;">
-                            <form:input path="currentLoad" type="number" step="0.1" style="width: 150px;" />
-                            <span style="margin-left: 10px; font-weight: bold; color: #666;">%</span>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>사용 여부</th>
+                    <th>재직 여부</th>
                     <td class="radio-group">
-                        <form:radiobutton path="useYn" value="Y" id="useY" /><label for="useY">사용</label>
-                        <form:radiobutton path="useYn" value="N" id="useN" style="margin-left:20px;" /><label for="useN">미사용</label>
+                        <form:radiobutton path="useYn" value="Y" id="useY" /><label for="useY">재직</label>
+                        <form:radiobutton path="useYn" value="N" id="useN" style="margin-left:20px;" /><label for="useN">미재직</label>
                     </td>
                 </tr>
             </table>

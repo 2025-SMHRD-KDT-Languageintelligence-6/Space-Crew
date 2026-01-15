@@ -12,7 +12,6 @@ public class UserVO extends ComDefaultVO implements Serializable {
 
     private String userId;
     private String userNm;
-    private String userPwd;
     private String deptNm;
     private String jobRole;
     private String positionNm;
@@ -20,7 +19,6 @@ public class UserVO extends ComDefaultVO implements Serializable {
     private String jobField;
     private BigDecimal currentLoad;
     private String joinDt;
-    private Integer authLevel;
     private String useYn;
     private String lastUpdusrId;
 

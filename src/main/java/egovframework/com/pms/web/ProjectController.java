@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -165,5 +166,19 @@ public class ProjectController {
         List<Map<String, Object>> userList = projectService.selectUserListForPopup(searchNm);
         resultMap.put("userList", userList);
         return resultMap;
+    }
+    
+    @RequestMapping(value = "/pms/selectUserAssignListAjax.do")
+    @ResponseBody
+    public Map<String, Object> selectUserAssignListAjax(
+            @RequestParam("userId") String userId) throws Exception {
+        
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        List<EgovMap> list = projectService.selectUserAssignListAjax(userId);
+        
+        map.put("list", list);
+        
+        return map;
     }
 }

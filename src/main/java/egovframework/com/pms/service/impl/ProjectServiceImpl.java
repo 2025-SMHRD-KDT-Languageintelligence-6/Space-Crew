@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
@@ -91,6 +92,12 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Override
 	public double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception {
 	    return projectMapper.selectUserCurrentRate(assignVO);
+	}
+	
+	
+	@Override
+	public List<EgovMap> selectUserAssignListAjax(String userId) throws Exception {
+		return projectMapper.selectUserAssignListAjax(userId);
 	}
 	
 }

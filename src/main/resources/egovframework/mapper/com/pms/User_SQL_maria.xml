@@ -11,14 +11,13 @@
             , JOB_ROLE      AS jobRole
             , POSITION_NM   AS positionNm
             , CAREER_YEARS  AS careerYears
-            , (SELECT IFNULL(SUM(SUB.INPUT_RATE), 0) * 100
+            , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
 	           FROM TB_PROJECT_ASSIGN SUB 
 	           WHERE SUB.USER_ID = TB_USER.USER_ID
 	             AND SUB.DEL_YN = 'N' 
 	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE
        		  )				AS currentLoad
             , JOIN_DT       AS joinDt
-            , AUTH_LEVEL    AS authLevel
             , USE_YN        AS useYn
         FROM TB_USER
         WHERE DEL_YN = 'N'
@@ -39,11 +38,11 @@
 
     <insert id="insertUser" parameterType="egovframework.com.pms.service.UserVO">
         INSERT INTO TB_USER (
-            USER_ID, USER_NM, USER_PWD, DEPT_NM, JOB_ROLE, POSITION_NM, 
-            CAREER_YEARS, JOB_FIELD, CURRENT_LOAD, JOIN_DT, AUTH_LEVEL, USE_YN
+            USER_ID, USER_NM, DEPT_NM, JOB_ROLE, POSITION_NM, 
+            CAREER_YEARS, JOB_FIELD, JOIN_DT, USE_YN
         ) VALUES (
-            #{userId}, #{userNm}, #{userPwd}, #{deptNm}, #{jobRole}, #{positionNm}, 
-            #{careerYears}, #{jobField}, #{currentLoad}, #{joinDt}, #{authLevel}, #{useYn}
+            #{userId}, #{userNm}, #{deptNm}, #{jobRole}, #{positionNm}, 
+            #{careerYears}, #{jobField}, #{joinDt}, #{useYn}
         )
     </insert>
 
@@ -66,11 +65,8 @@
 	        , JOB_ROLE      = #{jobRole}
 	        , POSITION_NM   = #{positionNm}
 	        , CAREER_YEARS  = #{careerYears}
-	        , CURRENT_LOAD  = #{currentLoad}
-	        , AUTH_LEVEL    = #{authLevel}
 	        , USE_YN        = #{useYn}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE USER_ID = #{userId}
 	</update>
 
@@ -78,7 +74,6 @@
 	    UPDATE TB_USER SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE USER_ID = #{userId}
 	</update>
 	

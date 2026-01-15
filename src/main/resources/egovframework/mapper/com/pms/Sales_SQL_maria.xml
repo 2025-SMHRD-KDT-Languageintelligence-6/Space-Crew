@@ -41,18 +41,17 @@
 
     <select id="selectSalesDetail" parameterType="long" resultType="egovframework.com.pms.service.SalesVO">
         SELECT 
-              A.SALES_ID       AS salesId
-            , A.CUST_ID        AS custId
-            , A.SALES_USER_ID  AS salesUserId
-            , A.SALES_TITLE    AS salesTitle
-            , A.EXPECTED_AMT   AS expectedAmt
-            , A.EXPECTED_DT    AS expectedDt
-            , A.PROBABILITY    AS probability
-            , A.STATUS         AS status
-            , A.SALES_CONTENT  AS salesContent
-            , A.REG_DT         AS regDt
-            , B.CUST_NM        AS customerName
-            , C.USER_NM        AS salesUserName
+              A.SALES_ID        AS salesId
+            , A.CUST_ID         AS custId
+            , A.SALES_USER_ID   AS salesUserId
+            , A.SALES_TITLE     AS salesTitle
+            , A.EXPECTED_AMT    AS expectedAmt
+            , A.EXPECTED_DT     AS expectedDt
+            , A.PROBABILITY     AS probability
+            , A.STATUS          AS status
+            , A.SALES_CONTENT   AS salesContent
+            , B.CUST_NM         AS customerName
+            , C.USER_NM         AS salesUserName
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
         LEFT JOIN TB_USER C ON A.SALES_USER_ID = C.USER_ID
@@ -71,7 +70,6 @@
             , STATUS = #{status}
             , SALES_CONTENT = #{salesContent}
             , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
         WHERE SALES_ID = #{salesId}
     </update>
 
@@ -79,14 +77,12 @@
 	    UPDATE TB_SALES SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , LAST_UPDT_PNTTM = NOW()
 	    WHERE SALES_ID = #{salesId}
 	</update>
 	
 	<update id="updateSalesStatus">
 	    UPDATE TB_SALES 
-	       SET STATUS = #{status},
-	           LAST_UPDT_PNTTM = NOW()
+	       SET STATUS = #{status}
 	     WHERE SALES_ID = #{selectedId}
 	</update>
 	

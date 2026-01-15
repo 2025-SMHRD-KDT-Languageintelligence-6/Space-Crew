@@ -15,7 +15,6 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String status;
     private String startDt;
     private String endDt;
-    private Double progressRate;
     private Integer complexityScore;
     
     private Long contractId;

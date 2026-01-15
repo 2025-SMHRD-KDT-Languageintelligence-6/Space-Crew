@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -50,19 +51,21 @@
                         <td><c:out value="${result.jobRole}"/></td>
                         <td>
                             <div class="${result.currentLoad > 100 ? 'text-danger-bold' : ''}" style="font-size: 13px; margin-bottom: 3px;">
-                                <c:out value="${result.currentLoad}"/>%
+                                <fmt:formatNumber value="${result.currentLoad}" pattern="#" />%
                             </div>
 
                             <div class="load-container">
-                                <c:set var="baseWidth" value="${result.currentLoad > 100 ? 100 : result.currentLoad}" />
+                            	<fmt:parseNumber var="intLoad" value="${result.currentLoad}" integerOnly="true" />
+                            	
+                                <c:set var="baseWidth" value="${intLoad > 100 ? 100 : intLoad}" />
                                 <c:set var="loadType" value="load-low" />
-                                <c:if test="${result.currentLoad > 40}"><c:set var="loadType" value="load-medium" /></c:if>
-                                <c:if test="${result.currentLoad > 75}"><c:set var="loadType" value="load-high" /></c:if>
+                                <c:if test="${intLoad > 40}"><c:set var="loadType" value="load-medium" /></c:if>
+                                <c:if test="${intLoad > 75}"><c:set var="loadType" value="load-high" /></c:if>
 
                                 <div class="load-bar-base ${loadType}" style="width: ${baseWidth}%"></div>
 
-                                <c:if test="${result.currentLoad > 100}">
-                                    <c:set var="overWidth" value="${result.currentLoad - 100}" />
+                                <c:if test="${intLoad > 100}">
+                                    <c:set var="overWidth" value="${intLoad - 100}" />
                                     <div class="load-bar-over" style="width: ${overWidth}%"></div>
                                 </c:if>
                             </div>

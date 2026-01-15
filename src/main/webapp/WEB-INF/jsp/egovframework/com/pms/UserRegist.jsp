@@ -18,12 +18,8 @@
         <form:form modelAttribute="userVO" action="${pageContext.request.contextPath}/pms/addUser.do" method="post">
             <table>
                 <tr>
-                    <th class="required">아이디</th>
-                    <td><form:input path="userId" required="required" placeholder="로그인 아이디 입력" /></td>
-                </tr>
-                <tr>
-                    <th class="required">비밀번호</th>
-                    <td><form:password path="userPwd" required="required" placeholder="영문, 숫자 포함 8자 이상" /></td>
+                    <th class="required">사원번호</th>
+                    <td><form:input path="userId" required="required" placeholder="사원번호 입력" /></td>
                 </tr>
                 <tr>
                     <th class="required">성명</th>
@@ -54,15 +50,10 @@
                     <td><form:input path="jobField" placeholder="예: Java, Spring Boot, React" /></td>
                 </tr>
                 <tr>
-                    <th class="required">입사일 / 권한</th>
+                    <th class="required">입사일</th>
                     <td>
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <form:input path="joinDt" type="date" style="width: 180px;" required="required" />
-                            <span style="color: #dee2e6;">|</span>
-                            <form:select path="authLevel" style="width: 150px;">
-                                <form:option value="2" label="일반사용자"/>
-                                <form:option value="1" label="관리자"/>
-                            </form:select>
                         </div>
                     </td>
                 </tr>

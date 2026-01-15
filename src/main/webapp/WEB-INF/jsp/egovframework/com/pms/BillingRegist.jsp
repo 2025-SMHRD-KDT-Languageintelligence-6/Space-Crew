@@ -48,13 +48,6 @@
                     <td><form:input path="payDt" type="date" style="width: 200px;" /></td>
                 </tr>
                 <tr>
-                    <th>입금 여부</th>
-                    <td class="radio-group">
-                        <form:radiobutton path="isPaid" value="N" id="paidN" /><label for="paidN">미납</label>
-                        <form:radiobutton path="isPaid" value="Y" id="paidY" style="margin-left:20px;" /><label for="paidY">입금완료</label>
-                    </td>
-                </tr>
-                <tr>
                     <th>실제 입금일</th>
                     <td><form:input path="actualPayDt" type="date" style="width: 200px;" /></td>
                 </tr>
