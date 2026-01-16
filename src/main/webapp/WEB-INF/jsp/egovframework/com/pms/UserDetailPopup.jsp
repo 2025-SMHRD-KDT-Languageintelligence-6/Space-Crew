@@ -52,7 +52,7 @@
             <td></td>
         </tr>
         <tr>
-            <th>가입일</th>
+            <th>입사일</th>
             <td></td>
         </tr>
         <tr>

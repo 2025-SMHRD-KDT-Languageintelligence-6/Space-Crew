@@ -9,7 +9,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>프로젝트 크루 -PMS 통합 관리 시스템</title>
+    <title>프로젝트 크루 -프로젝트 통합 관리 시스템</title>
 
 
 
@@ -22,8 +22,8 @@
 	<div class="content-page">
 	    <div class="container">
 	        <div class="header">
-	            <h1>🚀 PMS 통합 관리 시스템</h1>
-	            <p>프로젝트 관리 시스템 대시보드입니다.</p>
+	            <h1>🚀 프로젝트 통합 관리 시스템</h1>
+	            <p>시스템 대시보드입니다.</p>
 	        </div>
 
 	        <div class="dashboard-grid">

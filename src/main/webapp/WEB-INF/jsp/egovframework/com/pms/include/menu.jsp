@@ -9,7 +9,7 @@
 
 <div class="sidebar">
     <div class="logo">
-        <a href="<c:url value='/pms/main.do'/>">🚀 PMS 시스템</a>
+        <a href="<c:url value='/pms/main.do'/>">🚀 Space PMS</a>
     </div>
     <ul class="nav">
         <%-- <li><a href="<c:url value='/pms/main.do'/>"><i class="fas fa-tachometer-alt mr-3"></i> 대시보드</a></li> --%>

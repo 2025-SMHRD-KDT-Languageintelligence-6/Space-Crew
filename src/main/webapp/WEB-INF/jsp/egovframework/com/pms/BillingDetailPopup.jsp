@@ -313,8 +313,23 @@
             var title = $("#billTitle").val();
             var amt = parseInt($("#billAmt").val() || 0);
             
+            var totalAmt = parseInt($("#rawTotalAmt").val());
+            var billedDisplay = parseInt($("#totalBilledAmtDisplay").text().replace(/,/g, ''));
+            
+            var originalAmt = 0;
+            if(billId) {
+                originalAmt = parseInt($("#row_" + billId + " .billed-value").attr("data-value") || 0);
+            }
+            
+            var currentBalance = totalAmt - (billedDisplay - originalAmt);
+
             if(!title) { alert("청구 명칭을 입력하세요."); return; }
             if(amt <= 0) { alert("금액을 정확히 입력하세요."); return; }
+            
+            if(amt > currentBalance) {
+                alert("계약 잔액(" + currentBalance.toLocaleString() + "원)을 초과할 수 없습니다.");
+                return;
+            }
             
             var url = billId ? "<c:url value='/pms/updateBillingAjax.do'/>" : "<c:url value='/pms/addBillingAjax.do'/>";
 

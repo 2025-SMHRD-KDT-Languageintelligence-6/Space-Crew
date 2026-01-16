@@ -30,6 +30,19 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
 
     @Override
     public void saveBilling(BillingVO vo) throws Exception {
+    	BillingVO summary = billingMapper.selectProjectBillingSummary(vo.getProjId());
+        long totalAmt = summary.getTotalAmt();
+        long alreadyBilled = summary.getTotalBilledAmt();
+        
+        if (vo.getBillId() != null && vo.getBillId() != 0) {
+            BillingVO origin = billingMapper.selectBillingDetail(vo.getBillId());
+            alreadyBilled -= origin.getBillAmt();
+        }
+        
+        if (totalAmt < (alreadyBilled + vo.getBillAmt())) {
+            throw new Exception("계약 금액을 초과하여 청구할 수 없습니다."); 
+        }
+
         if (vo.getBillId() == null || vo.getBillId() == 0) {
             billingMapper.insertBilling(vo);
         } else {

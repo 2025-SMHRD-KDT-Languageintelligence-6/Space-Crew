@@ -34,7 +34,7 @@
                     <th width="15%">부서</th>
                     <th width="15%">직무</th>
                     <th width="18%">업무부하량</th>
-                    <th width="13%">가입일</th>
+                    <th width="13%">입사일</th>
                     <th width="15%">관리</th>
                 </tr>
             </thead>
