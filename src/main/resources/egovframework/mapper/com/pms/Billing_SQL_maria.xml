@@ -8,6 +8,7 @@
 	        , P.PROJ_NM           AS projNm
 	        , CONT.CONT_AMT       AS totalAmt
 	        , IFNULL(SUM(B.BILL_AMT), 0) AS totalBilledAmt
+	        , SUM(CASE WHEN B.ACTUAL_PAY_DT IS NOT NULL THEN B.BILL_AMT ELSE 0 END) AS totalPaidAmt
 	        , CASE 
 	            WHEN CONT.CONT_AMT > 0 
 	                 AND CONT.CONT_AMT = SUM(IFNULL(B.BILL_AMT, 0))

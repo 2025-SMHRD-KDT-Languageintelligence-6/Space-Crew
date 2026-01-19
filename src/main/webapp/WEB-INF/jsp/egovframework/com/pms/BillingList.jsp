@@ -28,9 +28,11 @@
 	        <thead>
 	            <tr>
 	                <th width="10">프로젝트ID</th>
-		            <th width="30%">프로젝트명</th>
-		            <th width="25%">계약금액</th>
-		            <th width="25%">누적청구액</th>
+		            <th width="32%">프로젝트명</th>
+		            <th width="12%">계약금액</th>
+		            <th width="12%">누적청구액</th>
+		            <th width="12%">실수금합계</th>
+		            <th width="12%">미수금잔액</th>
 		            <th width="10%">정산여부</th>
 	            </tr>
 	        </thead>
@@ -48,6 +50,14 @@
 	                    </td>
 	                    <td style="text-align:right; padding-right:15px; color:#28a745; font-weight:bold;">
 	                    	<fmt:formatNumber value="${result.totalBilledAmt}" pattern="#,###"/>원
+	                    </td>
+	                    <td style="text-align:right; padding-right:15px;">
+	                   		<fmt:formatNumber value="${result.totalPaidAmt}" pattern="#,###"/>원
+	                    
+	                    </td>
+	                    <td style="text-align:right; padding-right:15px;">
+	                   		<fmt:formatNumber value="${result.totalAmt - result.totalPaidAmt}" pattern="#,###"/>원
+	                    
 	                    </td>
 	                    <td>
 	                        <c:choose>

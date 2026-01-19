@@ -82,9 +82,7 @@
             <td>${projectVO.reqSkills}</td>
         </tr>
         </table>
-    <div id='calendar-container' style="margin-top:30px; border:1px solid #ddd; padding:10px; background:#fff;">
-	    <div id='calendar'></div>
-	</div>
+    
 	<div class="assign-section" style="margin-top:30px;">
 	    <h3>투입 인력 현황</h3>
 	    <table class="table" id="assignTable">
@@ -163,6 +161,12 @@
 	        </table>
 	    </div>
 	</div>
+	
+	<div id='calendar-container' style="margin-top:30px; border:1px solid #ddd; padding:10px; background:#fff;">
+	    <div id='calendar'></div>
+	</div>
+	
+	
     <div class="btn-close">
         <button type="button" onclick="window.close();" class="btn_s">닫기</button>
     </div>
