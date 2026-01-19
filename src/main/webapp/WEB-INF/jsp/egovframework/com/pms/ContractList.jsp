@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
@@ -8,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>계약 관리 목록</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ContractList.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ContractList.css'/>?v=1.1">
 </head>
 <body>
     <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -92,7 +93,7 @@
 	        </tbody>
 	    </table>
 
-	    <div style="text-align:center; margin-top:20px;">
+	    <div class="pagination-wrapper" style="text-align:center; margin-top:20px;">
 	        <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
 	    </div>
 

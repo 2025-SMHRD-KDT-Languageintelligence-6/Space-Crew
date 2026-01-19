@@ -193,3 +193,61 @@ tr:hover td { background-color: #fdfdfd; }
 
 .pagination-wrapper { margin-top: 25px; text-align: center; }
 .action-bar { margin-top: 20px; }
+
+/* 페이지네이션 영역 초기화 및 중앙 정렬 */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
+}
+
+/* 전자정부 태그가 생성하는 모든 직계 자식 요소를 가로로 나열 */
+.pagination-wrapper > div, 
+.pagination-wrapper ul,
+.pagination-wrapper ol {
+    display: flex !important;
+    flex-direction: row !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 5px; /* 숫자 사이 간격 */
+}
+
+/* 점(bullet) 제거 및 세로 나열 방지 */
+.pagination-wrapper li {
+    list-style-type: none !important;
+    display: inline-block !important;
+    float: none !important;
+}
+
+/* 링크 및 버튼 스타일 강제 적용 */
+.pagination-wrapper a, 
+.pagination-wrapper strong, 
+.pagination-wrapper span {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 35px;
+    height: 35px;
+    padding: 0 5px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    color: #007bff;
+    text-decoration: none !important;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+/* 활성화된 페이지 (현재 페이지) */
+.pagination-wrapper strong {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+}
+
+/* 호버 효과 */
+.pagination-wrapper a:hover {
+    background-color: #e9ecef;
+}

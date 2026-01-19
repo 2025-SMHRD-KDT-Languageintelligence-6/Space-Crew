@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>직원 관리 목록</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/UserList.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/UserList.css'/>?v=1.1">
 </head>
 <body>
     <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -90,7 +90,7 @@
             </tbody>
         </table>
 
-        <div style="text-align:center; margin-top:30px;">
+        <div class="pagination-wrapper" style="text-align:center; margin-top:30px;">
             <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
         </div>
 
