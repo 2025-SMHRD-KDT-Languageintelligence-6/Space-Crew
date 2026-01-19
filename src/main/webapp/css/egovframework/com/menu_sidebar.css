@@ -1,28 +1,15 @@
 /* 사이드바 전체 컨테이너 */
 .sidebar {
-    width: 220px;
-    background: rgb(15 23 42);
+    width: 240px; /* 가독성을 위해 살짝 넓힘 */
+    background: #0f172a; /* 더 깊은 다크톤 */
     color: white;
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
-    padding-top: 20px;
+    padding: 20px 10px; /* 내부 여백 조정 */
     box-sizing: border-box;
     z-index: 1000;
-}
-
-/* 상단 로고 */
-.sidebar .logo {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.sidebar .logo a {
-    color: #ecf0f1;
-    text-decoration: none;
 }
 
 /* 메뉴 리스트 */
@@ -32,62 +19,66 @@
     margin: 0;
 }
 
+.sidebar ul.nav li {
+    margin-bottom: 5px;
+}
+
 .sidebar ul.nav li a {
-    display: block;
-    padding: 15px 25px;
-    color: #bdc3c7;
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    color: #94a3b8; /* 비활성 메뉴 글자색 */
     text-decoration: none;
-    transition: 0.3s;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    font-size: 0.95rem;
 }
 
+/* 마우스 올렸을 때 (Hover) - 즉각 반응 */
 .sidebar ul.nav li a:hover {
-    background: #34495e;
-    color: white;
-    padding-left: 35px;
+    background-color: #34495e !important;
+    color: white !important;
+    padding-left: 25px; /* 약간의 이동 효과 */
 }
 
-/* 하단 로그아웃 버튼 */
+/* 현재 머물고 있는 페이지 (Active) - 파란색 강조 */
+.sidebar ul.nav li.active a,
+.sidebar ul.nav li a.active {
+    background-color: #2563eb !important; /* 선명한 파란색 */
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+/* 활성화된 메뉴의 아이콘 색상 */
+.sidebar ul.nav li.active a i,
+.sidebar ul.nav li a.active i {
+    color: #ffffff !important;
+}
+
+/* 아이콘 간격 */
+.sidebar ul.nav li a i {
+    width: 25px;
+    font-size: 1.1rem;
+}
+
+/* 로그아웃 버튼 */
 .sidebar .logout-btn {
     display: block;
-    padding: 15px 25px;
-    color: #e74c3c;
+    padding: 12px;
+    color: #f87171;
     text-decoration: none;
     position: absolute;
     bottom: 30px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: 0.3s;
+    left: 10px;
+    right: 10px;
     text-align: center;
-    border-top: 1px solid #3e4f5f;
+    border-radius: 8px;
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    transition: 0.3s;
 }
 
 .sidebar .logout-btn:hover {
-    background: #c0392b;
+    background: #ef4444;
     color: white;
 }
-/* 사이드바 메뉴 기본 스타일 보정 */
-.sidebar ul.nav li {
-    padding: 4px 12px; /* 강조 효과가 들어갈 여백 확보 */
-}
 
-.sidebar ul.nav li a {
-    display: block;
-    padding: 10px 15px;
-    color: #bdc3c7;
-    text-decoration: none;
-    border-radius: 8px; /* 둥근 모서리 */
-    transition: all 0.3s ease;
-}
-
-/* 선택되었을 때(Active) 또는 마우스를 올렸을 때 강조 효과 */
-.sidebar ul.nav li a.active,
-.sidebar ul.nav li a:hover {
-    background-color: #2563eb; /* 이미지와 유사한 파란색 */
-    color: #ffffff !important;  /* 글자색 흰색으로 강조 */
-}
-
-/* 아이콘 색상도 흰색으로 변경 */
-.sidebar ul.nav li a.active i,
-.sidebar ul.nav li a:hover i {
-    color: #ffffff;
-}
