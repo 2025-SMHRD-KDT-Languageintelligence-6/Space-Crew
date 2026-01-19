@@ -21,7 +21,7 @@
 	        <form name="listForm" action="<c:url value='/pms/salesList.do'/>" method="post">
 	            <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 	            <label>영업건명: </label>
-	            <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" />
+	            <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="영업건명을 입력하세요" style="width:200px;" />
 	            <button type="submit" class="btn btn-blue">검색</button>
 	        </form>
 	    </div>

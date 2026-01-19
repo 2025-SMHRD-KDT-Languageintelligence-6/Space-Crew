@@ -63,7 +63,7 @@ table {
     border-spacing: 0;
     background: #ffffff;
     border-radius: 12px;
-    overflow: hidden;
+/*    overflow: hidden;*/
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
@@ -83,6 +83,7 @@ td {
     border-bottom: 1px solid #f1f3f5;
     vertical-align: middle;
     text-align: center; /* 기본적으로 모든 셀은 가운데 정렬 */
+
 }
 
 tr:hover td {
@@ -98,6 +99,7 @@ tr:hover td {
     font-size: 11px;
     font-weight: 700;
     display: inline-block;
+    text-decoration: none;
 }
 
 /* 고객 등급 배지 (고객사 관리용) */

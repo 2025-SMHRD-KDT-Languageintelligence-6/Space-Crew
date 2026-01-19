@@ -21,7 +21,7 @@
                 <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 
                 <label>업무명: </label>
-                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" style="width:200px;" />
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="업무명을 입력하세요" style="width:200px;" />
                 <button type="submit" class="btn btn-blue">검색</button>
             </form>
         </div>

@@ -13,17 +13,19 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
+
 	<div class="content-page">
 	    <h2>청구 및 정산 목록</h2>
 	
-	    <div style="margin-bottom: 20px;">
-	        <form name="listForm" action="<c:url value='/pms/billingList.do'/>" method="post">
-	            <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
-	            <label>청구명: </label>
-	            <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" />
-	            <button type="submit" class="btn btn-blue">검색</button>
-	        </form>
-	    </div>
+	    <div class="search-box">
+            <form name="listForm" action="<c:url value='/pms/billingList.do'/>" method="post">
+                <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
+
+                <label>프로젝트명: </label>
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="프로젝트명을 입력하세요" style="width:200px;" />
+                <button type="submit" class="btn btn-blue">검색</button>
+            </form>
+        </div>
 	
 	    <table>
 	        <thead>
@@ -61,22 +63,26 @@
 	                    
 	                    </td>
 	                    <td>
-	                        <c:choose>
-			                    <c:when test="${result.isPaid == 'Y'}">
-			                        <span class="status-y" style="background:#e7f3ff; padding:4px 10px; border-radius:12px; font-size:11px;">정산완료</span>
-			                    </c:when>
-			                    <c:otherwise>
-			                        <c:choose>
-			                            <c:when test="${result.totalAmt == result.totalBilledAmt}">
-			                                <span style="background:#fff3cd; color:#856404; padding:4px 10px; border-radius:12px; font-size:11px;">입금대기</span>
-			                            </c:when>
-			                            <c:otherwise>
-			                                <span class="status-n" style="background:#fff0f0; padding:4px 10px; border-radius:12px; font-size:11px;">청구진행중</span>
-			                            </c:otherwise>
-			                        </c:choose>
-			                    </c:otherwise>
-			                </c:choose>
-	                    </td>
+                            <c:choose>
+                                <%-- 정산완료 상태 --%>
+                                <c:when test="${result.isPaid == 'Y'}">
+                                    <span class="status-badge status-paid">정산완료</span>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <c:choose>
+                                        <%-- 입금대기 상태 (금액이 일치할 때) --%>
+                                        <c:when test="${result.totalAmt == result.totalBilledAmt}">
+                                            <span class="status-badge status-waiting">입금대기</span>
+                                        </c:when>
+                                        <%-- 청구진행중 상태 --%>
+                                        <c:otherwise>
+                                            <span class="status-badge status-pending">청구진행중</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
 	                </tr>
 	            </c:forEach>
 	        </tbody>

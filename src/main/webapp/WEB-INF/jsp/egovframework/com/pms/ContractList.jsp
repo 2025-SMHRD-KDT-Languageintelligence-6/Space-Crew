@@ -20,8 +20,8 @@
             <form name="listForm" action="<c:url value='/pms/contractList.do'/>" method="post">
                 <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 
-                <label>계약명</label>
-                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="계약명을 입력하세요" style="width:250px;" />
+                <label>계약명: </label>
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="계약명을 입력하세요" style="width:200px;" />
                 <button type="submit" class="btn btn-blue" style="margin-left:10px;">검색</button>
             </form>
         </div>
@@ -56,7 +56,7 @@
 						        <a href="javascript:void(0);" 
 						           class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '검토중' ? 'status-ing' : 'status-lost'}"
 						           onclick="fn_toggle_status_menu('${result.contId}', event);"
-						           style="cursor:pointer; text-decoration:none; display:inline-block; padding:4px 8px; border-radius:12px; font-size:11px; color:#fff;">
+						           >
 						            ${result.contStatus} ▼
 						        </a>
 						
