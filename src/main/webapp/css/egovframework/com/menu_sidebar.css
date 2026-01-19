@@ -1,15 +1,33 @@
 /* 사이드바 전체 컨테이너 */
 .sidebar {
-    width: 240px; /* 가독성을 위해 살짝 넓힘 */
-    background: #0f172a; /* 더 깊은 다크톤 */
+    width: 240px;
+    background: #0f172a; /* 어두운 네이비톤 */
     color: white;
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
-    padding: 20px 10px; /* 내부 여백 조정 */
+    padding: 25px 15px;
     box-sizing: border-box;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+/* [로고 CSS 복구 및 개선] */
+.sidebar .logo {
+    padding: 10px 0 30px 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.sidebar .logo a {
+    color: #ffffff !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* 메뉴 리스트 */
@@ -17,60 +35,49 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    flex-grow: 1; /* 메뉴 영역이 중간을 차지하게 설정 */
 }
 
 .sidebar ul.nav li {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .sidebar ul.nav li a {
     display: flex;
     align-items: center;
-    padding: 12px 15px;
+    padding: 12px 16px;
     color: #94a3b8; /* 비활성 메뉴 글자색 */
     text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s ease-in-out;
-    font-size: 0.95rem;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    font-weight: 500;
 }
 
-/* 마우스 올렸을 때 (Hover) - 즉각 반응 */
+/* [요구사항 1] 마우스 올려 놓은 칸 강조 (Hover) */
 .sidebar ul.nav li a:hover {
-    background-color: #34495e !important;
-    color: white !important;
-    padding-left: 25px; /* 약간의 이동 효과 */
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    transform: translateX(5px); /* 오른쪽으로 살짝 이동하는 효과 */
 }
 
-/* 현재 머물고 있는 페이지 (Active) - 파란색 강조 */
-.sidebar ul.nav li.active a,
-.sidebar ul.nav li a.active {
+/* [요구사항 2] 내가 머무는 페이지 강조 (Active) */
+/* 자바스크립트에 의해 li에 active 클래스가 붙었을 때 스타일 */
+.sidebar ul.nav li.active a {
     background-color: #2563eb !important; /* 선명한 파란색 */
     color: #ffffff !important;
-    font-weight: bold;
+    font-weight: 600;
 }
 
-/* 활성화된 메뉴의 아이콘 색상 */
-.sidebar ul.nav li.active a i,
-.sidebar ul.nav li a.active i {
+.sidebar ul.nav li.active a i {
     color: #ffffff !important;
 }
 
-/* 아이콘 간격 */
-.sidebar ul.nav li a i {
-    width: 25px;
-    font-size: 1.1rem;
-}
-
-/* 로그아웃 버튼 */
+/* 로그아웃 버튼 스타일 */
 .sidebar .logout-btn {
-    display: block;
+    margin-top: auto;
     padding: 12px;
     color: #f87171;
     text-decoration: none;
-    position: absolute;
-    bottom: 30px;
-    left: 10px;
-    right: 10px;
     text-align: center;
     border-radius: 8px;
     border: 1px solid rgba(248, 113, 113, 0.2);
@@ -81,4 +88,3 @@
     background: #ef4444;
     color: white;
 }
-
