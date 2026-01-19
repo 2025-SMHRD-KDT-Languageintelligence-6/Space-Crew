@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="popup-header">
-        <h2>📂 영업 정보 : ${customerVO.custNm}</h2>
+        <h2>📂 영업 정보 : ${salesVO.salesTitle}</h2>
     </div>
 
     <table class="w3-table-all">
@@ -22,35 +22,31 @@
         </colgroup>
         <tr>
             <th>고객사</th>
-            <td></td>
+            <td>${salesVO.custNm}</td>
         </tr>
         <tr>
             <th>영업담당자</th>
-            <td></td>
+            <td>${salesVO.salesNm}</td>
         </tr>
         <tr>
             <th>예상금액</th>
-            <td></td>
+            <td>${salesVO.expectedAmt}</td>
         </tr>
         <tr>
             <th>예상 수주 시기</th>
-            <td></td>
+            <td>${salesVO.expectedDt}</td>
         </tr>
         <tr>
             <th>확률</th>
-            <td></td>
+            <td>${salesVO.probability}</td>
         </tr>
         <tr>
             <th>상태</th>
-            <td></td>
+            <td>${salesVO.status}</td>
         </tr>
         <tr>
             <th>영업추진내용</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>등록일시</th>
-            <td></td>
+            <td>${salesVO.salesContent}</td>
         </tr>
         </table>
 

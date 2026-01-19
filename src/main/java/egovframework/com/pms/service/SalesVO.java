@@ -19,7 +19,7 @@ public class SalesVO extends ComDefaultVO implements Serializable {
     private String status;
     private String salesContent;
 
-    private String customerName;
-    private String salesUserName;
+    private String custNm;
+    private String salesNm;
     private String lastUpdusrId;
 }

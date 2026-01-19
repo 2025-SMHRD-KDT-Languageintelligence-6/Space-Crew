@@ -20,8 +20,14 @@ public class ContractVO extends ComDefaultVO implements Serializable {
     private String contDt;
     
     private String picUserId;
-    private String picUserName;
+    private String picUserNm;
     private String contStatus;
     private String contRemark;
     private String lastUpdusrId;
+    
+    private String salesTitle;
+    private String salesUserId;
+    private String salesUserNm;
+    private String custNm;
+    
 }

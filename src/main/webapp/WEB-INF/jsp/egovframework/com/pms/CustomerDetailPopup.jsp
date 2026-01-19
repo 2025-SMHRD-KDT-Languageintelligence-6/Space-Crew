@@ -22,15 +22,15 @@
         </colgroup>
         <tr>
             <th>사업자 번호</th>
-            <td></td>
+            <td>${customerVO.bizRegNo}</td>
         </tr>
         <tr>
             <th>대표자</th>
-            <td></td>
+            <td>${customerVO.ceoNm}</td>
         </tr>
         <tr>
             <th>담당자</th>
-            <td></td>
+            <td>${customerVO.picNm}</td>
         </tr>
         <tr>
             <th>연락처</th>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
             <th>이메일</th>
-            <td></td>
+            <td>${customerVO.picEmail}</td>
         </tr>
         <tr>
             <th>주소</th>
@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <th>특이사항</th>
-            <td></td>
+            <td>${customerVO.custRemark}</td>
         </tr>
         
         

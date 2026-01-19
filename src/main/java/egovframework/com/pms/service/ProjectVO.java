@@ -17,12 +17,16 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String endDt;
     private Integer complexityScore;
     
-    private Long contractId;
-    private String contractName;
-    private String mainManagerId;
-    private String mainManagerName;
-    private String subManagerId;
-    private String subManagerName;
     private String lastUpdusrId;
+    private String reqSkills;
+    
+    private String contNm;
+    private Long contAmt;
+    private String salesTitle;
+    private String custNm;
+    private String picUserNm;
+    private String mainMgrNm;
+    private String subMgrNm;
+    private String salesUserNm;
 
 }

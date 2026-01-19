@@ -47,8 +47,8 @@
 	                            <c:out value="${result.salesTitle}"/>
 	                        </a>
 	                    </td>
-	                    <td>${result.customerName}</td>
-	                    <td>${result.salesUserName}</td>
+	                    <td>${result.custNm}</td>
+	                    <td>${result.salesNm}</td>
 	                    <td><fmt:formatNumber value="${result.expectedAmt}" pattern="#,###"/>원</td>
 	                    <td>
 	                        <span>${result.probability}%</span>

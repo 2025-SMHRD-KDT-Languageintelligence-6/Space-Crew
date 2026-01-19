@@ -16,7 +16,7 @@
 </head>
 <body>
 	<div class="popup-header">
-        <h2>📂 청구 정보 : </h2>
+        <h2>📂 청구 정보 : ${summary.projNm}</h2>
     </div>
 	<table class="w3-table-all">
         <colgroup>
@@ -25,47 +25,43 @@
         </colgroup>
         <tr>
             <th>고객사명</th>
-            <td></td>
+            <td>${summary.custNm}</td>
         </tr>
         <tr>
             <th>영업건명</th>
-            <td></td>
+            <td>${summary.salesTitle}</td>
         </tr>
         <tr>
             <th>영업담당자</th>
-            <td></td>
+            <td>${summary.salesUserNm}</td>
         </tr>
         <tr>
             <th>계약명</th>
-            <td></td>
+            <td>${summary.contNm}</td>
         </tr>
         <tr>
             <th>계약담당자</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>업무명</th>
-            <td></td>
+            <td>${summary.picUserNm}</td>
         </tr>
         <tr>
             <th>주담당자</th>
-            <td></td>
+            <td>${summary.mainMgrNm}</td>
         </tr>
         <tr>
             <th>부담당자</th>
-            <td></td>
+            <td>${summary.subMgrNm}</td>
         </tr>
         <tr>
             <th>계약금액</th>
-            <td></td>
+            <td>${summary.totalAmt}</td>
         </tr>
         <tr>
             <th>영업메모</th>
-            <td></td>
+            <td>${summary.salesContent}</td>
         </tr>
         <tr>
             <th>업무메모</th>
-            <td></td>
+            <td>${summary.contRemark}</td>
         </tr>
    	</table>
 

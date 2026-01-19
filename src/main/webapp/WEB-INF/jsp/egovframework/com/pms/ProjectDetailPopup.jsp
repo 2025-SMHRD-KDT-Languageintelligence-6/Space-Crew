@@ -27,47 +27,47 @@
         </colgroup>
         <tr>
             <th>고객사명</th>
-            <td></td>
+            <td>${projectVO.custNm}</td>
         </tr>
         <tr>
             <th>영업건명</th>
-            <td></td>
+            <td>${projectVO.salesTitle}</td>
         </tr>
         <tr>
             <th>영업담당자</th>
-            <td></td>
+            <td>${projectVO.salesUserNm}</td>
         </tr>
         <tr>
             <th>계약명</th>
-            <td></td>
+            <td>${projectVO.contNm}</td>
         </tr>
         <tr>
             <th>계약담당자</th>
-            <td></td>
+            <td>${projectVO.picUserNm}</td>
         </tr>
         <tr>
             <th>업무 유형</th>
-            <td></td>
+            <td>${projectVO.projType}</td>
         </tr>
         <tr>
             <th>상태</th>
-            <td></td>
+            <td>${projectVO.status}</td>
         </tr>
         <tr>
             <th>주담당자</th>
-            <td></td>
+            <td>${projectVO.mainMgrNm}</td>
         </tr>
         <tr>
             <th>부담당자</th>
-            <td></td>
+            <td>${projectVO.subMgrNm}</td>
         </tr>
         <tr>
             <th>시작일</th>
-            <td></td>
+            <td>${projectVO.startDt}</td>
         </tr>
         <tr>
             <th>종료일</th>
-            <td></td>
+            <td>${projectVO.endDt}</td>
         </tr>
         <tr>
             <th>진행률</th>
@@ -75,11 +75,11 @@
         </tr>
         <tr>
             <th>난이도</th>
-            <td></td>
+            <td>${projectVO.complexityScore}</td>
         </tr>
         <tr>
             <th>요구 기술 사항</th>
-            <td></td>
+            <td>${projectVO.reqSkills}</td>
         </tr>
         </table>
     <div id='calendar-container' style="margin-top:30px; border:1px solid #ddd; padding:10px; background:#fff;">

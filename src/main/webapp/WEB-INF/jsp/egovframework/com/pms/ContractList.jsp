@@ -49,7 +49,7 @@
 	                    <td class="text-right">
 	                        <fmt:formatNumber value="${result.contAmt}" pattern="#,###" />
 	                    </td>
-	                    <td><c:out value="${result.picUserName}"/></td>
+	                    <td><c:out value="${result.picUserNm}"/></td>
 	                    <td style="position: relative;">
 						    <div class="status-container">
 						        <a href="javascript:void(0);" 

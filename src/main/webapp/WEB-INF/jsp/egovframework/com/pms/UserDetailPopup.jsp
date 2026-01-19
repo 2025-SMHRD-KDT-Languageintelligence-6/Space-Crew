@@ -25,47 +25,43 @@
         </colgroup>
         <tr>
             <th>이름</th>
-            <td></td>
+            <td>${userVO.userNm}</td>
         </tr>
         <tr>
             <th>부서</th>
-            <td></td>
+            <td>${userVO.deptNm}</td>
         </tr>
         <tr>
             <th>직무</th>
-            <td></td>
+            <td>${userVO.jobRole}</td>
         </tr>
         <tr>
             <th>직급</th>
-            <td></td>
+            <td>${userVO.positionNm}</td>
         </tr>
         <tr>
             <th>경력연수</th>
-            <td></td>
+            <td>${userVO.careerYears}</td>
         </tr>
         <tr>
             <th>전문분야</th>
-            <td></td>
+            <td>${userVO.jobField}</td>
         </tr>
         <tr>
             <th>업무부하량</th>
-            <td></td>
+            <td>${userVO.currentLoad}</td>
         </tr>
         <tr>
             <th>입사일</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>권한레벨</th>
-            <td></td>
+            <td>${userVO.joinDt}</td>
         </tr>
         <tr>
             <th>재직</th>
-            <td></td>
+            <td>${userVO.useYn}</td>
         </tr>
         <tr>
             <th>보유스택</th>
-            <td></td>
+            <td>${userVO.techDesc}</td>
         </tr>
         </table>
 	

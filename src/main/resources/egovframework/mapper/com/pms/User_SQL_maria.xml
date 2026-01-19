@@ -53,6 +53,16 @@
 	        , DEPT_NM       AS deptNm
 	        , JOB_ROLE      AS jobRole
 	        , POSITION_NM   AS positionNm
+	        , CAREER_YEARS  AS careerYears
+	        , JOB_FIELD     AS jobField
+	        , JOIN_DT       AS joinDt
+	        , USE_YN        AS useYn
+	        , TECH_DESC     AS techDesc
+	        , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
+	           FROM TB_PROJECT_ASSIGN SUB 
+	           WHERE SUB.USER_ID = TB_USER.USER_ID
+	             AND SUB.DEL_YN = 'N' 
+	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE) AS currentLoad
         FROM TB_USER
         WHERE USER_ID = #{userId}
         AND DEL_YN = 'N'

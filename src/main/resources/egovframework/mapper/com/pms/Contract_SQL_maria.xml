@@ -13,7 +13,7 @@
             , A.END_DT        AS endDt
             , A.CONT_DT       AS contDt
             , A.PIC_USER_ID   AS picUserId
-            , B.USER_NM       AS picUserName
+            , B.USER_NM       AS picUserNm
             , A.CONT_STATUS   AS contStatus
         FROM TB_CONTRACT A
         LEFT JOIN TB_USER B ON A.PIC_USER_ID = B.USER_ID
@@ -35,19 +35,28 @@
 
     <select id="selectContractDetail" parameterType="long" resultType="egovframework.com.pms.service.ContractVO">
         SELECT 
-              CONT_ID       AS contId
-            , SALES_ID      AS salesId
-            , CONT_NM       AS contNm
-            , CONT_AMT      AS contAmt
-            , START_DT      AS startDt
-            , END_DT        AS endDt
-            , CONT_DT       AS contDt
-            , PIC_USER_ID   AS picUserId
-            , CONT_STATUS   AS contStatus
-            , CONT_REMARK   AS contRemark
-        FROM TB_CONTRACT 
+              A.CONT_ID       AS contId
+            , A.SALES_ID      AS salesId
+            , A.CONT_NM       AS contNm
+            , A.CONT_AMT      AS contAmt
+            , A.START_DT      AS startDt
+            , A.END_DT        AS endDt
+            , A.CONT_DT       AS contDt
+            , A.PIC_USER_ID   AS picUserId
+            , A.CONT_STATUS   AS contStatus
+            , A.CONT_REMARK   AS contRemark
+            , B.SALES_TITLE   AS salesTitle
+            , B.SALES_USER_ID AS salesUserId
+            , C.USER_NM       AS picUserNm
+            , D.USER_NM       AS salesUserNm
+            , E.CUST_NM       AS custNm
+        FROM TB_CONTRACT A
+        LEFT JOIN TB_SALES B    ON A.SALES_ID = B.SALES_ID
+        LEFT JOIN TB_USER C     ON A.PIC_USER_ID = C.USER_ID
+        LEFT JOIN TB_USER D     ON B.SALES_USER_ID = D.USER_ID
+        LEFT JOIN TB_CUSTOMER E ON B.CUST_ID = E.CUST_ID
         WHERE CONT_ID = #{contId}
-        AND DEL_YN = 'N'
+        AND A.DEL_YN = 'N'
     </select>
 
     <insert id="insertContract" parameterType="egovframework.com.pms.service.ContractVO">

@@ -23,4 +23,14 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private Long totalAmt;
     private Long totalBilledAmt;
     private Long totalPaidAmt;
+    private String contNm;
+    private String contRemark;
+    private String salesTitle;
+    private String salesContent;
+    private String custNm;
+    private String salesUserNm;
+    private String picUserNm;
+    private String mainMgrNm;
+    private String subMgrNm;
+    
 }

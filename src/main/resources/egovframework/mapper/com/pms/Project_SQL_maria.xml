@@ -11,8 +11,8 @@
             , A.STATUS            AS status
             , A.START_DT          AS startDt
             , A.END_DT            AS endDt
-            , B.CONT_NM           AS contractName
-            , C.USER_NM           AS mainManagerName
+            , B.CONT_NM           AS contNm
+            , C.USER_NM           AS mainMgrNm
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
         LEFT OUTER JOIN COMVNUSERMASTER C ON A.MAIN_MGR_ID = C.ESNTL_ID
@@ -47,15 +47,32 @@
 	
 	<select id="selectProjectDetail" parameterType="java.lang.Long" resultType="egovframework.com.pms.service.ProjectVO">
 	    SELECT 
-	          PROJ_ID           AS projId
-	        , PROJ_NM           AS projNm
-	        , PROJ_TYPE         AS projType
-	        , STATUS            AS status
-	        , START_DT          AS startDt
-	        , END_DT            AS endDt
-	    FROM TB_PROJECT
+	          A.PROJ_ID           AS projId
+	        , A.PROJ_NM           AS projNm
+	        , A.PROJ_TYPE         AS projType
+	        , A.STATUS            AS status
+	        , A.START_DT          AS startDt
+	        , A.END_DT            AS endDt
+	        , A.COMPLEXITY_SCORE  AS complexityScore
+	        , A.REQ_SKILLS        AS reqSkills
+	        , B.CONT_NM			  AS contNm
+	        , B.CONT_AMT          AS contAmt
+	        , C.SALES_TITLE       AS salesTitle
+	        , D.CUST_NM           AS custNm
+	        , E.USER_NM           AS picUserNm
+	        , F.USER_NM           AS mainMgrNm
+	        , G.USER_NM           AS salesUserNm
+	        , H.User_NM           AS subMgrNm
+	    FROM TB_PROJECT A
+	    LEFT JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
+	    LEFT JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
+	    LEFT JOIN TB_CUSTOMER D ON C.CUST_ID = D.CUST_ID
+	    LEFT JOIN TB_USER E     ON B.PIC_USER_ID = E.USER_ID
+	    LEFT JOIN TB_USER F     ON A.MAIN_MGR_ID = F.USER_ID
+	    LEFT JOIN TB_USER G     ON C.SALES_USER_ID = G.USER_ID
+	    LEFT JOIN TB_USER H     ON A.SUB_MGR_ID = H.USER_ID
 	    WHERE PROJ_ID = #{projId}
-	    AND DEL_YN = 'N'
+	    AND A.DEL_YN = 'N'
 	</select>
 	
 	<update id="updateProject" parameterType="egovframework.com.pms.service.ProjectVO">

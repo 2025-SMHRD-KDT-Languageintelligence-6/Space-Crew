@@ -101,7 +101,6 @@ public class BillingController {
     public String billingDetailPopup(@RequestParam("projId") Long projId, Model model) throws Exception {
         BillingVO summary = billingService.selectProjectBillingSummary(projId);
         List<BillingVO> billList = billingService.selectBillingListByProject(summary);
-
         model.addAttribute("summary", summary);
         model.addAttribute("billList", billList);
         return "egovframework/com/pms/BillingDetailPopup";

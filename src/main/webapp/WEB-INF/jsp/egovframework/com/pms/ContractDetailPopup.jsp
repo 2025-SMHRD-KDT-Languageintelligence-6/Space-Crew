@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="popup-header">
-        <h2>📂 계약 정보 : ${customerVO.custNm}</h2>
+        <h2>📂 계약 정보 : ${contractVO.contNm}</h2>
     </div>
 
     <table class="w3-table-all">
@@ -22,43 +22,43 @@
         </colgroup>
         <tr>
             <th>고객사 ID</th>
-            <td></td>
+            <td>${contractVO.custNm}</td>
         </tr>
         <tr>
             <th>영업건명</th>
-            <td></td>
+            <td>${contractVO.salesTitle}</td>
         </tr>
         <tr>
             <th>영업담당자</th>
-            <td></td>
+            <td>${contractVO.salesUserNm}</td>
         </tr>
         <tr>
             <th>계약담당자</th>
-            <td></td>
+            <td>${contractVO.picUserNm}</td>
         </tr>
         <tr>
             <th>계약금액</th>
-            <td></td>
+            <td>${contractVO.contAmt}</td>
         </tr>
         <tr>
             <th>계약일</th>
-            <td></td>
+            <td>${contractVO.contDt}</td>
         </tr>
         <tr>
             <th>계약시작일</th>
-            <td></td>
+            <td>${contractVO.startDt}</td>
         </tr>
         <tr>
             <th>계약종료일</th>
-            <td></td>
+            <td>${contractVO.endDt}</td>
         </tr>
         <tr>
             <th>상태</th>
-            <td></td>
+            <td>${contractVO.contStatus}</td>
         </tr>
         <tr>
             <th>특이사항</th>
-            <td></td>
+            <td>${contractVO.contRemark}</td>
         </tr>
         </table>
 

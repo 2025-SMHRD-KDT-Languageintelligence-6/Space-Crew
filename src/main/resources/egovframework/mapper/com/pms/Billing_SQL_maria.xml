@@ -30,7 +30,6 @@
 	<select id="selectBillingDetail" parameterType="long" resultType="egovframework.com.pms.service.BillingVO">
         SELECT 
               A.BILL_ID         AS billId
-            , A.PROJ_ID         AS projId
             , A.BILL_TITLE      AS billTitle
             , A.BILL_AMT        AS billAmt
             , A.TAX_BILL_DT     AS taxBillDt
@@ -38,9 +37,27 @@
             , CASE WHEN A.ACTUAL_PAY_DT IS NOT NULL THEN 'Y' ELSE 'N' END AS isPaid
             , A.ACTUAL_PAY_DT   AS actualPayDt
             , A.BILL_REMARK     AS billRemark
+            , B.PROJ_ID         AS projId
             , B.PROJ_NM         AS projNm
+            , C.CONT_NM         AS contNm
+            , C.CONT_AMT        AS totalAmt
+            , C.CONT_REMARK     AS contRemark
+            , D.SALES_TITLE     AS salesTitle
+            , D.SALES_CONTENT   AS salesContent
+            , E.CUST_NM         AS custNm
+            , F.USER_NM         AS salesUserNm
+	        , G.USER_NM         AS picUserNm
+	        , H.USER_NM         AS mainMgrNm
+	        , I.USER_NM         AS subMgrNm
         FROM TB_BILLING A
         LEFT JOIN TB_PROJECT B ON A.PROJ_ID = B.PROJ_ID
+        LEFT JOIN TB_CONTRACT C ON B.CONT_ID = C.CONT_ID
+	    LEFT JOIN TB_SALES D    ON C.SALES_ID = D.SALES_ID
+	    LEFT JOIN TB_CUSTOMER E ON D.CUST_ID = E.CUST_ID
+	    LEFT JOIN TB_USER F     ON D.SALES_USER_ID = F.USER_ID
+	    LEFT JOIN TB_USER G     ON C.PIC_USER_ID = G.USER_ID
+	    LEFT JOIN TB_USER H     ON B.MAIN_MGR_ID = H.USER_ID
+	    LEFT JOIN TB_USER I     ON B.SUB_MGR_ID = I.USER_ID
         WHERE A.BILL_ID = #{billId}
           AND A.DEL_YN = 'N' 
     </select>
@@ -103,18 +120,26 @@
 	    SELECT 
 	          P.PROJ_ID           AS projId
 	        , P.PROJ_NM           AS projNm
-	        , IFNULL(C.CONT_AMT, 0) AS totalAmt
-	        , (SELECT IFNULL(SUM(BILL_AMT), 0) 
-	           FROM TB_BILLING 
-	           WHERE PROJ_ID = #{projId} AND DEL_YN = 'N') AS totalBilledAmt
-	        , (SELECT IFNULL(SUM(BILL_AMT), 0) 
-	           FROM TB_BILLING 
-	           WHERE PROJ_ID = #{projId} 
-	             AND DEL_YN = 'N' 
-	             AND ACTUAL_PAY_DT IS NOT NULL 
-	             AND LENGTH(ACTUAL_PAY_DT) > 0) AS totalPaidAmt
+	        , C.CONT_NM           AS contNm
+	        , C.CONT_AMT          AS totalAmt
+	        , C.CONT_REMARK       AS contRemark
+	        , S.SALES_TITLE       AS salesTitle
+	        , S.SALES_CONTENT     AS salesContent
+	        , CUST.CUST_NM        AS custNm
+	        , U1.USER_NM          AS salesUserNm
+	        , U2.USER_NM          AS picUserNm
+	        , U3.USER_NM          AS mainMgrNm
+	        , U4.USER_NM          AS subMgrNm
+	        , (SELECT IFNULL(SUM(BILL_AMT), 0) FROM TB_BILLING WHERE PROJ_ID = P.PROJ_ID AND DEL_YN = 'N') AS totalBilledAmt
+	        , (SELECT IFNULL(SUM(BILL_AMT), 0) FROM TB_BILLING WHERE PROJ_ID = P.PROJ_ID AND DEL_YN = 'N' AND ACTUAL_PAY_DT IS NOT NULL) AS totalPaidAmt
 	    FROM TB_PROJECT P
-	    LEFT JOIN TB_CONTRACT C ON P.CONT_ID = C.CONT_ID
+	    LEFT JOIN TB_CONTRACT C  ON P.CONT_ID = C.CONT_ID
+	    LEFT JOIN TB_SALES S     ON C.SALES_ID = S.SALES_ID
+	    LEFT JOIN TB_CUSTOMER CUST ON S.CUST_ID = CUST.CUST_ID
+	    LEFT JOIN TB_USER U1     ON S.SALES_USER_ID = U1.USER_ID
+	    LEFT JOIN TB_USER U2     ON C.PIC_USER_ID = U2.USER_ID
+	    LEFT JOIN TB_USER U3     ON P.MAIN_MGR_ID = U3.USER_ID
+	    LEFT JOIN TB_USER U4     ON P.SUB_MGR_ID = U4.USER_ID
 	    WHERE P.PROJ_ID = #{projId}
 	</select>
 	
