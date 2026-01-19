@@ -531,4 +531,90 @@ cursor :pointer;
 .twit_list li a:hover {text-decoration:underline; }
 .twit_list li img {display:block; margin-top:10px; }
 
+/* ==========================================================
+   Space PMS 전용 팝업 스타일 (com.css 하단 추가용)
+   작성일: 2026-01-19
+   ========================================================== */
 
+/* 1. 팝업 레이아웃 초기화 */
+/* com.css body에 걸린 margin-left: 10px 등을 무력화합니다. */
+body {
+    margin: 0 !important;
+    padding: 20px !important;
+    background-color: #f8fafc !important;
+    font-family: 'Malgun Gothic', sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+/* 2. 헤더 영역 (기존 .popup h1과 충돌 방지) */
+.popup-header {
+    border-bottom: 2px solid #1e293b !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 20px !important;
+    display: block !important;
+    float: none !important;
+}
+
+.popup-header h2 {
+    margin: 0 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    background: none !important; /* com.css의 아이콘 배경 제거 */
+    padding: 0 !important;
+}
+
+/* 3. 테이블 스타일 (w3-table-all 및 공통 테이블 강제 적용) */
+table.w3-table-all, .assign-section table {
+    width: 100% !important;
+    border: 1px solid #e2e8f0 !important;
+    border-collapse: collapse !important;
+    background: #fff !important;
+    margin-bottom: 20px !important;
+    table-layout: auto !important; /* com.css의 fixed 해제 */
+}
+
+table.w3-table-all th, .assign-section table th {
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    padding: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    font-size: 13px !important;
+    text-align: center !important;
+}
+
+table.w3-table-all td, .assign-section table td {
+    padding: 12px !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+}
+
+/* 4. 하단 버튼 영역 및 기존 btn_s 보완 */
+.btn-close {
+    margin-top: 20px !important;
+    text-align: center !important;
+    padding-top: 20px !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+
+/* com.css의 .btn_s가 너무 작으므로 팝업에서는 크게 보이도록 설정 */
+.btn-close button.btn_s,
+.assign-section button.btn_s {
+    height: auto !important;
+    padding: 8px 25px !important;
+    background-color: #2563eb !important; /* 메인 파란색 */
+    color: #ffffff !important;
+    font-size: 12px !important;
+    border-radius: 4px !important;
+    border: none !important;
+    cursor: pointer !important;
+    margin: 0 5px !important;
+}
+
+.btn-close button.btn_s:hover {
+    background-color: #1d4ed8 !important;
+}
