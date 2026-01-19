@@ -1,28 +1,33 @@
 /* 사이드바 전체 컨테이너 */
 .sidebar {
-    width: 220px;
-    background: rgb(15 23 42);
+    width: 240px;
+    background: #0f172a; /* 어두운 네이비톤 */
     color: white;
     height: 100vh;
     position: fixed;
     left: 0;
     top: 0;
-    padding-top: 20px;
+    padding: 25px 15px;
     box-sizing: border-box;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
 }
 
-/* 상단 로고 */
+/* [로고 CSS 복구 및 개선] */
 .sidebar .logo {
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 1.2em;
-    font-weight: bold;
+    padding: 10px 0 30px 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
 .sidebar .logo a {
-    color: #ecf0f1;
+    color: #ffffff !important;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* 메뉴 리스트 */
@@ -30,64 +35,56 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    flex-grow: 1; /* 메뉴 영역이 중간을 차지하게 설정 */
+}
+
+.sidebar ul.nav li {
+    margin-bottom: 8px;
 }
 
 .sidebar ul.nav li a {
-    display: block;
-    padding: 15px 25px;
-    color: #bdc3c7;
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: #94a3b8; /* 비활성 메뉴 글자색 */
     text-decoration: none;
-    transition: 0.3s;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    font-weight: 500;
 }
 
+/* [요구사항 1] 마우스 올려 놓은 칸 강조 (Hover) */
 .sidebar ul.nav li a:hover {
-    background: #34495e;
-    color: white;
-    padding-left: 35px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    transform: translateX(5px); /* 오른쪽으로 살짝 이동하는 효과 */
 }
 
-/* 하단 로그아웃 버튼 */
+/* [요구사항 2] 내가 머무는 페이지 강조 (Active) */
+/* 자바스크립트에 의해 li에 active 클래스가 붙었을 때 스타일 */
+.sidebar ul.nav li.active a {
+    background-color: #2563eb !important; /* 선명한 파란색 */
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.sidebar ul.nav li.active a i {
+    color: #ffffff !important;
+}
+
+/* 로그아웃 버튼 스타일 */
 .sidebar .logout-btn {
-    display: block;
-    padding: 15px 25px;
-    color: #e74c3c;
+    margin-top: auto;
+    padding: 12px;
+    color: #f87171;
     text-decoration: none;
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    box-sizing: border-box;
-    transition: 0.3s;
     text-align: center;
-    border-top: 1px solid #3e4f5f;
+    border-radius: 8px;
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    transition: 0.3s;
 }
 
 .sidebar .logout-btn:hover {
-    background: #c0392b;
+    background: #ef4444;
     color: white;
-}
-/* 사이드바 메뉴 기본 스타일 보정 */
-.sidebar ul.nav li {
-    padding: 4px 12px; /* 강조 효과가 들어갈 여백 확보 */
-}
-
-.sidebar ul.nav li a {
-    display: block;
-    padding: 10px 15px;
-    color: #bdc3c7;
-    text-decoration: none;
-    border-radius: 8px; /* 둥근 모서리 */
-    transition: all 0.3s ease;
-}
-
-/* 선택되었을 때(Active) 또는 마우스를 올렸을 때 강조 효과 */
-.sidebar ul.nav li a.active,
-.sidebar ul.nav li a:hover {
-    background-color: #2563eb; /* 이미지와 유사한 파란색 */
-    color: #ffffff !important;  /* 글자색 흰색으로 강조 */
-}
-
-/* 아이콘 색상도 흰색으로 변경 */
-.sidebar ul.nav li a.active i,
-.sidebar ul.nav li a:hover i {
-    color: #ffffff;
 }
