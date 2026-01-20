@@ -20,6 +20,7 @@ import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class ProjectController {
@@ -181,4 +182,53 @@ public class ProjectController {
         
         return map;
     }
+    /**
+     * [추가 기능] AI 인력 추천 팝업 열기 (Python FastAPI 연동)
+     */
+    @RequestMapping(value = "/pms/openAIRecommendation.do")
+    public String openAIRecommendation(
+            @RequestParam("projId") String projId,
+            @RequestParam("reqSkills") String reqSkills,
+            @RequestParam(value = "aiWeight", defaultValue = "0.7") double aiWeight,
+            @RequestParam(value = "careerWeight", defaultValue = "0.3") double careerWeight,
+            Model model) throws Exception {
+
+        System.out.println("🚀 [AI 추천] 요청 도착! Project ID: " + projId);
+        System.out.println("📝 요구사항: " + reqSkills);
+
+        // 1. Python Server URL (파이썬 서버가 켜져 있어야 함)
+        String pythonUrl = "http://127.0.0.1:8000/match/real";
+
+        // 2. 파이썬에게 보낼 데이터 포장 (Map)
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("req_skills", reqSkills);
+        requestBody.put("target_role", "개발"); // 기본값
+        requestBody.put("ai_weight", aiWeight);
+        requestBody.put("career_weight", careerWeight);
+
+        // 3. 파이썬에게 전송 (RestTemplate 사용)
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            // 파이썬이 준 결과(JSON)를 Map으로 받기
+            Map response = restTemplate.postForObject(pythonUrl, requestBody, Map.class);
+            System.out.println("✅ [AI 추천] 응답 성공: " + response);
+
+            // 4. 결과를 JSP(팝업)로 전달
+            model.addAttribute("recommendList", response.get("ranking")); // 랭킹 리스트
+            model.addAttribute("reqSkills", reqSkills); // 입력했던 내용
+            model.addAttribute("projId", projId);       // 프로젝트 ID
+            model.addAttribute("aiWeight", (int)(aiWeight * 100)); // 화면 표시용 (70)
+            model.addAttribute("careerWeight", (int)(careerWeight * 100)); // 화면 표시용 (30)
+
+        } catch (Exception e) {
+            System.err.println("❌ [AI 추천] 파이썬 서버 연결 실패: " + e.getMessage());
+            model.addAttribute("errorMessage", "AI 서버(FastAPI)가 꺼져 있거나 연결할 수 없습니다.");
+        }
+
+        // 5. 결과를 보여줄 새로운 팝업 JSP 파일 (이제 만들어야 함)
+        return "egovframework/com/pms/RecommendationPopup";
+    }
+
+// ↑ 여기 바로 아래에 클래스 닫는 괄호 '}'가 있어야 해!
 }
