@@ -12,11 +12,11 @@
             , A.START_DT      AS startDt
             , A.END_DT        AS endDt
             , A.CONT_DT       AS contDt
-            , A.PIC_USER_ID   AS picUserId
-            , B.USER_NM       AS picUserNm
+            , A.EMP_ID   AS picUserId
+            , B.EMP_NM       AS picUserNm
             , A.CONT_STATUS   AS contStatus
         FROM TB_CONTRACT A
-        LEFT JOIN TB_USER B ON A.PIC_USER_ID = B.USER_ID
+        LEFT JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -42,18 +42,18 @@
             , A.START_DT      AS startDt
             , A.END_DT        AS endDt
             , A.CONT_DT       AS contDt
-            , A.PIC_USER_ID   AS picUserId
+            , A.EMP_ID   AS picUserId
             , A.CONT_STATUS   AS contStatus
             , A.CONT_REMARK   AS contRemark
             , B.SALES_TITLE   AS salesTitle
-            , B.SALES_USER_ID AS salesUserId
-            , C.USER_NM       AS picUserNm
-            , D.USER_NM       AS salesUserNm
+            , B.EMP_ID AS salesUserId
+            , C.EMP_NM       AS picUserNm
+            , D.EMP_NM       AS salesUserNm
             , E.CUST_NM       AS custNm
         FROM TB_CONTRACT A
         LEFT JOIN TB_SALES B    ON A.SALES_ID = B.SALES_ID
-        LEFT JOIN TB_USER C     ON A.PIC_USER_ID = C.USER_ID
-        LEFT JOIN TB_USER D     ON B.SALES_USER_ID = D.USER_ID
+        LEFT JOIN TB_EMP C     ON A.EMP_ID = C.EMP_ID
+        LEFT JOIN TB_EMP D     ON B.EMP_ID = D.EMP_ID
         LEFT JOIN TB_CUSTOMER E ON B.CUST_ID = E.CUST_ID
         WHERE CONT_ID = #{contId}
         AND A.DEL_YN = 'N'
@@ -61,7 +61,7 @@
 
     <insert id="insertContract" parameterType="egovframework.com.pms.service.ContractVO">
         INSERT INTO TB_CONTRACT (
-            SALES_ID, CONT_NM, CONT_AMT, START_DT, END_DT, CONT_DT, PIC_USER_ID, CONT_STATUS, CONT_REMARK
+            SALES_ID, CONT_NM, CONT_AMT, START_DT, END_DT, CONT_DT, EMP_ID, CONT_STATUS, CONT_REMARK
         ) VALUES (
             #{salesId}, #{contNm}, #{contAmt}, NULLIF(#{startDt},''), NULLIF(#{endDt},''), NULLIF(#{contDt},''), #{picUserId}, #{contStatus}, #{contRemark}
         )
@@ -75,7 +75,7 @@
             , START_DT = NULLIF(#{startDt}, '')
             , END_DT = NULLIF(#{endDt}, '')
             , CONT_DT = NULLIF(#{contDt}, '')
-            , PIC_USER_ID = #{picUserId}
+            , EMP_ID = #{picUserId}
             , CONT_STATUS = #{contStatus}
             , CONT_REMARK = #{contRemark}
             , LAST_UPDUSR_ID = #{lastUpdusrId}

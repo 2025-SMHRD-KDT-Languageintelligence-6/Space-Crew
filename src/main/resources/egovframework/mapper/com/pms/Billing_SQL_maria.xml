@@ -46,19 +46,19 @@
             , D.SALES_TITLE     AS salesTitle
             , D.SALES_CONTENT   AS salesContent
             , E.CUST_NM         AS custNm
-            , F.USER_NM         AS salesUserNm
-	        , G.USER_NM         AS picUserNm
-	        , H.USER_NM         AS mainMgrNm
-	        , I.USER_NM         AS subMgrNm
+            , F.EMP_NM         AS salesUserNm
+	        , G.EMP_NM         AS picUserNm
+	        , H.EMP_NM         AS mainMgrNm
+	        , I.EMP_NM         AS subMgrNm
         FROM TB_BILLING A
         LEFT JOIN TB_PROJECT B ON A.PROJ_ID = B.PROJ_ID
         LEFT JOIN TB_CONTRACT C ON B.CONT_ID = C.CONT_ID
 	    LEFT JOIN TB_SALES D    ON C.SALES_ID = D.SALES_ID
 	    LEFT JOIN TB_CUSTOMER E ON D.CUST_ID = E.CUST_ID
-	    LEFT JOIN TB_USER F     ON D.SALES_USER_ID = F.USER_ID
-	    LEFT JOIN TB_USER G     ON C.PIC_USER_ID = G.USER_ID
-	    LEFT JOIN TB_USER H     ON B.MAIN_MGR_ID = H.USER_ID
-	    LEFT JOIN TB_USER I     ON B.SUB_MGR_ID = I.USER_ID
+	    LEFT JOIN TB_EMP F     ON D.EMP_ID = F.EMP_ID
+	    LEFT JOIN TB_EMP G     ON C.EMP_ID = G.EMP_ID
+	    LEFT JOIN TB_EMP H     ON B.M_EMP_ID = H.EMP_ID
+	    LEFT JOIN TB_EMP I     ON B.S_EMP_ID = I.EMP_ID
         WHERE A.BILL_ID = #{billId}
           AND A.DEL_YN = 'N' 
     </select>
@@ -127,20 +127,20 @@
 	        , S.SALES_TITLE       AS salesTitle
 	        , S.SALES_CONTENT     AS salesContent
 	        , CUST.CUST_NM        AS custNm
-	        , U1.USER_NM          AS salesUserNm
-	        , U2.USER_NM          AS picUserNm
-	        , U3.USER_NM          AS mainMgrNm
-	        , U4.USER_NM          AS subMgrNm
+	        , U1.EMP_NM          AS salesUserNm
+	        , U2.EMP_NM          AS picUserNm
+	        , U3.EMP_NM          AS mainMgrNm
+	        , U4.EMP_NM          AS subMgrNm
 	        , (SELECT IFNULL(SUM(BILL_AMT), 0) FROM TB_BILLING WHERE PROJ_ID = P.PROJ_ID AND DEL_YN = 'N') AS totalBilledAmt
 	        , (SELECT IFNULL(SUM(BILL_AMT), 0) FROM TB_BILLING WHERE PROJ_ID = P.PROJ_ID AND DEL_YN = 'N' AND ACTUAL_PAY_DT IS NOT NULL) AS totalPaidAmt
 	    FROM TB_PROJECT P
 	    LEFT JOIN TB_CONTRACT C  ON P.CONT_ID = C.CONT_ID
 	    LEFT JOIN TB_SALES S     ON C.SALES_ID = S.SALES_ID
 	    LEFT JOIN TB_CUSTOMER CUST ON S.CUST_ID = CUST.CUST_ID
-	    LEFT JOIN TB_USER U1     ON S.SALES_USER_ID = U1.USER_ID
-	    LEFT JOIN TB_USER U2     ON C.PIC_USER_ID = U2.USER_ID
-	    LEFT JOIN TB_USER U3     ON P.MAIN_MGR_ID = U3.USER_ID
-	    LEFT JOIN TB_USER U4     ON P.SUB_MGR_ID = U4.USER_ID
+	    LEFT JOIN TB_EMP U1     ON S.EMP_ID = U1.EMP_ID
+	    LEFT JOIN TB_EMP U2     ON C.EMP_ID = U2.EMP_ID
+	    LEFT JOIN TB_EMP U3     ON P.M_EMP_ID = U3.EMP_ID
+	    LEFT JOIN TB_EMP U4     ON P.S_EMP_ID = U4.EMP_ID
 	    WHERE P.PROJ_ID = #{projId}
 	</select>
 	

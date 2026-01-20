@@ -5,41 +5,41 @@
 
     <select id="selectUserList" parameterType="egovframework.com.pms.service.UserVO" resultType="egovframework.com.pms.service.UserVO">
         SELECT 
-              USER_ID       AS userId
-            , USER_NM       AS userNm
+              EMP_ID       AS userId
+            , EMP_NM       AS userNm
             , DEPT_NM       AS deptNm
             , JOB_ROLE      AS jobRole
             , POSITION_NM   AS positionNm
             , CAREER_YEARS  AS careerYears
             , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
-	           FROM TB_PROJECT_ASSIGN SUB 
-	           WHERE SUB.USER_ID = TB_USER.USER_ID
+	           FROM TB_ASSIGNMENT SUB 
+	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
 	             AND SUB.DEL_YN = 'N' 
-	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE
+	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT
        		  )				AS currentLoad
             , JOIN_DT       AS joinDt
-            , USE_YN        AS useYn
-        FROM TB_USER
+            , IN_OFFICE        AS useYn
+        FROM TB_EMP
         WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
-            AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+            AND EMP_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
         ORDER BY JOIN_DT DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
     <select id="selectUserListTotCnt" parameterType="egovframework.com.pms.service.UserVO" resultType="int">
-        SELECT COUNT(*) FROM TB_USER
+        SELECT COUNT(*) FROM TB_EMP
         WHERE DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
-            AND USER_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+            AND EMP_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
     </select>
 
     <insert id="insertUser" parameterType="egovframework.com.pms.service.UserVO">
-        INSERT INTO TB_USER (
-            USER_ID, USER_NM, DEPT_NM, JOB_ROLE, POSITION_NM, 
-            CAREER_YEARS, JOB_FIELD, JOIN_DT, USE_YN
+        INSERT INTO TB_EMP (
+            EMP_ID, EMP_NM, DEPT_NM, JOB_ROLE, POSITION_NM, 
+            CAREER_YEARS, JOB_FIELD, JOIN_DT, IN_OFFICE
         ) VALUES (
             #{userId}, #{userNm}, #{deptNm}, #{jobRole}, #{positionNm}, 
             #{careerYears}, #{jobField}, #{joinDt}, #{useYn}
@@ -48,43 +48,43 @@
 
     <select id="selectUserDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.UserVO">
         SELECT
-	      	  USER_ID       AS userId
-	        , USER_NM       AS userNm
+	      	  EMP_ID       AS userId
+	        , EMP_NM       AS userNm
 	        , DEPT_NM       AS deptNm
 	        , JOB_ROLE      AS jobRole
 	        , POSITION_NM   AS positionNm
 	        , CAREER_YEARS  AS careerYears
 	        , JOB_FIELD     AS jobField
 	        , JOIN_DT       AS joinDt
-	        , USE_YN        AS useYn
-	        , TECH_DESC     AS techDesc
+	        , IN_OFFICE        AS useYn
+	        , SKILL_DESC     AS techDesc
 	        , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
-	           FROM TB_PROJECT_ASSIGN SUB 
-	           WHERE SUB.USER_ID = TB_USER.USER_ID
+	           FROM TB_ASSIGNMENT SUB 
+	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
 	             AND SUB.DEL_YN = 'N' 
-	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE) AS currentLoad
-        FROM TB_USER
-        WHERE USER_ID = #{userId}
+	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT) AS currentLoad
+        FROM TB_EMP
+        WHERE EMP_ID = #{userId}
         AND DEL_YN = 'N'
     </select>
     
 	<update id="updateUser" parameterType="egovframework.com.pms.service.UserVO">
-	    UPDATE TB_USER SET
-	          USER_NM       = #{userNm}
+	    UPDATE TB_EMP SET
+	          EMP_NM       = #{userNm}
 	        , DEPT_NM       = #{deptNm}
 	        , JOB_ROLE      = #{jobRole}
 	        , POSITION_NM   = #{positionNm}
 	        , CAREER_YEARS  = #{careerYears}
-	        , USE_YN        = #{useYn}
+	        , IN_OFFICE        = #{useYn}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	    WHERE USER_ID = #{userId}
+	    WHERE EMP_ID = #{userId}
 	</update>
 
     <update id="deleteUser" parameterType="egovframework.com.pms.service.UserVO">
-	    UPDATE TB_USER SET 
+	    UPDATE TB_EMP SET 
 	          DEL_YN = 'Y'
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	    WHERE USER_ID = #{userId}
+	    WHERE EMP_ID = #{userId}
 	</update>
 	
 

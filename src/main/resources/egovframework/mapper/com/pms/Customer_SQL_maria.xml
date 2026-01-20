@@ -9,7 +9,7 @@
             , A.BIZ_REG_NO    AS bizRegNo
             , A.CEO_NM        AS ceoNm
             , A.PIC_NM        AS picNm
-            , A.PIC_TEL       AS picTel
+            , A.PIC_CONTACT       AS picTel
             , A.PIC_EMAIL     AS picEmail
             , IF(B.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
         FROM TB_CUSTOMER A
@@ -40,7 +40,7 @@
             , BIZ_REG_NO    AS bizRegNo
             , CEO_NM        AS ceoNm
             , PIC_NM        AS picNm
-            , PIC_TEL       AS picTel
+            , PIC_CONTACT       AS picTel
             , PIC_EMAIL     AS picEmail
             , CUST_ADDR     AS custAddr
             , CUST_REMARK   AS custRemark
@@ -51,7 +51,7 @@
 
     <insert id="insertCustomer" parameterType="egovframework.com.pms.service.CustomerVO">
         INSERT INTO TB_CUSTOMER (
-            CUST_NM, BIZ_REG_NO, CEO_NM, PIC_NM, PIC_TEL, PIC_EMAIL, CUST_ADDR, CUST_REMARK
+            CUST_NM, BIZ_REG_NO, CEO_NM, PIC_NM, PIC_CONTACT, PIC_EMAIL, CUST_ADDR, CUST_REMARK
         ) VALUES (
             #{custNm}, #{bizRegNo}, #{ceoNm}, #{picNm}, #{picTel}, #{picEmail}, #{custAddr}, #{custRemark}
         )
@@ -63,7 +63,7 @@
             , BIZ_REG_NO = #{bizRegNo}
             , CEO_NM = #{ceoNm}
             , PIC_NM = #{picNm}
-            , PIC_TEL = #{picTel}
+            , PIC_CONTACT = #{picTel}
             , PIC_EMAIL = #{picEmail}
             , CUST_ADDR = #{custAddr}
             , CUST_REMARK = #{custRemark}

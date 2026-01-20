@@ -15,7 +15,7 @@
             , C.USER_NM           AS mainMgrNm
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
-        LEFT OUTER JOIN COMVNUSERMASTER C ON A.MAIN_MGR_ID = C.ESNTL_ID
+        LEFT OUTER JOIN COMVNUSERMASTER C ON A.M_EMP_ID = C.ESNTL_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 0">
@@ -59,18 +59,18 @@
 	        , B.CONT_AMT          AS contAmt
 	        , C.SALES_TITLE       AS salesTitle
 	        , D.CUST_NM           AS custNm
-	        , E.USER_NM           AS picUserNm
-	        , F.USER_NM           AS mainMgrNm
-	        , G.USER_NM           AS salesUserNm
-	        , H.User_NM           AS subMgrNm
+	        , E.EMP_NM           AS picUserNm
+	        , F.EMP_NM           AS mainMgrNm
+	        , G.EMP_NM           AS salesUserNm
+	        , H.EMP_NM           AS subMgrNm
 	    FROM TB_PROJECT A
 	    LEFT JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
 	    LEFT JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
 	    LEFT JOIN TB_CUSTOMER D ON C.CUST_ID = D.CUST_ID
-	    LEFT JOIN TB_USER E     ON B.PIC_USER_ID = E.USER_ID
-	    LEFT JOIN TB_USER F     ON A.MAIN_MGR_ID = F.USER_ID
-	    LEFT JOIN TB_USER G     ON C.SALES_USER_ID = G.USER_ID
-	    LEFT JOIN TB_USER H     ON A.SUB_MGR_ID = H.USER_ID
+	    LEFT JOIN TB_EMP E     ON B.EMP_ID = E.EMP_ID
+	    LEFT JOIN TB_EMP F     ON A.M_EMP_ID = F.EMP_ID
+	    LEFT JOIN TB_EMP G     ON C.EMP_ID = G.EMP_ID
+	    LEFT JOIN TB_EMP H     ON A.S_EMP_ID = H.EMP_ID
 	    WHERE PROJ_ID = #{projId}
 	    AND A.DEL_YN = 'N'
 	</select>
@@ -108,12 +108,12 @@
 	</update>
 	
 	<insert id="insertProjectAssign" parameterType="egovframework.com.pms.service.ProjectAssignVO">
-	    INSERT INTO TB_PROJECT_ASSIGN (
+	    INSERT INTO TB_ASSIGNMENT (
 	        PROJECT_ID, 
-	        USER_ID, 
+	        EMP_ID, 
 	        ASSIGN_TITLE, 
-	        START_DATE, 
-	        END_DATE, 
+	        START_DT, 
+	        END_DT, 
 	        INPUT_RATE,
 	        LAST_UPDUSR_ID
 	    ) VALUES (
@@ -131,24 +131,24 @@
 	    SELECT 
 	          A.ASSIGN_ID      AS assignId
 	        , A.PROJECT_ID     AS projectId
-	        , A.USER_ID        AS userId
-	        , B.USER_NM        AS userNm      
+	        , A.EMP_ID        AS userId
+	        , B.EMP_NM        AS userNm      
 	        , B.DEPT_NM        AS deptNm      
 	        , B.POSITION_NM    AS positionNm  
 	        , A.ASSIGN_TITLE   AS assignTitle
-	        , DATE_FORMAT(A.START_DATE, '%Y-%m-%d') AS startDate
-	        , DATE_FORMAT(A.END_DATE, '%Y-%m-%d')   AS endDate
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
 	        , A.INPUT_RATE     AS inputRate
-	    FROM TB_PROJECT_ASSIGN A
-	    INNER JOIN TB_USER B ON A.USER_ID = B.USER_ID
+	    FROM TB_ASSIGNMENT A
+	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
 	    WHERE A.PROJECT_ID = #{projectId}
 	      AND A.DEL_YN = 'N'
-	      AND B.USE_YN = 'Y'
+	      AND B.IN_OFFICE = 'Y'
 	    ORDER BY A.ASSIGN_ID DESC
 	</select>
 	
 	<update id="deleteProjectAssign" parameterType="int">
-	    UPDATE TB_PROJECT_ASSIGN 
+	    UPDATE TB_ASSIGNMENT 
 	       SET DEL_YN = 'Y',
 	           LAST_UPDUSR_ID = #{lastUpdusrId}
 	     WHERE ASSIGN_ID = #{assignId}
@@ -158,32 +158,32 @@
 	    SELECT IFNULL(MAX(daily_rate), 0)
 	    FROM (
 	        SELECT SUM(INPUT_RATE) as daily_rate
-	        FROM TB_PROJECT_ASSIGN
-	        WHERE USER_ID = #{userId}
+	        FROM TB_ASSIGNMENT
+	        WHERE EMP_ID = #{userId}
 	          AND DEL_YN = 'N'
-	          AND NOT (END_DATE &lt; #{startDate} OR START_DATE &gt; #{endDate})
-	        GROUP BY USER_ID
+	          AND NOT (END_DT &lt; #{startDate} OR START_DT &gt; #{endDate})
+	        GROUP BY EMP_ID
 	    ) AS temp
 	</select>
 	
 	<select id="selectUserListForPopup" parameterType="string" resultType="egovMap">
 	    SELECT 
-	          A.USER_ID      AS userId
-	        , A.USER_NM      AS userNm
+	          A.EMP_ID      AS userId
+	        , A.EMP_NM      AS userNm
 	        , A.DEPT_NM      AS deptNm
 	        , A.POSITION_NM  AS positionNm
 	        , (SELECT IFNULL(SUM(SUB.INPUT_RATE), 0) 
-	           FROM TB_PROJECT_ASSIGN SUB 
-	           WHERE TRIM(SUB.USER_ID) = TRIM(A.USER_ID) COLLATE utf8mb4_general_ci
+	           FROM TB_ASSIGNMENT SUB 
+	           WHERE TRIM(SUB.EMP_ID) = TRIM(A.EMP_ID) COLLATE utf8mb4_general_ci
 	             AND SUB.DEL_YN = 'N' 
-	             AND CURDATE() BETWEEN SUB.START_DATE AND SUB.END_DATE
+	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT
 	          ) AS currentLoad
-	    FROM TB_USER A
-	    WHERE A.USE_YN = 'Y'
+	    FROM TB_EMP A
+	    WHERE A.IN_OFFICE = 'Y'
 	    <if test="searchNm != null and searchNm != ''">
-	      AND A.USER_NM LIKE CONCAT('%', #{searchNm}, '%')
+	      AND A.EMP_NM LIKE CONCAT('%', #{searchNm}, '%')
 	    </if>
-	    ORDER BY A.USER_NM ASC
+	    ORDER BY A.EMP_NM ASC
 	</select>
 	
 	<select id="selectUserAssignListAjax" parameterType="string" resultType="egovMap">
@@ -191,12 +191,12 @@
 	          A.ASSIGN_ID      AS assignId
 	        , P.PROJ_NM        AS projNm
 	        , A.ASSIGN_TITLE   AS title
-	        , DATE_FORMAT(A.START_DATE, '%Y-%m-%d') AS startDate
-	        , DATE_FORMAT(A.END_DATE, '%Y-%m-%d')   AS endDate
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
 	        , A.INPUT_RATE     AS inputRate
-	    FROM TB_PROJECT_ASSIGN A
+	    FROM TB_ASSIGNMENT A
 	    INNER JOIN TB_PROJECT P ON A.PROJECT_ID = P.PROJ_ID
-	    WHERE A.USER_ID = #{userId}
+	    WHERE A.EMP_ID = #{userId}
 	      AND A.DEL_YN = 'N'
 	</select>
 	

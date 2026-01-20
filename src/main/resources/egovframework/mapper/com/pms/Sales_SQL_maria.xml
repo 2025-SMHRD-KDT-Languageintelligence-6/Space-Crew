@@ -10,10 +10,10 @@
             , A.STATUS         AS status
             , A.PROBABILITY       AS probability
             , B.CUST_NM        AS custNm
-            , C.USER_NM        AS salesNm
+            , C.EMP_NM        AS salesNm
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
-        LEFT JOIN TB_USER C ON A.SALES_USER_ID = C.USER_ID
+        LEFT JOIN TB_EMP C ON A.EMP_ID = C.EMP_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.SALES_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -24,7 +24,7 @@
 
     <insert id="insertSales" parameterType="egovframework.com.pms.service.SalesVO">
         INSERT INTO TB_SALES (
-            CUST_ID, SALES_USER_ID, SALES_TITLE, EXPECTED_AMT, EXPECTED_DT, PROBABILITY, STATUS, SALES_CONTENT
+            CUST_ID, EMP_ID, SALES_TITLE, EXPECTED_AMT, EXPECTED_DT, PROBABILITY, STATUS, SALES_CONTENT
         ) VALUES (
             #{custId}, #{salesUserId}, #{salesTitle}, #{expectedAmt}, NULLIF(#{expectedDt},''), #{probability}, #{status}, #{salesContent}
         )
@@ -43,7 +43,7 @@
         SELECT 
               A.SALES_ID        AS salesId
             , A.CUST_ID         AS custId
-            , A.SALES_USER_ID   AS salesUserId
+            , A.EMP_ID   AS salesUserId
             , A.SALES_TITLE     AS salesTitle
             , A.EXPECTED_AMT    AS expectedAmt
             , A.EXPECTED_DT     AS expectedDt
@@ -51,10 +51,10 @@
             , A.STATUS          AS status
             , A.SALES_CONTENT   AS salesContent
             , B.CUST_NM         AS custNm
-            , C.USER_NM         AS salesNm
+            , C.EMP_NM         AS salesNm
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
-        LEFT JOIN TB_USER C ON A.SALES_USER_ID = C.USER_ID
+        LEFT JOIN TB_EMP C ON A.EMP_ID = C.EMP_ID
         WHERE A.SALES_ID = #{salesId}
         AND A.DEL_YN = 'N'
     </select>
@@ -62,7 +62,7 @@
     <update id="updateSales" parameterType="egovframework.com.pms.service.SalesVO">
         UPDATE TB_SALES SET
               CUST_ID = #{custId}
-            , SALES_USER_ID = #{salesUserId}
+            , EMP_ID = #{salesUserId}
             , SALES_TITLE = #{salesTitle}
             , EXPECTED_AMT = #{expectedAmt}
             , EXPECTED_DT = NULLIF(#{expectedDt},'')
