@@ -15,8 +15,7 @@
         </property>
     </bean>
 	
-	<!-- DataSource -->
-	<alias name="dataSource" alias="egov.dataSource" />
+
 	
 	<!-- MySQL -->
 	<beans profile="mysql">  
@@ -89,6 +88,8 @@
 		<!--<property name="password" value="#{egovEnvCryptoService.getPassword()}"/>-->
 		<property name="password" value="${Globals.maria.Password}"/>
 	</bean>
+        <!-- DataSource -->
+        <alias name="dataSource" alias="egov.dataSource" />
 	</beans>
 
 	<!-- PostresSQL -->

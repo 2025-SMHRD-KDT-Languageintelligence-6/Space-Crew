@@ -79,7 +79,13 @@
         </tr>
         <tr>
             <th>요구 기술 사항</th>
-            <td>${projectVO.reqSkills}</td>
+            <td>
+                <textarea id="reqSkills" name="reqSkills" rows="3" style="width: 80%;" placeholder="예: 트래픽 처리에 능숙한 자바 개발자">${projectVO.reqSkills}</textarea>
+
+                <button type="button" class="btn btn-primary" onclick="openAIRecommendationPopup()">
+                    AI 인력 추천
+                </button>
+            </td>
         </tr>
         </table>
     
