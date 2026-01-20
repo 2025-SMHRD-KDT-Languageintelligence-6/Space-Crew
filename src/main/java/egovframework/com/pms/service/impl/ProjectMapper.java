@@ -32,7 +32,7 @@ public interface ProjectMapper {
 
 	void deleteProjectAssign(int assignId) throws Exception;
 
-	List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception;
+    List<ProjectAssignVO> selectProjectAssignList(ProjectVO vo) throws Exception;
 
 	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
 

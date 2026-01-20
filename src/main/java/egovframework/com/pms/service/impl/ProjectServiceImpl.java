@@ -75,9 +75,9 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
     }
 
 	@Override
-	public List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception {
-		return projectMapper.selectProjectAssignList(projectId);
-	}
+    public List<ProjectAssignVO> selectProjectAssignList(ProjectVO projectVO) throws Exception {
+        return projectMapper.selectProjectAssignList(projectVO);
+    }
 
 	@Override
 	public void deleteProjectAssign(int assignId) throws Exception {

@@ -126,26 +126,17 @@
 	        #{lastUpdusrId}
 	    )
 	</insert>
-	
-	<select id="selectProjectAssignList" parameterType="int" resultType="egovframework.com.pms.service.ProjectAssignVO">
-	    SELECT 
-	          A.ASSIGN_ID      AS assignId
-	        , A.PROJECT_ID     AS projectId
-	        , A.EMP_ID        AS userId
-	        , B.EMP_NM        AS userNm      
-	        , B.DEPT_NM        AS deptNm      
-	        , B.POSITION_NM    AS positionNm  
-	        , A.ASSIGN_TITLE   AS assignTitle
-	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
-	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
-	        , A.INPUT_RATE     AS inputRate
-	    FROM TB_ASSIGNMENT A
-	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
-	    WHERE A.PROJECT_ID = #{projectId}
-	      AND A.DEL_YN = 'N'
-	      AND B.IN_OFFICE = 'Y'
-	    ORDER BY A.ASSIGN_ID DESC
-	</select>
+
+    <select id="selectProjectAssignList" parameterType="egovframework.com.pms.service.ProjectVO" resultType="egovframework.com.pms.service.ProjectAssignVO">
+        SELECT
+        A.ASSIGN_ID        AS assignId
+        , A.PROJ_ID          AS projectId    , A.EMP_ID           AS userId       , B.EMP_NM           AS userNm       , B.DEPT_NM          AS deptNm
+        , B.POSITION_NM      AS positionNm
+        , A.ASSIGN_TITLE     AS assignTitle
+        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate  , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate    , A.INPUT_RATE       AS inputRate
+        FROM TB_ASSIGNMENT A                     INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID  WHERE A.PROJ_ID = #{projId}              AND A.DEL_YN = 'N'
+        AND B.IN_OFFICE = 'Y'                  ORDER BY A.ASSIGN_ID DESC
+    </select>
 	
 	<update id="deleteProjectAssign" parameterType="int">
 	    UPDATE TB_ASSIGNMENT 

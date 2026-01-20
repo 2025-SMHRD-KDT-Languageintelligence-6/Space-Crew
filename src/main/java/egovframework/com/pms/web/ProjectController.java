@@ -134,14 +134,21 @@ public class ProjectController {
         }
         return resultMap;
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/pms/selectProjectAssignListAjax.do")
-    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projectId") int projectId) throws Exception {
+    // 1. int -> Long으로 변경 (DB의 PROJ_ID는 숫자가 커서 Long이 안전해)
+    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projectId") Long projectId) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        
-        List<ProjectAssignVO> list = projectService.selectProjectAssignList(projectId);
-        
+
+        // 2. VO 객체 생성 (MyBatis는 VO로 받는 걸 좋아해)
+        ProjectVO projectVO = new ProjectVO();
+        projectVO.setProjId(projectId); // 검색 조건 담기
+
+        // 3. 서비스에 VO를 통째로 넘기기
+        // (만약 서비스가 아직 int를 받는다면, 서비스 파일도 고쳐야 해!)
+        List<ProjectAssignVO> list = projectService.selectProjectAssignList(projectVO);
+
         resultMap.put("list", list);
         return resultMap;
     }
