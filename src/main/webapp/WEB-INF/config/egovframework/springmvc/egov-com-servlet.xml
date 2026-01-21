@@ -102,6 +102,7 @@
 	        <mvc:mapping path="/sym/**"/>
 	        <mvc:mapping path="/uat/uap/**"/>
 	        <mvc:mapping path="/cop/ems/**"/>
+	        <mvc:mapping path="/uss/umt/**"/>
 	        
 	        <ref bean="adminAccessInterceptor"/>
 	    </mvc:interceptor>
