@@ -53,7 +53,7 @@
 	        , A.STATUS            AS status
 	        , A.START_DT          AS startDt
 	        , A.END_DT            AS endDt
-	        , A.COMPLEXITY_SCORE  AS complexityScore
+	        , A.EST_EFFORT        AS estEffort
 	        , A.REQ_SKILLS        AS reqSkills
 	        , B.CONT_NM			  AS contNm
 	        , B.CONT_AMT          AS contAmt

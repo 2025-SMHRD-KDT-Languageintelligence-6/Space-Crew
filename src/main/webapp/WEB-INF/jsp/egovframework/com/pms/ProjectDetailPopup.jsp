@@ -83,11 +83,15 @@
         </tr>
         <tr>
             <th>진행률</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>난이도</th>
-            <td>${projectVO.complexityScore}</td>
+            <td>
+		        <div style="width:100%; background:#eee; height:20px; border-radius:10px; overflow:hidden; position:relative;">
+		            <div id="mainProgressBar" style="width:0%; background:#4CAF50; height:100%; transition:width 0.5s;"></div>
+		            <span id="mainProgressText" style="position:absolute; width:100%; text-align:center; top:0; font-size:12px; font-weight:bold; color:#000;">0%</span>
+		        </div>
+		        <div style="margin-top:5px; font-size:12px; color:#666;">
+		            (누적 투입: <span id="currentTotalEffort">0</span> / 목표: <span id="targetEffort">${projectVO.estEffort}</span> Man-Day)
+		        </div>
+		    </td>
         </tr>
         <tr>
             <th>요구 기술 사항</th>
@@ -428,13 +432,15 @@
 	        dataType: "json",
 	        success: function(data) {
 	            var html = "";
+	            var totalProjectEffort = 0;
+	            
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
 	                	var start = new Date(item.startDate);
 	                    var end = new Date(item.endDate);
 	                    var diffDays = ((end - start) / (1000 * 60 * 60 * 24)) + 1;
 	                    var totalValue = (diffDays * item.inputRate).toFixed(1);
-	                    
+	                    totalProjectEffort += parseFloat(totalValue);
 	                    html += "<tr>";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
@@ -451,6 +457,22 @@
 	                html = "<tr><td colspan='5'>배정된 인력이 없습니다.</td></tr>";
 	            }
 	            $("#assignListBody").html(html);
+	            var target = parseFloat("${projectVO.estEffort}") || 0;
+	            var progress = 0;
+	            if(target > 0) {
+	                progress = ((totalProjectEffort / target) * 100).toFixed(1);
+	            }
+	            
+	            $("#currentTotalEffort").text(totalProjectEffort.toFixed(1));
+	            $("#mainProgressText").text(progress + "%");
+	            $("#mainProgressBar").css("width", (progress > 100 ? 100 : progress) + "%");
+	            
+	            if(progress > 100) {
+	                $("#mainProgressBar").css("background", "#f44336");
+	            } else {
+	                $("#mainProgressBar").css("background", "#4CAF50");
+	            }
+	            
 	            if(calendar) {
 	                calendar.refetchEvents();
 	            }
