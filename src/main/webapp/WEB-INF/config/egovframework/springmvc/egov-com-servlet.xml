@@ -94,5 +94,20 @@
         </mvc:interceptor>
     </mvc:interceptors>
 	
+	<bean id="adminAccessInterceptor" class="egovframework.com.cmm.interceptor.AdminAccessInterceptor" />
+
+	<mvc:interceptors>
+	    <mvc:interceptor>
+	        <mvc:mapping path="/sec/**"/>
+	        <mvc:mapping path="/sym/**"/>
+	        <mvc:mapping path="/uat/uap/**"/>
+	        <mvc:mapping path="/cop/ems/**"/>
+	        <mvc:mapping path="/uss/umt/**"/>
+	        
+	        <ref bean="adminAccessInterceptor"/>
+	    </mvc:interceptor>
+	</mvc:interceptors>
+	
+	
 
 </beans>

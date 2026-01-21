@@ -8,7 +8,20 @@
     <title>직원 상세 정보</title>
     <%-- 기존 공통 CSS --%>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
-
+	<style>
+		.fc-event {
+		    border: none !important;
+		}
+		.fc-event-title, 
+		.fc-event-main,
+		.fc-event-main-frame {
+		    color: #ffffff !important;
+		    font-weight: bold !important;
+		}
+		.fc-event:hover {
+		    color: #ffffff !important;
+		}
+	</style>
 </head>
 <body>
     <div class="popup-header">
@@ -62,6 +75,7 @@
                initialView: 'dayGridMonth',
                locale: 'ko',
                height: 500,
+               displayEventTime: false,
                headerToolbar: {
                    left: 'prev,next today',
                    center: 'title',

@@ -11,6 +11,7 @@ import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -138,12 +139,12 @@ public class ProjectController {
     @ResponseBody
     @RequestMapping(value = "/pms/selectProjectAssignListAjax.do")
     // 1. int -> Long으로 변경 (DB의 PROJ_ID는 숫자가 커서 Long이 안전해)
-    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projectId") Long projectId) throws Exception {
+    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projId") Long projId) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
 
         // 2. VO 객체 생성 (MyBatis는 VO로 받는 걸 좋아해)
         ProjectVO projectVO = new ProjectVO();
-        projectVO.setProjId(projectId); // 검색 조건 담기
+        projectVO.setProjId(projId); // 검색 조건 담기
 
         // 3. 서비스에 VO를 통째로 넘기기
         // (만약 서비스가 아직 int를 받는다면, 서비스 파일도 고쳐야 해!)
@@ -189,6 +190,62 @@ public class ProjectController {
         
         return map;
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/saveProjectTaskGroupAjax.do")
+    public Map<String, Object> saveProjectTaskGroupAjax(@RequestBody ProjectAssignVO vo) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if(vo.getTaskGroupId() == null || vo.getTaskGroupId().isEmpty()) {
+            vo.setTaskGroupId("TG_" + user.getId() + "_" + System.currentTimeMillis());
+        }
+        
+        vo.setLastUpdusrId(user.getId());
+
+        try {
+            projectService.saveProjectTaskGroup(vo); 
+            resultMap.put("status", "SUCCESS");
+        } catch (Exception e) {
+            resultMap.put("status", "ERROR");
+            resultMap.put("message", e.getMessage());
+        }
+        
+        return resultMap;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/selectTaskGroupDetailAjax.do")
+    public Map<String, Object> selectTaskGroupDetailAjax(@RequestParam("taskGroupId") String taskGroupId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        List<ProjectAssignVO> memberList = projectService.selectTaskGroupMemberList(taskGroupId);
+
+        if (memberList != null && !memberList.isEmpty()) {
+            resultMap.put("status", "SUCCESS");
+            resultMap.put("memberList", memberList);
+            resultMap.put("info", memberList.get(0));
+        } else {
+            resultMap.put("status", "EMPTY");
+        }
+
+        return resultMap;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/deleteProjectTaskGroupAjax.do")
+    public Map<String, Object> deleteProjectTaskGroupAjax(@RequestParam("taskGroupId") String taskGroupId) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            projectService.deleteProjectTaskGroup(taskGroupId); 
+            resultMap.put("status", "SUCCESS");
+        } catch (Exception e) {
+            resultMap.put("status", "ERROR");
+        }
+        return resultMap;
+    }
+
+    
     /**
      * [추가 기능] AI 인력 추천 팝업 열기 (Python FastAPI 연동)
      */

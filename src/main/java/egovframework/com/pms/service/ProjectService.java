@@ -23,7 +23,7 @@ public interface ProjectService {
 
     String insertProjectAssign(ProjectAssignVO assignVO, String forceSave) throws Exception;
 
-    // [수정 완료] 기존 int projectId -> ProjectVO vo 로 변경!
+    // [수정 완료] 기존 int projId -> ProjectVO vo 로 변경!
     List<ProjectAssignVO> selectProjectAssignList(ProjectVO vo) throws Exception;
 
     void deleteProjectAssign(int assignId) throws Exception;
@@ -33,4 +33,10 @@ public interface ProjectService {
     double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception;
 
     List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
+
+	void saveProjectTaskGroup(ProjectAssignVO vo) throws Exception;
+
+	List<ProjectAssignVO> selectTaskGroupMemberList(String taskGroupId) throws Exception;
+
+	void deleteProjectTaskGroup(String taskGroupId) throws Exception;
 }

@@ -53,16 +53,16 @@
 	        , A.STATUS            AS status
 	        , A.START_DT          AS startDt
 	        , A.END_DT            AS endDt
-	        , A.COMPLEXITY_SCORE  AS complexityScore
+	        , A.EST_EFFORT        AS estEffort
 	        , A.REQ_SKILLS        AS reqSkills
 	        , B.CONT_NM			  AS contNm
 	        , B.CONT_AMT          AS contAmt
 	        , C.SALES_TITLE       AS salesTitle
 	        , D.CUST_NM           AS custNm
-	        , E.EMP_NM           AS picUserNm
-	        , F.EMP_NM           AS mainMgrNm
-	        , G.EMP_NM           AS salesUserNm
-	        , H.EMP_NM           AS subMgrNm
+	        , E.EMP_NM            AS picUserNm
+	        , F.EMP_NM            AS mainMgrNm
+	        , G.EMP_NM            AS salesUserNm
+	        , H.EMP_NM            AS subMgrNm
 	    FROM TB_PROJECT A
 	    LEFT JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
 	    LEFT JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
@@ -117,7 +117,7 @@
 	        INPUT_RATE,
 	        LAST_UPDUSR_ID
 	    ) VALUES (
-	        #{projectId}, 
+	        #{projId}, 
 	        #{userId}, 
 	        #{assignTitle}, 
 	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
@@ -129,22 +129,21 @@
 
     <select id="selectProjectAssignList" parameterType="egovframework.com.pms.service.ProjectVO" resultType="egovframework.com.pms.service.ProjectAssignVO">
         SELECT
-        	  A.ASSIGN_ID        AS assignId
-       	    , A.PROJ_ID          AS projectId
-       	    , A.EMP_ID           AS userId
-       	    , B.EMP_NM           AS userNm
-       	    , B.DEPT_NM          AS deptNm
-        	, B.POSITION_NM      AS positionNm
-        	, A.ASSIGN_TITLE     AS assignTitle
-        	, DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
-        	, DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
-        	, A.INPUT_RATE       AS inputRate
+        	  ANY_VALUE(A.ASSIGN_ID)                           AS assignId
+       	    , ANY_VALUE(A.PROJ_ID)                             AS projId
+       	    , A.TASK_GROUP_ID                                  AS taskGroupId
+        	, ANY_VALUE(A.ASSIGN_TITLE)                        AS assignTitle
+        	, ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDate
+        	, ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
+        	, GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
+        	, SUM(A.INPUT_RATE)                                AS inputRate
         FROM TB_ASSIGNMENT A
         INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
         WHERE A.PROJ_ID = #{projId}
           AND A.DEL_YN = 'N'
           AND B.IN_OFFICE = 'Y'
-        ORDER BY A.ASSIGN_ID DESC
+        GROUP BY A.TASK_GROUP_ID
+        ORDER BY ANY_VALUE(A.START_DT) DESC
     </select>
 	
 	<update id="deleteProjectAssign" parameterType="int">
@@ -168,8 +167,8 @@
 	
 	<select id="selectUserListForPopup" parameterType="string" resultType="egovMap">
 	    SELECT 
-	          A.EMP_ID      AS userId
-	        , A.EMP_NM      AS userNm
+	          A.EMP_ID       AS userId
+	        , A.EMP_NM       AS userNm
 	        , A.DEPT_NM      AS deptNm
 	        , A.POSITION_NM  AS positionNm
 	        , (SELECT IFNULL(SUM(SUB.INPUT_RATE), 0) 
@@ -199,5 +198,55 @@
 	    WHERE A.EMP_ID = #{userId}
 	      AND A.DEL_YN = 'N'
 	</select>
+	
+	<delete id="deleteProjectTaskGroup" parameterType="String">
+	    DELETE FROM TB_ASSIGNMENT 
+	    WHERE TASK_GROUP_ID = #{taskGroupId}
+	</delete>
+	
+	<insert id="insertProjectTaskGroup" parameterType="egovframework.com.pms.service.ProjectAssignVO">
+	    INSERT INTO TB_ASSIGNMENT (
+	        PROJ_ID, 
+	        EMP_ID, 
+	        ASSIGN_TITLE, 
+	        START_DT, 
+	        END_DT, 
+	        INPUT_RATE, 
+	        TASK_GROUP_ID,
+	        LAST_UPDUSR_ID
+	    ) VALUES 
+	    <foreach collection="assignList" item="item" separator=",">
+	    (
+	        #{projId}, 
+	        #{item.userId}, 
+	        #{assignTitle}, 
+	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
+	        #{item.inputRate}, 
+	        #{taskGroupId},
+	        #{lastUpdusrId}
+	    )
+	    </foreach>
+	</insert>
+	
+	<select id="selectTaskGroupMemberList" parameterType="String" resultType="egovframework.com.pms.service.ProjectAssignVO">
+	    SELECT 
+	          A.ASSIGN_ID                         AS assignId
+	        , A.PROJ_ID                           AS projId
+	        , A.EMP_ID                            AS userId
+	        , B.EMP_NM                            AS userNm
+	        , A.ASSIGN_TITLE                      AS assignTitle
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
+	        , A.INPUT_RATE                        AS inputRate
+	        , A.TASK_GROUP_ID       			  AS taskGroupId
+	    FROM TB_ASSIGNMENT A
+	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
+	    WHERE A.TASK_GROUP_ID = #{taskGroupId}
+	      AND A.DEL_YN = 'N'
+	    ORDER BY B.EMP_NM ASC
+	</select>
+	
+	
 	
 </mapper>

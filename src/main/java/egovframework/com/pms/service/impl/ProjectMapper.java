@@ -37,4 +37,12 @@ public interface ProjectMapper {
 	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
 
 	List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
+
+	void saveProjectTaskGroup(ProjectAssignVO vo) throws Exception;
+
+	void deleteProjectTaskGroup(String taskGroupId) throws Exception;
+
+	void insertProjectTaskGroup(ProjectAssignVO vo) throws Exception;
+
+	List<ProjectAssignVO> selectTaskGroupMemberList(String taskGroupId) throws Exception;
 }

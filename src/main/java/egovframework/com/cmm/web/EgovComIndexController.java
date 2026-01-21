@@ -51,7 +51,7 @@ import egovframework.com.uat.uia.service.EgovLoginService;
  * </pre>
  */
 
-@Controller
+//@Controller
 public class EgovComIndexController {
 
 	@Autowired

@@ -2,13 +2,13 @@ package egovframework.com.pms.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Service;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
@@ -68,6 +68,7 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
         double newTotalRate = currentRate + assignVO.getInputRate();
         
         if (newTotalRate > 1.0 && "N".equals(forceSave)) {
+        	return "OVERLOAD";
         }
 
         projectMapper.insertProjectAssign(assignVO);
@@ -98,6 +99,26 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Override
 	public List<EgovMap> selectUserAssignListAjax(String userId) throws Exception {
 		return projectMapper.selectUserAssignListAjax(userId);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void saveProjectTaskGroup(ProjectAssignVO vo) throws Exception {
+		if (vo.getTaskGroupId() != null && !vo.getTaskGroupId().isEmpty()) {
+	        projectMapper.deleteProjectTaskGroup(vo.getTaskGroupId());
+	    }
+	    projectMapper.insertProjectTaskGroup(vo);
+	}
+
+	@Override
+	public List<ProjectAssignVO> selectTaskGroupMemberList(String taskGroupId) throws Exception {
+		return projectMapper.selectTaskGroupMemberList(taskGroupId);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteProjectTaskGroup(String taskGroupId) throws Exception {
+		projectMapper.deleteProjectTaskGroup(taskGroupId);
 	}
 	
 }

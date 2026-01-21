@@ -15,7 +15,7 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String status;
     private String startDt;
     private String endDt;
-    private Integer complexityScore;
+    private Double estEffort;
     
     private String lastUpdusrId;
     private String reqSkills;

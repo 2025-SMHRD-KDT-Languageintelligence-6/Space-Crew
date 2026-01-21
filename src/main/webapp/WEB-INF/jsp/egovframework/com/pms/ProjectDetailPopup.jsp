@@ -13,6 +13,18 @@
         body { padding: 20px; font-family: 'Malgun Gothic'; }
         .popup-header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
         .btn-close { margin-top: 20px; text-align: center; }
+        .fc-event {
+		    border: none !important;
+		}
+		.fc-event-title, 
+		.fc-event-main,
+		.fc-event-main-frame {
+		    color: #ffffff !important;
+		    font-weight: bold !important;
+		}
+		.fc-event:hover {
+		    color: #ffffff !important;
+		}
     </style>
 </head>
 <body>
@@ -71,11 +83,15 @@
         </tr>
         <tr>
             <th>진행률</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>난이도</th>
-            <td>${projectVO.complexityScore}</td>
+            <td>
+		        <div style="width:100%; background:#eee; height:20px; border-radius:10px; overflow:hidden; position:relative;">
+		            <div id="mainProgressBar" style="width:0%; background:#4CAF50; height:100%; transition:width 0.5s;"></div>
+		            <span id="mainProgressText" style="position:absolute; width:100%; text-align:center; top:0; font-size:12px; font-weight:bold; color:#000;">0%</span>
+		        </div>
+		        <div style="margin-top:5px; font-size:12px; color:#666;">
+		            (누적 투입: <span id="currentTotalEffort">0</span> / 목표: <span id="targetEffort">${projectVO.estEffort}</span> Man-Day)
+		        </div>
+		    </td>
         </tr>
         <tr>
             <th>요구 기술 사항</th>
@@ -98,6 +114,7 @@
 	                <th>업무</th>
 	                <th>투입기간</th>
 	                <th>투입률(M/M)</th>
+	                <th>총투입률</th>
 	                <th>관리</th>
 	            </tr>
 	        </thead>
@@ -109,14 +126,8 @@
     
     <div id="assignModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:400px; background:#fff; border:1px solid #000; padding:20px; z-index:1000; box-shadow: 5px 5px 15px rgba(0,0,0,0.3);">
 	    <h3>인력 배정 등록</h3>
+	    <input type="hidden" id="taskGroupId">
 	    <table style="width:100%;">
-	        <tr>
-	            <th>성명</th>
-	            <td>
-	                <input type="text" id="assignUserNm" readonly style="width:100px;">
-	                <input type="hidden" id="assignUserId"> <button type="button" onclick="fn_open_user_search();">찾기</button>
-	            </td>
-	        </tr>
 	        <tr>
 	            <th>업무명</th>
 	            <td><input type="text" id="assignTitle" style="width:100%;"></td>
@@ -131,15 +142,36 @@
 	        </tr>
 	        <tr>
 	            <th>투입률</th>
-	            <td><input type="number" id="assignInputRate" step="0.1" min="0.1" max="1.0" value="1.0"> M/M</td>
+	            <td>
+	    	        <span id="totalInputRateDisplay" style="font-weight:bold; color:#2196F3; font-size:1.1em;">0.00</span> 
+      				<input type="hidden" id="totalInputRate" value="0">M/M
+   				</td>
 	        </tr>
 	    </table>
-	    
+	    <div style="margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">
+	        <div style="display:flex; justify-content:space-between; align-items:center;">
+	            <strong>투입 인원 목록</strong>
+	            <button type="button" class="btn_s" onclick="fn_open_user_search();">인원 추가</button>
+	        </div>
+	        <table style="width:100%; margin-top:10px;" id="selectedUserTable">
+	            <thead>
+	                <tr style="background:#f9f9f9;">
+	                    <th>성명</th>
+	                    <th>투입률(MM)</th>
+	                    <th>삭제</th>
+	                </tr>
+	            </thead>
+	            <tbody id="selectedUserListBody">
+	                </tbody>
+	        </table>
+	    </div>
 	    <div style="text-align:right; margin-top:15px;">
-	        <button type="button" class="btn_s" onclick="fn_save_assign();">저장</button>
+	        <button type="button" class="btn_s" onclick="fn_save_task_group();">저장</button>
 	        <button type="button" class="btn_s" onclick="$('#assignModal').hide();">취소</button>
 	    </div>
 	</div>
+	
+	
     <div id="userSearchModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:500px; background:#fff; border:2px solid #333; padding:20px; z-index:2000; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
 	    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
 	        <h3 style="margin:0;">👥 직원 검색</h3>
@@ -188,7 +220,7 @@
             return;
         }
         var assignData = {
-            projectId: "${projectVO.projId}",
+            projId: "${projectVO.projId}",
             userId: $("#assignUserId").val(),
             assignTitle: $("#assignTitle").val(),
             startDate: $("#assignStartDate").val(),
@@ -223,6 +255,10 @@
     }
 	
 	function fn_open_assign_popup() {
+		$("#taskGroupId").val("");
+	    $("#assignTitle").val("");
+	    $("#selectedUserListBody").empty();
+	    $("#totalInputRateDisplay").text("0.0");
 	    $('#assignModal').show();
 	}
 	
@@ -272,33 +308,171 @@
 	}
 	
 	function fn_select_this_user(userId, userNm) {
-	    $("#assignUserId").val(userId);
-	    $("#assignUserNm").val(userNm);
+		if($("#user_row_" + userId).length > 0) {
+	        alert("이미 목록에 추가된 인원입니다.");
+	        return;
+	    }
+
+	    var html = "<tr id='user_row_" + userId + "'>";
+	    html += "  <td>" + userNm + "<input type='hidden' class='selectedUserId' value='" + userId + "'></td>";
+	    html += "  <td><input type='number' class='selectedInputRate' step='0.1' min='0.1' max='1.0' value='1.0' style='width:60px;' onchange='fn_calculate_total_mm()' onkeyup='fn_calculate_total_mm()'> MM</td>";
+	    html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
+	    html += "</tr>";
+
+	    $("#selectedUserListBody").append(html);
 	    $('#userSearchModal').hide();
+	    
+	    fn_calculate_total_mm();
+	}
+	
+	
+	function fn_save_task_group() {
+	    if(!$("#assignTitle").val()) { alert("업무명을 입력하세요."); return; }
+	    if(!$("#assignStartDate").val() || !$("#assignEndDate").val()) { alert("기간을 입력하세요."); return; }
+	    if($("#selectedUserListBody tr").length === 0) { alert("투입 인원을 최소 1명 이상 선택하세요."); return; }
+
+	    var assignList = [];
+	    $("#selectedUserListBody tr").each(function() {
+	        assignList.push({
+	            userId: $(this).find(".selectedUserId").val(),
+	            inputRate: $(this).find(".selectedInputRate").val()
+	        });
+	    });
+
+	    var sendData = {
+	        projId: "${projectVO.projId}",
+	        assignTitle: $("#assignTitle").val(),
+	        startDate: $("#assignStartDate").val(),
+	        endDate: $("#assignEndDate").val(),
+	        taskGroupId: $("#taskGroupId").val(),
+	        assignList: assignList
+	    };
+
+	    $.ajax({
+	        url: "<c:url value='/pms/saveProjectTaskGroupAjax.do'/>",
+	        type: "POST",
+	        contentType: "application/json; charset=UTF-8",
+	        data: JSON.stringify(sendData),
+	        success: function(data) {
+	            if(data.status === "SUCCESS") {
+	                alert("성공적으로 저장되었습니다.");
+	                $('#assignModal').hide();
+	                location.reload();
+	            } else {
+	                alert("오류 발생: " + data.message);
+	            }
+	        }
+	    });
+	}
+	
+	function fn_edit_task_group(taskGroupId) {
+	    $.ajax({
+	        url: "<c:url value='/pms/selectTaskGroupDetailAjax.do'/>",
+	        data: { "taskGroupId": taskGroupId },
+	        success: function(data) {
+	            $("#taskGroupId").val(taskGroupId);
+	            $("#assignTitle").val(data.info.assignTitle);
+	            $("#assignStartDate").val(data.info.startDate);
+	            $("#assignEndDate").val(data.info.endDate);
+	            
+	            $("#selectedUserListBody").empty();
+	            $.each(data.memberList, function(idx, mem) {
+	                var html = "<tr id='user_row_" + mem.userId + "'>";
+	                html += "  <td>" + mem.userNm + "<input type='hidden' class='selectedUserId' value='" + mem.userId + "'></td>";
+	                html += "  <td><input type='number' class='selectedInputRate' step='0.1' value='" + mem.inputRate + "' style='width:60px;'> MM</td>";
+	                html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove();\">X</button></td>";
+	                html += "</tr>";
+	                $("#selectedUserListBody").append(html);
+	            });
+	            fn_calculate_total_mm();
+	            $('#assignModal').show();
+	        }
+	    });
+	}
+	
+	function fn_delete_task_group(taskGroupId) {
+	    if(!confirm("해당 업무와 투입 인원 전체를 삭제하시겠습니까?")) return;
+	    
+	    $.ajax({
+	        url: "<c:url value='/pms/deleteProjectTaskGroupAjax.do'/>",
+	        type: "POST",
+	        data: { taskGroupId: taskGroupId },
+	        success: function(data) {
+	            alert("삭제되었습니다.");
+	            fn_load_assign_list();
+	        }
+	    });
+	}
+	
+	function fn_calculate_total_mm() {
+	    var total = 0;
+	    $(".selectedInputRate").each(function() {
+	        var val = parseFloat($(this).val());
+	        if (!isNaN(val)) {
+	            total += val;
+	        }
+	    });
+
+	    var formattedTotal = total.toFixed(1);
+	    $("#totalInputRateDisplay").text(formattedTotal);
+	    $("#totalInputRate").val(formattedTotal);
+	    
+	    if (total > 1.0) {
+	        $("#totalInputRateDisplay").css("color", "#f44336");
+	    } else {
+	        $("#totalInputRateDisplay").css("color", "#2196F3");
+	    }
 	}
 	
 	function fn_load_assign_list() {
 	    $.ajax({
 	        url: "<c:url value='/pms/selectProjectAssignListAjax.do'/>",
 	        type: "GET",
-	        data: { projectId: "${projectVO.projId}" },
+	        data: { projId: "${projectVO.projId}" },
 	        dataType: "json",
 	        success: function(data) {
 	            var html = "";
+	            var totalProjectEffort = 0;
+	            
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
+	                	var start = new Date(item.startDate);
+	                    var end = new Date(item.endDate);
+	                    var diffDays = ((end - start) / (1000 * 60 * 60 * 24)) + 1;
+	                    var totalValue = (diffDays * item.inputRate).toFixed(1);
+	                    totalProjectEffort += parseFloat(totalValue);
 	                    html += "<tr>";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
-	                    html += "  <td>" + item.inputRate + "</td>";
-	                    html += "  <td><button type='button' class='btn_red' onclick='fn_delete_assign(" + item.assignId + ")'>삭제</button></td>";
+	                    html += "  <td>" + item.inputRate.toFixed(1) + "</td>";
+	                    html += "  <td><strong>" + totalValue + "</strong></td>";
+	                    html += "  <td>";
+	                    html += "    <button type='button' class='btn_s' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
+	                    html += "    <button type='button' class='btn_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
+	                    html += "  </td>";
 	                    html += "</tr>";
 	                });
 	            } else {
 	                html = "<tr><td colspan='5'>배정된 인력이 없습니다.</td></tr>";
 	            }
 	            $("#assignListBody").html(html);
+	            var target = parseFloat("${projectVO.estEffort}") || 0;
+	            var progress = 0;
+	            if(target > 0) {
+	                progress = ((totalProjectEffort / target) * 100).toFixed(1);
+	            }
+	            
+	            $("#currentTotalEffort").text(totalProjectEffort.toFixed(1));
+	            $("#mainProgressText").text(progress + "%");
+	            $("#mainProgressBar").css("width", (progress > 100 ? 100 : progress) + "%");
+	            
+	            if(progress > 100) {
+	                $("#mainProgressBar").css("background", "#f44336");
+	            } else {
+	                $("#mainProgressBar").css("background", "#4CAF50");
+	            }
+	            
 	            if(calendar) {
 	                calendar.refetchEvents();
 	            }
@@ -316,6 +490,7 @@
             initialView: 'dayGridMonth',
             locale: 'ko',
             height: 500,
+            displayEventTime: false,
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -325,7 +500,7 @@
                 $.ajax({
                     url: "<c:url value='/pms/selectProjectAssignListAjax.do'/>",
                     type: "GET",
-                    data: { projectId: "${projectVO.projId}" },
+                    data: { projId: "${projectVO.projId}" },
                     dataType: "json",
                     success: function(data) {
                         var events = [];
@@ -333,7 +508,7 @@
                             $.each(data.list, function(idx, item) {
                                 events.push({
                                     id: item.assignId,
-                                    title: item.userNm + " (" + (item.inputRate * 100).toFixed(0) + "%)",
+                                    title: item.assignTitle + " [" + item.userNm + "]",
                                     start: item.startDate,
                                     end: item.endDate + "T23:59:59", 
                                     color: (item.inputRate >= 1.0 ? '#f44336' : '#3788d8')
@@ -349,6 +524,20 @@
         calendar.render();
     });
 	
+    function fn_delete_task_group(taskGroupId) {
+        if(!confirm("해당 업무와 투입 인원 전체를 삭제하시겠습니까?")) return;
+        
+        $.ajax({
+            url: "<c:url value='/pms/deleteProjectTaskGroupAjax.do'/>", 
+            type: "POST",
+            data: { "taskGroupId": taskGroupId },
+            success: function(data) {
+                alert("삭제되었습니다.");
+                fn_load_assign_list();
+            }
+        });
+    }
+    
 	function fn_delete_assign(assignId) {
 	    if(!confirm("정말 삭제하시겠습니까?")) return;
 	    
