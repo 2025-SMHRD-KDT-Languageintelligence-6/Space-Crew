@@ -433,20 +433,29 @@
 	        success: function(data) {
 	            var html = "";
 	            var totalProjectEffort = 0;
+	            var today = new Date();
+	            today.setHours(0, 0, 0, 0);
 	            
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
 	                	var start = new Date(item.startDate);
 	                    var end = new Date(item.endDate);
-	                    var diffDays = ((end - start) / (1000 * 60 * 60 * 24)) + 1;
-	                    var totalValue = (diffDays * item.inputRate).toFixed(1);
-	                    totalProjectEffort += parseFloat(totalValue);
+	                    
+	                    var fullDiffDays = ((end - start) / (1000 * 60 * 60 * 24)) + 1;
+	                    var fullValue = (fullDiffDays * item.inputRate).toFixed(1);
+	                    var effectiveEnd = end > today ? today : end;
+	                    var accumulatedValue = 0;
+	                    if (today >= start) {
+	                        var diffDays = ((effectiveEnd - start) / (1000 * 60 * 60 * 24)) + 1;
+	                        accumulatedValue = diffDays * item.inputRate;
+	                    }
+	                    totalProjectEffort += accumulatedValue;
 	                    html += "<tr>";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
 	                    html += "  <td>" + item.inputRate.toFixed(1) + "</td>";
-	                    html += "  <td><strong>" + totalValue + "</strong></td>";
+	                    html += "  <td><strong>" + fullValue + "</strong></td>";
 	                    html += "  <td>";
 	                    html += "    <button type='button' class='btn_s' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
 	                    html += "    <button type='button' class='btn_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
@@ -454,14 +463,11 @@
 	                    html += "</tr>";
 	                });
 	            } else {
-	                html = "<tr><td colspan='5'>배정된 인력이 없습니다.</td></tr>";
+	                html = "<tr><td colspan='6'>배정된 인력이 없습니다.</td></tr>";
 	            }
 	            $("#assignListBody").html(html);
 	            var target = parseFloat("${projectVO.estEffort}") || 0;
-	            var progress = 0;
-	            if(target > 0) {
-	                progress = ((totalProjectEffort / target) * 100).toFixed(1);
-	            }
+	            var progress = target > 0 ? ((totalProjectEffort / target) * 100).toFixed(1) : 0;
 	            
 	            $("#currentTotalEffort").text(totalProjectEffort.toFixed(1));
 	            $("#mainProgressText").text(progress + "%");
