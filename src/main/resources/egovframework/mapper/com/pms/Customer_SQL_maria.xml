@@ -16,7 +16,7 @@
         LEFT JOIN TB_FAVORITE B 
 	      ON A.CUST_ID = B.TARGET_ID 
 	     AND B.TARGET_TYPE = 'CUSTOMER'
-	     AND B.USER_ID = #{loginId}
+	     AND B.EMP_ID = #{loginId}
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -81,19 +81,19 @@
 	<select id="selectFavoriteCount" parameterType="map" resultType="int">
 	    SELECT COUNT(*)
 	    FROM TB_FAVORITE
-	    WHERE USER_ID = #{loginId}
+	    WHERE EMP_ID = #{loginId}
 	      AND TARGET_TYPE = #{targetType}
 	      AND TARGET_ID = #{targetId}
 	</select>
 	
 	<insert id="insertFavorite" parameterType="map">
-	    INSERT INTO TB_FAVORITE (USER_ID, TARGET_TYPE, TARGET_ID)
+	    INSERT INTO TB_FAVORITE (EMP_ID, TARGET_TYPE, TARGET_ID)
 	    VALUES (#{loginId}, #{targetType}, #{targetId})
 	</insert>
 	
 	<delete id="deleteFavorite" parameterType="map">
 	    DELETE FROM TB_FAVORITE
-	    WHERE USER_ID = #{loginId}
+	    WHERE EMP_ID = #{loginId}
 	      AND TARGET_TYPE = #{targetType}
 	      AND TARGET_ID = #{targetId}
 	</delete>

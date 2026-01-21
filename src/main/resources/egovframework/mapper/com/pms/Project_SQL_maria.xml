@@ -109,7 +109,7 @@
 	
 	<insert id="insertProjectAssign" parameterType="egovframework.com.pms.service.ProjectAssignVO">
 	    INSERT INTO TB_ASSIGNMENT (
-	        PROJECT_ID, 
+	        PROJ_ID, 
 	        EMP_ID, 
 	        ASSIGN_TITLE, 
 	        START_DT, 
@@ -130,7 +130,7 @@
 	<select id="selectProjectAssignList" parameterType="int" resultType="egovframework.com.pms.service.ProjectAssignVO">
 	    SELECT 
 	          A.ASSIGN_ID      AS assignId
-	        , A.PROJECT_ID     AS projectId
+	        , A.PROJ_ID     AS projectId
 	        , A.EMP_ID        AS userId
 	        , B.EMP_NM        AS userNm      
 	        , B.DEPT_NM        AS deptNm      
@@ -141,7 +141,7 @@
 	        , A.INPUT_RATE     AS inputRate
 	    FROM TB_ASSIGNMENT A
 	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
-	    WHERE A.PROJECT_ID = #{projectId}
+	    WHERE A.PROJ_ID = #{projectId}
 	      AND A.DEL_YN = 'N'
 	      AND B.IN_OFFICE = 'Y'
 	    ORDER BY A.ASSIGN_ID DESC
@@ -195,7 +195,7 @@
 	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
 	        , A.INPUT_RATE     AS inputRate
 	    FROM TB_ASSIGNMENT A
-	    INNER JOIN TB_PROJECT P ON A.PROJECT_ID = P.PROJ_ID
+	    INNER JOIN TB_PROJECT P ON A.PROJ_ID = P.PROJ_ID
 	    WHERE A.EMP_ID = #{userId}
 	      AND A.DEL_YN = 'N'
 	</select>
