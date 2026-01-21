@@ -367,7 +367,25 @@
 	    $("#assignUserId").val(userId);
 	    $("#assignUserNm").val(userNm);
 	}
-	
+
+	// [추가] AI 인력 추천 팝업 열기
+        function openAIRecommendationPopup() {
+            // 1. 입력한 요구사항 가져오기
+            var skills = $("#reqSkills").val(); // jQuery로 값 가져오기
+            var projId = "${projectVO.projId}"; // JSP 변수(프로젝트ID) 가져오기
+
+            if (!skills) {
+                alert("요구 기술 사항을 입력해주세요!");
+                $("#reqSkills").focus();
+                return;
+            }
+
+            // 2. 팝업 주소 만들기 (주의: /pms/ 로 시작해야 함!)
+            var url = "/pms/openAIRecommendation.do?projId=" + projId + "&reqSkills=" + encodeURIComponent(skills);
+
+            // 3. 새 창 열기
+            window.open(url, "AI_Recommend_Popup", "width=900,height=700,scrollbars=yes");
+        }
 	
 	</script>
 </body>

@@ -44,10 +44,10 @@
 <body>
 
 <div class="container">
-    <h2>🚀 AI 스마트 인력 추천 결과</h2>
+    <h2>AI 스마트 인력 추천 결과</h2>
 
     <div class="req-box">
-        <strong>📋 입력된 요구사항:</strong><br>
+        <strong>입력된 요구사항:</strong><br>
         "${reqSkills}"
     </div>
 
@@ -65,52 +65,54 @@
     </div>
 
     <table>
-        <thead>
-            <tr>
-                <th style="width: 15%;">순위</th>
-                <th style="width: 20%;">이름 (경력)</th>
-                <th>주요 스킬 요약</th>
-                <th style="width: 15%;">적합도 점수</th>
-                <th style="width: 15%;">선택</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:if test="${empty recommendList}">
+            <colgroup>
+                <col style="width: 20%;"> <col style="width: 20%;"> <col style="width: 20%;"> <col style="width: 20%;"> </colgroup>
+            <thead>
                 <tr>
-                    <td colspan="5" style="padding: 30px;">검색 결과가 없거나 AI 서버 연결에 실패했습니다. 😢</td>
-                </tr>
-            </c:if>
+                    <th>직원명</th>
 
-            <c:forEach var="item" items="${recommendList}" varStatus="status">
-                <tr>
-                    <td>
-                        <c:choose>
-                            <c:when test="${status.index == 0}">🥇 1위</c:when>
-                            <c:when test="${status.index == 1}">🥈 2위</c:when>
-                            <c:when test="${status.index == 2}">🥉 3위</c:when>
-                            <c:otherwise>${status.index + 1}위</c:otherwise>
-                        </c:choose>
-                    </td>
-                    <td>
-                        <strong>${item.name}</strong><br>
-                        <small>(${item.years}년차)</small>
-                    </td>
-                    <td>
-                        <div class="snippet">${item.snippet}</div>
-                    </td>
-                    <td>
-                        <span class="score">${item.score}점</span>
-                    </td>
-                    <td>
-                        <button type="button" class="btn-select"
-                                onclick="selectStaff('${item.name}')">
-                            담당자 선정
-                        </button>
-                    </td>
+                    <th>현재 가동률</th>
+
+                    <th>AI 매칭 점수</th>
+
+                    <th>선택</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:if test="${empty recommendList}">
+                    <tr>
+                        <td colspan="4" style="padding: 30px;">
+                            검색 결과가 없거나 AI 서버 연결에 실패했습니다. 😢
+                        </td>
+                    </tr>
+                </c:if>
+
+                <c:forEach var="item" items="${recommendList}" varStatus="status">
+                    <tr>
+                        <td>
+                            <strong>${item.name}</strong>
+                        </td>
+
+                        <td>
+                            <span class="badge" style="background-color: #6c757d;">
+                                ${item.currentLoad != null ? item.currentLoad : 0}%
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="score">${item.score}점</span>
+                        </td>
+
+                        <td>
+                            <button type="button" class="btn-select"
+                                    onclick="selectStaff('${item.name}')">
+                                담당자 선정
+                            </button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
 </div>
 
 <script>
