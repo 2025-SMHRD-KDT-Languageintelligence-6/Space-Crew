@@ -6,7 +6,7 @@ import java.util.Map;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
 public interface ProjectService {
-    
+
     List<ProjectVO> selectProjectList(ProjectVO vo) throws Exception;
 
     int selectProjectListTotCnt(ProjectVO vo) throws Exception;
@@ -19,17 +19,18 @@ public interface ProjectService {
 
     void updateProject(ProjectVO vo) throws Exception;
 
-	void updateProjectStatus(Map<String, Object> param) throws Exception;
+    void updateProjectStatus(Map<String, Object> param) throws Exception;
 
-	String insertProjectAssign(ProjectAssignVO assignVO, String forceSave) throws Exception;
+    String insertProjectAssign(ProjectAssignVO assignVO, String forceSave) throws Exception;
 
-	List<ProjectAssignVO> selectProjectAssignList(int projectId) throws Exception;
+    // [수정 완료] 기존 int projectId -> ProjectVO vo 로 변경!
+    List<ProjectAssignVO> selectProjectAssignList(ProjectVO vo) throws Exception;
 
-	void deleteProjectAssign(int assignId) throws Exception;
+    void deleteProjectAssign(int assignId) throws Exception;
 
-	List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
+    List<Map<String, Object>> selectUserListForPopup(String searchNm) throws Exception;
 
-	double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception;
+    double selectUserCurrentRate(ProjectAssignVO assignVO) throws Exception;
 
-	List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
+    List<EgovMap> selectUserAssignListAjax(String userId) throws Exception;
 }
