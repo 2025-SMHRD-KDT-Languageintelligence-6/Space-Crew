@@ -16,6 +16,17 @@
 
         <form:form modelAttribute="contractVO" action="${pageContext.request.contextPath}/pms/addContract.do" method="post">
             <table>
+            	<tr>
+				    <th>연결된 영업건</th>
+				    <td>
+				        <form:select path="salesId">
+				            <form:option value="" label="-- 단독 계약 (영업 연동 없음) --"/>
+				            <c:forEach var="sales" items="${salesList}">
+				                <form:option value="${sales.salesId}" label="${sales.salesTitle} (${sales.custNm})" />
+				            </c:forEach>
+				        </form:select>
+				    </td>
+				</tr>
                 <tr>
                     <th class="required">계약명</th>
                     <td><form:input path="contNm" required="required" placeholder="계약명을 입력하세요" /></td>
@@ -23,12 +34,24 @@
 
                 <tr>
                     <th class="required">고객사</th>
-                    <td><form:input path="custNm" required="required" placeholder="고객사명을 직접 입력하세요" /></td>
+                    <td>
+				        <form:select path="custId" required="required">
+				            <form:option value="" label="-- 고객사 선택 --"/>
+				            <form:options items="${customerList}" itemValue="custId" itemLabel="custNm"/>
+				        </form:select>
+				    </td>
                 </tr>
 
                 <tr>
                     <th class="required">계약담당자</th>
-                    <td><form:input path="picUserNm" required="required" placeholder="담당자 이름을 입력하세요" /></td>
+                    <td>
+				        <form:select path="picUserId" required="required">
+				            <form:option value="" label="-- 담당자 선택 --"/>
+				            <c:forEach var="user" items="${userList}">
+				                <form:option value="${user.userId}" label="${user.userNm} (${user.deptNm})"/>
+				            </c:forEach>
+				        </form:select>
+				    </td>
                 </tr>
 
                 <tr>
@@ -56,7 +79,14 @@
 
                 <tr>
                     <th>계약상태</th>
-                    <td><form:input path="contStatus" placeholder="예: 대기, 진행, 완료" /></td>
+                    <td>
+				        <form:select path="contStatus">
+				            <form:option value="대기" label="대기"/>
+				            <form:option value="진행" label="진행"/>
+				            <form:option value="완료" label="완료"/>
+				            <form:option value="중단" label="중단"/>
+				        </form:select>
+				    </td>
                 </tr>
 
                 <tr>
@@ -71,6 +101,42 @@
             </div>
         </form:form>
     </div>
+    
+    
+	<script type="text/javascript">
+	    var salesInfoList = [];
+	    <c:forEach var="sales" items="${salesList}">
+	        salesInfoList.push({
+	            salesId: "${sales.salesId}",
+	            custId: "${sales.custId}",
+	            salesUserId: "${sales.salesUserId}"
+	        });
+	    </c:forEach>
+	    
+	    $(document).ready(function() {
+	        $("select[name='salesId']").change(function() {
+	            var selectedId = $(this).val();
+	            
+	            if (!selectedId) return;
 
+	            var matched = salesInfoList.find(function(item) {
+	                return item.salesId == selectedId;
+	            });
+
+	            if (matched) {
+	                $("select[name='custId']").val(matched.custId).change();
+	                if (matched.salesUserId) {
+	                    $("select[name='picUserId']").val(matched.salesUserId).change();
+	                }
+	            }
+	        });
+	    });
+	    
+	    
+	    
+	</script>
+	
+	
+	
 </body>
 </html>
