@@ -72,6 +72,17 @@ public class ContractController {
     @RequestMapping(value = "/pms/updateContractView.do")
     public String updateContractView(@RequestParam("selectedId") Long id, Model model) throws Exception {
         ContractVO result = contractService.selectContractDetail(id);
+        if(result != null) {
+            if(result.getContDt() != null && result.getContDt().length() >= 10) {
+                result.setContDt(result.getContDt().substring(0, 10));
+            }
+            if(result.getStartDt() != null && result.getStartDt().length() >= 10) {
+                result.setStartDt(result.getStartDt().substring(0, 10));
+            }
+            if(result.getEndDt() != null && result.getEndDt().length() >= 10) {
+                result.setEndDt(result.getEndDt().substring(0, 10));
+            }
+        }
         model.addAttribute("contractVO", result);
         
         model.addAttribute("userList", userService.selectUserList(new UserVO()));

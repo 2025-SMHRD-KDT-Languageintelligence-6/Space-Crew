@@ -115,5 +115,56 @@
         </div>
 
         </div>
+        
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      
+    <script type="text/javascript">
+    function fn_egov_link_page(pageNo){
+        document.listForm.pageIndex.value = pageNo;
+        document.listForm.action = "<c:url value='/pms/salesList.do'/>";
+        document.listForm.submit();
+    }
+
+    function fn_open_sales_popup(salesId, salesTitle) {
+        var windowName = "sales_pop_" + salesId;
+        var url = "<c:url value='/pms/salesDetailPopup.do'/>?selectedId=" + salesId;
+        var options = "width=700, height=600, resizable=yes, scrollbars=yes, status=no";
+        window.open(url, windowName, options);
+    }
+    
+    function fn_toggle_status_menu(id, event) {
+        event.stopPropagation();
+        $(".status-menu-layer").hide();
+        $("#status_menu_" + id).toggle();
+    }
+
+    $(document).click(function() {
+        $(".status-menu-layer").hide();
+    });
+
+    function fn_update_sales_status(salesId, nextStatus) {
+        if(!confirm("영업 상태를 [" + nextStatus + "]로 변경하시겠습니까?")) return;
+
+        $.ajax({
+            url: "<c:url value='/pms/updateSalesStatusAjax.do'/>",
+            type: "POST",
+            data: { 
+                "selectedId": salesId, 
+                "status": nextStatus 
+            },
+            dataType: "json",
+            success: function(data) {
+                if(data.status == "success") {
+                    alert("영업 상태가 변경되었습니다.");
+                    location.reload();
+                } else {
+                    alert("변경 실패: " + data.message);
+                }
+            },
+            error: function() { alert("서버 통신 오류"); }
+        });
+    }
+    </script>
+
 </body>
 </html>

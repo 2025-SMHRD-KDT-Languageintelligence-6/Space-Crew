@@ -38,7 +38,7 @@
                     <td><form:input path="ceoNm" /></td>
                 </tr>
                 <tr>
-                    <th>담당자 성함</th>
+                    <th>담당자명</th>
                     <td><form:input path="picNm" /></td>
                 </tr>
                 <tr>

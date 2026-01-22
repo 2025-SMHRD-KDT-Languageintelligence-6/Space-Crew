@@ -28,7 +28,7 @@
 
                 <tr>
                     <th class="required">계약담당자</th>
-                    <td><form:input path="picUserNm" required="required" placeholder="담당자 성함을 입력하세요" /></td>
+                    <td><form:input path="picUserNm" required="required" placeholder="담당자 이름을 입력하세요" /></td>
                 </tr>
 
                 <tr>
