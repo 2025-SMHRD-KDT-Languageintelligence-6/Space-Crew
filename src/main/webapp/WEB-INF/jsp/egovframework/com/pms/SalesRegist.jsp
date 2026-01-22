@@ -8,6 +8,11 @@
     <meta charset="UTF-8">
     <title>영업 등록</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
+    <style>
+        .input-half { width: 45% !important; display: inline-block; }
+        .unit-text { margin-left: 5px; color: #666; font-size: 0.9em; }
+        .required::after { content: ' *'; color: red; }
+    </style>
 </head>
 <body>
     <div class="form-container">
@@ -15,10 +20,16 @@
 
         <form:form modelAttribute="salesVO" action="${pageContext.request.contextPath}/pms/addSales.do" method="post">
             <table>
+                <colgroup>
+                    <col style="width: 25%;">
+                    <col style="width: 75%;">
+                </colgroup>
+
                 <tr>
                     <th class="required">영업건명</th>
-                    <td><form:input path="salesTitle" required="required" placeholder="예: 2024 상반기 서버 증설 건" /></td>
+                    <td><form:input path="salesTitle" required="required" placeholder="예: 2026년 인프라 고도화 사업" /></td>
                 </tr>
+
                 <tr>
                     <th class="required">고객사</th>
                     <td>
@@ -28,8 +39,9 @@
                         </form:select>
                     </td>
                 </tr>
+
                 <tr>
-                    <th class="required">담당 영업사원</th>
+                    <th class="required">영업담당자</th>
                     <td>
                         <form:select path="salesUserId" required="required">
                             <form:option value="" label="-- 담당자 선택 --"/>
@@ -39,37 +51,44 @@
                         </form:select>
                     </td>
                 </tr>
+
                 <tr>
                     <th>예상 수주금액</th>
                     <td>
-                        <form:input path="expectedAmt" type="number" class="input-half" placeholder="0" />
+                        <input type="number" name="expectedAmt" class="input-half" placeholder="0" />
                         <span class="unit-text">원</span>
                     </td>
                 </tr>
+
                 <tr>
                     <th>예상 수주시점</th>
-                    <td><form:input path="expectedDt" type="date" class="input-half" /></td>
+                    <td><input type="date" name="expectedDt" class="input-half" /></td>
                 </tr>
+
                 <tr>
                     <th>수주 확률</th>
                     <td>
-                        <form:input path="probability" type="number" min="0" max="100" class="input-half" placeholder="0" />
+                        <input type="number" name="probability" min="0" max="100" class="input-half" placeholder="0" />
                         <span class="unit-text">%</span>
                     </td>
                 </tr>
+
                 <tr>
                     <th>진행 상태</th>
                     <td>
-                        <form:select path="status" class="input-half">
-                            <form:option value="영업중" label="영업중"/>
-                            <form:option value="수주완료" label="수주완료"/>
-                            <form:option value="영업실패" label="영업실패"/>
-                        </form:select>
+                        <select name="status" class="input-half">
+                            <option value="영업중">영업중</option>
+                            <option value="수주완료">수주완료</option>
+                            <option value="영업실패">영업실패</option>
+                        </select>
                     </td>
                 </tr>
+
                 <tr>
                     <th>영업 내용</th>
-                    <td><form:textarea path="salesContent" rows="5" placeholder="진행 상황 및 상세 내용을 입력하세요." /></td>
+                    <td>
+                        <textarea name="salesContent" rows="6" style="width:95%;" placeholder="고객사 미팅 내용 및 향후 계획을 입력하세요."></textarea>
+                    </td>
                 </tr>
             </table>
 
