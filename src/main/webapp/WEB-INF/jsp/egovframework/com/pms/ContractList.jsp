@@ -27,71 +27,65 @@
         </div>
 
 	    <table>
-	        <thead>
-	            <tr>
-	                <th width="8%">ID</th>
-	                <th width="25%">계약명</th>
-	                <th width="15%">계약금액(원)</th>
-	                <th width="10%">담당자</th>
-	                <th width="10%">상태</th>
-	                <th width="12%">계약일</th>
-	                <th width="10%">관리</th>
-	            </tr>
-	        </thead>
-	        <tbody>
-	            <c:forEach var="result" items="${resultList}" varStatus="status">
-	                <tr>
-	                    <td><c:out value="${result.contId}"/></td>
-	                    <td class="text-left">
-	                        <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');"  style="font-weight:bold; color:#007bff;">
-	                            <c:out value="${result.contNm}"/>
-	                        </a>
-	                    </td>
-	                    <td class="text-right">
-	                        <fmt:formatNumber value="${result.contAmt}" pattern="#,###" />
-	                    </td>
-	                    <td><c:out value="${result.picUserNm}"/></td>
-	                    <td style="position: relative;">
-						    <div class="status-container">
-						        <a href="javascript:void(0);" 
-						           class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '검토중' ? 'status-ing' : 'status-lost'}"
-						           onclick="fn_toggle_status_menu('${result.contId}', event);"
-						           >
-						            ${result.contStatus} ▼
-						        </a>
-						
-						        <div id="status_menu_${result.contId}" class="status-menu-layer" style="display:none; position: absolute; z-index: 999; background: #fff; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); width: 100px; left: 50%; transform: translateX(-50%);">
-						            <ul style="list-style:none; padding:0; margin:0;">
-						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '검토중')" style="display:block; padding:8px; font-size:12px; color:#333;">검토중</a></li>
-						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약완료')" style="display:block; padding:8px; font-size:12px; color:#333;">계약완료</a></li>
-						                <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약종료')" style="display:block; padding:8px; font-size:12px; color:#333;">계약종료</a></li>
-						            </ul>
-						        </div>
-						    </div>
-						</td>
-	                    <td><c:out value="${result.contDt}"/></td>
-	                    <td>
-
-                                <a href="<c:url value='/pms/updateContractView.do'/>?selectedId=${result.contId}"
-                                   class="btn btn-yellow btn-sm">수정</a>
-
-                                <a href="javascript:void(0);"
-                                   class="btn btn-red btn-sm"
-                                   onclick="if(confirm('계약 정보를 삭제하시겠습니까?')) location.href='<c:url value='/pms/deleteContract.do'/>?selectedId=${result.contId}';">
-                                   삭제
-                                </a>
-
+            <thead>
+                <tr>
+                    <th width="30%">계약명</th>
+                    <th width="15%">고객사</th>
+                    <th width="12%">계약담당자</th>
+                    <th width="18%">계약금액</th>
+                    <th width="10%">상태</th>
+                    <th width="15%">관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="result" items="${resultList}" varStatus="status">
+                    <tr>
+                        <td class="text-left">
+                            <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');"  style="font-weight:bold; color:#007bff;">
+                                <c:out value="${result.contNm}"/>
+                            </a>
                         </td>
 
-	                </tr>
-	            </c:forEach>
-	            <c:if test="${empty resultList}">
-	                <tr>
-	                    <td colspan="7">등록된 계약 내역이 없습니다.</td>
-	                </tr>
-	            </c:if>
-	        </tbody>
-	    </table>
+                        <td><c:out value="${result.custNm}"/></td>
+
+                        <td><c:out value="${result.picUserNm}"/></td>
+
+                        <td class="text-right" style="padding-right:15px;">
+                            <fmt:formatNumber value="${result.contAmt}" pattern="#,###" />원
+                        </td>
+
+                        <td style="position: relative;">
+                            <div class="status-container">
+                                <a href="javascript:void(0);"
+                                   class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '검토중' ? 'status-ing' : 'status-lost'}"
+                                   onclick="fn_toggle_status_menu('${result.contId}', event);">
+                                    ${result.contStatus} ▼
+                                </a>
+
+                                <div id="status_menu_${result.contId}" class="status-menu-layer" style="display:none;">
+                                    <ul>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '검토중')">검토중</a></li>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약완료')">계약완료</a></li>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약종료')">계약종료</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <a href="<c:url value='/pms/updateContractView.do'/>?selectedId=${result.contId}" class="btn btn-yellow btn-sm">수정</a>
+                            <a href="javascript:void(0);" class="btn btn-red btn-sm" onclick="if(confirm('계약 정보를 삭제하시겠습니까?')) location.href='<c:url value='/pms/deleteContract.do'/>?selectedId=${result.contId}';">삭제</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+                <c:if test="${empty resultList}">
+                    <tr>
+                        <td colspan="6">등록된 계약 내역이 없습니다.</td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
 
 	    <div class="pagination-wrapper" style="text-align:center; margin-top:20px;">
 	        <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />

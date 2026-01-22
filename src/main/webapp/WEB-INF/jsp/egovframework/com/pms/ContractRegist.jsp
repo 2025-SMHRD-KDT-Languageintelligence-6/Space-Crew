@@ -20,6 +20,17 @@
                     <th class="required">계약명</th>
                     <td><form:input path="contNm" required="required" placeholder="계약명을 입력하세요" /></td>
                 </tr>
+
+                <tr>
+                    <th class="required">고객사</th>
+                    <td><form:input path="custNm" required="required" placeholder="고객사명을 직접 입력하세요" /></td>
+                </tr>
+
+                <tr>
+                    <th class="required">계약담당자</th>
+                    <td><form:input path="picUserNm" required="required" placeholder="담당자 성함을 입력하세요" /></td>
+                </tr>
+
                 <tr>
                     <th class="required">계약금액</th>
                     <td>
@@ -27,40 +38,27 @@
                         <span style="margin-left:5px; font-weight:bold; color:#666;">원</span>
                     </td>
                 </tr>
+
                 <tr>
                     <th class="required">계약일자</th>
                     <td><form:input path="contDt" type="date" /></td>
                 </tr>
+
                 <tr>
-                    <th>수행기간</th>
-                    <td>
-                        <form:input path="startDt" type="date" />
-                        <span class="date-range-sep">~</span>
-                        <form:input path="endDt" type="date" />
-                    </td>
+                    <th>수행 시작일</th>
+                    <td><form:input path="startDt" type="date" /></td>
                 </tr>
+
                 <tr>
-                    <th class="required">내부 담당자</th>
-                    <td>
-                        <form:select path="picUserId" required="required">
-                            <form:option value="" label="-- 담당자를 선택하세요 --"/>
-                            <c:forEach var="user" items="${userList}">
-                                <form:option value="${user.userId}" label="${user.userNm} (${user.deptNm})"/>
-                            </c:forEach>
-                        </form:select>
-                    </td>
+                    <th>수행 종료일</th>
+                    <td><form:input path="endDt" type="date" /></td>
                 </tr>
+
                 <tr>
                     <th>계약상태</th>
-                    <td>
-                        <form:select path="contStatus">
-                            <form:option value="대기" label="대기"/>
-                            <form:option value="진행" label="진행"/>
-                            <form:option value="완료" label="완료"/>
-                            <form:option value="파기" label="파기"/>
-                        </form:select>
-                    </td>
+                    <td><form:input path="contStatus" placeholder="예: 대기, 진행, 완료" /></td>
                 </tr>
+
                 <tr>
                     <th>비고</th>
                     <td><form:textarea path="contRemark" rows="5" placeholder="기타 참고사항을 입력하세요" /></td>
