@@ -5,12 +5,14 @@
     <select id="selectSalesList" parameterType="egovframework.com.pms.service.SalesVO" resultType="egovframework.com.pms.service.SalesVO">
         SELECT 
               A.SALES_ID       AS salesId
+            , A.CUST_ID        AS custId
+            , A.EMP_ID         AS salesUserId
             , A.SALES_TITLE    AS salesTitle
             , A.EXPECTED_AMT   AS expectedAmt
             , A.STATUS         AS status
-            , A.PROBABILITY       AS probability
+            , A.PROBABILITY    AS probability
             , B.CUST_NM        AS custNm
-            , C.EMP_NM        AS salesNm
+            , C.EMP_NM         AS salesNm
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
         LEFT JOIN TB_EMP C ON A.EMP_ID = C.EMP_ID
