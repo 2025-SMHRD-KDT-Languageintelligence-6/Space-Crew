@@ -18,9 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
+import egovframework.com.pms.service.ContractService;
+import egovframework.com.pms.service.ContractVO;
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
+import egovframework.com.pms.service.UserService;
+import egovframework.com.pms.service.UserVO;
+
 import org.springframework.web.client.RestTemplate;
 
 @Controller
@@ -28,6 +33,13 @@ public class ProjectController {
 
     @Resource(name = "projectService")
     private ProjectService projectService;
+    
+    @Resource(name = "userService")
+    private UserService userService;
+    
+    @Resource(name = "contractService")
+    private ContractService contractService;
+    
 
     @RequestMapping(value = "/pms/projectList.do")
     public String selectProjectList(@ModelAttribute("searchVO") ProjectVO projectVO, Model model) throws Exception {
@@ -53,6 +65,14 @@ public class ProjectController {
 
     @RequestMapping(value = "/pms/addProjectView.do")
     public String addProjectView(@ModelAttribute("projectVO") ProjectVO projectVO, Model model) throws Exception {
+    	List<ContractVO> contractList = contractService.selectContractList(new ContractVO());
+    	UserVO userSearchVO = new UserVO();
+        userSearchVO.setRecordCountPerPage(999);
+        userSearchVO.setFirstIndex(0);
+        List<UserVO> userList = userService.selectUserList(userSearchVO);
+        model.addAttribute("projectVO", new ProjectVO());
+        model.addAttribute("contractList", contractList);
+        model.addAttribute("userList", userList);
         return "egovframework/com/pms/ProjectRegist";
     }
 
@@ -77,7 +97,14 @@ public class ProjectController {
                 result.setEndDt(result.getEndDt().substring(0, 10));
             }
         }
+        List<ContractVO> contractList = contractService.selectContractList(new ContractVO());
+        UserVO userSearchVO = new UserVO();
+        userSearchVO.setRecordCountPerPage(999);
+        userSearchVO.setFirstIndex(0);
+        List<UserVO> userList = userService.selectUserList(userSearchVO);
         model.addAttribute("projectVO", result);
+        model.addAttribute("contractList", contractList);
+        model.addAttribute("userList", userList);
         return "egovframework/com/pms/ProjectUpdt";
     }
     

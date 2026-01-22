@@ -17,9 +17,16 @@
         <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/addProject.do" method="post">
             <table>
             	<tr>
-                	<th>계약명</th>
-                	<td></td>
-                </tr>
+				    <th class="required">계약명</th>
+				    <td>
+				        <form:select path="contId" required="required">
+				            <form:option value="" label="-- 연결할 계약을 선택하세요 --"/>
+				            <c:forEach var="contract" items="${contractList}">
+				                <form:option value="${contract.contId}" label="${contract.contNm} (${contract.custNm})" />
+				            </c:forEach>
+				        </form:select>
+				    </td>
+				</tr>
                 <tr>
                     <th class="required">업무명</th>
                     <td><form:input path="projNm" required="required" placeholder="업무명을 입력하세요" /></td>
@@ -46,13 +53,23 @@
                     </td>
                 </tr>
                 <tr>
-                	<th>주담당자</th>
-                	<td></td>
-                </tr>
+				    <th class="required">주담당자</th>
+				    <td>
+				        <form:select path="mainMgrNm" required="required">
+				            <form:option value="" label="-- 선택 --"/>
+				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        </form:select>
+				    </td>
+				</tr>
                 <tr>
-                	<th>부담당자</th>
-                	<td></td>
-                </tr>
+				    <th class="required">부담당자</th>
+				    <td>
+				        <form:select path="subMgrNm" required="required">
+				            <form:option value="" label="-- 선택 --"/>
+				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        </form:select>
+				    </td>
+				</tr>
                 <tr>
                     <th class="required">수행 기간</th>
                     <td>
