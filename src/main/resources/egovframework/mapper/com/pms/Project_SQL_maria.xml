@@ -12,10 +12,15 @@
             , A.START_DT          AS startDt
             , A.END_DT            AS endDt
             , B.CONT_NM           AS contNm
-            , C.USER_NM           AS mainMgrNm
+<!--        , C.USER_NM           AS mainMgrNm -->
+            , D.CUST_NM           AS custNm
+            , E.EMP_NM            AS mainMgrNm
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
-        LEFT OUTER JOIN COMVNUSERMASTER C ON A.M_EMP_ID = C.ESNTL_ID
+<!--    LEFT OUTER JOIN COMVNUSERMASTER C ON A.M_EMP_ID = C.ESNTL_ID -->
+		LEFT OUTER JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
+  		LEFT OUTER JOIN TB_CUSTOMER D ON C.CUST_ID = D.CUST_ID
+   		LEFT OUTER JOIN TB_EMP E      ON A.M_EMP_ID = E.EMP_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 0">

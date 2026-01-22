@@ -16,6 +16,10 @@
 
         <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/addProject.do" method="post">
             <table>
+            	<tr>
+                	<th>계약명</th>
+                	<td></td>
+                </tr>
                 <tr>
                     <th class="required">업무명</th>
                     <td><form:input path="projNm" required="required" placeholder="업무명을 입력하세요" /></td>
@@ -42,6 +46,14 @@
                     </td>
                 </tr>
                 <tr>
+                	<th>주담당자</th>
+                	<td></td>
+                </tr>
+                <tr>
+                	<th>부담당자</th>
+                	<td></td>
+                </tr>
+                <tr>
                     <th class="required">수행 기간</th>
                     <td>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -50,6 +62,14 @@
                             <form:input path="endDt" type="date" style="width: 180px;" />
                         </div>
                     </td>
+                </tr>
+                <tr>
+                	<th>예상 인력</th>
+                	<td><form:input path="estEffort" type="number" style="width: 50px;" min="0"/>  M/M</td>
+                </tr>
+                <tr>
+                	<th>요구 및 특이사항</th>
+                	<td><form:textarea path="reqSkills" rows="4" placeholder="업무에 필요한 요구사항과 특이사항을 써주세요" /></td>
                 </tr>
             </table>
 

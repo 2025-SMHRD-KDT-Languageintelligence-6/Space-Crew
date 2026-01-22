@@ -33,8 +33,8 @@
                     <th width="12%">성명</th>
                     <th width="15%">부서</th>
                     <th width="15%">직무</th>
+                    <th width="13%">직급</th>
                     <th width="18%">업무부하량</th>
-                    <th width="13%">입사일</th>
                     <th width="15%">관리</th>
                 </tr>
             </thead>
@@ -49,6 +49,7 @@
                         <td style="font-weight: 600;"><c:out value="${result.userNm}"/></td>
                         <td><c:out value="${result.deptNm}"/></td>
                         <td><c:out value="${result.jobRole}"/></td>
+                        <td><c:out value="${result.positionNm}"/></td>
                         <td>
                             <div class="${result.currentLoad > 100 ? 'text-danger-bold' : ''}" style="font-size: 13px; margin-bottom: 3px;">
                                 <fmt:formatNumber value="${result.currentLoad}" pattern="#" />%
@@ -70,7 +71,7 @@
                                 </c:if>
                             </div>
                         </td>
-                        <td style="color: #666;"><c:out value="${result.joinDt}"/></td>
+                        
                         <td>
                             <div class="btn-group">
                                 <a href="<c:url value='/pms/updateUserView.do'/>?selectedId=${result.userId}"

@@ -57,6 +57,22 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <th class="required">재직여부</th>
+                    <td>
+                    	<form:input path="useYn" required="required" style="width: 50px;" min="0" placeholder="Y/N" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">보유스택</th>
+                    <td>
+                        <form:input path="techDesc"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>특이사항</th>
+                    <td></td>
+                </tr>
             </table>
 
             <div class="btn-area">

@@ -30,8 +30,8 @@
 	    <table>
 	        <thead>
 	            <tr>
-	                <th width="10">프로젝트ID</th>
-		            <th width="32%">프로젝트명</th>
+		            <th width="32%">업무명</th>
+		            <th width="10">고객사</th>
 		            <th width="12%">계약금액</th>
 		            <th width="12%">누적청구액</th>
 		            <th width="12%">실수금합계</th>
@@ -42,12 +42,12 @@
 	        <tbody>
 	            <c:forEach var="result" items="${resultList}">
 	                <tr>
-	                    <td>${result.projId}</td>
 	                    <td>
 						    <a href="javascript:void(0);" onclick="fn_open_billing_popup('${result.projId}');" style="font-weight:bold; color:#007bff; text-decoration:underline;">
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
+						<td>${result.custNm}</td>
 	                    <td style="text-align:right; padding-right:15px;">
 	                   		<fmt:formatNumber value="${result.totalAmt}" pattern="#,###"/>원
 	                    </td>
@@ -58,7 +58,7 @@
 	                   		<fmt:formatNumber value="${result.totalPaidAmt}" pattern="#,###"/>원
 	                    
 	                    </td>
-	                    <td style="text-align:right; padding-right:15px;">
+	                    <td style="text-align:right; padding-right:15px; color:#f06948; font-weight:bold;">
 	                   		<fmt:formatNumber value="${result.totalAmt - result.totalPaidAmt}" pattern="#,###"/>원
 	                    
 	                    </td>
@@ -91,11 +91,11 @@
 	    <div class="pagination-wrapper" style="text-align:center; margin-top:20px;">
 	        <ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
 	    </div>
-	
-	    <div style="margin-top: 20px;">
-	        <a href="<c:url value='/pms/addBillingView.do'/>" class="btn btn-blue">신규 청구 등록</a>
-	    </div>
-	
+		
+		<div style="margin-top: 20px; font-size: 13px; color: #888;">
+		    ※ 청구 데이터는 업무 등록 시 자동으로 생성됩니다. 상세 내용을 확인하시려면 업무명을 클릭하세요.
+		</div>
+		
 	    <script>
 	        function fn_egov_link_page(pageNo){
 	            document.listForm.pageIndex.value = pageNo;
