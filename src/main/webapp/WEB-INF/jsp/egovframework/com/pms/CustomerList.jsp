@@ -35,11 +35,12 @@
             <thead>
                 <tr>
                     <th width="7%">즐겨찾기</th>
-                    <th width="33%">고객사명</th>
+                    <th width="28%">고객사명</th>
                     <th width="15%">사업자등록번호</th>
-                    <th width="10%">담당자</th>
+                    <th width="8%">대표</th>
+                    <th width="8%">담당자</th>
                     <th width="15%">연락처</th>
-                    <th width="10%">고객 등급</th>
+                    <th width="9%">고객 등급</th>
                     <th width="10%">관리</th>
                 </tr>
             </thead>
@@ -65,15 +66,13 @@
                             </a>
                         </td>
 
-                        <td><c:out value=""/></td>
-
+                        <td><c:out value=""/>${result.bizRegNo}</td>
+						<td><c:out value="${result.ceoNm}"/></td>
                         <td><c:out value="${result.picNm}"/></td>
 
                         <td><c:out value="${result.picTel}"/></td>
 
-                        <td>
-                            <c:out value=""/>
-                        </td>
+                        <td><c:out value="${result.custGrade}"/></td>
 
                         <td>
                            <a href="<c:url value='/pms/updateCustomerView.do'/>?selectedId=${result.custId}"

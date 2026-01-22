@@ -66,7 +66,7 @@
                 <tr>
                     <th class="required">보유스택</th>
                     <td>
-                        <form:input path="techDesc"/>
+                        <form:input path="skillDesc"/>
                     </td>
                 </tr>
                 <tr>

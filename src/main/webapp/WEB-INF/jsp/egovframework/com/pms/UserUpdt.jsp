@@ -60,8 +60,15 @@
                     <th class="required">입사일</th>
                     <td>
                         <div style="display: flex; align-items: center; gap: 15px;">
-                            <form:input path="joinDt" type="date" style="width: 180px;" required="required" />
-                        </div>
+					        <form:input path="joinDt" type="date" 
+					                    style="width: 180px; ${not empty userVO.joinDt ? 'background-color: #e9ecef;' : ''}" 
+					                    required="required" 
+					                    readonly="${not empty userVO.joinDt ? 'true' : 'false'}" />
+					        
+					        <c:if test="${not empty userVO.joinDt}">
+					            <small style="color: #fa5252;">(입사일은 이미 등록되어 수정할 수 없습니다)</small>
+					        </c:if>
+					    </div>
                     </td>
                 </tr>
                 <tr>
@@ -73,7 +80,7 @@
                 <tr>
                     <th class="required">보유스택</th>
                     <td>
-                        <form:input path="techDesc"/>
+                        <form:input path="skillDesc"/>
                     </td>
                 </tr>
                 <tr>

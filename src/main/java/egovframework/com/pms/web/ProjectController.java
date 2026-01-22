@@ -69,6 +69,14 @@ public class ProjectController {
     @RequestMapping(value = "/pms/updateProjectView.do")
     public String updateProjectView(@RequestParam("selectedId") Long id, @ModelAttribute("projectVO") ProjectVO projectVO, Model model) throws Exception {
         ProjectVO result = projectService.selectProjectDetail(id);
+        if(result != null) {
+            if(result.getStartDt() != null && result.getStartDt().length() >= 10) {
+                result.setStartDt(result.getStartDt().substring(0, 10));
+            }
+            if(result.getEndDt() != null && result.getEndDt().length() >= 10) {
+                result.setEndDt(result.getEndDt().substring(0, 10));
+            }
+        }
         model.addAttribute("projectVO", result);
         return "egovframework/com/pms/ProjectUpdt";
     }

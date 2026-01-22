@@ -36,16 +36,6 @@
         </if>
     </select>
 
-    <insert id="insertUser" parameterType="egovframework.com.pms.service.UserVO">
-        INSERT INTO TB_EMP (
-            EMP_ID, EMP_NM, DEPT_NM, JOB_ROLE, POSITION_NM, 
-            CAREER_YEARS, JOB_FIELD, JOIN_DT, IN_OFFICE
-        ) VALUES (
-            #{userId}, #{userNm}, #{deptNm}, #{jobRole}, #{positionNm}, 
-            #{careerYears}, #{jobField}, #{joinDt}, #{useYn}
-        )
-    </insert>
-
     <select id="selectUserDetail" parameterType="java.lang.String" resultType="egovframework.com.pms.service.UserVO">
         SELECT
 	      	  EMP_ID       AS userId
@@ -57,7 +47,7 @@
 	        , JOB_FIELD     AS jobField
 	        , JOIN_DT       AS joinDt
 	        , IN_OFFICE        AS useYn
-	        , SKILL_DESC     AS techDesc
+	        , SKILL_DESC     AS skillDesc
 	        , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
 	           FROM TB_ASSIGNMENT SUB 
 	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
@@ -68,15 +58,28 @@
         AND DEL_YN = 'N'
     </select>
     
+    <insert id="insertUser" parameterType="egovframework.com.pms.service.UserVO">
+        INSERT INTO TB_EMP (
+            EMP_ID, EMP_NM, DEPT_NM, JOB_ROLE, POSITION_NM, 
+            CAREER_YEARS, JOB_FIELD, JOIN_DT, IN_OFFICE, SKILL_DESC
+        ) VALUES (
+            #{userId}, #{userNm}, #{deptNm}, #{jobRole}, #{positionNm}, 
+            #{careerYears}, #{jobField}, #{joinDt}, #{useYn}, #{skillDesc}
+        )
+    </insert>
+    
 	<update id="updateUser" parameterType="egovframework.com.pms.service.UserVO">
 	    UPDATE TB_EMP SET
-	          EMP_NM       = #{userNm}
-	        , DEPT_NM       = #{deptNm}
-	        , JOB_ROLE      = #{jobRole}
-	        , POSITION_NM   = #{positionNm}
-	        , CAREER_YEARS  = #{careerYears}
-	        , IN_OFFICE        = #{useYn}
+	          EMP_NM         = #{userNm}
+	        , DEPT_NM        = #{deptNm}
+	        , JOB_ROLE       = #{jobRole}
+	        , POSITION_NM    = #{positionNm}
+	        , CAREER_YEARS   = #{careerYears}
+	        , JOB_FIELD      = #{jobField}
+	        , IN_OFFICE      = #{useYn}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , SKILL_DESC     = #{skillDesc}
+	        , JOIN_DT = IFNULL(JOIN_DT, NULLIF(#{joinDt}, ''))
 	    WHERE EMP_ID = #{userId}
 	</update>
 

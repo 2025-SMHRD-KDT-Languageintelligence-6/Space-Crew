@@ -44,9 +44,9 @@
 	
 	<insert id="insertProject" parameterType="egovframework.com.pms.service.ProjectVO">
 	    INSERT INTO TB_PROJECT (
-	        PROJ_NM, PROJ_TYPE, STATUS, START_DT, END_DT
+	        PROJ_NM, PROJ_TYPE, STATUS, START_DT, END_DT, EST_EFFORT, REQ_SKILLS
 	    ) VALUES (
-	        #{projNm}, #{projType}, #{status}, NULLIF(#{startDt},''), NULLIF(#{endDt},'')
+	        #{projNm}, #{projType}, #{status}, NULLIF(#{startDt},''), NULLIF(#{endDt},''), #{estEffort}, #{reqSkills}
 	    )
 	</insert>
 	
@@ -88,6 +88,8 @@
 	        , START_DT = NULLIF(#{startDt},'')
 	        , END_DT = NULLIF(#{endDt},'')
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        , EST_EFFORT = #{estEffort}
+	        , REQ_SKILLS = #{reqSkills}
 	    WHERE PROJ_ID = #{projId}
 	</update>
 	

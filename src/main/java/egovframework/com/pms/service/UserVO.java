@@ -21,5 +21,5 @@ public class UserVO extends ComDefaultVO implements Serializable {
     private String joinDt;
     private String useYn;
     private String lastUpdusrId;
-    private String techDesc;
+    private String skillDesc;
 }

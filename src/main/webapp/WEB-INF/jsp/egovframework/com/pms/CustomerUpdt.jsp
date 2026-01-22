@@ -46,32 +46,28 @@
                     <td><form:input path="picTel" /></td>
                 </tr>
 
-                <%-- [신규 경로] VO에 없을 경우 500 에러를 유발하므로 일반 HTML 태그로 처리 --%>
                 <tr>
                     <th>담당자 이메일</th>
-                    <td>
-                        <input type="email" name="temp_picEmail" value="" placeholder="VO 필드 추가 필요" style="width:95%;" />
-                    </td>
+                    <td><form:input path="picEmail" /></td>
                 </tr>
                 <tr>
                     <th>고객사 주소</th>
-                    <td>
-                        <input type="text" name="temp_custAddr" value="" placeholder="VO 필드 추가 필요" style="width:95%;" />
-                    </td>
+                    <td><form:input path="custAddr" /></td>
                 </tr>
                 <tr>
                     <th>고객 등급</th>
                     <td>
-                        <select name="temp_custGrade" style="width:95%;">
-                            <option value="">-- 등급 선택 (임시) --</option>
-                        </select>
+                        <form:select path="custGrade" style="width:95%;">
+                            <form:option value="N" label="N"/>
+						    <form:option value="B" label="B"/>
+						    <form:option value="A" label="A"/>
+						    <form:option value="S" label="S"/>
+                        </form:select>
                     </td>
                 </tr>
                 <tr>
                     <th>비고/특이사항</th>
-                    <td>
-                        <textarea name="temp_custRemark" rows="4" style="width:95%;" placeholder="VO 필드 추가 필요"></textarea>
-                    </td>
+                    <td><form:textarea path="custRemark" rows="4" style="width:95%;" /></td>
                 </tr>
             </table>
 

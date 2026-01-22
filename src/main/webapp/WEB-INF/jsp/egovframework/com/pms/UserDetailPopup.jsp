@@ -44,7 +44,7 @@
                 <tr><th>업무부하량</th><td>${userVO.currentLoad}</td></tr>
                 <tr><th>입사일</th><td>${userVO.joinDt}</td></tr>
                 <tr><th>재직</th><td>${userVO.useYn}</td></tr>
-                <tr><th>보유스택</th><td>${userVO.techDesc}</td></tr>
+                <tr><th>보유스택</th><td>${userVO.skillDesc}</td></tr>
             </table>
         </div>
 
