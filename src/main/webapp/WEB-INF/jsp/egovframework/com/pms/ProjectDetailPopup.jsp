@@ -84,13 +84,17 @@
         <tr>
             <th>진행률</th>
             <td>
-		        <div style="width:100%; background:#eee; height:20px; border-radius:10px; overflow:hidden; position:relative;">
-		            <div id="mainProgressBar" style="width:0%; background:#4CAF50; height:100%; transition:width 0.5s;"></div>
-		            <span id="mainProgressText" style="position:absolute; width:100%; text-align:center; top:0; font-size:12px; font-weight:bold; color:#000;">0%</span>
-		        </div>
-		        <div style="margin-top:5px; font-size:12px; color:#666;">
-		            (누적 투입: <span id="currentTotalEffort">0</span> / 목표: <span id="targetEffort">${projectVO.estEffort}</span> Man-Day)
-		        </div>
+		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
+				    <div id="planProgressBar" style="width:0%; background:rgba(76, 175, 80, 0.3); height:100%; position:absolute; top:0; left:0; transition:width 0.5s;"></div>
+				    
+				    <div id="mainProgressBar" style="width:0%; background:#4CAF50; height:100%; position:absolute; top:0; left:0; transition:width 0.5s; z-index:2;"></div>
+				    
+				    <span id="mainProgressText" style="position:absolute; width:100%; text-align:center; top:0; line-height:24px; font-size:12px; font-weight:bold; color:#000; z-index:3;">0%</span>
+				</div>
+				<div style="margin-top:5px; font-size:11px; color:#666; display:flex; justify-content:space-between;">
+				    <span>현재 : <span id="currentTotalEffort">0</span> MM</span>
+				    <span>예약 : <span id="planTotalEffort">0</span> MM / 목표 : ${projectVO.estEffort} MM</span>
+				</div>
 		    </td>
         </tr>
         <tr>
@@ -432,7 +436,8 @@
 	        dataType: "json",
 	        success: function(data) {
 	            var html = "";
-	            var totalProjectEffort = 0;
+	            var totalActualEffort = 0;
+	            var totalPlanEffort = 0;
 	            var today = new Date();
 	            today.setHours(0, 0, 0, 0);
 	            
@@ -449,7 +454,8 @@
 	                        var diffDays = ((effectiveEnd - start) / (1000 * 60 * 60 * 24)) + 1;
 	                        accumulatedValue = diffDays * item.inputRate;
 	                    }
-	                    totalProjectEffort += accumulatedValue;
+	                    totalPlanEffort += parseFloat(fullValue);
+	                    totalActualEffort += accumulatedValue;
 	                    html += "<tr>";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
@@ -467,16 +473,18 @@
 	            }
 	            $("#assignListBody").html(html);
 	            var target = parseFloat("${projectVO.estEffort}") || 0;
-	            var progress = target > 0 ? ((totalProjectEffort / target) * 100).toFixed(1) : 0;
+	            var actualPercent = target > 0 ? ((totalActualEffort / target) * 100).toFixed(1) : 0;
+	            var planPercent = target > 0 ? ((totalPlanEffort / target) * 100).toFixed(1) : 0;
 	            
-	            $("#currentTotalEffort").text(totalProjectEffort.toFixed(1));
-	            $("#mainProgressText").text(progress + "%");
-	            $("#mainProgressBar").css("width", (progress > 100 ? 100 : progress) + "%");
+	            $("#mainProgressBar").css("width", (actualPercent > 100 ? 100 : actualPercent) + "%");
+	            $("#planProgressBar").css("width", (planPercent > 100 ? 100 : planPercent) + "%");
+	            $("#mainProgressText").text(actualPercent + "%");
 	            
-	            if(progress > 100) {
-	                $("#mainProgressBar").css("background", "#f44336");
-	            } else {
-	                $("#mainProgressBar").css("background", "#4CAF50");
+	            $("#currentTotalEffort").text(totalActualEffort.toFixed(1));
+	            $("#planTotalEffort").text(totalPlanEffort.toFixed(1));
+	            
+	            if(planPercent > 100) {
+	                $("#planProgressBar").css("background", "rgba(244, 67, 54, 0.2)");
 	            }
 	            
 	            if(calendar) {
