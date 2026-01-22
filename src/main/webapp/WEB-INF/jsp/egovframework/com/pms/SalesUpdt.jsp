@@ -8,25 +8,36 @@
     <meta charset="UTF-8">
     <title>영업 정보 수정</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
+    <style>
+        .input-half { width: 45% !important; display: inline-block; }
+        .unit-text { margin-left: 5px; color: #666; font-size: 0.9em; }
+        .readonly-text { font-weight: bold; color: #555; background: #f9f9f9; padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd; }
+    </style>
 </head>
 <body>
     <div class="form-container">
         <h2>영업 정보 수정</h2>
 
-        <%-- 주의: action을 updateSales.do로 변경하는 것을 권장합니다 --%>
         <form:form modelAttribute="salesVO" action="${pageContext.request.contextPath}/pms/updateSales.do" method="post">
-
+            <%-- 수정 시 반드시 필요한 PK 값 --%>
             <form:hidden path="salesId" />
 
             <table>
+                <colgroup>
+                    <col style="width: 25%;">
+                    <col style="width: 75%;">
+                </colgroup>
+
                 <tr>
                     <th>영업 번호</th>
-                    <td><span class="readonly-text">#<c:out value="${salesVO.salesId}"/></span></td>
+                    <td><span class="readonly-text"><c:out value="${salesVO.salesId}"/></span></td>
                 </tr>
+
                 <tr>
                     <th class="required">영업건명</th>
                     <td><form:input path="salesTitle" required="required" /></td>
                 </tr>
+
                 <tr>
                     <th class="required">고객사</th>
                     <td>
@@ -36,8 +47,9 @@
                         </form:select>
                     </td>
                 </tr>
+
                 <tr>
-                    <th class="required">담당 영업사원</th>
+                    <th class="required">영업담당자</th>
                     <td>
                         <form:select path="salesUserId" required="required">
                             <form:option value="" label="-- 담당자 선택 --"/>
@@ -47,36 +59,46 @@
                         </form:select>
                     </td>
                 </tr>
+
                 <tr>
                     <th>예상 수주금액</th>
                     <td>
-                        <div style="display:flex; align-items:center;">
-                            <form:input path="expectedAmt" type="number" style="width:200px;" />
-                            <span style="margin-left:10px;">원</span>
-                        </div>
+                        <input type="number" name="expectedAmt" value="${salesVO.expectedAmt}" class="input-half" />
+                        <span class="unit-text">원</span>
                     </td>
                 </tr>
+
                 <tr>
                     <th>예상 수주시점</th>
-                    <td><form:input path="expectedDt" type="date" style="width:200px;" /></td>
+                    <td>
+                        <input type="date" name="expectedDt" value="${salesVO.expectedDt}" class="input-half" />
+                    </td>
                 </tr>
+
                 <tr>
-                    <th>수주 확률 (%)</th>
-                    <td><form:input path="probability" type="number" min="0" max="100" style="width:100px;" /> %</td>
+                    <th>수주 확률</th>
+                    <td>
+                        <input type="number" name="probability" value="${salesVO.probability}" min="0" max="100" class="input-half" />
+                        <span class="unit-text">%</span>
+                    </td>
                 </tr>
+
                 <tr>
                     <th>진행 상태</th>
                     <td>
-                        <form:select path="status" style="width:150px;">
-                            <form:option value="영업중" label="영업중"/>
-                            <form:option value="수주완료" label="수주완료"/>
-                            <form:option value="영업실패" label="영업실패"/>
-                        </form:select>
+                        <select name="status" class="input-half">
+                            <option value="영업중" <c:if test="${salesVO.status eq '영업중'}">selected</c:if>>영업중</option>
+                            <option value="수주완료" <c:if test="${salesVO.status eq '수주완료'}">selected</c:if>>수주완료</option>
+                            <option value="영업실패" <c:if test="${salesVO.status eq '영업실패'}">selected</c:if>>영업실패</option>
+                        </select>
                     </td>
                 </tr>
+
                 <tr>
                     <th>영업 내용</th>
-                    <td><form:textarea path="salesContent" rows="5" /></td>
+                    <td>
+                        <textarea name="salesContent" rows="6" style="width:95%;"><c:out value="${salesVO.salesContent}"/></textarea>
+                    </td>
                 </tr>
             </table>
 

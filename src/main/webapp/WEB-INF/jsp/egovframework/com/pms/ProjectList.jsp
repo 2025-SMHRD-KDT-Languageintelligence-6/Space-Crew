@@ -29,23 +29,28 @@
 	    <table>
 	        <thead>
 	            <tr>
-	                <th width="10%">ID</th>
-                    <th width="40%">업무명</th>
-                    <th width="15%">상태</th>
-                    <th width="15%">시작일</th>
-                    <th width="20%">관리</th>
+	                <th width="7%">타입</th>
+                    <th width="30%">업무명</th>
+                    <th width="15%">고객사</th>
+                    <th width="8%">주담당자</th>
+                    <th width="15%">종료일</th>
+                    <th width="10%">상태</th>
+                    <th width="10%">관리</th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	            <c:forEach var="result" items="${resultList}" varStatus="status">
 	                <tr>
-	                    <td><c:out value="${result.projId}"/></td>
+	                    <td><c:out value="${result.projType}"/></td>
 	                    <td class="text-left">
 						    <a href="javascript:void(0);" onclick="fn_open_project_popup('${result.projId}', '${result.projNm}');" style="font-weight:bold; color:#007bff;">
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
-	                    <td style="position: relative;">
+						<td><c:out value="${result.custNm}"/></td>
+						<td><c:out value="${result.mainMgrNm}"/></td>
+	                    <td><c:out value="${result.endDt}"/></td>
+						<td style="position: relative;">
 						    <div class="status-container">
 						        <a href="javascript:void(0);" 
 						           class="status-badge ${result.status eq '완료' ? 'status-won' : result.status eq '진행중' ? 'status-ing' : 'status-lost'}"
@@ -64,8 +69,7 @@
 						        </div>
 						    </div>
 						</td>
-	                    <td><c:out value="${result.startDt}"/></td>
-	                    <td>
+						<td>
 						    <a href="<c:url value='/pms/updateProjectView.do'/>?selectedId=${result.projId}"
                                class="btn btn-yellow btn-sm">수정</a>
                             <a href="javascript:void(0);"

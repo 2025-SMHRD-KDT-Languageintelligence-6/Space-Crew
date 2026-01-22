@@ -16,6 +16,17 @@
 
         <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/addProject.do" method="post">
             <table>
+            	<tr>
+				    <th class="required">계약명</th>
+				    <td>
+				        <form:select path="contId" required="required">
+				            <form:option value="" label="-- 연결할 계약을 선택하세요 --"/>
+				            <c:forEach var="contract" items="${contractList}">
+				                <form:option value="${contract.contId}" label="${contract.contNm} (${contract.custNm})" />
+				            </c:forEach>
+				        </form:select>
+				    </td>
+				</tr>
                 <tr>
                     <th class="required">업무명</th>
                     <td><form:input path="projNm" required="required" placeholder="업무명을 입력하세요" /></td>
@@ -42,6 +53,24 @@
                     </td>
                 </tr>
                 <tr>
+				    <th class="required">주담당자</th>
+				    <td>
+				        <form:select path="mainMgrNm" required="required">
+				            <form:option value="" label="-- 선택 --"/>
+				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        </form:select>
+				    </td>
+				</tr>
+                <tr>
+				    <th class="required">부담당자</th>
+				    <td>
+				        <form:select path="subMgrNm" required="required">
+				            <form:option value="" label="-- 선택 --"/>
+				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        </form:select>
+				    </td>
+				</tr>
+                <tr>
                     <th class="required">수행 기간</th>
                     <td>
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -50,6 +79,14 @@
                             <form:input path="endDt" type="date" style="width: 180px;" />
                         </div>
                     </td>
+                </tr>
+                <tr>
+                	<th>예상 인력</th>
+                	<td><form:input path="estEffort" type="number" style="width: 50px;" min="0"/>  M/M</td>
+                </tr>
+                <tr>
+                	<th>요구 및 특이사항</th>
+                	<td><form:textarea path="reqSkills" rows="4" placeholder="업무에 필요한 요구사항과 특이사항을 써주세요" /></td>
                 </tr>
             </table>
 

@@ -9,8 +9,11 @@
             , A.BIZ_REG_NO    AS bizRegNo
             , A.CEO_NM        AS ceoNm
             , A.PIC_NM        AS picNm
-            , A.PIC_CONTACT       AS picTel
+            , A.PIC_CONTACT   AS picTel
             , A.PIC_EMAIL     AS picEmail
+            , A.CUST_GRADE    AS custGrade
+            , A.CUST_ADDR     AS custAddr
+            , A.CUST_REMARK   AS custRemark
             , IF(B.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
         FROM TB_CUSTOMER A
         LEFT JOIN TB_FAVORITE B 
@@ -26,10 +29,11 @@
     </select>
 
     <select id="selectCustomerListTotCnt" parameterType="egovframework.com.pms.service.CustomerVO" resultType="int">
-        SELECT COUNT(*) FROM TB_CUSTOMER
-        WHERE DEL_YN = 'N'
+        SELECT COUNT(*) 
+        FROM TB_CUSTOMER A
+        WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
-            AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+            AND A.CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
     </select>
 
@@ -51,9 +55,9 @@
 
     <insert id="insertCustomer" parameterType="egovframework.com.pms.service.CustomerVO">
         INSERT INTO TB_CUSTOMER (
-            CUST_NM, BIZ_REG_NO, CEO_NM, PIC_NM, PIC_CONTACT, PIC_EMAIL, CUST_ADDR, CUST_REMARK
+            CUST_NM, BIZ_REG_NO, CEO_NM, PIC_NM, PIC_CONTACT, PIC_EMAIL, CUST_ADDR, CUST_REMARK, CUST_GRADE
         ) VALUES (
-            #{custNm}, #{bizRegNo}, #{ceoNm}, #{picNm}, #{picTel}, #{picEmail}, #{custAddr}, #{custRemark}
+            #{custNm}, #{bizRegNo}, #{ceoNm}, #{picNm}, #{picTel}, #{picEmail}, #{custAddr}, #{custRemark}, #{custGrade}
         )
     </insert>
 
@@ -68,6 +72,7 @@
             , CUST_ADDR = #{custAddr}
             , CUST_REMARK = #{custRemark}
             , LAST_UPDUSR_ID = #{lastUpdusrId}
+            , CUST_GRADE = #{custGrade}
         WHERE CUST_ID = #{custId}
     </update>
 

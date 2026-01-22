@@ -34,13 +34,13 @@
         <table>
             <thead>
                 <tr>
-                	<th width="6%"></th>
-                    <th width="5%">ID</th>
-                    <th width="22%">고객사명</th>
-                    <th width="15%">사업자번호</th>
-                    <th width="12%">대표자</th>
-                    <th width="12%">담당자</th>
-                    <th width="18%">연락처</th>
+                    <th width="7%">즐겨찾기</th>
+                    <th width="28%">고객사명</th>
+                    <th width="15%">사업자등록번호</th>
+                    <th width="8%">대표</th>
+                    <th width="8%">담당자</th>
+                    <th width="15%">연락처</th>
+                    <th width="9%">고객 등급</th>
                     <th width="10%">관리</th>
                 </tr>
             </thead>
@@ -59,18 +59,21 @@
 						        </c:choose>
 						    </a>
 						</td>
-                        <td><c:out value="${result.custId}"/></td>
-                        <td class="text-left">
-                            <a href="javascript:void(0);"
-                               onclick="fn_open_customer_popup('${result.custId}', '${result.custNm}');" style="font-weight:bold; color:#007bff;"
-                               class="cust-link">
+
+						<td class="text-left">
+                            <a href="javascript:void(0);" onclick="fn_open_customer_popup('${result.custId}', '${result.custNm}');" style="font-weight:bold; color:#007bff;">
                                 <c:out value="${result.custNm}"/>
                             </a>
                         </td>
-                        <td><c:out value="${result.bizRegNo}"/></td>
-                        <td><c:out value="${result.ceoNm}"/></td>
+
+                        <td><c:out value=""/>${result.bizRegNo}</td>
+						<td><c:out value="${result.ceoNm}"/></td>
                         <td><c:out value="${result.picNm}"/></td>
+
                         <td><c:out value="${result.picTel}"/></td>
+
+                        <td><c:out value="${result.custGrade}"/></td>
+
                         <td>
                            <a href="<c:url value='/pms/updateCustomerView.do'/>?selectedId=${result.custId}"
                               class="btn btn-yellow btn-sm">수정</a>

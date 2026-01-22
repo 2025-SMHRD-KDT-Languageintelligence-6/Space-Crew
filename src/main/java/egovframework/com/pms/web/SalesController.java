@@ -64,6 +64,7 @@ public class SalesController {
         
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
+        userSearchVO.setFirstIndex(0);
         model.addAttribute("userList", userService.selectUserList(userSearchVO));
         
         return "egovframework/com/pms/SalesRegist";
@@ -82,14 +83,17 @@ public class SalesController {
     @RequestMapping(value = "/pms/updateSalesView.do")
     public String updateView(@RequestParam("selectedId") Long id, Model model) throws Exception {
         SalesVO result = salesService.selectSalesDetail(id);
+        if(result != null && result.getExpectedDt() != null) {
+            String rawDt = result.getExpectedDt();
+            if(rawDt.length() >= 10) {
+                result.setExpectedDt(rawDt.substring(0, 10));
+            }
+        }
         model.addAttribute("salesVO", result);
-
         model.addAttribute("customerList", customerService.selectCustomerList(new CustomerVO()));
-        
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
         model.addAttribute("userList", userService.selectUserList(userSearchVO));
-
         return "egovframework/com/pms/SalesUpdt";
     }
     

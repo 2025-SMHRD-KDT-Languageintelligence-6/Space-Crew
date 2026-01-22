@@ -18,6 +18,10 @@ import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.ContractService;
 import egovframework.com.pms.service.ContractVO;
+import egovframework.com.pms.service.CustomerService;
+import egovframework.com.pms.service.CustomerVO;
+import egovframework.com.pms.service.SalesService;
+import egovframework.com.pms.service.SalesVO;
 import egovframework.com.pms.service.UserService;
 import egovframework.com.pms.service.UserVO;
 
@@ -29,7 +33,13 @@ public class ContractController {
 
     @Resource(name = "userService")
     private UserService userService;
-
+    
+    @Resource(name = "salesService")
+    private SalesService salesService;
+    
+    @Resource(name = "customerService")
+    private CustomerService customerService;
+    
     @RequestMapping(value = "/pms/contractList.do")
     public String selectContractList(@ModelAttribute("searchVO") ContractVO contractVO, Model model) throws Exception {
         
@@ -55,7 +65,19 @@ public class ContractController {
     
     @RequestMapping(value = "/pms/addContractView.do")
     public String addContractView(@ModelAttribute("contractVO") ContractVO contractVO, Model model) throws Exception {
-        model.addAttribute("userList", userService.selectUserList(new UserVO()));
+        List<SalesVO> salesList = salesService.selectSalesList(new SalesVO());
+        List<CustomerVO> customerList = customerService.selectCustomerList(new CustomerVO());
+        
+        UserVO userSearchVO = new UserVO();
+        userSearchVO.setRecordCountPerPage(999);
+        userSearchVO.setFirstIndex(0);
+        List<UserVO> userList = userService.selectUserList(userSearchVO);
+
+        model.addAttribute("contractVO", new ContractVO());
+        model.addAttribute("salesList", salesList);
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("userList", userList);
+
         return "egovframework/com/pms/ContractRegist";
     }
     
@@ -72,10 +94,28 @@ public class ContractController {
     @RequestMapping(value = "/pms/updateContractView.do")
     public String updateContractView(@RequestParam("selectedId") Long id, Model model) throws Exception {
         ContractVO result = contractService.selectContractDetail(id);
+        if(result != null) {
+            if(result.getContDt() != null && result.getContDt().length() >= 10) {
+                result.setContDt(result.getContDt().substring(0, 10));
+            }
+            if(result.getStartDt() != null && result.getStartDt().length() >= 10) {
+                result.setStartDt(result.getStartDt().substring(0, 10));
+            }
+            if(result.getEndDt() != null && result.getEndDt().length() >= 10) {
+                result.setEndDt(result.getEndDt().substring(0, 10));
+            }
+        }
+        List<SalesVO> salesList = salesService.selectSalesList(new SalesVO());
+        List<CustomerVO> customerList = customerService.selectCustomerList(new CustomerVO());
+        UserVO userSearchVO = new UserVO();
+        userSearchVO.setRecordCountPerPage(999);
+        userSearchVO.setFirstIndex(0);
+        List<UserVO> userList = userService.selectUserList(userSearchVO);
+
         model.addAttribute("contractVO", result);
-        
-        model.addAttribute("userList", userService.selectUserList(new UserVO()));
-        
+        model.addAttribute("salesList", salesList);
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("userList", userList);
         return "egovframework/com/pms/ContractUpdt";
     }
     

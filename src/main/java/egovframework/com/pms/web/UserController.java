@@ -58,6 +58,12 @@ public class UserController {
     @RequestMapping(value = "/pms/updateUserView.do")
     public String updateUserView(@RequestParam("selectedId") String id, Model model) throws Exception {
         UserVO result = userService.selectUserDetail(id);
+        
+        if(result.getJoinDt() != null && result.getJoinDt().length() == 8) {
+            String raw = result.getJoinDt();
+            result.setJoinDt(raw.substring(0, 4) + "-" + raw.substring(4, 6) + "-" + raw.substring(6, 8));
+        }
+        
         model.addAttribute("userVO", result);
         return "egovframework/com/pms/UserUpdt";
     }

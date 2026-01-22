@@ -14,39 +14,51 @@
     <div class="form-container">
         <h2>신규 고객사 등록</h2>
 
+
         <form:form modelAttribute="customerVO" action="${pageContext.request.contextPath}/pms/addCustomer.do" method="post">
             <table>
                 <tr>
                     <th class="required">고객사명</th>
-                    <td><form:input path="custNm" required="required" placeholder="예: (주)대한시스템즈" /></td>
+                    <td><form:input path="custNm" required="required" /></td>
                 </tr>
                 <tr>
                     <th>사업자 등록번호</th>
-                    <td><form:input path="bizRegNo" placeholder="000-00-00000" /></td>
+                    <td><form:input path="bizRegNo" /></td>
                 </tr>
                 <tr>
                     <th>대표자명</th>
                     <td><form:input path="ceoNm" /></td>
                 </tr>
                 <tr>
-                    <th>담당자 성함</th>
+                    <th>담당자명</th>
                     <td><form:input path="picNm" /></td>
                 </tr>
                 <tr>
                     <th>담당자 연락처</th>
-                    <td><form:input path="picTel" placeholder="010-0000-0000" /></td>
+                    <td><form:input path="picTel" /></td>
                 </tr>
                 <tr>
                     <th>담당자 이메일</th>
-                    <td><form:input path="picEmail" type="email" placeholder="example@email.com" /></td>
+                    <td><form:input path="picEmail" /></td>
                 </tr>
                 <tr>
                     <th>고객사 주소</th>
                     <td><form:input path="custAddr" /></td>
                 </tr>
                 <tr>
-                    <th>특이사항</th>
-                    <td><form:textarea path="custRemark" rows="4" placeholder="참고사항을 입력하세요." /></td>
+                    <th>고객 등급</th>
+                    <td>
+                        <form:select path="custGrade" style="width:95%;">
+                            <form:option value="N" label="N"/>
+						    <form:option value="B" label="B"/>
+						    <form:option value="A" label="A"/>
+						    <form:option value="S" label="S"/>
+                        </form:select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>비고/특이사항</th>
+                    <td><form:textarea path="custRemark" rows="4" style="width:95%;" /></td>
                 </tr>
             </table>
 

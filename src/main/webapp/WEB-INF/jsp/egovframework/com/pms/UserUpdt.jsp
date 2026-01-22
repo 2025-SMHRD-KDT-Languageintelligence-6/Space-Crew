@@ -28,30 +28,64 @@
                         <span class="readonly-id"><c:out value="${userVO.userId}"/></span>
                         <small style="color: #868e96; margin-left: 10px;">(사원번호는 수정할 수 없습니다)</small>
                     </td>
-                </tr>
                 <tr>
                     <th class="required">성명</th>
-                    <td><form:input path="userNm" required="required" placeholder="성명을 입력하세요" /></td>
+                    <td><form:input path="userNm" required="required" placeholder="이름 입력" /></td>
                 </tr>
                 <tr>
                     <th>부서명</th>
                     <td><form:input path="deptNm" placeholder="소속 부서" /></td>
                 </tr>
                 <tr>
-                    <th>직무 / 직위</th>
+                    <th>직무 / 직급</th>
                     <td>
                         <div style="display: flex; gap: 10px;">
                             <form:input path="jobRole" placeholder="직무 (예: 개발)" style="flex: 1;" />
-                            <form:input path="positionNm" placeholder="직위 (예: 대리)" style="flex: 1;" />
+                            <form:input path="positionNm" placeholder="직급 (예: 대리)" style="flex: 1;" />
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <th>재직 여부</th>
-                    <td class="radio-group">
-                        <form:radiobutton path="useYn" value="Y" id="useY" /><label for="useY">재직</label>
-                        <form:radiobutton path="useYn" value="N" id="useN" style="margin-left:20px;" /><label for="useN">미재직</label>
+                    <th>경력(년)</th>
+                    <td>
+                        <form:input path="careerYears" type="number" style="width: 150px;" min="0" />
+                        <span style="margin-left: 10px; font-weight: bold; color: #666;">년</span>
                     </td>
+                </tr>
+                <tr>
+                    <th>전문분야</th>
+                    <td><form:input path="jobField" placeholder="예: Java, Spring Boot, React" /></td>
+                </tr>
+                <tr>
+                    <th class="required">입사일</th>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+					        <form:input path="joinDt" type="date" 
+					                    style="width: 180px; ${not empty userVO.joinDt ? 'background-color: #e9ecef;' : ''}" 
+					                    required="required" 
+					                    readonly="${not empty userVO.joinDt ? 'true' : 'false'}" />
+					        
+					        <c:if test="${not empty userVO.joinDt}">
+					            <small style="color: #fa5252;">(입사일은 이미 등록되어 수정할 수 없습니다)</small>
+					        </c:if>
+					    </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">재직여부</th>
+                    <td>
+                    	<form:input path="useYn" required="required" style="width: 50px;" min="0" placeholder="Y/N" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="required">보유스택</th>
+                    <td>
+                        <form:input path="skillDesc"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th>특이사항</th>
+                    <td></td>
                 </tr>
             </table>
 

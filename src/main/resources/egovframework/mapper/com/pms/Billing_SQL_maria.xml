@@ -6,6 +6,7 @@
         SELECT 
               P.PROJ_ID           AS projId
 	        , P.PROJ_NM           AS projNm
+	        , C.CUST_NM           AS custNm
 	        , CONT.CONT_AMT       AS totalAmt
 	        , IFNULL(SUM(B.BILL_AMT), 0) AS totalBilledAmt
 	        , SUM(CASE WHEN B.ACTUAL_PAY_DT IS NOT NULL THEN B.BILL_AMT ELSE 0 END) AS totalPaidAmt
@@ -18,12 +19,14 @@
 	          END AS isPaid
 	    FROM TB_PROJECT P
 	    LEFT JOIN TB_CONTRACT CONT ON P.CONT_ID = CONT.CONT_ID
+	    LEFT JOIN TB_SALES S ON CONT.SALES_ID = S.SALES_ID
+	    LEFT JOIN TB_CUSTOMER C ON S.CUST_ID = C.CUST_ID
 	    LEFT JOIN TB_BILLING B ON P.PROJ_ID = B.PROJ_ID AND B.DEL_YN = 'N'
 	    WHERE 1=1
 	    <if test="searchKeyword != null and searchKeyword != ''">
 	        AND P.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
 	    </if>
-	    GROUP BY P.PROJ_ID, P.PROJ_NM, CONT.CONT_AMT
+	    GROUP BY P.PROJ_ID, P.PROJ_NM, C.CUST_NM, CONT.CONT_AMT
 	    ORDER BY P.PROJ_ID DESC
 	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
