@@ -118,7 +118,7 @@
 	                <th>업무</th>
 	                <th>투입기간</th>
 	                <th>투입률(M/M)</th>
-	                <th>총투입률</th>
+	                <th>확인</th>
 	                <th>관리</th>
 	            </tr>
 	        </thead>
@@ -435,33 +435,39 @@
 	        data: { projId: "${projectVO.projId}" },
 	        dataType: "json",
 	        success: function(data) {
-	            var html = "";
+	        	var html = "";
 	            var totalActualEffort = 0;
 	            var totalPlanEffort = 0;
-	            var today = new Date();
-	            today.setHours(0, 0, 0, 0);
+	            
+	            var targetStr = "${projectVO.estEffort}".replace(/[^0-9.]/g, ""); 
+	            var target = parseFloat(targetStr) || 0;
 	            
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
-	                	var start = new Date(item.startDate);
-	                    var end = new Date(item.endDate);
-	                    
-	                    var fullDiffDays = ((end - start) / (1000 * 60 * 60 * 24)) + 1;
-	                    var fullValue = (fullDiffDays * item.inputRate).toFixed(1);
-	                    var effectiveEnd = end > today ? today : end;
-	                    var accumulatedValue = 0;
-	                    if (today >= start) {
-	                        var diffDays = ((effectiveEnd - start) / (1000 * 60 * 60 * 24)) + 1;
-	                        accumulatedValue = diffDays * item.inputRate;
+	                    var fullValue = parseFloat(item.inputRate || 0);
+	                    totalPlanEffort += fullValue;
+	                    var isConfirmed = (item.confirmYn && item.confirmYn.trim().toUpperCase() === 'Y');
+	                    if (item.confirmYn === 'Y') {
+	                        totalActualEffort += fullValue;
 	                    }
-	                    totalPlanEffort += parseFloat(fullValue);
-	                    totalActualEffort += accumulatedValue;
+
 	                    html += "<tr>";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
-	                    html += "  <td>" + item.inputRate.toFixed(1) + "</td>";
-	                    html += "  <td><strong>" + fullValue + "</strong></td>";
+	                    html += "  <td><strong>" + fullValue.toFixed(1) + " MM</strong></td>";
+	                    
+	                    html += "  <td style='text-align:center;'>";
+	                    
+	                    if (item.confirmYn === 'Y') {
+	                        html += "  <span class='badge-green'>완료</span>";
+	                        html += "  <button type='button' class='btn_s' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'N')\">취소</button>";
+	                    } else {
+	                        html += "  <button type='button' class='btn_blue' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'Y')\">확인</button>";
+	                    }
+	                    
+	                    html += "</td>";
+	                    
 	                    html += "  <td>";
 	                    html += "    <button type='button' class='btn_s' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
 	                    html += "    <button type='button' class='btn_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
@@ -471,8 +477,9 @@
 	            } else {
 	                html = "<tr><td colspan='6'>배정된 인력이 없습니다.</td></tr>";
 	            }
+	            
 	            $("#assignListBody").html(html);
-	            var target = parseFloat("${projectVO.estEffort}") || 0;
+	            
 	            var actualPercent = target > 0 ? ((totalActualEffort / target) * 100).toFixed(1) : 0;
 	            var planPercent = target > 0 ? ((totalPlanEffort / target) * 100).toFixed(1) : 0;
 	            
@@ -483,13 +490,13 @@
 	            $("#currentTotalEffort").text(totalActualEffort.toFixed(1));
 	            $("#planTotalEffort").text(totalPlanEffort.toFixed(1));
 	            
-	            if(planPercent > 100) {
-	                $("#planProgressBar").css("background", "rgba(244, 67, 54, 0.2)");
+	            if(parseFloat(planPercent) > 100) {
+	                $("#planProgressBar").css("background", "rgba(244, 67, 54, 0.5)");
+	            } else {
+	                $("#planProgressBar").css("background", "rgba(76, 175, 80, 0.3)");
 	            }
 	            
-	            if(calendar) {
-	                calendar.refetchEvents();
-	            }
+	            if(calendar) {calendar.refetchEvents();}
 	        }
 	    });
 	}
@@ -569,6 +576,20 @@
 	function fn_egov_user_callback(userId, userNm) {
 	    $("#assignUserId").val(userId);
 	    $("#assignUserNm").val(userNm);
+	}
+	
+	function fn_toggle_confirm(tGroupId, status) {
+	    var msg = status === 'Y' ? "해당 인력의 업무 완료를 확인하시겠습니까?" : "확인을 취소하시겠습니까?";
+	    if(!confirm(msg)) return;
+
+	    $.ajax({
+	        url: "<c:url value='/pms/updateAssignConfirmAjax.do'/>",
+	        type: "POST",
+	        data: { "taskGroupId": tGroupId, "confirmYn": status },
+	        success: function(data) {
+	            fn_load_assign_list();
+	        }
+	    });
 	}
 	
 	

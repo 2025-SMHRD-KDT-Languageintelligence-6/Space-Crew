@@ -45,4 +45,8 @@ public interface ProjectMapper {
 	void insertProjectTaskGroup(ProjectAssignVO vo) throws Exception;
 
 	List<ProjectAssignVO> selectTaskGroupMemberList(String taskGroupId) throws Exception;
+	
+	void updateAssignConfirm(Map<String, Object> param) throws Exception;
+	
+	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
 }
