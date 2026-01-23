@@ -1,5 +1,6 @@
 package egovframework.com.pms.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,17 +90,24 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
         long totalContAmt = Long.parseLong(String.valueOf(status.get("totalContAmt")));
         long totalBilledAmt = Long.parseLong(String.valueOf(status.get("totalBilledAmt")));
 
-        String finalStatus = "청구진행중";
-
-        if (totalContAmt > 0 && totalContAmt == totalBilledAmt) {
+        String finalStep = "청구전";
+        
+        if (totalBilledAmt > 0) {
+            finalStep = "청구진행중";
+        }
+        
+        if (totalContAmt > 0 && totalContAmt <= totalBilledAmt) {
             if (totalCount == paidCount && totalCount > 0) {
-                finalStatus = "정산완료";
+                finalStep = "입금완료";
             } else {
-                finalStatus = "입금대기";
+                finalStep = "청구완료";
             }
         }
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("selectedId", projId);
+        paramMap.put("billStep", finalStep);
 
-        projectMapper.updateProjectStatus(projId, finalStatus);
+        projectMapper.updateProjectStatusAjax(paramMap);
     }
     
     @Override

@@ -57,16 +57,17 @@
                         <td style="position: relative;">
                             <div class="status-container">
                                 <a href="javascript:void(0);"
-                                   class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '검토중' ? 'status-ing' : 'status-lost'}"
+                                   class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '계약중' ? 'status-ing' : 'status-lost'}"
                                    onclick="fn_toggle_status_menu('${result.contId}', event);">
                                     ${result.contStatus} ▼
                                 </a>
 
                                 <div id="status_menu_${result.contId}" class="status-menu-layer" style="display:none;">
                                     <ul>
-                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '검토중')">검토중</a></li>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약중')">계약중</a></li>
                                         <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약완료')">계약완료</a></li>
-                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약종료')">계약종료</a></li>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '계약실패')">계약실패</a></li>
+                                        <li><a href="javascript:void(0);" onclick="fn_update_contract_status('${result.contId}', '보류')">보류</a></li>
                                     </ul>
                                 </div>
                             </div>

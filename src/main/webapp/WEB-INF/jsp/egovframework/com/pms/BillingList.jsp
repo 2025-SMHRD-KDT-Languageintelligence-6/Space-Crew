@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>청구 및 정산 관리</title>
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/BillingList.css'/>?v=1.1" >
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/BillingList.css'/>?v=1.2" >
 </head>
 <body>
 	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -65,25 +65,25 @@
 	                    
 	                    </td>
 	                    <td>
-                            <c:choose>
-                                <%-- 정산완료 상태 --%>
-                                <c:when test="${result.isPaid == 'Y'}">
-                                    <span class="status-badge status-paid">입금완료</span>
-                                </c:when>
-
-                                <c:otherwise>
-                                    <c:choose>
-                                        <%-- 입금대기 상태 (금액이 일치할 때) --%>
-                                        <c:when test="${result.totalAmt == result.totalBilledAmt}">
-                                            <span class="status-badge status-waiting">청구완료</span>
-                                        </c:when>
-                                        <%-- 청구진행중 상태 --%>
-                                        <c:otherwise>
-                                            <span class="status-badge status-pending">청구진행중</span>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:otherwise>
-                            </c:choose>
+                            <c:set var="stepClass" value=""/>
+						    <c:choose>
+						        <c:when test="${result.billStep eq '입금완료'}">
+						            <c:set var="stepClass" value="status-paid"/>
+						        </c:when>
+						        <c:when test="${result.billStep eq '청구완료'}">
+						            <c:set var="stepClass" value="status-waiting"/>
+						        </c:when>
+						        <c:when test="${result.billStep eq '청구전'}">
+						            <c:set var="stepClass" value="status-default"/>
+						        </c:when>
+						        <c:otherwise>
+						            <c:set var="stepClass" value="status-pending"/>
+						        </c:otherwise>
+						    </c:choose>
+						
+						    <span class="status-badge ${stepClass}">
+						        <c:out value="${empty result.billStep ? '청구전' : result.billStep}"/>
+						    </span>
                         </td>
                         <td style="position: relative;">
 						    <div class="status-container">

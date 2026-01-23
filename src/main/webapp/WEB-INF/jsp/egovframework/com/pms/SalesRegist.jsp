@@ -78,8 +78,9 @@
                     <td>
                         <select name="status" class="input-half">
                             <option value="영업중">영업중</option>
-                            <option value="수주완료">수주완료</option>
-                            <option value="영업실패">영업실패</option>
+                            <option value="영업완료">영업완료</option>
+                            <option value="영업취소">영업취소</option>
+                            <option value="보류">보류</option>
                         </select>
                     </td>
                 </tr>

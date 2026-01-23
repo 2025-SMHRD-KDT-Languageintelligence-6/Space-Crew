@@ -6,6 +6,8 @@
         SELECT 
               P.PROJ_ID           AS projId
 	        , P.PROJ_NM           AS projNm
+	        , P.BILL_STEP		  AS billStep
+	        , P.BILL_STATUS		  AS billStatus
 	        , C.CUST_NM           AS custNm
 	        , CONT.CONT_AMT       AS totalAmt
 	        , P.BILL_STATUS       AS billStatus

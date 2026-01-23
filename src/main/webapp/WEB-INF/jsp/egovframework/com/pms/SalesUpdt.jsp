@@ -88,8 +88,9 @@
                     <td>
                         <select name="status" class="input-half">
                             <option value="영업중" <c:if test="${salesVO.status eq '영업중'}">selected</c:if>>영업중</option>
-                            <option value="수주완료" <c:if test="${salesVO.status eq '수주완료'}">selected</c:if>>수주완료</option>
-                            <option value="영업실패" <c:if test="${salesVO.status eq '영업실패'}">selected</c:if>>영업실패</option>
+                            <option value="영업완료" <c:if test="${salesVO.status eq '영업완료'}">selected</c:if>>영업완료</option>
+                            <option value="영업취소" <c:if test="${salesVO.status eq '영업취소'}">selected</c:if>>영업취소</option>
+                            <option value="보류" <c:if test="${salesVO.status eq '보류'}">selected</c:if>>보류</option>
                         </select>
                     </td>
                 </tr>

@@ -84,10 +84,10 @@
                     <th>계약상태</th>
                     <td>
 				        <form:select path="contStatus">
-				            <form:option value="대기" label="대기"/>
-				            <form:option value="진행" label="진행"/>
-				            <form:option value="완료" label="완료"/>
-				            <form:option value="중단" label="중단"/>
+				            <form:option value="계약중" label="계약중"/>
+				            <form:option value="계약완료" label="계약완료"/>
+				            <form:option value="계약실패" label="계약실패"/>
+				            <form:option value="보류" label="보류"/>
 				        </form:select>
 				    </td>
                 </tr>

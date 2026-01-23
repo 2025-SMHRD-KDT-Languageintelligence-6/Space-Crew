@@ -37,7 +37,8 @@
                         <form:select path="projType">
                             <form:option value="개발" label="개발"/>
                             <form:option value="유지보수" label="유지보수"/>
-                            <form:option value="인프라" label="인프라"/>
+                            <form:option value="하자보수" label="하자보수"/>
+                            <form:option value="일반용역" label="일반용역"/>
                         </form:select>
                     </td>
                 </tr>
@@ -45,10 +46,11 @@
                     <th>상태</th>
                     <td>
                         <form:select path="status">
-                            <form:option value="준비" label="준비"/>
-                            <form:option value="진행" label="진행"/>
-                            <form:option value="테스트" label="테스트"/>
-                            <form:option value="종료" label="종료"/>
+                            <form:option value="배정중" label="배정중"/>
+                            <form:option value="진행중" label="진행중"/>
+                            <form:option value="업무완료" label="업무완료"/>
+                            <form:option value="업무실패" label="업무실패"/>
+                            <form:option value="보류" label="보류"/>
                         </form:select>
                     </td>
                 </tr>

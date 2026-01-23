@@ -81,8 +81,9 @@
                                        <div id="status_menu_${result.salesId}" class="status-menu-layer" style="display:none;">
                                            <ul>
                                                <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업중')">영업중</a></li>
-                                               <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '수주완료')">수주완료</a></li>
-                                               <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업실패')">영업실패</a></li>
+                                               <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업완료')">영업완료</a></li>
+                                               <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업취소')">영업취소</a></li>
+                                               <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '보류')">보류</a></li>
                                            </ul>
                                        </div>
                                    </c:when>

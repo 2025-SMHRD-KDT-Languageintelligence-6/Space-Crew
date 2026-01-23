@@ -152,7 +152,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        /* AJAX 로직 및 저장 실패 메시지 등 모든 기능 보존 */
+
         function updateSummary(addedAmt) {
             var totalAmt = parseInt($("#rawTotalAmt").val());
             var prevBilled = parseInt($("#totalBilledAmtDisplay").text().replace(/,/g, ''));
@@ -220,7 +220,7 @@
         function fn_reset_form() {
             $("#form_billId").val("");
             $("#billingForm")[0].reset();
-            $("#formTitle").text("📂 내역 추가").css("color", "#333");
+            $("#formTitle").text("내역 추가").css("color", "#333");
             $("#btnSubmit").text("내역 저장").removeClass("btn_yellow").addClass("btn-blue");
             $("#btnCancel").hide();
         }

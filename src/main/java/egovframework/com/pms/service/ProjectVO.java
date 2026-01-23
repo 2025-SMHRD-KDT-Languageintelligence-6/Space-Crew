@@ -28,6 +28,7 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String mainMgrNm;
     private String subMgrNm;
     private String salesUserNm;
-    
+    private String mainMgrId;
+    private String subMgrId;
     private Long contId;
 }

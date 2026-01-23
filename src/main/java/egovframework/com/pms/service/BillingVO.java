@@ -33,5 +33,6 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private String mainMgrNm;
     private String subMgrNm;
     private String billStatus;
+    private String billStep;
     
 }

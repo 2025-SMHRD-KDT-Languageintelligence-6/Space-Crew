@@ -50,6 +50,7 @@
             , C.EMP_NM       AS picUserNm
             , D.EMP_NM       AS salesUserNm
             , E.CUST_NM       AS custNm
+            , E.CUST_ID		  AS custId
             , E.CEO_NM        AS ceoNm
         FROM TB_CONTRACT A
         LEFT JOIN TB_SALES B    ON A.SALES_ID = B.SALES_ID

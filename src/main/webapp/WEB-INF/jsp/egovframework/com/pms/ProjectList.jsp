@@ -61,10 +61,11 @@
 						
 						        <div id="status_menu_${result.projId}" class="status-menu-layer" style="display:none; position: absolute; z-index: 999; background: #fff; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); width: 100px; left: 50%; transform: translateX(-50%);">
 						            <ul style="list-style:none; padding:0; margin:0;">
-						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '대기')" style="display:block; padding:8px; font-size:12px; color:#333;">대기</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '배정중')" style="display:block; padding:8px; font-size:12px; color:#333;">배정중</a></li>
 						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '진행중')" style="display:block; padding:8px; font-size:12px; color:#333;">진행중</a></li>
-						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '완료')" style="display:block; padding:8px; font-size:12px; color:#333;">완료</a></li>
-						                <li><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '중단')" style="display:block; padding:8px; font-size:12px; color:#333;">중단</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '업무완료')" style="display:block; padding:8px; font-size:12px; color:#333;">업무완료</a></li>
+						                <li style="border-bottom:1px solid #eee;"><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '업무취소')" style="display:block; padding:8px; font-size:12px; color:#333;">업무취소</a></li>
+						                <li><a href="javascript:void(0);" onclick="fn_update_project_status('${result.projId}', '보류')" style="display:block; padding:8px; font-size:12px; color:#333;">보류</a></li>
 						            </ul>
 						        </div>
 						    </div>
