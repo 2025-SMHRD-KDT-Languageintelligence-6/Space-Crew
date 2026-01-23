@@ -133,7 +133,7 @@
 	    <input type="hidden" id="taskGroupId">
 	    <table style="width:100%;">
 	        <tr>
-	            <th>업무명</th>
+	            <th>프로젝트명</th>
 	            <td><input type="text" id="assignTitle" style="width:100%;"></td>
 	        </tr>
 	        <tr>
@@ -332,7 +332,7 @@
 	
 	
 	function fn_save_task_group() {
-	    if(!$("#assignTitle").val()) { alert("업무명을 입력하세요."); return; }
+	    if(!$("#assignTitle").val()) { alert("프로젝트명을 입력하세요."); return; }
 	    if(!$("#assignStartDate").val() || !$("#assignEndDate").val()) { alert("기간을 입력하세요."); return; }
 	    if($("#selectedUserListBody tr").length === 0) { alert("투입 인원을 최소 1명 이상 선택하세요."); return; }
 

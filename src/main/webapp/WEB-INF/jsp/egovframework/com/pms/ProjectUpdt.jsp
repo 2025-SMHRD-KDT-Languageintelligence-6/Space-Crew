@@ -40,8 +40,8 @@
 				    </td>
 				</tr>
                 <tr>
-                    <th class="required">업무명</th>
-                    <td><form:input path="projNm" required="required" placeholder="업무명을 입력하세요" /></td>
+                    <th class="required">프로젝트명</th>
+                    <td><form:input path="projNm" required="required" placeholder="프로젝트명을 입력하세요" /></td>
                 </tr>
                 <tr>
                     <th class="required">유형</th>
