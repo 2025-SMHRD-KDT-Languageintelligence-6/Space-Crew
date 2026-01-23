@@ -606,9 +606,10 @@
 	        return;
 	    }
 	    if (!confirm("수정 페이지로 이동하시겠습니까?\n(현재 팝업은 자동으로 닫힙니다)")) return;
-	    
+
+
 	    var updateUrl = "<c:url value='/pms/updateProjectView.do'/>?selectedId=" + id;
-	    
+
 	    try {
 	        window.opener.location.href = updateUrl;
 	        
