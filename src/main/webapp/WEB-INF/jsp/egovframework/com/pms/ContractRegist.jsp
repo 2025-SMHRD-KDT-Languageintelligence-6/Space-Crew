@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <title>계약 등록</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/Regist-Updt-Form.css'/>">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
