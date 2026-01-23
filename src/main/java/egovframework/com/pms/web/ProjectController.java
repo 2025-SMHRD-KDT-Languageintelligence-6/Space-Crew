@@ -279,7 +279,28 @@ public class ProjectController {
         }
         return resultMap;
     }
-
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateAssignConfirmAjax.do")
+    public Map<String, Object> updateAssignConfirmAjax(
+    		@RequestParam("taskGroupId") String taskGroupId, 
+            @RequestParam("confirmYn") String confirmYn) throws Exception {
+    	
+        Map<String, Object> param = new HashMap<>();
+        param.put("taskGroupId", taskGroupId);
+        param.put("confirmYn", confirmYn);
+        
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            projectService.updateAssignConfirm(param); 
+            resultMap.put("status", "SUCCESS");
+        } catch (Exception e) {
+            resultMap.put("status", "ERROR");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
     
     /**
      * [추가 기능] AI 인력 추천 팝업 열기 (Python FastAPI 연동)

@@ -250,3 +250,21 @@ tr:hover td { background-color: #fdfdfd; }
 .pagination-wrapper a:hover {
     background-color: #e9ecef;
 }
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block;
+}
+
+/* 정상 (초록) */
+.status-won { background-color: #28a745 !important; }
+
+/* 보류 (주황) */
+.status-ing { background-color: #ffc107 !important; color: #000 !important; }
+
+/* 파기/실패 (빨강) */
+.status-lost { background-color: #dc3545 !important; }

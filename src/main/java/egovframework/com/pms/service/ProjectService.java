@@ -39,4 +39,8 @@ public interface ProjectService {
 	List<ProjectAssignVO> selectTaskGroupMemberList(String taskGroupId) throws Exception;
 
 	void deleteProjectTaskGroup(String taskGroupId) throws Exception;
+
+	void updateAssignConfirm(Map<String, Object> param) throws Exception;
+	
+	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
 }

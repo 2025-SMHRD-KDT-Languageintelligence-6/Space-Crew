@@ -8,6 +8,7 @@
 	        , P.PROJ_NM           AS projNm
 	        , C.CUST_NM           AS custNm
 	        , CONT.CONT_AMT       AS totalAmt
+	        , P.BILL_STATUS       AS billStatus
 	        , IFNULL(SUM(B.BILL_AMT), 0) AS totalBilledAmt
 	        , SUM(CASE WHEN B.ACTUAL_PAY_DT IS NOT NULL THEN B.BILL_AMT ELSE 0 END) AS totalPaidAmt
 	        , CASE 
@@ -26,7 +27,7 @@
 	    <if test="searchKeyword != null and searchKeyword != ''">
 	        AND P.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
 	    </if>
-	    GROUP BY P.PROJ_ID, P.PROJ_NM, C.CUST_NM, CONT.CONT_AMT
+	    GROUP BY P.PROJ_ID, P.PROJ_NM, C.CUST_NM, CONT.CONT_AMT, P.BILL_STATUS
 	    ORDER BY P.PROJ_ID DESC
 	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
@@ -36,10 +37,10 @@
               A.BILL_ID         AS billId
             , A.BILL_TITLE      AS billTitle
             , A.BILL_AMT        AS billAmt
-            , A.TAX_BILL_DT     AS taxBillDt
-            , A.PAY_DT          AS payDt
+            , DATE_FORMAT(A.TAX_BILL_DT, '%Y-%m-%d')     AS taxBillDt
+            , DATE_FORMAT(A.PAY_DT, '%Y-%m-%d')          AS payDt
             , CASE WHEN A.ACTUAL_PAY_DT IS NOT NULL THEN 'Y' ELSE 'N' END AS isPaid
-            , A.ACTUAL_PAY_DT   AS actualPayDt
+            , DATE_FORMAT(A.ACTUAL_PAY_DT, '%Y-%m-%d')   AS actualPayDt
             , A.BILL_REMARK     AS billRemark
             , B.PROJ_ID         AS projId
             , B.PROJ_NM         AS projNm
@@ -106,7 +107,7 @@
 	        <if test="payDt != null">PAY_DT = NULLIF(#{payDt}, ''),</if>
 	        <if test="actualPayDt != null">ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, ''),</if>
 	        <if test="billRemark != null">BILL_REMARK = #{billRemark},</if>
-	        <if test="lastUpdusrId != null">LAST_UPDUSR_ID = #{lastUpdusrId}</if>
+	        <if test="lastUpdusrId != null">LAST_UPDUSR_ID = #{lastUpdusrId},</if>
 	    </set>
 	        
 	    WHERE BILL_ID = #{billId}
@@ -152,8 +153,9 @@
 	          BILL_ID             AS billId
 	        , BILL_TITLE          AS billTitle
 	        , BILL_AMT            AS billAmt
-	        , TAX_BILL_DT         AS taxBillDt
-	        , ACTUAL_PAY_DT       AS actualPayDt
+	        , DATE_FORMAT(TAX_BILL_DT, '%Y-%m-%d')         AS taxBillDt
+	        , DATE_FORMAT(ACTUAL_PAY_DT, '%Y-%m-%d')       AS actualPayDt
+	        , DATE_FORMAT(PAY_DT, '%Y-%m-%d')              AS payDt
 	    FROM TB_BILLING
 	    WHERE PROJ_ID = #{projId}
 	    AND DEL_YN = 'N'

@@ -62,7 +62,8 @@
             <tr class="w3-light-grey">
                 <th>회차/명칭</th>
                 <th>청구 금액</th>
-                <th>발행일</th>
+                <th>세금계산서 발행일</th>
+                <th>입금 예정일</th>
                 <th>입금 확인일</th>
                 <th>관리</th>
             </tr>
@@ -75,6 +76,7 @@
                         <fmt:formatNumber value="${bill.billAmt}" pattern="#,###"/>원
                     </td>
                     <td>${bill.taxBillDt != null ? bill.taxBillDt : '-'}</td>
+                    <td>${bill.payDt != null ? bill.payDt : '-'}</td>
                     <td>
                         <c:choose>
                             <c:when test="${empty bill.actualPayDt || bill.actualPayDt == '-'}">
@@ -93,7 +95,7 @@
                     </td>
                     <td>
                         <button type="button" class="btn_yellow" style="padding:2px 5px; font-size:11px;"
-                               onclick="fn_edit_billing('${bill.billId}', '${bill.billTitle}', '${bill.billAmt}', '${bill.taxBillDt}')">수정</button>
+                               onclick="fn_edit_billing('${bill.billId}', '${bill.billTitle}', '${bill.billAmt}', '${bill.taxBillDt}', '${bill.payDt}')">수정</button>
                         <button type="button" class="btn_red" style="padding:2px 5px;"
                                 onclick="fn_delete_billing('${bill.billId}', ${bill.billAmt})">삭제</button>
                     </td>
@@ -144,7 +146,8 @@
     </div>
 
     <div class="btn-close">
-        <button type="button" onclick="window.close();" class="btn_s">창 닫기</button>
+    	
+        <button type="button" onclick="window.close();" class="btn_s">닫기</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -202,11 +205,12 @@
             });
         }
 
-        function fn_edit_billing(billId, title, amt, taxDate) {
+        function fn_edit_billing(billId, title, amt, taxDate, payDate) {
             $("#form_billId").val(billId);
             $("#billTitle").val(title);
             $("#billAmt").val(amt);
             $("input[name='taxBillDt']").val(taxDate === '-' ? '' : taxDate);
+            $("input[name='payDt']").val(payDate === '-' ? '' : payDate);
             $("#formTitle").text("내역 수정 : ").css("color", "orange");
             $("#btnSubmit").text("수정하기").removeClass("btn-blue").addClass("btn_yellow");
             $("#btnCancel").show();
@@ -262,6 +266,7 @@
                 success: function() { location.reload(); }
             });
         }
+        
     </script>
 </body>
 </html>

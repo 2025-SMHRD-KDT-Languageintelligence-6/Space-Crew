@@ -65,7 +65,35 @@
         </table>
 
     <div class="btn-close">
+    	<button type="button" onclick="fn_go_update_page('${contractVO.contId}');" class="btn_blue">수정</button>
         <button type="button" onclick="window.close();" class="btn_s">닫기</button>
     </div>
+    <script>
+		function fn_go_update_page(id) {
+		    if(!id || id === "") {
+		        alert("ID 정보가 없어 수정 페이지로 이동할 수 없습니다.");
+		        return;
+		    }
+	
+		    if (!window.opener || window.opener.closed) {
+		        alert("부모 창을 찾을 수 없습니다.");
+		        return;
+		    }
+		    if (!confirm("수정 페이지로 이동하시겠습니까?\n(현재 팝업은 자동으로 닫힙니다)")) return;
+		    
+		    var updateUrl = "<c:url value='/pms/updateContractView.do'/>?selectedId=" + id;
+		    
+		    try {
+		        window.opener.location.href = updateUrl;
+		        
+		        setTimeout(function() {
+		            window.close();
+		        }, 100);
+		    } catch (e) {
+		        window.opener.location = updateUrl;
+		        window.close();
+		    }
+		}
+    </script>
 </body>
 </html>

@@ -30,5 +30,4 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String salesUserNm;
     
     private Long contId;
-
 }

@@ -9,8 +9,8 @@
             , A.PROJ_NM           AS projNm
             , A.PROJ_TYPE         AS projType
             , A.STATUS            AS status
-            , A.START_DT          AS startDt
-            , A.END_DT            AS endDt
+            , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
+            , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
             , B.CONT_NM           AS contNm
 <!--        , C.USER_NM           AS mainMgrNm -->
             , D.CUST_NM           AS custNm
@@ -56,8 +56,8 @@
 	        , A.PROJ_NM           AS projNm
 	        , A.PROJ_TYPE         AS projType
 	        , A.STATUS            AS status
-	        , A.START_DT          AS startDt
-	        , A.END_DT            AS endDt
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
 	        , A.EST_EFFORT        AS estEffort
 	        , A.REQ_SKILLS        AS reqSkills
 	        , B.CONT_NM			  AS contNm
@@ -107,10 +107,17 @@
 	
 	<update id="updateProjectStatusAjax" parameterType="map">
 	    UPDATE TB_PROJECT
-	       SET STATUS = #{status}
-	         <if test="lastUpdusrId != null">
-	         , LAST_UPDUSR_ID = #{lastUpdusrId}
+	    <set>
+	    	<if test="status != null and status != ''">
+	       		STATUS = #{status},
+	        </if>
+	        <if test="billStatus != null and billStatus != ''">
+	            BILL_STATUS = #{billStatus},
+	        </if>
+        	<if test="lastUpdusrId != null">
+	            LAST_UPDUSR_ID = #{lastUpdusrId}
 	         </if>
+         </set>
 	     WHERE PROJ_ID = #{selectedId}
 	</update>
 	
@@ -144,6 +151,7 @@
         	, ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
         	, GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
         	, SUM(A.INPUT_RATE)                                AS inputRate
+        	, MAX(A.CONFIRM_YN)                                AS confirmYn
         FROM TB_ASSIGNMENT A
         INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
         WHERE A.PROJ_ID = #{projId}
@@ -152,6 +160,18 @@
         GROUP BY A.TASK_GROUP_ID
         ORDER BY ANY_VALUE(A.START_DT) DESC
     </select>
+	
+	<update id="updateAssignConfirm" parameterType="map">
+	    UPDATE TB_ASSIGNMENT
+	       SET CONFIRM_YN = #{confirmYn}
+	     WHERE ASSIGN_ID = #{assignId}
+	</update>
+	
+	<update id="updateTaskGroupConfirm">
+	    UPDATE TB_ASSIGNMENT 
+	       SET CONFIRM_YN = #{confirmYn}
+	     WHERE TASK_GROUP_ID = #{taskGroupId}
+	</update>
 	
 	<update id="deleteProjectAssign" parameterType="int">
 	    UPDATE TB_ASSIGNMENT 

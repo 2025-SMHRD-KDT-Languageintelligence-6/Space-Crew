@@ -12,6 +12,7 @@
             , A.STATUS         AS status
             , A.PROBABILITY    AS probability
             , B.CUST_NM        AS custNm
+            , B.CEO_NM  	   AS ceoNm
             , C.EMP_NM         AS salesNm
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID
@@ -48,11 +49,12 @@
             , A.EMP_ID   AS salesUserId
             , A.SALES_TITLE     AS salesTitle
             , A.EXPECTED_AMT    AS expectedAmt
-            , A.EXPECTED_DT     AS expectedDt
+            , DATE_FORMAT(A.EXPECTED_DT, '%Y-%m-%d')     AS expectedDt
             , A.PROBABILITY     AS probability
             , A.STATUS          AS status
             , A.SALES_CONTENT   AS salesContent
             , B.CUST_NM         AS custNm
+            , B.CEO_NM          AS ceoNm
             , C.EMP_NM         AS salesNm
         FROM TB_SALES A
         LEFT JOIN TB_CUSTOMER B ON A.CUST_ID = B.CUST_ID

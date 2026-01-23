@@ -120,5 +120,15 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	public void deleteProjectTaskGroup(String taskGroupId) throws Exception {
 		projectMapper.deleteProjectTaskGroup(taskGroupId);
 	}
+
+	@Override
+	public void updateAssignConfirm(Map<String, Object> param) throws Exception {
+		projectMapper.updateTaskGroupConfirm(param);
+	}
+
+	@Override
+	public void updateTaskGroupConfirm(Map<String, Object> param) throws Exception {
+		projectMapper.updateTaskGroupConfirm(param);
+	}
 	
 }

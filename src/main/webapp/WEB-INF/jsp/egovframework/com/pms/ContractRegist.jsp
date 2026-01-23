@@ -23,7 +23,9 @@
 				        <form:select path="salesId">
 				            <form:option value="" label="-- 단독 계약 (영업 연동 없음) --"/>
 				            <c:forEach var="sales" items="${salesList}">
-				                <form:option value="${sales.salesId}" label="${sales.salesTitle} (${sales.custNm})" />
+				                <form:option value="${sales.salesId}">
+								    ${sales.salesTitle} (${sales.custNm}, ${sales.ceoNm})
+								</form:option>
 				            </c:forEach>
 				        </form:select>
 				    </td>

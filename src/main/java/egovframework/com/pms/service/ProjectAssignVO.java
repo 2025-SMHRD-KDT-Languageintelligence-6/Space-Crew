@@ -22,5 +22,7 @@ public class ProjectAssignVO extends ComDefaultVO implements Serializable {
     private String taskGroupId;
     
     private List<ProjectAssignVO> assignList;
+    
+    private String confirmYn;
 }
 
