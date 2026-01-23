@@ -15,7 +15,11 @@
             , A.EMP_ID   AS picUserId
             , B.EMP_NM       AS picUserNm
             , A.CONT_STATUS   AS contStatus
+            , S.CUST_ID		  AS custId
+            , C.CUST_NM		  as custNm
         FROM TB_CONTRACT A
+        LEFT JOIN TB_SALES S    ON A.SALES_ID = S.SALES_ID
+        LEFT JOIN TB_CUSTOMER C ON S.CUST_ID = C.CUST_ID
         LEFT JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
