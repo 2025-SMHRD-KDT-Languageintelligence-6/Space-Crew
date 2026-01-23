@@ -237,3 +237,69 @@ tr:hover td {
 .text-right { text-align: right !important; }
 .prob-container { width: 100%; background: #eee; height: 8px; border-radius: 4px; margin-top: 5px; overflow: hidden; }
 .prob-bar { background: #28a745; height: 100%; }
+
+
+
+/* =================================================================
+   페이지네이션 (Pagination) 디자인 복구
+   ================================================================= */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
+}
+
+/* 전자정부 태그 내부의 리스트 구조 강제 가로 정렬 */
+.pagination-wrapper ul, 
+.pagination-wrapper ol {
+    display: flex !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 5px; /* 숫자 사이 간격 */
+}
+
+.pagination-wrapper li {
+    list-style-type: none !important;
+    display: inline-block !important;
+}
+
+/* 숫자 및 화살표 버튼 스타일 */
+.pagination-wrapper a, 
+.pagination-wrapper strong, 
+.pagination-wrapper span {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 35px;
+    height: 35px;
+    padding: 0 8px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    color: #007bff;
+    text-decoration: none !important;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+/* 현재 활성화된 페이지 번호 (강조) */
+.pagination-wrapper strong {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+    font-weight: 700;
+}
+
+/* 호버 효과 */
+.pagination-wrapper a:hover {
+    background-color: #e9ecef;
+    border-color: #007bff;
+}
+
+/* 처음/이전/다음/끝 이미지 버튼 보정 */
+.pagination-wrapper img {
+    vertical-align: middle;
+}
