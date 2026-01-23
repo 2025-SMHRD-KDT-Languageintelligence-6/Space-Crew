@@ -17,7 +17,7 @@
 	             AND SUB.DEL_YN = 'N' 
 	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT
        		  )				AS currentLoad
-            , JOIN_DT       AS joinDt
+            , DATE_FORMAT(JOIN_DT, '%Y-%m-%d')       AS joinDt
             , IN_OFFICE        AS useYn
         FROM TB_EMP
         WHERE DEL_YN = 'N'
@@ -45,7 +45,7 @@
 	        , POSITION_NM   AS positionNm
 	        , CAREER_YEARS  AS careerYears
 	        , JOB_FIELD     AS jobField
-	        , JOIN_DT       AS joinDt
+	        , DATE_FORMAT(JOIN_DT, '%Y-%m-%d')       AS joinDt
 	        , IN_OFFICE        AS useYn
 	        , SKILL_DESC     AS skillDesc
 	        , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)

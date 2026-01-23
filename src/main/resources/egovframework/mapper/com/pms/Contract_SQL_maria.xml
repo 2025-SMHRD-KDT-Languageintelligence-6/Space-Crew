@@ -9,9 +9,9 @@
             , A.SALES_ID      AS salesId
             , A.CONT_NM       AS contNm
             , A.CONT_AMT      AS contAmt
-            , A.START_DT      AS startDt
-            , A.END_DT        AS endDt
-            , A.CONT_DT       AS contDt
+            , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+       		, DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
+       		, DATE_FORMAT(A.CONT_DT, '%Y-%m-%d')  AS contDt
             , A.EMP_ID   AS picUserId
             , B.EMP_NM       AS picUserNm
             , A.CONT_STATUS   AS contStatus
@@ -39,9 +39,9 @@
             , A.SALES_ID      AS salesId
             , A.CONT_NM       AS contNm
             , A.CONT_AMT      AS contAmt
-            , A.START_DT      AS startDt
-            , A.END_DT        AS endDt
-            , A.CONT_DT       AS contDt
+            , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+       		, DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
+       		, DATE_FORMAT(A.CONT_DT, '%Y-%m-%d')  AS contDt
             , A.EMP_ID   AS picUserId
             , A.CONT_STATUS   AS contStatus
             , A.CONT_REMARK   AS contRemark
@@ -50,6 +50,7 @@
             , C.EMP_NM       AS picUserNm
             , D.EMP_NM       AS salesUserNm
             , E.CUST_NM       AS custNm
+            , E.CEO_NM        AS ceoNm
         FROM TB_CONTRACT A
         LEFT JOIN TB_SALES B    ON A.SALES_ID = B.SALES_ID
         LEFT JOIN TB_EMP C     ON A.EMP_ID = C.EMP_ID

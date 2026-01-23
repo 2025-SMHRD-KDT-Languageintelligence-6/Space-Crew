@@ -22,4 +22,5 @@ public class SalesVO extends ComDefaultVO implements Serializable {
     private String custNm;
     private String salesNm;
     private String lastUpdusrId;
+    private String ceoNm;
 }

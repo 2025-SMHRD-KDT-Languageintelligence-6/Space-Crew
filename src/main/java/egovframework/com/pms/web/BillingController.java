@@ -168,4 +168,26 @@ public class BillingController {
         return resultMap;
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/pms/updateProjectBillStatusAjax.do")
+    public Map<String, Object> updateProjectBillStatusAjax(
+            @RequestParam("selectedId") Long projId, 
+            @RequestParam("billStatus") String billStatus) throws Exception {
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("selectedId", projId);
+        param.put("billStatus", billStatus);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            projectService.updateProjectStatus(param); 
+            resultMap.put("status", "success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("status", "fail");
+            resultMap.put("message", e.getMessage());
+        }
+        return resultMap;
+    }
+    
 }

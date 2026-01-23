@@ -9,8 +9,8 @@
             , A.PROJ_NM           AS projNm
             , A.PROJ_TYPE         AS projType
             , A.STATUS            AS status
-            , A.START_DT          AS startDt
-            , A.END_DT            AS endDt
+            , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
+            , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
             , B.CONT_NM           AS contNm
 <!--        , C.USER_NM           AS mainMgrNm -->
             , D.CUST_NM           AS custNm
@@ -56,8 +56,8 @@
 	        , A.PROJ_NM           AS projNm
 	        , A.PROJ_TYPE         AS projType
 	        , A.STATUS            AS status
-	        , A.START_DT          AS startDt
-	        , A.END_DT            AS endDt
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
 	        , A.EST_EFFORT        AS estEffort
 	        , A.REQ_SKILLS        AS reqSkills
 	        , B.CONT_NM			  AS contNm
@@ -107,10 +107,17 @@
 	
 	<update id="updateProjectStatusAjax" parameterType="map">
 	    UPDATE TB_PROJECT
-	       SET STATUS = #{status}
-	         <if test="lastUpdusrId != null">
-	         , LAST_UPDUSR_ID = #{lastUpdusrId}
+	    <set>
+	    	<if test="status != null and status != ''">
+	       		STATUS = #{status},
+	        </if>
+	        <if test="billStatus != null and billStatus != ''">
+	            BILL_STATUS = #{billStatus},
+	        </if>
+        	<if test="lastUpdusrId != null">
+	            LAST_UPDUSR_ID = #{lastUpdusrId}
 	         </if>
+         </set>
 	     WHERE PROJ_ID = #{selectedId}
 	</update>
 	
