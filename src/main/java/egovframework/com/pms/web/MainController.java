@@ -37,8 +37,8 @@ public class MainController {
     }
 
     // 회의록 분석
-    @RequestMapping("/pms/meetingView.do")
-    public String meetingViewPage() {
-        return "egovframework/com/pms/meeting_view";
-    }
+	/*
+	 * @RequestMapping("/pms/meetingView.do") public String meetingViewPage() {
+	 * return "egovframework/com/pms/meeting_view"; }
+	 */
 }
