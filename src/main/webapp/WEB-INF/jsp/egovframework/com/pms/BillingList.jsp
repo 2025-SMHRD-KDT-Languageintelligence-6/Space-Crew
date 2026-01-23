@@ -21,8 +21,8 @@
             <form name="listForm" action="<c:url value='/pms/billingList.do'/>" method="post">
                 <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 
-                <label>업무명: </label>
-                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="업무명을 입력하세요" style="width:200px;" />
+                <label>프로젝트명: </label>
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="프로젝트명을 입력하세요" style="width:200px;" />
                 <button type="submit" class="btn btn-blue">검색</button>
             </form>
         </div>
@@ -30,7 +30,7 @@
 	    <table>
 	        <thead>
 	            <tr>
-		            <th width="27%">업무명</th>
+		            <th width="27%">프로젝트명</th>
 		            <th width="10">고객사</th>
 		            <th width="12%">계약금액</th>
 		            <th width="12%">누적청구액</th>
@@ -113,7 +113,7 @@
 	    </div>
 		
 		<div style="margin-top: 20px; font-size: 13px; color: #888;">
-		    ※ 청구 데이터는 업무 등록 시 자동으로 생성됩니다. 상세 내용을 확인하시려면 업무명을 클릭하세요.
+		    ※ 청구 데이터는 업무 등록 시 자동으로 생성됩니다. 상세 내용을 확인하시려면 프로젝트명을 클릭하세요.
 		</div>
 		
 		

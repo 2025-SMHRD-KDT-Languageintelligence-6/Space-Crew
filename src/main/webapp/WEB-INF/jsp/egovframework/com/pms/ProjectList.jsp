@@ -20,8 +20,8 @@
             <form name="listForm" action="<c:url value='/pms/projectList.do'/>" method="post">
                 <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 
-                <label>업무명: </label>
-                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="업무명을 입력하세요" style="width:200px;" />
+                <label>프로젝트명: </label>
+                <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="프로젝트명을 입력하세요" style="width:200px;" />
                 <button type="submit" class="btn btn-blue">검색</button>
             </form>
         </div>
@@ -30,7 +30,7 @@
 	        <thead>
 	            <tr>
 	                <th width="7%">타입</th>
-                    <th width="30%">업무명</th>
+                    <th width="30%">프로젝트명</th>
                     <th width="15%">고객사</th>
                     <th width="8%">주담당자</th>
                     <th width="15%">종료일</th>
