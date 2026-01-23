@@ -58,6 +58,13 @@
 	                <h3><i class="fas fa-user-tie mr-3"></i> 직원 관리</h3>
 	                <p>내부 인력 및 조직 관리</p>
 	            </a>
+
+	            <a href="<c:url value='/pms/meetingView.do'/>" class="card">
+                    <h3>🎙️ AI 회의록 분석 바로가기</h3>
+                    <p>회의록 분석</p>
+                </a>
+
+
 	        </div>
 	    </div>
 	</div>

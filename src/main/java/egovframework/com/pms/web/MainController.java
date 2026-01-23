@@ -35,4 +35,10 @@ public class MainController {
     public String index() {
         return "redirect:/pms/main.do";
     }
+
+    // 회의록 분석
+    @RequestMapping("/pms/meetingView.do")
+    public String meetingViewPage() {
+        return "egovframework/com/pms/meeting_view";
+    }
 }
