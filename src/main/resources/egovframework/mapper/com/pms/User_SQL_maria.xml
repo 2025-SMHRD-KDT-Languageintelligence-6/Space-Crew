@@ -48,6 +48,7 @@
 	        , DATE_FORMAT(JOIN_DT, '%Y-%m-%d')       AS joinDt
 	        , IN_OFFICE        AS useYn
 	        , SKILL_DESC     AS skillDesc
+	        , ATCH_FILE_ID AS atchFileId
 	        , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
 	           FROM TB_ASSIGNMENT SUB 
 	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
@@ -90,5 +91,10 @@
 	    WHERE EMP_ID = #{userId}
 	</update>
 	
+	<update id="updateUserAtchFileId">
+	    UPDATE TB_EMP
+	       SET ATCH_FILE_ID = #{atchFileId}
+	     WHERE EMP_ID = #{userId}
+	</update>
 
 </mapper>

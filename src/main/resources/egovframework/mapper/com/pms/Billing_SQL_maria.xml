@@ -44,6 +44,7 @@
             , CASE WHEN A.ACTUAL_PAY_DT IS NOT NULL THEN 'Y' ELSE 'N' END AS isPaid
             , DATE_FORMAT(A.ACTUAL_PAY_DT, '%Y-%m-%d')   AS actualPayDt
             , A.BILL_REMARK     AS billRemark
+            , A.ATCH_FILE_ID    AS atchFileId
             , B.PROJ_ID         AS projId
             , B.PROJ_NM         AS projNm
             , C.CONT_NM         AS contNm
@@ -158,6 +159,7 @@
 	        , DATE_FORMAT(TAX_BILL_DT, '%Y-%m-%d')         AS taxBillDt
 	        , DATE_FORMAT(ACTUAL_PAY_DT, '%Y-%m-%d')       AS actualPayDt
 	        , DATE_FORMAT(PAY_DT, '%Y-%m-%d')              AS payDt
+	        , ATCH_FILE_ID        						   AS atchFileId
 	    FROM TB_BILLING
 	    WHERE PROJ_ID = #{projId}
 	    AND DEL_YN = 'N'
@@ -188,6 +190,12 @@
    	<update id="updateActualPayDt">
 	    UPDATE TB_BILLING
 	       SET ACTUAL_PAY_DT = #{actualPayDt}
+	     WHERE BILL_ID = #{billId}
+	</update>
+	
+	<update id="updateBillingAtchFileId">
+	    UPDATE TB_BILLING
+	       SET ATCH_FILE_ID = #{atchFileId}
 	     WHERE BILL_ID = #{billId}
 	</update>
 	

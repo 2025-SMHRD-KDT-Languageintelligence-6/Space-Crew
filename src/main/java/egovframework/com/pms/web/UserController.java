@@ -1,15 +1,28 @@
 package egovframework.com.pms.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.service.EgovFileMngService;
+import egovframework.com.cmm.service.EgovFileMngUtil;
+import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.UserVO;
+import egovframework.com.pms.service.impl.BillingMapper;
+import egovframework.com.pms.service.impl.ContractMapper;
+import egovframework.com.pms.service.impl.CustomerMapper;
+import egovframework.com.pms.service.impl.ProjectMapper;
+import egovframework.com.pms.service.impl.SalesMapper;
 import egovframework.com.pms.service.UserService;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
@@ -18,7 +31,29 @@ public class UserController {
 
     @Resource(name = "userService")
     private UserService userService;
+    
+    @Resource(name = "EgovFileMngService")
+    private EgovFileMngService fileMngService;
 
+    @Resource(name = "EgovFileMngUtil")
+    private EgovFileMngUtil fileUtil;
+    
+    @Resource(name = "salesMapper")
+    private SalesMapper salesMapper;
+    
+    @Resource(name = "projectMapper")
+    private ProjectMapper projectMapper;
+    
+    @Resource(name = "contractMapper")
+    private ContractMapper contractMapper;
+    
+    @Resource(name = "customerMapper")
+    private CustomerMapper customerMapper;
+    
+    @Resource(name = "billingMapper")
+    private BillingMapper billingMapper;
+    
+    
     @RequestMapping(value = "/pms/userList.do")
     public String selectUserList(@ModelAttribute("searchVO") UserVO userVO, Model model) throws Exception {
         
@@ -95,5 +130,80 @@ public class UserController {
         UserVO result = userService.selectUserDetail(id);
         model.addAttribute("userVO", result);
         return "egovframework/com/pms/UserDetailPopup";
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/uploadFileAjax.do")
+    public Map<String, Object> uploadFileAjax(final MultipartHttpServletRequest multiRequest, 
+                                              @RequestParam Map<String, Object> param) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        try {
+            List<FileVO> result = null;
+            String atchFileId = (String) param.get("atchFileId");
+            String userId = (String) param.get("userId");
+            String salesId = (String) param.get("salesId");
+            String projId = (String) param.get("projId");
+            String contId = (String) param.get("contId");
+            String custId = (String) param.get("custId");
+            String billId = (String) param.get("billId");
+            
+            final Map<String, MultipartFile> files = multiRequest.getFileMap();
+            
+            if (!files.isEmpty()) {
+
+                if (atchFileId == null || "".equals(atchFileId)) {
+                    result = fileUtil.parseFileInf(files, "PMS_", 0, "", "");
+                    atchFileId = fileMngService.insertFileInfs(result);
+                    
+                    if (userId != null && !"".equals(userId)) {
+                        UserVO vo = new UserVO();
+                        vo.setUserId(userId);
+                        vo.setAtchFileId(atchFileId);
+                        userService.updateUserAtchFileId(vo);
+                    } else if (salesId != null && !"".equals(salesId)) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("salesId", salesId);
+                        map.put("atchFileId", atchFileId);
+                        salesMapper.updateSalesAtchFileId(map);
+                    } else if (projId != null && !"".equals(projId)) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("projId", projId);
+                        map.put("atchFileId", atchFileId);
+                        projectMapper.updateProjectAtchFileId(map);
+                    } else if (contId != null && !"".equals(contId)) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("contId", contId);
+                        map.put("atchFileId", atchFileId);
+                        contractMapper.updateContractAtchFileId(map);
+                    } else if (custId != null && !"".equals(custId)) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("custId", custId);
+                        map.put("atchFileId", atchFileId);
+                        customerMapper.updateCustomerAtchFileId(map);
+                    } else if (billId != null && !"".equals(billId)) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("billId", billId);
+                        map.put("atchFileId", atchFileId);
+                        billingMapper.updateBillingAtchFileId(map);
+                    }
+                } 
+                else {
+                    FileVO fvo = new FileVO();
+                    fvo.setAtchFileId(atchFileId);
+                    int cnt = fileMngService.getMaxFileSN(fvo);
+                    result = fileUtil.parseFileInf(files, "PMS_", cnt, atchFileId, "");
+                    fileMngService.updateFileInfs(result);
+                }
+            }
+            resultMap.put("status", "success");
+            resultMap.put("atchFileId", atchFileId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultMap.put("status", "error");
+            resultMap.put("message", e.getMessage());
+        }
+        
+        return resultMap;
     }
 }

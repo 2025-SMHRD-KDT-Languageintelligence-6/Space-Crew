@@ -15,4 +15,5 @@ public interface ContractMapper {
     void updateContract(ContractVO vo) throws Exception;
 	void deleteContract(ContractVO vo) throws Exception;
 	void updateContractStatus(Map<String, Object> param) throws Exception;
+	void updateContractAtchFileId(Map<String, Object> map);
 }

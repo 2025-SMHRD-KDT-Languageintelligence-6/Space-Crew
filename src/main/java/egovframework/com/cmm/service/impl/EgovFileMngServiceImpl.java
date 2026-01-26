@@ -83,6 +83,8 @@ public class EgovFileMngServiceImpl extends EgovAbstractServiceImpl implements E
 	 */
 	@Override
 	public List<FileVO> selectFileInfs(FileVO fvo) throws Exception {
+		
+		/* System.out.println("[DEBUG] atchFileId: " + fvo.getAtchFileId()); */
 		return fileMngDAO.selectFileInfs(fvo);
 	}
 

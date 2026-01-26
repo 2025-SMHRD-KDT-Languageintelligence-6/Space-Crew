@@ -67,6 +67,7 @@
 	        , A.CONT_ID			  AS contId
 	        , A.M_EMP_ID          AS mainMgrId
 	        , A.S_EMP_ID          AS subMgrId
+	        , A.ATCH_FILE_ID      AS atchFileId
 	        , B.CONT_NM			  AS contNm
 	        , B.CONT_AMT          AS contAmt
 	        , C.SALES_TITLE       AS salesTitle
@@ -284,6 +285,10 @@
 	    ORDER BY B.EMP_NM ASC
 	</select>
 	
-	
+	<update id="updateProjectAtchFileId">
+	    UPDATE TB_PROJECT
+	       SET ATCH_FILE_ID = #{atchFileId}
+	     WHERE PROJ_ID = #{projId}
+	</update>
 	
 </mapper>

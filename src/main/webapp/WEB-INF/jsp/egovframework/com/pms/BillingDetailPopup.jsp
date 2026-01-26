@@ -9,6 +9,20 @@
     <title>청구 상세 정보</title>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com-billingdetailpopup.css'/>">
+    
+    <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
+	
+	<script type="text/javascript">
+	    function fn_egov_downFile(atchFileId, fileSn) {
+	        window.open("<c:url value='/cmm/fms/FileDown.do'/>?atchFileId="+atchFileId+"&fileSn="+fileSn);
+	    }
+	    
+	    function fn_egov_deleteFile(atchFileId, fileSn) {
+	        if(confirm("삭제하시겠습니까?")) {
+	        }
+	    }
+	</script>
+    
 </head>
 <body class="billing-popup">
     <div class="popup-header">
@@ -65,6 +79,7 @@
                 <th>세금계산서 발행일</th>
                 <th>입금 예정일</th>
                 <th>입금 확인일</th>
+                <th>첨부</th>
                 <th>관리</th>
             </tr>
         </thead>
@@ -93,6 +108,18 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
+                    <td>
+					    <div id="file_list_${bill.billId}">
+					        <c:import url="/cmm/fms/selectFileInfs.do" charEncoding="utf-8">
+					            <c:param name="param_atchFileId" value="${bill.atchFileId}" />
+					            <c:param name="atchFileId" value="${bill.atchFileId}" />
+					        </c:import>
+					    </div>
+					    
+					    <button type="button" class="btn_blue" style="font-size:11px; padding:2px 5px;"
+					            onclick="fn_prepare_upload('${bill.billId}', '${bill.atchFileId}')">파일첨부</button>
+					</td>
+                    
                     <td>
                         <button type="button" class="btn_yellow" style="padding:2px 5px; font-size:11px;"
                                onclick="fn_edit_billing('${bill.billId}', '${bill.billTitle}', '${bill.billAmt}', '${bill.taxBillDt}', '${bill.payDt}')">수정</button>
@@ -149,7 +176,9 @@
     	
         <button type="button" onclick="window.close();" class="btn_s">닫기</button>
     </div>
-
+	
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
 
@@ -267,6 +296,41 @@
             });
         }
         
+        var currentTargetBillId = "";
+        var currentTargetAtchId = "";
+
+        function fn_prepare_upload(billId, atchId) {
+            currentTargetBillId = billId;
+            currentTargetAtchId = atchId;
+            $("#commonFileInput").click();
+        }
+
+        function fn_handle_file_change() {
+            var fileInput = document.getElementById('commonFileInput');
+            if (fileInput.files.length === 0) return;
+
+            var formData = new FormData();
+            for (var i = 0; i < fileInput.files.length; i++) {
+                formData.append("file_" + i, fileInput.files[i]);
+            }
+            
+            formData.append("billId", currentTargetBillId);
+            formData.append("atchFileId", currentTargetAtchId);
+
+            $.ajax({
+                url: "<c:url value='/pms/uploadFileAjax.do'/>",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    alert("파일이 성공적으로 업로드되었습니다.");
+                    location.reload(); 
+                }
+            });
+        }
+        
     </script>
+    <input type="file" id="commonFileInput" style="display:none;" onchange="fn_handle_file_change();" multiple>
 </body>
 </html>

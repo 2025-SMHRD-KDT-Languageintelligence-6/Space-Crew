@@ -18,4 +18,5 @@ public interface CustomerMapper {
 	int selectFavoriteCount(Map<String, Object> param) throws Exception;
 	void insertFavorite(Map<String, Object> param) throws Exception;
 	void deleteFavorite(Map<String, Object> param) throws Exception;
+	void updateCustomerAtchFileId(Map<String, Object> map);
 }

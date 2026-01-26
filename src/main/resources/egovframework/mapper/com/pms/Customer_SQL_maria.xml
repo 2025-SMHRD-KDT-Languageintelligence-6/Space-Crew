@@ -48,6 +48,7 @@
             , PIC_EMAIL     AS picEmail
             , CUST_ADDR     AS custAddr
             , CUST_REMARK   AS custRemark
+            , ATCH_FILE_ID  AS atchFileId
         FROM TB_CUSTOMER 
         WHERE CUST_ID = #{custId}
         AND DEL_YN = 'N'
@@ -102,5 +103,11 @@
 	      AND TARGET_TYPE = #{targetType}
 	      AND TARGET_ID = #{targetId}
 	</delete>
+	
+	<update id="updateCustomerAtchFileId">
+	    UPDATE TB_CUSTOMER
+	       SET ATCH_FILE_ID = #{atchFileId}
+	     WHERE CUST_ID = #{custId}
+	</update>
 	
 </mapper>

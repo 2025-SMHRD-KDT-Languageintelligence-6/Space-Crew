@@ -35,4 +35,6 @@ public class BillingVO extends ComDefaultVO implements Serializable {
     private String billStatus;
     private String billStep;
     
+    private String atchFileId;
+    
 }

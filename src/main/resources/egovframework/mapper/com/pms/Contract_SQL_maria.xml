@@ -49,6 +49,7 @@
             , A.EMP_ID   AS picUserId
             , A.CONT_STATUS   AS contStatus
             , A.CONT_REMARK   AS contRemark
+            , A.ATCH_FILE_ID      AS atchFileId
             , B.SALES_TITLE   AS salesTitle
             , B.EMP_ID AS salesUserId
             , C.EMP_NM       AS picUserNm
@@ -100,5 +101,10 @@
 	       SET CONT_STATUS = #{contStatus}
 	     WHERE CONT_ID = #{selectedId}
 	</update>
-
+	
+	<update id="updateContractAtchFileId">
+	    UPDATE TB_CONTRACT
+	       SET ATCH_FILE_ID = #{atchFileId}
+	     WHERE CONT_ID = #{contId}
+	</update>
 </mapper>

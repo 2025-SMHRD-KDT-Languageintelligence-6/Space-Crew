@@ -53,6 +53,7 @@
             , A.PROBABILITY     AS probability
             , A.STATUS          AS status
             , A.SALES_CONTENT   AS salesContent
+            , A.ATCH_FILE_ID    AS atchFileId
             , B.CUST_NM         AS custNm
             , B.CEO_NM          AS ceoNm
             , C.EMP_NM         AS salesNm
@@ -90,6 +91,10 @@
 	     WHERE SALES_ID = #{selectedId}
 	</update>
 	
-	
+	<update id="updateSalesAtchFileId">
+	    UPDATE TB_SALES
+	       SET ATCH_FILE_ID = #{atchFileId}
+	     WHERE SALES_ID = #{salesId}
+	</update>
 	
 </mapper>

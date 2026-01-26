@@ -16,4 +16,6 @@ public interface UserService {
     void deleteUser(UserVO vo) throws Exception;
 
 	void updateUser(UserVO vo) throws Exception;
+	
+	void updateUserAtchFileId(UserVO vo) throws Exception;
 }

@@ -31,4 +31,6 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String mainMgrId;
     private String subMgrId;
     private Long contId;
+    
+    private String atchFileId;
 }

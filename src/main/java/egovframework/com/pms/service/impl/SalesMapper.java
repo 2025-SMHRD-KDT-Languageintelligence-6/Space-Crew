@@ -15,5 +15,7 @@ public interface SalesMapper {
     void updateSales(SalesVO vo) throws Exception;
     void deleteSales(SalesVO vo) throws Exception;
 	void updateSalesStatus(Map<String, Object> param) throws Exception;
+	
+	void updateSalesAtchFileId(Map<String, Object> map);
 }
 

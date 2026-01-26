@@ -38,6 +38,16 @@ public class AdminAccessInterceptor implements HandlerInterceptor {
 	}
 
     private boolean isAdminPath(String uri) {
+    	if (uri.contains("EgovStplatCnfirm")
+    			|| uri.contains("EgovRlnmCnfirm")
+    	        || uri.contains("MberSbscrb")
+    	        || uri.contains("MberInsert")
+    	        || uri.contains("EntrprsSbscrb")
+    	        || uri.contains("EntrprsInsert")
+    	        || uri.contains("IdDplctCnfirm")) {
+    	        return false; 
+    	    }
+    	
         return uri.contains("/sec/")
             || uri.contains("/sym/")
             || uri.contains("/uat/uap/")

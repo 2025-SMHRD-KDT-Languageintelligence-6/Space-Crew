@@ -22,6 +22,18 @@
 		    color: #ffffff !important;
 		}
 	</style>
+	<script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
+	
+	<script type="text/javascript">
+	    function fn_egov_downFile(atchFileId, fileSn) {
+	        window.open("<c:url value='/cmm/fms/FileDown.do'/>?atchFileId="+atchFileId+"&fileSn="+fileSn);
+	    }
+	    
+	    function fn_egov_deleteFile(atchFileId, fileSn) {
+	        if(confirm("삭제하시겠습니까?")) {
+	        }
+	    }
+	</script>
 </head>
 <body>
     <div class="popup-header">
@@ -47,13 +59,28 @@
                 <tr><th>보유스택</th><td>${userVO.skillDesc}</td></tr>
             </table>
         </div>
-
         <div class="info-photo-wrapper">
             <img src="<c:url value='/images/bul_i.jpg'/>" alt="직원 사진" onerror="this.style.display='none';">
             <div class="no-photo-text">사원 사진 미등록</div>
         </div>
     </div>
 
+    <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
+	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 즉시 업로드</h4>
+	    <div style="display: flex; gap: 10px; align-items: center;">
+	        <input type="file" id="ajaxFileInput" name="file_1" multiple style="flex-grow: 1;" />
+	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px;">업로드</button>
+	    </div>
+	    <small style="color: #666;">* 여러 파일을 한 번에 선택할 수 있습니다.</small>
+	</div>
+	
+    <div id="file_list_area">
+	    <c:import url="/cmm/fms/selectFileInfs.do" charEncoding="utf-8">
+	        <c:param name="param_atchFileId" value="${userVO.atchFileId}" />
+	        <c:param name="atchFileId" value="${userVO.atchFileId}" />
+	    </c:import>
+	</div>
+	
     <div class="btn-close">
     	<button type="button" onclick="fn_go_update_page('${userVO.userId}');" class="btn_blue">수정</button>
         <button type="button" onclick="window.close();" class="btn_s">닫기</button>
@@ -64,7 +91,8 @@
         <div id='userCalendar'></div>
     </div>
 
-    <%-- FullCalendar 라이브러리 및 스크립트 --%>
+
+
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
@@ -135,6 +163,37 @@
 	   	        window.close();
 	   	    }
 	   	}
+       
+       function fn_file_ajax_upload() {
+    	    var fileInput = document.getElementById('ajaxFileInput');
+    	    if (fileInput.files.length === 0) {
+    	        alert("파일을 선택해주세요.");
+    	        return;
+    	    }
+    	    var formData = new FormData();
+    	    for (var i = 0; i < fileInput.files.length; i++) {
+    	        formData.append("file_" + i, fileInput.files[i]);
+    	    }
+    	    formData.append("userId", "${userVO.userId}");
+    	    formData.append("atchFileId", "${userVO.atchFileId}");
+
+    	    $.ajax({
+    	        url: "<c:url value='/pms/uploadFileAjax.do'/>",
+    	        type: "POST",
+    	        data: formData,
+    	        processData: false,
+    	        contentType: false,
+    	        success: function(data) {
+    	            if(data.status === "success") {
+    	                alert("파일이 성공적으로 업로드되었습니다.");
+    	                location.reload(); 
+    	            } else {
+    	                alert("오류 발생: " + data.message);
+    	            }
+    	        },
+    	        error: function() { alert("서버 통신 오류가 발생했습니다."); }
+    	    });
+    	}
        
     </script>
 </body>

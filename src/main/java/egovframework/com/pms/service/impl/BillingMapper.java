@@ -18,4 +18,5 @@ public interface BillingMapper {
 	List<BillingVO> selectBillingListByProject(BillingVO searchVO);
 	Map<String, Object> selectProjectSettlementStatus(Long projId);
 	void updateActualPayDt(BillingVO vo);
+	void updateBillingAtchFileId(Map<String, Object> map);
 }

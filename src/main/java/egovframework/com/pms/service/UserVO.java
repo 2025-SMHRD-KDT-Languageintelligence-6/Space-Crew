@@ -22,4 +22,6 @@ public class UserVO extends ComDefaultVO implements Serializable {
     private String useYn;
     private String lastUpdusrId;
     private String skillDesc;
+    
+    private String atchFileId;
 }

@@ -24,4 +24,6 @@ public class CustomerVO extends ComDefaultVO implements Serializable {
     
     private String favYn;
     private String loginId;
+    
+    private String atchFileId;
 }

@@ -49,4 +49,6 @@ public interface ProjectMapper {
 	void updateAssignConfirm(Map<String, Object> param) throws Exception;
 	
 	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
+	
+	void updateProjectAtchFileId(Map<String, Object> map);
 }
