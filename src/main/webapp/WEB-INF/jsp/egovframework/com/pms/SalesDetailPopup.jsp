@@ -65,7 +65,7 @@
         </table>
 
 	<div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
-	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 즉시 업로드</h4>
+	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 업로드</h4>
 	    <div style="display: flex; gap: 10px; align-items: center;">
 	        <input type="file" id="ajaxFileInput" name="file_1" multiple style="flex-grow: 1;" />
 	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px;">업로드</button>
