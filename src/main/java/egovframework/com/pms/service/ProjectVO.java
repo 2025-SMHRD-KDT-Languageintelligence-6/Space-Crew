@@ -33,4 +33,6 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private Long contId;
     
     private String atchFileId;
+    
+    private Integer progressRate;
 }

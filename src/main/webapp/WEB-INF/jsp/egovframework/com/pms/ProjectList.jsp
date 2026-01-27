@@ -31,8 +31,9 @@
 	            <tr>
 	                <th width="7%">타입</th>
                     <th width="30%">프로젝트명</th>
-                    <th width="15%">고객사</th>
+                    <!-- <th width="15%">고객사</th> -->
                     <th width="8%">주담당자</th>
+                    <th width="15%">경과율</th>
                     <th width="15%">종료일</th>
                     <th width="10%">상태</th>
                     <th width="10%">관리</th>
@@ -47,8 +48,26 @@
 						        <c:out value="${result.projNm}"/>
 						    </a>
 						</td>
-						<td><c:out value="${result.custNm}"/></td>
+						<%-- <td><c:out value="${result.custNm}"/></td> --%>
 						<td><c:out value="${result.mainMgrNm}"/></td>
+						<td style="vertical-align: middle;">
+						    <div style="display: flex; align-items: center; justify-content: space-between; width: 160px; margin: 0 auto;">
+						        <div style="flex-grow: 1; background-color: #e5e7eb; border-radius: 9999px; h-height: 8px; height: 8px; position: relative; overflow: hidden;">
+						            <div style="position: absolute; top: 0; left: 0; height: 100%; transition: width 0.5s ease-in-out;
+						                width: <c:out value='${result.progressRate}'/>%;
+						                background-color:
+						                <c:choose>
+						                    <c:when test='${result.progressRate ge 80}'>#ef4444</c:when>
+						                    <c:when test='${result.progressRate ge 40}'>#f59e0b</c:when>
+						                    <c:otherwise>#10b981</c:otherwise>
+					                    </c:choose>;">
+						            </div>
+						        </div>
+						        <span style="font-size: 12px; font-weight: 600; color: #374151; margin-left: 8px; min-width: 35px; text-align: right;">
+						            <c:out value="${result.progressRate}"/>%
+						        </span>
+						    </div>
+						</td>						
 	                    <td><c:out value="${result.endDt}"/></td>
 						<td style="position: relative;">
 						    <div class="status-container">

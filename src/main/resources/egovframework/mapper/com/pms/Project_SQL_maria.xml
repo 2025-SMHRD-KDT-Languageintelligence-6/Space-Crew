@@ -13,6 +13,11 @@
             , A.BILL_STEP         AS billStep
             , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
             , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
+            , CASE
+				  WHEN CURDATE() <![CDATA[ < ]]> A.START_DT THEN 0
+				  WHEN CURDATE() <![CDATA[ > ]]> A.END_DT THEN 100
+				  ELSE ROUND((DATEDIFF(CURDATE(), A.START_DT) / NULLIF(DATEDIFF(A.END_DT, A.START_DT), 0)) * 100, 0)
+			  END                 AS progressRate
             , B.CONT_NM           AS contNm
 <!--        , C.USER_NM           AS mainMgrNm -->
             , D.CUST_NM           AS custNm
@@ -68,6 +73,11 @@
 	        , A.M_EMP_ID          AS mainMgrId
 	        , A.S_EMP_ID          AS subMgrId
 	        , A.ATCH_FILE_ID      AS atchFileId
+	        , CASE
+				  WHEN CURDATE() <![CDATA[ < ]]> A.START_DT THEN 0
+				  WHEN CURDATE() <![CDATA[ > ]]> A.END_DT THEN 100
+				  ELSE ROUND((DATEDIFF(CURDATE(), A.START_DT) / NULLIF(DATEDIFF(A.END_DT, A.START_DT), 0)) * 100, 0)
+			  END                 AS progressRate
 	        , B.CONT_NM			  AS contNm
 	        , B.CONT_AMT          AS contAmt
 	        , C.SALES_TITLE       AS salesTitle

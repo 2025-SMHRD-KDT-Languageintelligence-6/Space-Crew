@@ -85,14 +85,25 @@
             <th>부담당자</th>
             <td>${projectVO.subMgrNm}</td>
         </tr>
-        <tr>
-            <th>시작일</th>
-            <td>${projectVO.startDt}</td>
-        </tr>
-        <tr>
-            <th>종료일</th>
-            <td>${projectVO.endDt}</td>
-        </tr>
+        	<th>경과율</th>
+        	<td>
+		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
+		            <div id="elapsedProgressBar" 
+		                 style="width: <c:out value='${projectVO.progressRate}'/>%; 
+		                        background:#2196F3; height:100%; position:absolute; top:0; left:0; transition:width 0.5s; z-index:2;">
+		            </div>
+		            
+		            <span id="elapsedProgressText" 
+		                  style="position:absolute; width:100%; text-align:center; top:0; line-height:24px; font-size:12px; font-weight:bold; color:#000; z-index:3;">
+		                <c:out value="${projectVO.progressRate}"/>%
+		            </span>
+		        </div>
+		        <div style="margin-top:5px; font-size:11px; color:#666; display:flex; justify-content:space-between;">
+		            <span>시작: ${projectVO.startDt}</span>
+		            <span>종료: ${projectVO.endDt}</span>
+		        </div>
+		    </td>
+	    </tr>
         <tr>
             <th>진행률</th>
             <td>
