@@ -19,10 +19,16 @@
         <li><a href="<c:url value='/pms/billingList.do'/>"><i class="fas fa-file-invoice-dollar mr-3"></i> 청구/정산 관리</a></li>
         <li><a href="<c:url value='/pms/userList.do'/>"><i class="fas fa-user-tie mr-3"></i> 직원 관리</a></li>
     </ul>
+    <div class="current-time-box" style="text-align: center; margin: auto 15px 20px 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #fff;">
+	    <div id="sidebarDate" style="font-size: 1em; opacity: 0.8; margin-bottom: 5px;">0000-00-00</div>
+	    
+	    <!-- <i class="far fa-clock"></i>  -->
+	    <span id="sidebarClock" style="display: block; font-size: 0.8em; margin-top: 5px;">00:00</span>
+	</div>
     <a href="<c:url value='/uat/uia/actionLogout.do'/>" class="logout-btn">로그아웃</a>
 </div>
 
-<script>
+<script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
         // 1. 현재 브라우저의 전체 URL 주소를 가져옵니다.
         const currentPath = window.location.href;
@@ -39,4 +45,21 @@
             }
         });
     });
+    
+	    function updateSidebarClock() {
+	        const now = new Date();
+	        const week = ['일', '월', '화', '수', '목', '금', '토'];
+	        const dayOfWeek = week[now.getDay()];
+	        const hours = String(now.getHours()).padStart(2, '0');
+	        const minutes = String(now.getMinutes()).padStart(2, '0');
+	        const year = now.getFullYear();
+	        const month = String(now.getMonth() + 1).padStart(2, '0');
+	        const day = String(now.getDate()).padStart(2, '0');
+	        document.getElementById('sidebarDate').innerText = year + "-" + month + "-" + day + " (" + dayOfWeek + ")";
+	        document.getElementById('sidebarClock').innerText = hours + ":" + minutes;
+	    }
+	
+	    updateSidebarClock();
+	    setInterval(updateSidebarClock, 60000); 
+
 </script>
