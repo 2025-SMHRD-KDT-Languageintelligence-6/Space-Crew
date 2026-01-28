@@ -759,73 +759,57 @@
 	    });
 	}
 
-/* [Step 4-2] AI 매칭 시스템 로직 */
-    var g_reqCount = 0; // 요구사항 칸 카운트
+/* [Step 4-2] AI 매칭 시스템 로직 (수정 완료) */
     var g_projId = "${projectVO.projId}";
 
-    // 1. 요구사항 칸 추가 (동적 생성)
-    function fn_add_req_row(textVal) {
-        g_reqCount++;
-        var html = '';
-        html += '<div class="req-item" id="req_box_' + g_reqCount + '">';
-        html += '  <div class="req-header">';
-        html += '    <span>📌 업무 #' + g_reqCount + '</span>';
-        html += '    <span id="assign_badge_' + g_reqCount + '"></span>'; // 담당자 뱃지 영역
-        html += '  </div>';
-        html += '  <textarea id="req_text_' + g_reqCount + '" rows="3" style="width:98%; border:1px solid #ccc; padding:5px; resize:vertical;" placeholder="필요한 기술 스택과 업무 내용을 입력하세요.">' + textVal + '</textarea>';
-        html += '  <div style="text-align:right; margin-top:8px;">';
-        html += '    <button type="button" class="btn_blue" onclick="fn_open_ai_popup(' + g_reqCount + ')">🔍 AI 인력 추천</button>';
-        html += '  </div>';
-        html += '</div>';
+    // 1. [통합 팝업 열기] : 인력 배정 모달에서 '🤖 AI 추천' 버튼 클릭 시 실행
+    function fn_open_ai_popup_integrated() {
+        var assignTitle = $("#assignTitle").val();     // 업무명
+        var reqText = $("#assignReqSkills").val();     // 요구 기술 (textarea)
 
-        $("#reqContainer").append(html);
-    }
+        // 유효성 검사
+        if(!assignTitle) { alert("업무 명칭을 먼저 입력해주세요."); $("#assignTitle").focus(); return; }
+        if(!reqText) { alert("AI 분석을 위해 '요구 기술 및 상세내용'을 입력해주세요."); $("#assignReqSkills").focus(); return; }
 
-    // 2. 팝업 열기 & DB 저장 (REQ_SKILLS 업데이트)
-    function fn_open_ai_popup(reqId) {
-        var reqText = $("#req_text_" + reqId).val();
-        if(!reqText) { alert("요구 기술 사항을 입력해주세요."); return; }
-
-        $("#currentReqId").val(reqId); // 현재 작업중인 칸 번호 저장
-
-        // [AJAX] 입력 내용을 DB에 저장
-        var param = { "req_skills": reqText };
-
+        // [Spring] 서버에 텍스트 저장 요청 -> assignId(식별자) 발급
         $.ajax({
-            url: "/api/matching/projects/" + g_projId + "/skills",
-            type: "PUT",
+            url: "/api/matching/projects/" + g_projId + "/assignments/req",
+            type: "POST",
             contentType: "application/json",
-            data: JSON.stringify(param),
+            data: JSON.stringify({
+                "req_skills": reqText,
+                "assign_title": assignTitle
+            }),
             success: function(res) {
+                // 발급받은 assignId를 화면에 저장 (이게 있어야 매칭 가능)
+                $("#currentReqId").val(res.assignId);
+
+                // AI 결과 팝업 열기 & 매칭 시작
                 $('#aiMatchModal').show();
                 fn_run_ai_match();
             },
-            error: function(xhr, status, error) {
-                alert("요구사항 저장 중 오류가 발생했습니다.");
-                console.error("Save Error:", error);
+            error: function(xhr) {
+                alert("데이터 저장 실패: " + xhr.status + "\n(로그인이 되어있는지 확인해주세요)");
             }
         });
     }
 
-    // 3. 슬라이더 UI 변경
-    function fn_update_slider_ui(val) {
-        $("#val-ai").text(val);
-        $("#val-career").text(100 - val);
-    }
-
-    // 4. AI 매칭 실행
+    // 2. [AI 매칭 실행] : Python 서버(8000번)로 직접 요청
     function fn_run_ai_match() {
-        var weight = $("#weightSlider").val();
+        var weight = $("#weightSlider").val();       // 가중치 값
+        var assignId = $("#currentReqId").val();     // 아까 받은 ID
 
-        $("#aiResultBody").html('<tr><td colspan="7" style="padding:30px; text-align:center;">AI 분석 중입니다...<br>(문맥 파악 및 점수 계산)</td></tr>');
+        // 로딩 메시지 표시
+        $("#aiResultBody").html('<tr><td colspan="7" style="padding:30px; text-align:center; font-size:14px;">🧠 AI가 요구사항을 분석하여 적합한 인재를 찾고 있습니다...<br><span style="color:#666; font-size:12px;">(텍스트 문맥 분석 + 가동률 체크)</span></td></tr>');
 
         var param = {
-            "project_id": parseInt(g_projId),
+            "assign_id": parseInt(assignId),
             "ai_weight": parseInt(weight)
         };
 
+        // [Python] FastAPI 서버 호출
         $.ajax({
-            url: "/api/matching/match",
+            url: "http://127.0.0.1:8000/api/match",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(param),
@@ -833,18 +817,26 @@
                 var html = "";
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        var utilText = item.utilization > 0 ? "<span style='color:red'>" + (item.utilization * 100) + "%</span>" : "<span style='color:green'>대기(0%)</span>";
+                        // 가동률 색상 처리 (0%는 녹색, 사용중은 빨간색)
+                        var utilText = item.utilization > 0 ? "<span style='color:#f44336; font-weight:bold;'>" + (item.utilization * 100).toFixed(0) + "%</span>" : "<span style='color:#4CAF50; font-weight:bold;'>대기(0%)</span>";
 
-                        html += "<tr onmouseover=\"this.style.background='#f9f9f9'\" onmouseout=\"this.style.background='white'\">";
-                        html += "  <td style='font-weight:bold;'>" + item.rank + "</td>";
-                        html += "  <td>" + item.name + " <span style='color:#888; font-size:11px;'>(" + item.career_years + "년차)</span><br>";
-                        html += "      <span style='font-size:11px; color:#555;'>" + item.tags.substring(0, 15) + "...</span></td>";
+                        // 설명이 너무 길면 자르기
+                        var desc = item.desc ? item.desc : "설명 없음";
+                        if(desc.length > 25) desc = desc.substring(0, 25) + "...";
+
+                        html += "<tr onmouseover=\"this.style.background='#f0f8ff'\" onmouseout=\"this.style.background='white'\">";
+                        html += "  <td style='font-weight:bold; color:#333;'>" + item.rank + "</td>";
+                        html += "  <td style='text-align:left; padding-left:10px;'>";
+                        html += "      <strong>" + item.name + "</strong> <span style='font-size:11px; color:#666;'>(" + item.career_years + "년차)</span><br>";
+                        html += "      <span style='font-size:11px; color:#888;'>" + desc + "</span>";
+                        html += "  </td>";
                         html += "  <td>" + utilText + "</td>";
-                        html += "  <td>" + item.ai_score + "</td>";
-                        html += "  <td>" + item.career_score + "</td>";
-                        html += "  <td style='color:#2196F3; font-weight:bold;'>" + item.total_score + "</td>";
+                        html += "  <td style='color:#673AB7; font-weight:bold;'>" + item.ai_score + "</td>";
+                        html += "  <td style='color:#555;'>" + item.career_score + "</td>";
+                        html += "  <td style='color:#2196F3; font-weight:bold; font-size:1.1em;'>" + item.total_score + "</td>";
                         html += "  <td>";
-                        html += "    <button type='button' class='btn_s' onclick=\"fn_confirm_assign_to_list('" + item.emp_id + "','" + item.name + "')\">선택</button>";
+                        // [선택] 버튼: 누르면 인원 목록에 추가됨
+                        html += "    <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + item.emp_id + "','" + item.name + "')\">선택</button>";
                         html += "  </td>";
                         html += "</tr>";
                     });
@@ -853,98 +845,31 @@
                 }
                 $("#aiResultBody").html(html);
             },
-            error: function() {
-                $("#aiResultBody").html('<tr><td colspan="7" style="padding:20px; color:red;">매칭 서버 통신 오류</td></tr>');
+            error: function(xhr, status, error) {
+                $("#aiResultBody").html('<tr><td colspan="7" style="padding:20px; color:red; font-weight:bold;">❌ AI 서버(Python) 연결 실패<br><span style="font-size:12px; color:#555;">(main.py가 켜져 있는지, 주소가 127.0.0.1:8000 인지 확인해주세요)</span></td></tr>');
             }
         });
     }
 
-    // 5. 최종 선택 (담당자 배정)
-    function fn_confirm_assign(empId, empName) {
-        if(!confirm(empName + " 님을 이 업무 담당자로 선정하시겠습니까?")) return;
-
-        var param = {
-            "project_id": parseInt(g_projId),
-            "emp_id": empId
-        };
-
-        $.ajax({
-            url: "/api/matching/assign",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(res) {
-                alert("배정이 완료되었습니다.");
-                $('#aiMatchModal').hide();
-
-                var reqId = $("#currentReqId").val();
-                $("#assign_badge_" + reqId).html("<span class='badge-ai'>✅ 담당: " + empName + "</span>");
-                $("#req_text_" + reqId).prop("readonly", true).css("background", "#eee");
-
-                fn_load_assign_list();
-            },
-            error: function() {
-                alert("배정 처리 중 오류가 발생했습니다.");
-            }
-        });
-    }
-    
-
-    function fn_open_ai_popup_integrated() {
-        var assignTitle = $("#assignTitle").val();
-        if(!assignTitle) { 
-            alert("업무 명칭(프로젝트명)을 먼저 입력해주세요. AI가 이를 기반으로 분석합니다."); 
-            return; 
-        }
-        
-        var param = { "req_skills": assignTitle };
-        $.ajax({
-            url: "/api/matching/projects/" + g_projId + "/skills",
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(res) {
-                $('#aiMatchModal').show();
-                fn_run_ai_match();
-            }
-        });
+    // 3. [슬라이더 UI 변경]
+    function fn_update_slider_ui(val) {
+        $("#val-ai").text(val);
+        $("#val-career").text(100 - val);
     }
 
+    // 4. [인원 선택] : AI 결과에서 '선택' 버튼 클릭 시 호출
     function fn_confirm_assign_to_list(empId, empName) {
-        
+        // 이미 목록에 있는지 체크
         if($("#user_row_" + empId).length > 0) {
-            alert("이미 목록에 추가된 인원입니다.");
+            alert(empName + " 님은 이미 투입 목록에 있습니다.");
             return;
         }
 
+        // 기존에 있던 인원 추가 함수(fn_select_this_user)를 재사용하여 목록에 넣음
         fn_select_this_user(empId, empName);
-        
-        alert(empName + " 님이 투입 목록에 추가되었습니다. 투입률(MM)을 조정해주세요!");
-        $('#aiMatchModal').hide();
-    }
-	
-    function fn_run_ai_match_from_modal() {
-        var reqText = $("#assignReqSkills").val();
-        
-        if(!reqText) { 
-            alert("AI 추천을 위해 요구 기술 사항을 먼저 입력해주세요! ㅋㅋㅋ"); 
-            return; 
-        }
 
-        var param = { "req_skills": reqText };
-        $.ajax({
-            url: "/api/matching/projects/" + g_projId + "/skills",
-            type: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify(param),
-            success: function(res) {
-                $('#aiMatchModal').show();
-                fn_run_ai_match();
-            },
-            error: function() {
-                alert("요구사항 분석 서버 통신에 실패했습니다.");
-            }
-        });
+        // 팝업 닫기
+        $('#aiMatchModal').hide();
     }
 	</script>
 </body>
