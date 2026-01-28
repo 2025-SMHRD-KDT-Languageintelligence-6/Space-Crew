@@ -130,5 +130,13 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	public void updateTaskGroupConfirm(Map<String, Object> param) throws Exception {
 		projectMapper.updateTaskGroupConfirm(param);
 	}
-	
+
+    /**
+     * [추가] AI 매칭용 요구사항 등록 구현
+     * ProjectMapper를 통해 DB에 저장합니다.
+     */
+    @Override
+    public void insertAssignmentReq(ProjectAssignVO vo) throws Exception {
+        projectMapper.insertAssignmentReq(vo);
+    }
 }

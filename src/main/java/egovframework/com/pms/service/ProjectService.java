@@ -43,4 +43,7 @@ public interface ProjectService {
 	void updateAssignConfirm(Map<String, Object> param) throws Exception;
 	
 	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
+
+    /** [추가] AI 매칭용 요구사항 등록 (TB_ASSIGNMENT INSERT) */
+    void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
 }

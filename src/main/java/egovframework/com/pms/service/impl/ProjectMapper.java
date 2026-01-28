@@ -51,4 +51,7 @@ public interface ProjectMapper {
 	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
 	
 	void updateProjectAtchFileId(Map<String, Object> map);
+
+    /** [추가] AI 매칭용 요구사항 INSERT */
+    void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
 }

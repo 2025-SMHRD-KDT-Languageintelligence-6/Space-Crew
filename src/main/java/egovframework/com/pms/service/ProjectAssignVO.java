@@ -24,5 +24,7 @@ public class ProjectAssignVO extends ComDefaultVO implements Serializable {
     private List<ProjectAssignVO> assignList;
     
     private String confirmYn;
+
+    private String reqSkills;
 }
 

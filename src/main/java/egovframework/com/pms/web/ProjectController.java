@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
@@ -301,54 +302,38 @@ public class ProjectController {
         return resultMap;
     }
     
-    
+
+
     /**
-     * [추가 기능] AI 인력 추천 팝업 열기 (Python FastAPI 연동)
+     * [AI 매칭] 요구사항 텍스트 저장 -> assignId 반환
+     * (기존 ProjectController에 통합)
      */
-    @RequestMapping(value = "/pms/openAIRecommendation.do")
-    public String openAIRecommendation(
-            @RequestParam("projId") String projId,
-            @RequestParam("reqSkills") String reqSkills,
-            @RequestParam(value = "aiWeight", defaultValue = "0.7") double aiWeight,
-            @RequestParam(value = "careerWeight", defaultValue = "0.3") double careerWeight,
-            Model model) throws Exception {
+    @ResponseBody
+    @RequestMapping(value = "/api/matching/projects/{projId}/assignments/req")
+    public Map<String, Object> addAssignmentReq(@PathVariable int projId, @RequestBody Map<String, Object> payload) throws Exception {
 
-        System.out.println("🚀 [AI 추천] 요청 도착! Project ID: " + projId);
-        System.out.println("📝 요구사항: " + reqSkills);
+        // 1. VO 생성 (ProjectAssignVO 사용)
+        ProjectAssignVO vo = new ProjectAssignVO();
+        vo.setProjId(projId);
+        vo.setReqSkills((String) payload.get("req_skills"));
 
-        // 1. Python Server URL (파이썬 서버가 켜져 있어야 함)
-        String pythonUrl = "http://127.0.0.1:8000/match/real";
-
-        // 2. 파이썬에게 보낼 데이터 포장 (Map)
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("req_skills", reqSkills);
-        requestBody.put("target_role", "개발"); // 기본값
-        requestBody.put("ai_weight", aiWeight);
-        requestBody.put("career_weight", careerWeight);
-
-        // 3. 파이썬에게 전송 (RestTemplate 사용)
-        RestTemplate restTemplate = new RestTemplate();
-
-        try {
-            // 파이썬이 준 결과(JSON)를 Map으로 받기
-            Map response = restTemplate.postForObject(pythonUrl, requestBody, Map.class);
-            System.out.println("✅ [AI 추천] 응답 성공: " + response);
-
-            // 4. 결과를 JSP(팝업)로 전달
-            model.addAttribute("recommendList", response.get("ranking")); // 랭킹 리스트
-            model.addAttribute("reqSkills", reqSkills); // 입력했던 내용
-            model.addAttribute("projId", projId);       // 프로젝트 ID
-            model.addAttribute("aiWeight", (int)(aiWeight * 100)); // 화면 표시용 (70)
-            model.addAttribute("careerWeight", (int)(careerWeight * 100)); // 화면 표시용 (30)
-
-        } catch (Exception e) {
-            System.err.println("❌ [AI 추천] 파이썬 서버 연결 실패: " + e.getMessage());
-            model.addAttribute("errorMessage", "AI 서버(FastAPI)가 꺼져 있거나 연결할 수 없습니다.");
+        // 제목이 있으면 넣고, 없으면 앞부분 잘라서 임시 제목으로
+        String title = (String) payload.get("assign_title");
+        if(title == null || title.isEmpty()) {
+            String req = (String) payload.get("req_skills");
+            title = (req.length() > 10) ? req.substring(0, 10) + "..." : req;
         }
+        vo.setAssignTitle(title);
 
-        // 5. 결과를 보여줄 새로운 팝업 JSP 파일 (이제 만들어야 함)
-        return "egovframework/com/pms/RecommendationPopup";
+        // 2. 서비스 호출 (기존 projectService 사용!)
+        // 서비스에 insertAssignmentReq 메서드를 추가해야 합니다.
+        projectService.insertAssignmentReq(vo);
+
+        // 3. 결과 반환
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "success");
+        result.put("assignId", vo.getAssignId()); // INSERT 후 생성된 ID
+
+        return result;
     }
-
-// ↑ 여기 바로 아래에 클래스 닫는 괄호 '}'가 있어야 해!
 }

@@ -300,5 +300,39 @@
 	       SET ATCH_FILE_ID = #{atchFileId}
 	     WHERE PROJ_ID = #{projId}
 	</update>
-	
+
+    <insert id="insertAssignmentReq" useGeneratedKeys="true" keyProperty="assignId"
+            parameterType="egovframework.com.pms.service.ProjectAssignVO">
+        INSERT INTO TB_ASSIGNMENT (
+        PROJ_ID,
+        REQ_SKILLS,
+        INPUT_RATE,
+        START_DT,
+        END_DT,
+        DEL_YN,
+        CONFIRM_YN,
+        ASSIGN_TITLE,
+        TASK_GROUP_ID,
+        LAST_UPDUSR_ID
+        ) VALUES (
+        #{projId},
+        #{reqSkills},
+        0,            NOW(),
+        NOW(),
+        'N',
+        'N',
+        #{assignTitle},
+        CONCAT('TG_', DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')), #{lastUpdusrId}
+        )
+    </insert>
+
+    <update id="updateAssignmentEmp" parameterType="egovframework.com.pms.service.ProjectAssignVO">
+        UPDATE TB_ASSIGNMENT
+        SET
+        EMP_ID = #{userId},  INPUT_RATE = 1.0,    START_DT = NOW(),
+        END_DT = DATE_ADD(NOW(), INTERVAL 3 MONTH),
+        ASSIGN_TITLE = #{assignTitle}
+        WHERE ASSIGN_ID = #{assignId}
+    </update>
+
 </mapper>
