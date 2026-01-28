@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.com.pms.service.impl.MeetingMapper">
+
+    <select id="selectMeetingList" parameterType="egovframework.com.pms.service.MeetingVO" resultType="egovframework.com.pms.service.MeetingVO">
+        SELECT 
+              MEET_ID      AS meetId
+            , MEET_TITLE   AS meetTitle
+            , DATE_FORMAT(MEET_DT, '%Y-%m-%d') AS meetDt
+            , ATCH_FILE_ID AS atchFileId
+        FROM TB_MEETING
+        WHERE 1=1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND MEET_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY MEET_DT DESC
+    </select>
+	
+	<insert id="insertMeeting" parameterType="egovframework.com.pms.service.MeetingVO">
+	    INSERT INTO TB_MEETING (
+	          MEET_TITLE
+	        , MEET_DT
+	        , CONTENT_FULL
+	        , CONTENT_SUM
+	        , ACTION_ITEMS
+	        , LAST_UPDUSR_ID
+	        , ATCH_FILE_ID
+	    ) VALUES (
+	          #{meetTitle}
+	        , STR_TO_DATE(#{meetDt}, '%Y-%m-%d')  
+	        , #{contentFull}
+	        , #{contentSum}
+	        , #{actionItems}
+	        , #{lastUpdusrId}
+	        , #{atchFileId}
+	    )
+	</insert>
+	
+	<select id="selectMeetingById" parameterType="egovframework.com.pms.service.MeetingVO" resultType="egovframework.com.pms.service.MeetingVO">
+	    SELECT 
+	          MEET_ID        AS meetId
+	        , MEET_TITLE     AS meetTitle
+	        , DATE_FORMAT(MEET_DT, '%Y-%m-%d') AS meetDt
+	        , CONTENT_FULL   AS contentFull
+	        , CONTENT_SUM    AS contentSum
+	        , ACTION_ITEMS   AS actionItems
+	        , ATCH_FILE_ID   AS atchFileId
+	    FROM TB_MEETING
+	    WHERE MEET_ID = #{meetId}
+    </select>
+	
+</mapper>

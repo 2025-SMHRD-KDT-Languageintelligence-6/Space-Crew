@@ -1,0 +1,223 @@
+/* =================================================================
+   1. 기본 레이아웃 (Common Layout)
+   ================================================================= */
+body {
+    background-color: #f4f7f6;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+    color: #333;
+    margin: 0;
+}
+
+.content-page {
+    margin-left: 240px;
+    padding: 30px;
+    min-height: 100vh;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    border-left: 5px solid #007bff; /* 메인 테마 블루 */
+    padding-left: 15px;
+}
+/* =================================================================
+   2. 검색 영역 (Search Box)
+   ================================================================= */
+.search-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.search-box label {
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.search-box input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+/* =================================================================
+   2. 테이블 스타일 (Table Style)
+   ================================================================= */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 12px;
+/*    overflow: hidden;*/
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-top: 10px;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle;
+    text-align: center;
+}
+
+tr:hover td {
+    background-color: #fdfdfd;
+}
+
+/* =================================================================
+   3. 프로젝트 상태 배지 (Status Badges)
+   ================================================================= */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* 상태별 색상 (예시: 대기, 진행, 완료, 지연) */
+.status-ready { background-color: #e2e3e5; color: #383d41; }
+.status-ing { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+.status-done { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.status-delay { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.status-won { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.status-lost { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+/* =================================================================
+   4. 버튼 스타일 (Buttons)
+   ================================================================= */
+.btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-blue {
+    background: #007bff;
+    color: #fff !important;
+}
+
+.btn-blue:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-yellow {
+    background: #ffc107;
+    color: #212529 !important;
+}
+
+.btn-red {
+    background: #dc3545;
+    color: #fff !important;
+}
+
+.btn-red:hover {
+    background: #c82333;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+/* =================================================================
+   5. 유틸리티 (Utilities)
+   ================================================================= */
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+.sales-link { color: #007bff; text-decoration: none; font-weight: 600; }
+.pagination-wrapper { text-align: center; margin-top: 20px; }
+
+/* 페이지네이션 영역 초기화 및 중앙 정렬 */
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: 100%;
+}
+
+/* 전자정부 태그가 생성하는 모든 직계 자식 요소를 가로로 나열 */
+.pagination-wrapper > div, 
+.pagination-wrapper ul,
+.pagination-wrapper ol {
+    display: flex !important;
+    flex-direction: row !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 5px; /* 숫자 사이 간격 */
+}
+
+/* 점(bullet) 제거 및 세로 나열 방지 */
+.pagination-wrapper li {
+    list-style-type: none !important;
+    display: inline-block !important;
+    float: none !important;
+}
+
+/* 링크 및 버튼 스타일 강제 적용 */
+.pagination-wrapper a, 
+.pagination-wrapper strong, 
+.pagination-wrapper span {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 35px;
+    height: 35px;
+    padding: 0 5px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    color: #007bff;
+    text-decoration: none !important;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+/* 활성화된 페이지 (현재 페이지) */
+.pagination-wrapper strong {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+}
+
+/* 호버 효과 */
+.pagination-wrapper a:hover {
+    background-color: #e9ecef;
+}

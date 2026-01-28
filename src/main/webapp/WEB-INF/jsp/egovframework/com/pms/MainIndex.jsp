@@ -59,7 +59,7 @@
 	                <p>내부 인력 및 조직 관리</p>
 	            </a>
 
-	            <a href="<c:url value='/pms/meetingView.do'/>" class="card">
+	            <a href="<c:url value='/pms/meetingList.do'/>" class="card">
                     <h3>🎙️ AI 회의록 분석 바로가기</h3>
                     <p>회의록 분석</p>
                 </a>
