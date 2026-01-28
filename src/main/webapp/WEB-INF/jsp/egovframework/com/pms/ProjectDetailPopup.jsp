@@ -16,7 +16,7 @@
         .fc-event {
 		    border: none !important;
 		}
-		.fc-event-title, 
+		.fc-event-title,
 		.fc-event-main,
 		.fc-event-main-frame {
 		    color: #ffffff !important;
@@ -25,14 +25,23 @@
 		.fc-event:hover {
 		    color: #ffffff !important;
 		}
+
+	.req-item { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 4px; position: relative; }
+    .req-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #555; font-weight: bold; }
+    .slider-container { padding: 20px; background: #f1f3f5; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 1px solid #e9ecef; }
+    input[type=range] { width: 90%; margin: 15px 0; cursor: pointer; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: #666; padding: 0 10px; }
+    .score-txt { font-weight: bold; color: #2196F3; font-size: 1.1em; }
+    .badge-ai { background-color: #673AB7; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; }
+
     </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
-	
+
 	<script type="text/javascript">
 	    function fn_egov_downFile(atchFileId, fileSn) {
 	        window.open("<c:url value='/cmm/fms/FileDown.do'/>?atchFileId="+atchFileId+"&fileSn="+fileSn);
 	    }
-	    
+
 	    function fn_egov_deleteFile(atchFileId, fileSn) {
 	        if(confirm("삭제하시겠습니까?")) {
 	        }
@@ -88,12 +97,12 @@
         	<th>경과율</th>
         	<td>
 		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
-		            <div id="elapsedProgressBar" 
-		                 style="width: <c:out value='${projectVO.progressRate}'/>%; 
+		            <div id="elapsedProgressBar"
+		                 style="width: <c:out value='${projectVO.progressRate}'/>%;
 		                        background:#2196F3; height:100%; position:absolute; top:0; left:0; transition:width 0.5s; z-index:2;">
 		            </div>
-		            
-		            <span id="elapsedProgressText" 
+
+		            <span id="elapsedProgressText"
 		                  style="position:absolute; width:100%; text-align:center; top:0; line-height:24px; font-size:12px; font-weight:bold; color:#000; z-index:3;">
 		                <c:out value="${projectVO.progressRate}"/>%
 		            </span>
@@ -109,9 +118,9 @@
             <td>
 		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
 				    <div id="planProgressBar" style="width:0%; background:rgba(76, 175, 80, 0.3); height:100%; position:absolute; top:0; left:0; transition:width 0.5s;"></div>
-				    
+
 				    <div id="mainProgressBar" style="width:0%; background:#4CAF50; height:100%; position:absolute; top:0; left:0; transition:width 0.5s; z-index:2;"></div>
-				    
+
 				    <span id="mainProgressText" style="position:absolute; width:100%; text-align:center; top:0; line-height:24px; font-size:12px; font-weight:bold; color:#000; z-index:3;">0%</span>
 				</div>
 				<div style="margin-top:5px; font-size:11px; color:#666; display:flex; justify-content:space-between;">
@@ -121,17 +130,16 @@
 		    </td>
         </tr>
         <tr>
-            <th>요구 기술 사항</th>
-            <td>
-                <textarea id="reqSkills" name="reqSkills" rows="3" style="width: 80%;" placeholder="예: 트래픽 처리에 능숙한 자바 개발자">${projectVO.reqSkills}</textarea>
-
-                <button type="button" class="btn btn-primary" onclick="openAIRecommendationPopup()">
-                    AI 인력 추천
-                </button>
-            </td>
-        </tr>
+                    <th>
+                        요구 기술 사항<br>
+                        <button type="button" class="btn_s" onclick="fn_add_req_row('')" style="margin-top:8px; width:100%;">+ 업무 추가</button>
+                    </th>
+                    <td>
+                        <div id="reqContainer"></div>
+                    </td>
+                </tr>
         </table>
-    
+
     <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
 	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 업로드</h4>
 	    <div style="display: flex; gap: 10px; align-items: center;">
@@ -140,16 +148,16 @@
 	    </div>
 	    <small style="color: #666;">* 여러 파일을 한 번에 선택할 수 있습니다.</small>
 	</div>
-	
+
     <div id="file_list_area">
 	    <c:import url="/cmm/fms/selectFileInfs.do" charEncoding="utf-8">
 	        <c:param name="param_atchFileId" value="${projectVO.atchFileId}" />
 	        <c:param name="atchFileId" value="${projectVO.atchFileId}" />
 	    </c:import>
 	</div>
-    
-    
-    
+
+
+
 	<div class="assign-section" style="margin-top:30px;">
 	    <h3>투입 인력 현황</h3>
 	    <table class="table" id="assignTable">
@@ -168,7 +176,7 @@
 	    </table>
 	    <button type="button" class="btn btn-blue" onclick="fn_open_assign_popup();">인력 배정 추가</button>
 	</div>
-    
+
     <div id="assignModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:400px; background:#fff; border:1px solid #000; padding:20px; z-index:1000; box-shadow: 5px 5px 15px rgba(0,0,0,0.3);">
 	    <h3>인력 배정 등록</h3>
 	    <input type="hidden" id="taskGroupId">
@@ -188,7 +196,7 @@
 	        <tr>
 	            <th>투입률</th>
 	            <td>
-	    	        <span id="totalInputRateDisplay" style="font-weight:bold; color:#2196F3; font-size:1.1em;">0.00</span> 
+	    	        <span id="totalInputRateDisplay" style="font-weight:bold; color:#2196F3; font-size:1.1em;">0.00</span>
       				<input type="hidden" id="totalInputRate" value="0">M/M
    				</td>
 	        </tr>
@@ -215,19 +223,19 @@
 	        <button type="button" class="btn_s" onclick="$('#assignModal').hide();">취소</button>
 	    </div>
 	</div>
-	
-	
+
+
     <div id="userSearchModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:500px; background:#fff; border:2px solid #333; padding:20px; z-index:2000; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
 	    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
 	        <h3 style="margin:0;">👥 직원 검색</h3>
 	        <button type="button" onclick="$('#userSearchModal').hide();" style="cursor:pointer;">X</button>
 	    </div>
-	    
+
 	    <div style="margin-bottom:15px; background:#f4f4f4; padding:10px; text-align:center;">
 	        <input type="text" id="popSearchNm" placeholder="직원 성명을 입력하세요" style="width:200px; padding:5px;" onkeypress="if(event.keyCode==13) fn_pop_search_user();">
 	        <button type="button" class="btn_s" onclick="fn_pop_search_user();">검색</button>
 	    </div>
-	
+
 	    <div style="max-height:300px; overflow-y:auto;">
 	        <table class="w3-table-all" style="width:100%; font-size:13px;">
 	            <thead>
@@ -244,21 +252,69 @@
 	        </table>
 	    </div>
 	</div>
-	
+
 	<div id='calendar-container' style="margin-top:30px; border:1px solid #ddd; padding:10px; background:#fff;">
 	    <div id='calendar'></div>
 	</div>
-	
-	
+
+
     <div class="btn-close">
     	<button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_blue">수정</button>
         <button type="button" onclick="window.close();" class="btn_s">닫기</button>
     </div>
-    
+
+    <div id="aiMatchModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:850px; background:#fff; border:2px solid #333; padding:25px; z-index:9999; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-height:90vh; overflow-y:auto; border-radius: 8px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                <h3 style="margin:0; font-size:18px;">🤖 AI 인력 추천 결과</h3>
+                <button type="button" onclick="$('#aiMatchModal').hide();" style="border:none; background:none; font-size:24px; cursor:pointer;">&times;</button>
+            </div>
+
+            <input type="hidden" id="currentReqId"> <div class="slider-container">
+                <label style="font-size:14px;"><strong>⚖️ 가중치 설정 (AI 매칭률 : 경력 점수)</strong></label>
+                <input type="range" id="weightSlider" min="10" max="90" step="20" value="70" oninput="fn_update_slider_ui(this.value)" onchange="fn_run_ai_match()">
+                <div class="range-labels">
+                    <span>10:90 (경력중시)</span>
+                    <span>30:70</span>
+                    <span>50:50</span>
+                    <span>70:30</span>
+                    <span>90:10 (매칭중시)</span>
+                </div>
+                <p style="margin-top:15px; font-size:14px; margin-bottom:0;">
+                    현재 설정 👉 매칭률 <span id="val-ai" class="score-txt">70</span>% : 경력 <span id="val-career" class="score-txt">30</span>%
+                </p>
+            </div>
+
+            <table class="w3-table-all" style="font-size:13px; text-align:center;">
+                <colgroup>
+                    <col style="width:8%;">
+                    <col style="width:25%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:12%;">
+                </colgroup>
+                <thead>
+                    <tr style="background:#f1f3f5;">
+                        <th>순위</th>
+                        <th>직원명 (연차)</th>
+                        <th>가동률</th>
+                        <th>매칭률</th>
+                        <th>경력점수</th>
+                        <th>종합점수</th>
+                        <th>선택</th>
+                    </tr>
+                </thead>
+                <tbody id="aiResultBody">
+                    <tr><td colspan="7" style="padding:20px;">데이터를 불러오는 중...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/ko.global.min.js"></script>
-    
+
     <script type="text/javascript">
     function fn_save_assign() {
     	if(!$("#assignStartDate").val() || !$("#assignEndDate").val()){
@@ -299,7 +355,7 @@
             }
         });
     }
-	
+
 	function fn_open_assign_popup() {
 		$("#taskGroupId").val("");
 	    $("#assignTitle").val("");
@@ -307,7 +363,7 @@
 	    $("#totalInputRateDisplay").text("0.0");
 	    $('#assignModal').show();
 	}
-	
+
 	function fn_pop_search_user() {
 	    var searchNm = $("#popSearchNm").val();
 	    if(!searchNm) { alert("검색어를 입력하세요."); return; }
@@ -322,7 +378,7 @@
 	                    var rawLoad = parseFloat(user.currentLoad) || 0;
 	                    var rate = (rawLoad * 100).toFixed(0);
 	                    var barColor = rate >= 100 ? "#f44336" : (rate >= 80 ? "#ff9800" : "#4CAF50");
-	                    
+
 	                    html += "<tr>";
 	                    html += "  <td>" + (user.deptNm || '-') + "</td>";
 	                    html += "  <td>" + (user.positionNm || '-') + "</td>";
@@ -345,14 +401,14 @@
 	        }
 	    });
 	}
-	
+
 	function fn_open_user_search() {
 	    $('#popSearchNm').val('');
 	    $('#userSearchResultBody').html('<tr><td colspan="4" style="text-align:center;">검색어를 입력하세요.</td></tr>');
 	    $('#userSearchModal').show();
 	    $('#popSearchNm').focus();
 	}
-	
+
 	function fn_select_this_user(userId, userNm) {
 		if($("#user_row_" + userId).length > 0) {
 	        alert("이미 목록에 추가된 인원입니다.");
@@ -367,11 +423,11 @@
 
 	    $("#selectedUserListBody").append(html);
 	    $('#userSearchModal').hide();
-	    
+
 	    fn_calculate_total_mm();
 	}
-	
-	
+
+
 	function fn_save_task_group() {
 	    if(!$("#assignTitle").val()) { alert("프로젝트명을 입력하세요."); return; }
 	    if(!$("#assignStartDate").val() || !$("#assignEndDate").val()) { alert("기간을 입력하세요."); return; }
@@ -410,7 +466,7 @@
 	        }
 	    });
 	}
-	
+
 	function fn_edit_task_group(taskGroupId) {
 	    $.ajax({
 	        url: "<c:url value='/pms/selectTaskGroupDetailAjax.do'/>",
@@ -420,7 +476,7 @@
 	            $("#assignTitle").val(data.info.assignTitle);
 	            $("#assignStartDate").val(data.info.startDate);
 	            $("#assignEndDate").val(data.info.endDate);
-	            
+
 	            $("#selectedUserListBody").empty();
 	            $.each(data.memberList, function(idx, mem) {
 	                var html = "<tr id='user_row_" + mem.userId + "'>";
@@ -435,10 +491,10 @@
 	        }
 	    });
 	}
-	
+
 	function fn_delete_task_group(taskGroupId) {
 	    if(!confirm("해당 업무와 투입 인원 전체를 삭제하시겠습니까?")) return;
-	    
+
 	    $.ajax({
 	        url: "<c:url value='/pms/deleteProjectTaskGroupAjax.do'/>",
 	        type: "POST",
@@ -449,7 +505,7 @@
 	        }
 	    });
 	}
-	
+
 	function fn_calculate_total_mm() {
 	    var total = 0;
 	    $(".selectedInputRate").each(function() {
@@ -462,14 +518,14 @@
 	    var formattedTotal = total.toFixed(1);
 	    $("#totalInputRateDisplay").text(formattedTotal);
 	    $("#totalInputRate").val(formattedTotal);
-	    
+
 	    if (total > 1.0) {
 	        $("#totalInputRateDisplay").css("color", "#f44336");
 	    } else {
 	        $("#totalInputRateDisplay").css("color", "#2196F3");
 	    }
 	}
-	
+
 	function fn_load_assign_list() {
 	    $.ajax({
 	        url: "<c:url value='/pms/selectProjectAssignListAjax.do'/>",
@@ -480,10 +536,10 @@
 	        	var html = "";
 	            var totalActualEffort = 0;
 	            var totalPlanEffort = 0;
-	            
-	            var targetStr = "${projectVO.estEffort}".replace(/[^0-9.]/g, ""); 
+
+	            var targetStr = "${projectVO.estEffort}".replace(/[^0-9.]/g, "");
 	            var target = parseFloat(targetStr) || 0;
-	            
+
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
 	                    var fullValue = parseFloat(item.inputRate || 0);
@@ -498,18 +554,18 @@
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
 	                    html += "  <td><strong>" + fullValue.toFixed(1) + " MM</strong></td>";
-	                    
+
 	                    html += "  <td style='text-align:center;'>";
-	                    
+
 	                    if (item.confirmYn === 'Y') {
 	                        html += "  <span class='badge-green'>완료</span>";
 	                        html += "  <button type='button' class='btn_s' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'N')\">취소</button>";
 	                    } else {
 	                        html += "  <button type='button' class='btn_blue' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'Y')\">확인</button>";
 	                    }
-	                    
+
 	                    html += "</td>";
-	                    
+
 	                    html += "  <td>";
 	                    html += "    <button type='button' class='btn_s' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
 	                    html += "    <button type='button' class='btn_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
@@ -519,25 +575,25 @@
 	            } else {
 	                html = "<tr><td colspan='6'>배정된 인력이 없습니다.</td></tr>";
 	            }
-	            
+
 	            $("#assignListBody").html(html);
-	            
+
 	            var actualPercent = target > 0 ? ((totalActualEffort / target) * 100).toFixed(1) : 0;
 	            var planPercent = target > 0 ? ((totalPlanEffort / target) * 100).toFixed(1) : 0;
-	            
+
 	            $("#mainProgressBar").css("width", (actualPercent > 100 ? 100 : actualPercent) + "%");
 	            $("#planProgressBar").css("width", (planPercent > 100 ? 100 : planPercent) + "%");
 	            $("#mainProgressText").text(actualPercent + "%");
-	            
+
 	            $("#currentTotalEffort").text(totalActualEffort.toFixed(1));
 	            $("#planTotalEffort").text(totalPlanEffort.toFixed(1));
-	            
+
 	            if(parseFloat(planPercent) > 100) {
 	                $("#planProgressBar").css("background", "rgba(244, 67, 54, 0.5)");
 	            } else {
 	                $("#planProgressBar").css("background", "rgba(76, 175, 80, 0.3)");
 	            }
-	            
+
 	            if(calendar) {calendar.refetchEvents();}
 	        }
 	    });
@@ -546,6 +602,13 @@
 	var calendar = null;
 
     $(document).ready(function() {
+    // [Step 4-1] 초기 요구사항 로드
+            var initialSkill = "${fn:escapeXml(projectVO.reqSkills)}";
+            if(initialSkill && initialSkill.trim().length > 0) {
+                fn_add_req_row(initialSkill);
+            } else {
+                fn_add_req_row(""); // 없으면 빈 칸 1개 생성
+            }
         fn_load_assign_list();
 
         var calendarEl = document.getElementById('calendar');
@@ -573,7 +636,7 @@
                                     id: item.assignId,
                                     title: item.assignTitle + " [" + item.userNm + "]",
                                     start: item.startDate,
-                                    end: item.endDate + "T23:59:59", 
+                                    end: item.endDate + "T23:59:59",
                                     color: (item.inputRate >= 1.0 ? '#f44336' : '#3788d8')
                                 });
                             });
@@ -583,15 +646,15 @@
                 });
             }
         });
-        
+
         calendar.render();
     });
-	
+
     function fn_delete_task_group(taskGroupId) {
         if(!confirm("해당 업무와 투입 인원 전체를 삭제하시겠습니까?")) return;
-        
+
         $.ajax({
-            url: "<c:url value='/pms/deleteProjectTaskGroupAjax.do'/>", 
+            url: "<c:url value='/pms/deleteProjectTaskGroupAjax.do'/>",
             type: "POST",
             data: { "taskGroupId": taskGroupId },
             success: function(data) {
@@ -600,10 +663,10 @@
             }
         });
     }
-    
+
 	function fn_delete_assign(assignId) {
 	    if(!confirm("정말 삭제하시겠습니까?")) return;
-	    
+
 	    $.ajax({
 	        url: "<c:url value='/pms/deleteProjectAssignAjax.do'/>",
 	        type: "POST",
@@ -614,12 +677,12 @@
 	        }
 	    });
 	}
-	
+
 	function fn_egov_user_callback(userId, userNm) {
 	    $("#assignUserId").val(userId);
 	    $("#assignUserNm").val(userNm);
 	}
-	
+
 	function fn_toggle_confirm(tGroupId, status) {
 	    var msg = status === 'Y' ? "해당 인력의 업무 완료를 확인하시겠습니까?" : "확인을 취소하시겠습니까?";
 	    if(!confirm(msg)) return;
@@ -633,10 +696,10 @@
 	        }
 	    });
 	}
-	
+
 	function fn_go_update_page(id) {
-	    
-	    
+
+
 	    if(!id || id === "") {
 	        alert("ID 정보가 없어 수정 페이지로 이동할 수 없습니다.");
 	        return;
@@ -653,7 +716,7 @@
 
 	    try {
 	        window.opener.location.href = updateUrl;
-	        
+
 	        setTimeout(function() {
 	            window.close();
 	        }, 100);
@@ -662,7 +725,7 @@
 	        window.close();
 	    }
 	}
-	
+
 	function fn_file_ajax_upload() {
 	    var fileInput = document.getElementById('ajaxFileInput');
 	    if (fileInput.files.length === 0) {
@@ -685,7 +748,7 @@
 	        success: function(data) {
 	            if(data.status === "success") {
 	                alert("파일이 성공적으로 업로드되었습니다.");
-	                location.reload(); 
+	                location.reload();
 	            } else {
 	                alert("오류 발생: " + data.message);
 	            }
@@ -693,7 +756,137 @@
 	        error: function() { alert("서버 통신 오류가 발생했습니다."); }
 	    });
 	}
-	
+
+/* [Step 4-2] AI 매칭 시스템 로직 */
+    var g_reqCount = 0; // 요구사항 칸 카운트
+    var g_projId = "${projectVO.projId}";
+
+    // 1. 요구사항 칸 추가 (동적 생성)
+    function fn_add_req_row(textVal) {
+        g_reqCount++;
+        var html = '';
+        html += '<div class="req-item" id="req_box_' + g_reqCount + '">';
+        html += '  <div class="req-header">';
+        html += '    <span>📌 업무 #' + g_reqCount + '</span>';
+        html += '    <span id="assign_badge_' + g_reqCount + '"></span>'; // 담당자 뱃지 영역
+        html += '  </div>';
+        html += '  <textarea id="req_text_' + g_reqCount + '" rows="3" style="width:98%; border:1px solid #ccc; padding:5px; resize:vertical;" placeholder="필요한 기술 스택과 업무 내용을 입력하세요.">' + textVal + '</textarea>';
+        html += '  <div style="text-align:right; margin-top:8px;">';
+        html += '    <button type="button" class="btn_blue" onclick="fn_open_ai_popup(' + g_reqCount + ')">🔍 AI 인력 추천</button>';
+        html += '  </div>';
+        html += '</div>';
+
+        $("#reqContainer").append(html);
+    }
+
+    // 2. 팝업 열기 & DB 저장 (REQ_SKILLS 업데이트)
+    function fn_open_ai_popup(reqId) {
+        var reqText = $("#req_text_" + reqId).val();
+        if(!reqText) { alert("요구 기술 사항을 입력해주세요."); return; }
+
+        $("#currentReqId").val(reqId); // 현재 작업중인 칸 번호 저장
+
+        // [AJAX] 입력 내용을 DB에 저장
+        var param = { "req_skills": reqText };
+
+        $.ajax({
+            url: "/api/matching/projects/" + g_projId + "/skills",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(res) {
+                $('#aiMatchModal').show();
+                fn_run_ai_match();
+            },
+            error: function(xhr, status, error) {
+                alert("요구사항 저장 중 오류가 발생했습니다.");
+                console.error("Save Error:", error);
+            }
+        });
+    }
+
+    // 3. 슬라이더 UI 변경
+    function fn_update_slider_ui(val) {
+        $("#val-ai").text(val);
+        $("#val-career").text(100 - val);
+    }
+
+    // 4. AI 매칭 실행
+    function fn_run_ai_match() {
+        var weight = $("#weightSlider").val();
+
+        $("#aiResultBody").html('<tr><td colspan="7" style="padding:30px; text-align:center;">AI 분석 중입니다...<br>(문맥 파악 및 점수 계산)</td></tr>');
+
+        var param = {
+            "project_id": parseInt(g_projId),
+            "ai_weight": parseInt(weight)
+        };
+
+        $.ajax({
+            url: "/api/matching/match",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(data) {
+                var html = "";
+                if(data && data.length > 0) {
+                    $.each(data, function(i, item) {
+                        var utilText = item.utilization > 0 ? "<span style='color:red'>" + (item.utilization * 100) + "%</span>" : "<span style='color:green'>대기(0%)</span>";
+
+                        html += "<tr onmouseover=\"this.style.background='#f9f9f9'\" onmouseout=\"this.style.background='white'\">";
+                        html += "  <td style='font-weight:bold;'>" + item.rank + "</td>";
+                        html += "  <td>" + item.name + " <span style='color:#888; font-size:11px;'>(" + item.career_years + "년차)</span><br>";
+                        html += "      <span style='font-size:11px; color:#555;'>" + item.tags.substring(0, 15) + "...</span></td>";
+                        html += "  <td>" + utilText + "</td>";
+                        html += "  <td>" + item.ai_score + "</td>";
+                        html += "  <td>" + item.career_score + "</td>";
+                        html += "  <td style='color:#2196F3; font-weight:bold;'>" + item.total_score + "</td>";
+                        html += "  <td>";
+                        html += "    <button type='button' class='btn_s' onclick=\"fn_confirm_assign('" + item.emp_id + "','" + item.name + "')\">선택</button>";
+                        html += "  </td>";
+                        html += "</tr>";
+                    });
+                } else {
+                    html = "<tr><td colspan='7' style='padding:20px;'>조건에 맞는 추천 인력이 없습니다.</td></tr>";
+                }
+                $("#aiResultBody").html(html);
+            },
+            error: function() {
+                $("#aiResultBody").html('<tr><td colspan="7" style="padding:20px; color:red;">매칭 서버 통신 오류</td></tr>');
+            }
+        });
+    }
+
+    // 5. 최종 선택 (담당자 배정)
+    function fn_confirm_assign(empId, empName) {
+        if(!confirm(empName + " 님을 이 업무 담당자로 선정하시겠습니까?")) return;
+
+        var param = {
+            "project_id": parseInt(g_projId),
+            "emp_id": empId
+        };
+
+        $.ajax({
+            url: "/api/matching/assign",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(res) {
+                alert("배정이 완료되었습니다.");
+                $('#aiMatchModal').hide();
+
+                var reqId = $("#currentReqId").val();
+                $("#assign_badge_" + reqId).html("<span class='badge-ai'>✅ 담당: " + empName + "</span>");
+                $("#req_text_" + reqId).prop("readonly", true).css("background", "#eee");
+
+                fn_load_assign_list();
+            },
+            error: function() {
+                alert("배정 처리 중 오류가 발생했습니다.");
+            }
+        });
+    }
+
 	</script>
 </body>
 </html>
