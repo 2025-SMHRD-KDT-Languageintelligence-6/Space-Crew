@@ -33,7 +33,10 @@
     .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: #666; padding: 0 10px; }
     .score-txt { font-weight: bold; color: #2196F3; font-size: 1.1em; }
     .badge-ai { background-color: #673AB7; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; }
-
+	.btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
+	.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
+	.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
+	.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
     </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 
@@ -135,7 +138,7 @@
 	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 업로드</h4>
 	    <div style="display: flex; gap: 10px; align-items: center;">
 	        <input type="file" id="ajaxFileInput" name="file_1" multiple style="flex-grow: 1;" />
-	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px;">업로드</button>
+	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px; white-space: nowrap; min-width: 45px;">업로드</button>
 	    </div>
 	    <small style="color: #666;">* 여러 파일을 한 번에 선택할 수 있습니다.</small>
 	</div>
@@ -158,7 +161,7 @@
 	                <th>업무</th>
 	                <th>투입기간</th>
 	                <th>투입률(M/M)</th>
-	                <th>확인</th>
+	                <th>상태</th>
 	                <th>관리</th>
 	            </tr>
 	        </thead>
@@ -558,17 +561,16 @@
 	                    html += "  <td style='text-align:center;'>";
 
 	                    if (item.confirmYn === 'Y') {
-	                        html += "  <span class='badge-green'>완료</span>";
-	                        html += "  <button type='button' class='btn_s' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'N')\">취소</button>";
+	                        html += "  <button type='button' class='btn_s_gray' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'N')\">완료</button>";
 	                    } else {
-	                        html += "  <button type='button' class='btn_blue' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'Y')\">확인</button>";
+	                        html += "  <button type='button' class='btn_s_blue' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'Y')\">진행</button>";
 	                    }
 
 	                    html += "</td>";
 
 	                    html += "  <td>";
-	                    html += "    <button type='button' class='btn_s' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
-	                    html += "    <button type='button' class='btn_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
+	                    html += "    <button type='button' class='btn_blue' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
+	                    html += "    <button type='button' class='btn_s_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
 	                    html += "  </td>";
 	                    html += "</tr>";
 	                });
@@ -684,7 +686,7 @@
 	}
 
 	function fn_toggle_confirm(tGroupId, status) {
-	    var msg = status === 'Y' ? "해당 인력의 업무 완료를 확인하시겠습니까?" : "확인을 취소하시겠습니까?";
+	    var msg = status === 'Y' ? "완료처리 하시겠습니까?" : "완료처리를 취소하시겠습니까?";
 	    if(!confirm(msg)) return;
 
 	    $.ajax({
