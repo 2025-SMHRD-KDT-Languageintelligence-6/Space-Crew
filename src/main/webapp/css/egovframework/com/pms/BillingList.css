@@ -271,14 +271,14 @@ tr:hover td { background-color: #fdfdfd; }
 
 
 .status-badge.status-default {
-    background-color: #6c757d !important; /* 확실히 보이게 좀 더 진한 회색 */
+    background-color: #6c757d !important;
     color: #ffffff !important;
     border: 1px solid #5a6268 !important;
     display: inline-block !important;
     visibility: visible !important;
 }
 
-/* 2. 입금완료 (초록/파랑계열 - Harry님 기존 스타일 보강) */
+/* 2. 입금완료 (초록/파랑계열) */
 .status-badge.status-paid {
     background-color: #28a745 !important;
     color: #ffffff !important;

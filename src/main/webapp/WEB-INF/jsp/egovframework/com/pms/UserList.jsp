@@ -20,7 +20,7 @@
             <form name="listForm" action="<c:url value='/pms/userList.do'/>" method="post">
                 <input type="hidden" name="pageIndex" value="<c:out value='${searchVO.pageIndex}'/>"/>
 
-                <label>직원명</label>
+                <label>직원명:</label>
                 <input type="text" name="searchKeyword" value="<c:out value='${searchVO.searchKeyword}'/>" placeholder="성명을 입력하세요" />
                 <button type="submit" class="btn btn-blue" style="margin-left: 10px;">검색</button>
             </form>

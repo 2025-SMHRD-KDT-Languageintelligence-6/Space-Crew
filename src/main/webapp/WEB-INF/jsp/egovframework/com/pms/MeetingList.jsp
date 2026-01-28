@@ -9,6 +9,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/ProjectList.css'/>">
+    <style>
+        .progress-fill { transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .scanning-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #a855f7, transparent);
+            position: absolute; width: 100%; animation: scan 2s infinite;
+        }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+        .result-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .content-page {
+        margin-left: 250px !important;
+        width: calc(100% - 250px) !important;
+        min-height: 100vh;
+        background-color: #f8fafc;
+    	}
+    </style>
 </head>
 <body class="bg-slate-50">
 

@@ -6,7 +6,42 @@
 <link rel="stylesheet" href="<c:url value='/css/egovframework/com/menu_sidebar.css'/>">
 <%-- 아이콘 라이브러리 --%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+/* [사이드바 자간 & 정렬 리셋] */
+.sidebar, .sidebar * {
+    /* 1. 자간을 강제로 0(표준)으로 고정 */
+    letter-spacing: 0px !important; 
+    
+    /* 2. 테일윈드의 렌더링 방식 무력화 */
+    text-rendering: auto !important;
+    -webkit-font-smoothing: auto !important;
+    
+    /* 3. 줄 높이(Line-height)를 픽셀 단위로 강제 고정 */
+    line-height: 1.2 !important; 
+}
 
+/* [부모 메뉴 정렬 정밀 교정] */
+.sidebar ul.nav li a.parent-menu {
+    display: flex !important;
+    align-items: center !important; /* 세로 중앙 정렬 */
+    height: 48px !important;        /* 높이를 픽셀로 박아버림 */
+    padding: 0 16px !important;     /* 상하는 0, 좌우는 16px */
+}
+
+/* [아이콘과 텍스트 사이 간격 고정] */
+.sidebar ul.nav li a i {
+    width: 20px !important;         /* 아이콘 폭 고정 (정렬의 핵심!) */
+    margin-right: 12px !important;  /* 아이콘과 글자 사이 간격 강제 지정 */
+    text-align: center !important;
+    display: inline-block !important;
+}
+
+/* [텍스트만 감싸는 span이 있다면] */
+.parent-menu span {
+    display: flex !important;
+    align-items: center !important;
+}
+</style>
 <div class="sidebar">
     <div class="logo">
         <a href="<c:url value='/pms/main.do'/>">🚀 Space PMS</a>
