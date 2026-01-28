@@ -9,7 +9,12 @@
     <title>청구 상세 정보</title>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com-billingdetailpopup.css'/>">
-    
+    <style>
+	    .btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
+		.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
+		.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
+		.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
+    </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 	
 	<script type="text/javascript">
@@ -41,7 +46,7 @@
         <tr><th>계약담당자</th><td>${summary.picUserNm}</td></tr>
         <tr><th>주담당자</th><td>${summary.mainMgrNm}</td></tr>
         <tr><th>부담당자</th><td>${summary.subMgrNm}</td></tr>
-        <tr><th>계약금액</th><td>${summary.totalAmt}</td></tr>
+        <tr><th>계약금액</th><td><fmt:formatNumber value="${summary.totalAmt}" pattern="#,###"/>원</td></tr>
         <tr><th>영업메모</th><td>${summary.salesContent}</td></tr>
         <tr><th>업무메모</th><td>${summary.contRemark}</td></tr>
     </table>
@@ -174,7 +179,7 @@
 
     <div class="btn-close">
     	
-        <button type="button" onclick="window.close();" class="btn_s">닫기</button>
+        <button type="button" onclick="window.close();" class="btn_s_gray">닫기</button>
     </div>
 	
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>

@@ -21,6 +21,10 @@
 		.fc-event:hover {
 		    color: #ffffff !important;
 		}
+		.btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
+		.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
+		.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
+		.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
 	</style>
 	<script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 	
@@ -69,7 +73,7 @@
 	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 업로드</h4>
 	    <div style="display: flex; gap: 10px; align-items: center;">
 	        <input type="file" id="ajaxFileInput" name="file_1" multiple style="flex-grow: 1;" />
-	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px;">업로드</button>
+	        <button type="button" onclick="fn_file_ajax_upload();" class="btn_blue" style="padding: 5px 15px; white-space: nowrap; min-width: 45px;">업로드</button>
 	    </div>
 	    <small style="color: #666;">* 여러 파일을 한 번에 선택할 수 있습니다.</small>
 	</div>
@@ -82,8 +86,8 @@
 	</div>
 	
     <div class="btn-close">
-    	<button type="button" onclick="fn_go_update_page('${userVO.userId}');" class="btn_blue">수정</button>
-        <button type="button" onclick="window.close();" class="btn_s">닫기</button>
+    	<button type="button" onclick="fn_go_update_page('${userVO.userId}');" class="btn_s_blue">수정</button>
+        <button type="button" onclick="window.close();" class="btn_s_gray">닫기</button>
     </div>
 
     <div class="calendar-section">
