@@ -262,8 +262,8 @@
 
 
     <div class="btn-close">
-    	<button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_blue">수정</button>
-        <button type="button" onclick="window.close();" class="btn_s">닫기</button>
+    	<button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_s_blue">수정</button>
+        <button type="button" onclick="window.close();" class="btn_s_gray">닫기</button>
     </div>
 
     <div id="aiMatchModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:850px; background:#fff; border:2px solid #333; padding:25px; z-index:9999; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-height:90vh; overflow-y:auto; border-radius: 8px;">
