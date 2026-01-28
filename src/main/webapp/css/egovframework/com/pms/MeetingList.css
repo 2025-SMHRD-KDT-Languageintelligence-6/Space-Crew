@@ -221,3 +221,57 @@ tr:hover td {
 .pagination-wrapper a:hover {
     background-color: #e9ecef;
 }
+
+/* 페이지네이션 wrapper 안의 ul, li 초기화 */
+.pagination-wrapper ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 5px;
+}
+
+/* 모든 리스트 아이템과 링크 공통 스타일 */
+.pagination-wrapper li a, 
+.pagination-wrapper li strong,
+.pagination-wrapper li span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 5px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    background: #fff;
+    transition: all 0.2s;
+}
+
+/* ★ 핵심: 현재 페이지 강조 ★ */
+/* 1순위: strong 태그로 되어 있을 때 */
+.pagination-wrapper li strong {
+    background-color: #afcdfa !important;
+    color: #ffffff !important;
+    border-color: #afcdfa !important;
+    font-weight: 700;
+}
+
+/* 2순위: 혹시 특정 li에 클래스가 붙을 경우를 대비 (active 등) */
+.pagination-wrapper li.active a,
+.pagination-wrapper li.current a {
+    background-color: #afcdfa !important;
+    color: #ffffff !important;
+}
+
+/* 호버 효과 */
+.pagination-wrapper li a:hover {
+    border-color: #afcdfa;
+    color: #afcdfa;
+    background-color: #eff6ff;
+}
