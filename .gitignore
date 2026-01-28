@@ -1,15 +1,35 @@
-/target/
+# --- Java/eGovFrame/Maven ---
+target/
 bin/
+*.class
+*.war
+*.ear
+*.jar
 
-/.settings/
-/.classpath
-/.project
-/.factorypath
+# --- Eclipse/IDE Settings ---
+.settings/
+.classpath
+.project
+.factorypath
+.metadata/
+.recommenders/
 
-/.idea/
+# --- IntelliJ/JetBrains ---
+.idea/
 *.iml
 out/
-.mvn/
+gen/
 
+# --- Python (AI Server용) ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+.ipynb_checkpoints/
+
+# --- OS/Common ---
 .DS_Store
 Thumbs.db
+*.log
+tmp/
