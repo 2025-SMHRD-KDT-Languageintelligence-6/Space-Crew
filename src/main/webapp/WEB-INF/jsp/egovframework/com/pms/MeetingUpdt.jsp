@@ -18,15 +18,23 @@
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
         .result-fade-in { animation: fadeIn 0.8s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .content-page {
+        margin-left: 250px !important;
+        width: calc(100% - 250px) !important;
+        min-height: 100vh;
+        background-color: #f8fafc;
+    }
     </style>
 </head>
-<body class="bg-slate-50 flex h-screen overflow-hidden">
+<body class="bg-slate-50 flex min-h-screen">
 
 <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
+<div class="content-page">
+    
+    <div class="p-10 space-y-12">
+<!-- <main class="flex-1 min-w-0 h-full flex flex-col p-12 overflow-y-auto no-scrollbar"> -->
 
-<main class="flex-1 flex flex-col p-12 overflow-y-auto no-scrollbar">
-
-    <header class="flex justify-between items-center mb-10">
+    <header class="flex justify-between items-center">
         <div class="flex items-center gap-6">
             <button onclick="history.back()" class="w-12 h-12 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:text-blue-600 transition-all shadow-sm">
                 <i class="fas fa-arrow-left"></i>
@@ -53,7 +61,15 @@
                         <span id="fileNameDisplay">회의 음성 파일 선택</span>
                     </button>
                 </div>
-
+				<div class="w-full max-w-md mx-auto mb-8 text-left">
+				    <label class="block text-[11px] font-black text-purple-400 uppercase tracking-[0.2em] mb-3 ml-2">Meeting Date</label>
+				    <div class="relative">
+				        <input type="date" id="meetDtInput" 
+				               class="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] p-4 text-sm font-bold text-slate-700 focus:border-purple-300 focus:bg-white outline-none transition-all shadow-inner">
+				    </div>
+				</div>
+				
+				
                 <button type="button" id="btnAnalyze" class="px-16 py-4 bg-purple-600 text-white font-black rounded-2xl shadow-lg shadow-purple-200 hover:bg-purple-700 transition-all uppercase tracking-widest text-sm" onclick="fn_upload_audio()">
                     분석 시작하기
                 </button>
@@ -120,7 +136,10 @@
         </div>
 
     </div>
-</main>
+<!-- </main> -->
+	</div>
+</div>
+
 
 <script>
     // 파일 선택 시 이름 표시
@@ -131,6 +150,11 @@
 
     function fn_upload_audio() {
         var fileField = $('#audioFileInput')[0];
+        var meetDt = $('#meetDtInput').val();
+        if (!meetDt) {
+            alert("회의 날짜를 선택해 주세요.");
+            return;
+        }
         if (fileField.files.length === 0) {
             alert("분석할 음성 파일을 선택해 주세요.");
             return;
@@ -138,6 +162,7 @@
 
         var formData = new FormData();
         formData.append("uploadAudio", fileField.files[0]);
+        formData.append("meetDt", meetDt);
 
         // UI 상태 변경
         $('#progressContainer').fadeIn();

@@ -18,8 +18,8 @@
         <li><a href="<c:url value='/pms/projectList.do'/>"><i class="fas fa-project-diagram mr-3"></i> 업무 관리</a></li>
         <li><a href="<c:url value='/pms/billingList.do'/>"><i class="fas fa-file-invoice-dollar mr-3"></i> 청구/정산 관리</a></li>
         <li><a href="<c:url value='/pms/userList.do'/>"><i class="fas fa-user-tie mr-3"></i> 직원 관리</a></li>
-        <li><a href="<c:url value='/pms/meetingList.do'/>"><i class="fas fa-user-tie mr-3"></i> 회의록 관리</a></li>
-        <li><a href="<c:url value='/pms/updateMeetingView.do'/>"><i class="fas fa-user-tie mr-3"></i> 회의록 분석</a></li>
+        <li><a href="<c:url value='/pms/meetingList.do'/>"><i class="fas fa-magic mr-3"></i> 회의록 관리</a></li>
+        <li><a href="<c:url value='/pms/updateMeetingView.do'/>"><i class="fas fa-magic mr-3"></i> 회의록 분석</a></li>
         
     </ul>
     <div class="current-time-box" style="text-align: center; margin: auto 15px 20px 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #fff;">

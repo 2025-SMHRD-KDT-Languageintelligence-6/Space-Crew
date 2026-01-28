@@ -123,31 +123,38 @@ public class MeetingController {
 	public Map<String, Object> analyzeMeetingData(final MultipartHttpServletRequest multiRequest) throws Exception {
 	    Map<String, Object> resultMap = new HashMap<>();
 	    
+	    String meetDt = multiRequest.getParameter("meetDt");
+	    
 	    Map<String, MultipartFile> files = multiRequest.getFileMap();
 	    
-	    if (!files.isEmpty()) {
-	        List<FileVO> result = fileUtil.parseFileInf(files, "MEET_", 0, "", "Globals.fileStorePath");
-	        String atchFileId = fileMngService.insertFileInfs(result);
-
-	        MeetingVO vo = new MeetingVO();
-	        vo.setMeetTitle(result.get(0).getOrignlFileNm());
-	        vo.setAtchFileId(atchFileId);
-	        
-	        String meetDt = multiRequest.getParameter("meetDt");
-	        vo.setMeetDt(meetDt);
-	        vo.setLastUpdusrId("webmaster");
-	        vo.setContentSum("표준 테이블 연동 업로드 완료.");
-	        vo.setActionItems(" ");
-
-	        meetingService.insertMeeting(vo); 
-
-	        resultMap.put("status", "success");
-	        resultMap.put("meetId", vo.getMeetId());
-	    } else {
-	        resultMap.put("status", "fail");
-	        resultMap.put("message", "파일이 전송되지 않았습니다.");
-	    }
+	    String atchFileId ="";
 	    
+	    
+	    if (!files.isEmpty()) {
+	        List<FileVO> result = fileUtil.parseFileInf(files, "MEET_", 0, "", "");
+	        atchFileId = fileMngService.insertFileInfs(result);
+	        
+	        MeetingVO vo = new MeetingVO();
+	        vo.setAtchFileId(atchFileId);
+	        vo.setMeetDt(meetDt);
+	        vo.setMeetTitle(meetDt + " 더미 회의록");
+	        vo.setContentFull("전체 더미 내용");
+	        vo.setContentSum("더미 요약 내용");
+	        vo.setActionItems("더미더미");
+        
+	        try {
+	            meetingService.insertMeeting(vo); 
+	            
+	            resultMap.put("status", "success");
+	            resultMap.put("data", vo);
+	        } catch (Exception e) {
+	            resultMap.put("status", "error");
+	            resultMap.put("message", e.getMessage());
+	        } 
+	    } else {
+	    	resultMap.put("status", "error");
+	    	resultMap.put("message", "파일이 전송되지 않았습니다");
+	    }
 	    return resultMap;
 	}
 	
