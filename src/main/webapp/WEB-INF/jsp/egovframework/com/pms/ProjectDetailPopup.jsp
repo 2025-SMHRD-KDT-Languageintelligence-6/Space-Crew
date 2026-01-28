@@ -129,15 +129,6 @@
 				</div>
 		    </td>
         </tr>
-        <tr>
-                    <th>
-                        요구 기술 사항<br>
-                        <button type="button" class="btn_s" onclick="fn_add_req_row('')" style="margin-top:8px; width:100%;">+ 업무 추가</button>
-                    </th>
-                    <td>
-                        <div id="reqContainer"></div>
-                    </td>
-                </tr>
         </table>
 
     <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
@@ -182,7 +173,7 @@
 	    <input type="hidden" id="taskGroupId">
 	    <table style="width:100%;">
 	        <tr>
-	            <th>프로젝트명</th>
+	            <th>세부 업무명</th>
 	            <td><input type="text" id="assignTitle" style="width:100%;"></td>
 	        </tr>
 	        <tr>
@@ -200,11 +191,20 @@
       				<input type="hidden" id="totalInputRate" value="0">M/M
    				</td>
 	        </tr>
+	        <tr>
+	            <th>요구 기술<br>및 상세내용</th>
+	            <td>
+	                <textarea id="assignReqSkills" rows="3" 
+	                          style="width:100%; border:1px solid #ccc; padding:5px; resize:vertical; font-size:12px;" 
+	                          placeholder="AI 추천을 위해 필요한 기술 스택을 입력하세요 (예: Java, React, Python)"></textarea>
+	            </td>
+	        </tr>
 	    </table>
 	    <div style="margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">
 	        <div style="display:flex; justify-content:space-between; align-items:center;">
 	            <strong>투입 인원 목록</strong>
 	            <button type="button" class="btn_s" onclick="fn_open_user_search();">인원 추가</button>
+	            <button type="button" class="btn_s" style="background:#673AB7; color:white;" onclick="fn_open_ai_popup_integrated();">🤖 AI 추천</button>
 	        </div>
 	        <table style="width:100%; margin-top:10px;" id="selectedUserTable">
 	            <thead>
@@ -603,12 +603,12 @@
 
     $(document).ready(function() {
     // [Step 4-1] 초기 요구사항 로드
-            var initialSkill = "${fn:escapeXml(projectVO.reqSkills)}";
+            /* var initialSkill = "${fn:escapeXml(projectVO.reqSkills)}";
             if(initialSkill && initialSkill.trim().length > 0) {
                 fn_add_req_row(initialSkill);
             } else {
                 fn_add_req_row(""); // 없으면 빈 칸 1개 생성
-            }
+            } */
         fn_load_assign_list();
 
         var calendarEl = document.getElementById('calendar');
@@ -842,7 +842,7 @@
                         html += "  <td>" + item.career_score + "</td>";
                         html += "  <td style='color:#2196F3; font-weight:bold;'>" + item.total_score + "</td>";
                         html += "  <td>";
-                        html += "    <button type='button' class='btn_s' onclick=\"fn_confirm_assign('" + item.emp_id + "','" + item.name + "')\">선택</button>";
+                        html += "    <button type='button' class='btn_s' onclick=\"fn_confirm_assign_to_list('" + item.emp_id + "','" + item.name + "')\">선택</button>";
                         html += "  </td>";
                         html += "</tr>";
                     });
@@ -886,7 +886,64 @@
             }
         });
     }
+    
 
+    function fn_open_ai_popup_integrated() {
+        var assignTitle = $("#assignTitle").val();
+        if(!assignTitle) { 
+            alert("업무 명칭(프로젝트명)을 먼저 입력해주세요. AI가 이를 기반으로 분석합니다."); 
+            return; 
+        }
+        
+        var param = { "req_skills": assignTitle };
+        $.ajax({
+            url: "/api/matching/projects/" + g_projId + "/skills",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(res) {
+                $('#aiMatchModal').show();
+                fn_run_ai_match();
+            }
+        });
+    }
+
+    function fn_confirm_assign_to_list(empId, empName) {
+        
+        if($("#user_row_" + empId).length > 0) {
+            alert("이미 목록에 추가된 인원입니다.");
+            return;
+        }
+
+        fn_select_this_user(empId, empName);
+        
+        alert(empName + " 님이 투입 목록에 추가되었습니다. 투입률(MM)을 조정해주세요!");
+        $('#aiMatchModal').hide();
+    }
+	
+    function fn_run_ai_match_from_modal() {
+        var reqText = $("#assignReqSkills").val();
+        
+        if(!reqText) { 
+            alert("AI 추천을 위해 요구 기술 사항을 먼저 입력해주세요! ㅋㅋㅋ"); 
+            return; 
+        }
+
+        var param = { "req_skills": reqText };
+        $.ajax({
+            url: "/api/matching/projects/" + g_projId + "/skills",
+            type: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify(param),
+            success: function(res) {
+                $('#aiMatchModal').show();
+                fn_run_ai_match();
+            },
+            error: function() {
+                alert("요구사항 분석 서버 통신에 실패했습니다.");
+            }
+        });
+    }
 	</script>
 </body>
 </html>
