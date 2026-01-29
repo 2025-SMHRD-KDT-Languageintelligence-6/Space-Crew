@@ -5,6 +5,7 @@ bin/
 *.war
 *.ear
 *.jar
+globals.properties
 
 # --- Eclipse/IDE Settings ---
 .settings/
