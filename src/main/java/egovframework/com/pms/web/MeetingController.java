@@ -1,5 +1,7 @@
 package egovframework.com.pms.web;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,10 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -127,34 +131,64 @@ public class MeetingController {
 	    
 	    Map<String, MultipartFile> files = multiRequest.getFileMap();
 	    
-	    String atchFileId ="";
-	    
-	    
-	    if (!files.isEmpty()) {
-	        List<FileVO> result = fileUtil.parseFileInf(files, "MEET_", 0, "", "");
-	        atchFileId = fileMngService.insertFileInfs(result);
-	        
-	        MeetingVO vo = new MeetingVO();
-	        vo.setAtchFileId(atchFileId);
-	        vo.setMeetDt(meetDt);
-	        vo.setMeetTitle(meetDt + " 더미 회의록");
-	        vo.setContentFull("전체 더미 내용");
-	        vo.setContentSum("더미 요약 내용");
-	        vo.setActionItems("더미더미");
-        
-	        try {
-	            meetingService.insertMeeting(vo); 
-	            
-	            resultMap.put("status", "success");
-	            resultMap.put("data", vo);
-	        } catch (Exception e) {
-	            resultMap.put("status", "error");
-	            resultMap.put("message", e.getMessage());
-	        } 
-	    } else {
-	    	resultMap.put("status", "error");
-	    	resultMap.put("message", "파일이 전송되지 않았습니다");
+	    if (files.isEmpty()) {
+	        resultMap.put("status", "error");
+	        resultMap.put("message", "파일이 전송되지 않았습니다");
+	        return resultMap;
 	    }
+	    
+	    try {
+	        List<FileVO> result = fileUtil.parseFileInf(files, "MEET_", 0, "", "");
+	        String atchFileId = fileMngService.insertFileInfs(result);
+
+	        MultipartFile mFile = files.get("uploadAudio");
+	        
+	        String tempDir = System.getProperty("java.io.tmpdir");
+	        File tempFile = new File(tempDir + File.separator + mFile.getOriginalFilename());
+	        mFile.transferTo(tempFile);
+
+	        org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+	        String pythonUrl = "http://127.0.0.1:8001/process-meeting";
+
+	        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+	        headers.setContentType(org.springframework.http.MediaType.MULTIPART_FORM_DATA);
+
+	        org.springframework.util.MultiValueMap<String, Object> body = new org.springframework.util.LinkedMultiValueMap<>();
+	        body.add("file", new org.springframework.core.io.FileSystemResource(tempFile));
+
+	        org.springframework.http.HttpEntity<org.springframework.util.MultiValueMap<String, Object>> requestEntity = 
+	            new org.springframework.http.HttpEntity<>(body, headers);
+
+	        org.springframework.http.ResponseEntity<Map> response = 
+	            restTemplate.postForEntity(pythonUrl, requestEntity, Map.class);
+
+	        if (response.getStatusCode() == org.springframework.http.HttpStatus.OK) {
+	            Map<String, Object> aiRes = (Map<String, Object>) response.getBody();
+	            Map<String, Object> aiData = (Map<String, Object>) aiRes.get("data");
+
+	            MeetingVO vo = new MeetingVO();
+	            vo.setAtchFileId(atchFileId);
+	            vo.setMeetDt(meetDt);
+	            vo.setMeetTitle(meetDt + " AI 분석 회의록");
+	            vo.setContentFull((String) aiData.get("full_text"));
+	            vo.setContentSum((String) aiData.get("summary"));
+	            vo.setActionItems((String) aiData.get("action_items"));
+	            
+	            meetingService.insertMeeting(vo);
+
+	            resultMap.put("status", "success");
+	            resultMap.put("data", aiData);
+	            resultMap.put("excel_path", aiRes.get("excel_path"));
+	        }
+
+	        if (tempFile.exists()) tempFile.delete();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        resultMap.put("status", "error");
+	        resultMap.put("message", "AI 분석 중 오류: " + e.getMessage());
+	    }
+
 	    return resultMap;
 	}
 	
@@ -179,6 +213,30 @@ public class MeetingController {
 	    model.addAttribute("res", dummyRes);
 	    
 	    return "egovframework/com/pms/MeetingUpdt";
+	}
+	
+	@RequestMapping("/pms/downloadExcel.do")
+	public void downloadExcel(@RequestParam("filePath") String filePath, HttpServletResponse response) throws Exception {
+	    
+	    String fileName = new File(filePath).getName();
+	    
+	    String fixedPath = "D:" + File.separator + "pms_uploads" + File.separator + "results";
+	    File file = new File(fixedPath, fileName);
+
+	    System.out.println("🔎 [Download] 찾는 위치: " + file.getAbsolutePath());
+
+	    if (file.exists()) {
+	        String downloadName = "AI_Meeting_Report.xlsx";
+	        
+	        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	        response.setHeader("Content-Disposition", "attachment; filename=\"" + downloadName + "\"");
+	        
+	        Files.copy(file.toPath(), response.getOutputStream());
+	        response.getOutputStream().flush();
+	    } else {
+	        System.out.println("❌ [Download] 파일을 찾을 수 없습니다! (D드라이브 확인 필요)");
+	        response.setStatus(404);
+	    }
 	}
 	
 }
