@@ -55,7 +55,7 @@
                 <tr>
                     <th>예상 수주금액</th>
                     <td>
-                        <input type="number" name="expectedAmt" class="input-half" placeholder="0" />
+                        <input type="number" name="expectedAmt" min="0" oninput="if(this.value < 0) this.value = 0;" class="input-half" placeholder="0" />
                         <span class="unit-text">원</span>
                     </td>
                 </tr>

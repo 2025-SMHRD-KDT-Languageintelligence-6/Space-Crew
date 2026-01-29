@@ -60,7 +60,7 @@
                 <tr>
                     <th class="required">계약금액</th>
                     <td>
-                        <form:input path="contAmt" type="number" style="width:200px;" />
+                        <form:input path="contAmt" type="number" min="0" oninput="if(this.value < 0) this.value = 0;" style="width:200px;" />
                         <span style="margin-left:5px; font-weight:bold; color:#666;">원</span>
                     </td>
                 </tr>
