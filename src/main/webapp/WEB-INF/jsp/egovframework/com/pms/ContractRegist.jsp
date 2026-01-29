@@ -120,17 +120,33 @@
 	        $("select[name='salesId']").change(function() {
 	            var selectedId = $(this).val();
 	            
-	            if (!selectedId) return;
-
+				if (!selectedId) {
+		            $("select[name='custId']").val("").change();
+		            $("select[name='picUserId']").val("").change();
+		            return;
+		        }
+	            
 	            var matched = salesInfoList.find(function(item) {
-	                return item.salesId == selectedId;
+	                return String(item.salesId) === String(selectedId);
 	            });
 
 	            if (matched) {
-	                $("select[name='custId']").val(matched.custId).change();
-	                if (matched.salesUserId) {
-	                    $("select[name='picUserId']").val(matched.salesUserId).change();
+	            	console.log("매칭된 데이터:", matched);
+	                
+	                var targetCustId = String(matched.custId).trim();
+	                var targetPicId = String(matched.salesUserId).trim();
+
+	                $("select[name='custId']").val(targetCustId).prop("selected", true);
+	                $("select[name='picUserId']").val(targetPicId).prop("selected", true);
+
+	                if($("select[name='custId']").val() !== targetCustId) {
+	                    $("select[name='custId'] option").each(function() {
+	                        if($(this).val() == targetCustId) {
+	                            $(this).prop("selected", true);
+	                        }
+	                    });
 	                }
+	                // $("select[name='custId']").change(); 
 	            }
 	        });
 	    });

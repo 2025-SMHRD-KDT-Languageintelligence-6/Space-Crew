@@ -60,7 +60,10 @@ public class SalesController {
 
     @RequestMapping(value = "/pms/addSalesView.do")
     public String addView(@ModelAttribute("salesVO") SalesVO salesVO, Model model) throws Exception {
-        model.addAttribute("customerList", customerService.selectCustomerList(new CustomerVO()));
+    	CustomerVO custSearchVO = new CustomerVO();
+        custSearchVO.setRecordCountPerPage(999);
+        custSearchVO.setFirstIndex(0);
+        model.addAttribute("customerList", customerService.selectCustomerList(custSearchVO));
         
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
@@ -90,10 +93,16 @@ public class SalesController {
             }
         }
         model.addAttribute("salesVO", result);
-        model.addAttribute("customerList", customerService.selectCustomerList(new CustomerVO()));
+        
+        CustomerVO custSearchVO = new CustomerVO();
+        custSearchVO.setRecordCountPerPage(999);
+        custSearchVO.setFirstIndex(0);
+        model.addAttribute("customerList", customerService.selectCustomerList(custSearchVO));
+        
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
         model.addAttribute("userList", userService.selectUserList(userSearchVO));
+        
         return "egovframework/com/pms/SalesUpdt";
     }
     

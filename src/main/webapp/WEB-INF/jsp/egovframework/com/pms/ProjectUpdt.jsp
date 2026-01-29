@@ -110,6 +110,42 @@
             </div>
         </form:form>
     </div>
-
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        $("input[name='startDt']").on("change", function() {
+	            var startDate = $(this).val();
+	            if (startDate) {
+	                $("input[name='endDt']").attr("min", startDate);
+	            }
+	        });
+	
+	        $("input[name='endDt']").on("change", function() {
+	            var endDate = $(this).val();
+	            if (endDate) {
+	                $("input[name='startDt']").attr("max", endDate);
+	            }
+	        });
+	
+	        var preStart = $("input[name='startDt']").val();
+	        var preEnd = $("input[name='endDt']").val();
+	        if (preStart) $("input[name='endDt']").attr("min", preStart);
+	        if (preEnd) $("input[name='startDt']").attr("max", preEnd);
+	    });
+	
+	    $("form").submit(function(e) {
+	        var startDate = $("input[name='startDt']").val();
+	        var endDate = $("input[name='endDt']").val();
+	
+	        if (startDate && endDate) {
+	            if (startDate > endDate) {
+	                alert("수행 종료일은 시작일보다 빠를 수 없습니다.");
+	                $("input[name='endDt']").focus();
+	                e.preventDefault();
+	                return false;
+	            }
+	        }
+	    });
+	</script>
 </body>
 </html>

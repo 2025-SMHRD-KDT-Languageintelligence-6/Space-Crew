@@ -362,6 +362,9 @@
 	function fn_open_assign_popup() {
 		$("#taskGroupId").val("");
 	    $("#assignTitle").val("");
+	    $("#assignStartDate").val("");
+	    $("#assignEndDate").val("");
+	    $("#assignReqSkills").val("");
 	    $("#selectedUserListBody").empty();
 	    $("#totalInputRateDisplay").text("0.0");
 	    $('#assignModal').show();
@@ -393,7 +396,7 @@
 	                    html += "    <span style='color:" + barColor + "; font-size:11px; font-weight:bold;'>" + rate + "%</span>";
 	                    html += "  </td>";
 	                    html += "  <td style='text-align:center;'>";
-	                    html += "    <button type='button' class='btn_s' onclick=\"fn_select_this_user('" + user.userId + "', '" + user.userNm + "')\">선택</button>";
+	                    html += "    <button type='button' class='btn_s' onclick=\"fn_select_this_user('" + user.empId + "', '" + user.userNm + "')\">선택</button>";
 	                    html += "  </td>";
 	                    html += "</tr>";
 	                });
@@ -432,8 +435,19 @@
 
 
 	function fn_save_task_group() {
+		
+		var startDate = $("#assignStartDate").val();
+	    var endDate = $("#assignEndDate").val();
+		
 	    if(!$("#assignTitle").val()) { alert("프로젝트명을 입력하세요."); return; }
-	    if(!$("#assignStartDate").val() || !$("#assignEndDate").val()) { alert("기간을 입력하세요."); return; }
+	    if(!startDate || !endDate) { alert("기간을 입력하세요."); return; }
+	    
+	    if(startDate > endDate) {
+	        alert("종료일은 시작일보다 빠를 수 없습니다.");
+	        $("#assignEndDate").focus();
+	        return;
+	    }
+	    
 	    if($("#selectedUserListBody tr").length === 0) { alert("투입 인원을 최소 1명 이상 선택하세요."); return; }
 
 	    var assignList = [];
@@ -758,7 +772,26 @@
 	        error: function() { alert("서버 통신 오류가 발생했습니다."); }
 	    });
 	}
+	
+	$(document).ready(function() {
+	    $("#assignStartDate").on("change", function() {
+	        var startVal = $(this).val();
+	        if (startVal) {
+	            $("#assignEndDate").attr("min", startVal);
+	        }
+	    });
 
+	    $("#assignEndDate").on("change", function() {
+	        var endVal = $(this).val();
+	        if (endVal) {
+	            $("#assignStartDate").attr("max", endVal);
+	        }
+	    });
+	});
+	
+	
+	
+	
 /* [Step 4-2] AI 매칭 시스템 로직 (수정 완료) */
     var g_projId = "${projectVO.projId}";
 
@@ -836,7 +869,8 @@
                         html += "  <td style='color:#2196F3; font-weight:bold; font-size:1.1em;'>" + item.total_score + "</td>";
                         html += "  <td>";
                         // [선택] 버튼: 누르면 인원 목록에 추가됨
-                        html += "    <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + item.emp_id + "','" + item.name + "')\">선택</button>";
+                        html += "    <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + item.userId + "','" + item.name + "')\">선택</button>";
+                        /* html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + (item.emp_id || item.userId) + "','" + item.name + "')\">선택</button>"; */
                         html += "  </td>";
                         html += "</tr>";
                     });
@@ -858,15 +892,15 @@
     }
 
     // 4. [인원 선택] : AI 결과에서 '선택' 버튼 클릭 시 호출
-    function fn_confirm_assign_to_list(empId, empName) {
+    function fn_confirm_assign_to_list(idFromAi, empName) {
         // 이미 목록에 있는지 체크
-        if($("#user_row_" + empId).length > 0) {
+        if($("#user_row_" + idFromAi).length > 0) {
             alert(empName + " 님은 이미 투입 목록에 있습니다.");
             return;
         }
 
         // 기존에 있던 인원 추가 함수(fn_select_this_user)를 재사용하여 목록에 넣음
-        fn_select_this_user(empId, empName);
+        fn_select_this_user(idFromAi, empName);
 
         // 팝업 닫기
         $('#aiMatchModal').hide();

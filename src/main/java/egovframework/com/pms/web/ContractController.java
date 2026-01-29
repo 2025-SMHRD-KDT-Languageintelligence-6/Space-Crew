@@ -65,8 +65,15 @@ public class ContractController {
     
     @RequestMapping(value = "/pms/addContractView.do")
     public String addContractView(@ModelAttribute("contractVO") ContractVO contractVO, Model model) throws Exception {
-        List<SalesVO> salesList = salesService.selectSalesList(new SalesVO());
-        List<CustomerVO> customerList = customerService.selectCustomerList(new CustomerVO());
+        
+    	SalesVO salesSearchVO = new SalesVO();
+        salesSearchVO.setRecordCountPerPage(999);
+        List<SalesVO> salesList = salesService.selectSalesList(salesSearchVO);
+        
+        CustomerVO custSearchVO = new CustomerVO();
+        custSearchVO.setRecordCountPerPage(999);
+        custSearchVO.setFirstIndex(0);
+        List<CustomerVO> customerList = customerService.selectCustomerList(custSearchVO);
         
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
@@ -105,8 +112,16 @@ public class ContractController {
                 result.setEndDt(result.getEndDt().substring(0, 10));
             }
         }
-        List<SalesVO> salesList = salesService.selectSalesList(new SalesVO());
-        List<CustomerVO> customerList = customerService.selectCustomerList(new CustomerVO());
+        SalesVO salesSearchVO = new SalesVO();
+        salesSearchVO.setRecordCountPerPage(999);
+        salesSearchVO.setFirstIndex(0);
+        List<SalesVO> salesList = salesService.selectSalesList(salesSearchVO);
+
+        CustomerVO custSearchVO = new CustomerVO();
+        custSearchVO.setRecordCountPerPage(999);
+        custSearchVO.setFirstIndex(0);
+        List<CustomerVO> customerList = customerService.selectCustomerList(custSearchVO);
+        
         UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
         userSearchVO.setFirstIndex(0);
