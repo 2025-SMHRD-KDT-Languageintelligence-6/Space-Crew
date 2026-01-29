@@ -135,7 +135,42 @@
 	        });
 	    });
 	    
+	    $(document).ready(function() {
+	        $("input[name='startDt']").change(function() {
+	            var startDate = $(this).val();
+	            if (startDate) {
+	                $("input[name='endDt']").attr("min", startDate);
+	            }
+	        });
+
+	        $("input[name='endDt']").change(function() {
+	            var endDate = $(this).val();
+	            if (endDate) {
+	                $("input[name='startDt']").attr("max", endDate);
+	            }
+	        });
+	    });
 	    
+	    $("form").submit(function(e) {
+	        var startDate = $("input[name='startDt']").val();
+	        var endDate = $("input[name='endDt']").val();
+
+	        if (startDate && endDate) {
+	            if (startDate > endDate) {
+	                alert("수행 종료일은 시작일보다 빠를 수 없습니다.");
+	                $("input[name='endDt']").focus();
+	                e.preventDefault();
+	                return false;
+	            }
+	        }
+	    });
+	    
+	    $(document).ready(function() {
+	        var serverCustId = "${contractVO.custId}";
+	        if(serverCustId) {
+	            $("#custId").val(serverCustId).prop("selected", true);
+	        }
+	    });
 	    
 	</script>
 	
