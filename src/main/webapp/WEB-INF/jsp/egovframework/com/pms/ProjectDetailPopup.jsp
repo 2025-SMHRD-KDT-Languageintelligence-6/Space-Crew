@@ -464,6 +464,7 @@
 	        startDate: $("#assignStartDate").val(),
 	        endDate: $("#assignEndDate").val(),
 	        taskGroupId: $("#taskGroupId").val(),
+	        reqSkills: $("#assignReqSkills").val(),
 	        assignList: assignList
 	    };
 
@@ -494,6 +495,8 @@
 	            $("#assignStartDate").val(data.info.startDate);
 	            $("#assignEndDate").val(data.info.endDate);
 
+	            $("#assignReqSkills").val(data.info.reqSkills || "");
+	            
 	            $("#selectedUserListBody").empty();
 	            $.each(data.memberList, function(idx, mem) {
 	                var html = "<tr id='user_row_" + mem.userId + "'>";
@@ -800,43 +803,24 @@
         var assignTitle = $("#assignTitle").val();     // 업무명
         var reqText = $("#assignReqSkills").val();     // 요구 기술 (textarea)
 
-        // 유효성 검사
-        if(!assignTitle) { alert("업무 명칭을 먼저 입력해주세요."); $("#assignTitle").focus(); return; }
-        if(!reqText) { alert("AI 분석을 위해 '요구 기술 및 상세내용'을 입력해주세요."); $("#assignReqSkills").focus(); return; }
+        if(!assignTitle || !reqText) { 
+            alert("업무 명칭과 요구 기술을 입력해주세요."); 
+            return; 
+        }
 
-        // [Spring] 서버에 텍스트 저장 요청 -> assignId(식별자) 발급
-        $.ajax({
-            url: "/api/matching/projects/" + g_projId + "/assignments/req",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "req_skills": reqText,
-                "assign_title": assignTitle
-            }),
-            success: function(res) {
-                // 발급받은 assignId를 화면에 저장 (이게 있어야 매칭 가능)
-                $("#currentReqId").val(res.assignId);
-
-                // AI 결과 팝업 열기 & 매칭 시작
-                $('#aiMatchModal').show();
-                fn_run_ai_match();
-            },
-            error: function(xhr) {
-                alert("데이터 저장 실패: " + xhr.status + "\n(로그인이 되어있는지 확인해주세요)");
-            }
-        });
+        $('#aiMatchModal').show();
+        
+        fn_run_ai_match_direct(assignTitle, reqText); 
     }
 
     // 2. [AI 매칭 실행] : Python 서버(8000번)로 직접 요청
     function fn_run_ai_match() {
         var weight = $("#weightSlider").val();       // 가중치 값
-        var assignId = $("#currentReqId").val();     // 아까 받은 ID
-
-        // 로딩 메시지 표시
-        $("#aiResultBody").html('<tr><td colspan="7" style="padding:30px; text-align:center; font-size:14px;">🧠 AI가 요구사항을 분석하여 적합한 인재를 찾고 있습니다...<br><span style="color:#666; font-size:12px;">(텍스트 문맥 분석 + 가동률 체크)</span></td></tr>');
+        $("#aiResultBody").html('<tr><td colspan="7">...분석 중...</td></tr>');
 
         var param = {
-            "assign_id": parseInt(assignId),
+            "assign_title": title,
+            "req_skills": skills,
             "ai_weight": parseInt(weight)
         };
 
@@ -869,8 +853,7 @@
                         html += "  <td style='color:#2196F3; font-weight:bold; font-size:1.1em;'>" + item.total_score + "</td>";
                         html += "  <td>";
                         // [선택] 버튼: 누르면 인원 목록에 추가됨
-                        html += "    <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + item.userId + "','" + item.name + "')\">선택</button>";
-                        /* html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + (item.emp_id || item.userId) + "','" + item.name + "')\">선택</button>"; */
+                        html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + (item.emp_id || item.userId) + "','" + item.name + "')\">선택</button>";
                         html += "  </td>";
                         html += "</tr>";
                     });

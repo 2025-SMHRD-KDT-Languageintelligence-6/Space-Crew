@@ -262,6 +262,7 @@
 	        END_DT, 
 	        INPUT_RATE, 
 	        TASK_GROUP_ID,
+	        REQ_SKILLS,
 	        LAST_UPDUSR_ID
 	    ) VALUES 
 	    <foreach collection="assignList" item="item" separator=",">
@@ -273,6 +274,7 @@
 	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
 	        #{item.inputRate}, 
 	        #{taskGroupId},
+	        #{reqSkills},
 	        #{lastUpdusrId}
 	    )
 	    </foreach>

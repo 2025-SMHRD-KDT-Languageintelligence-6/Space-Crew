@@ -308,32 +308,30 @@ public class ProjectController {
      * [AI 매칭] 요구사항 텍스트 저장 -> assignId 반환
      * (기존 ProjectController에 통합)
      */
-    @ResponseBody
-    @RequestMapping(value = "/api/matching/projects/{projId}/assignments/req")
-    public Map<String, Object> addAssignmentReq(@PathVariable int projId, @RequestBody Map<String, Object> payload) throws Exception {
-
-        // 1. VO 생성 (ProjectAssignVO 사용)
-        ProjectAssignVO vo = new ProjectAssignVO();
-        vo.setProjId(projId);
-        vo.setReqSkills((String) payload.get("req_skills"));
-
-        // 제목이 있으면 넣고, 없으면 앞부분 잘라서 임시 제목으로
-        String title = (String) payload.get("assign_title");
-        if(title == null || title.isEmpty()) {
-            String req = (String) payload.get("req_skills");
-            title = (req.length() > 10) ? req.substring(0, 10) + "..." : req;
-        }
-        vo.setAssignTitle(title);
-
-        // 2. 서비스 호출 (기존 projectService 사용!)
-        // 서비스에 insertAssignmentReq 메서드를 추가해야 합니다.
-        projectService.insertAssignmentReq(vo);
-
-        // 3. 결과 반환
-        Map<String, Object> result = new HashMap<>();
-        result.put("status", "success");
-        result.put("assignId", vo.getAssignId()); // INSERT 후 생성된 ID
-
-        return result;
-    }
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/api/matching/projects/{projId}/assignments/req")
+	 * public Map<String, Object> addAssignmentReq(@PathVariable int
+	 * projId, @RequestBody Map<String, Object> payload) throws Exception {
+	 * 
+	 * // 1. VO 생성 (ProjectAssignVO 사용) ProjectAssignVO vo = new ProjectAssignVO();
+	 * vo.setProjId(projId); vo.setReqSkills((String) payload.get("req_skills"));
+	 * 
+	 * // 제목이 있으면 넣고, 없으면 앞부분 잘라서 임시 제목으로 String title = (String)
+	 * payload.get("assign_title"); if(title == null || title.isEmpty()) { String
+	 * req = (String) payload.get("req_skills"); title = (req.length() > 10) ?
+	 * req.substring(0, 10) + "..." : req; } vo.setAssignTitle(title);
+	 * 
+	 * // 2. 서비스 호출 (기존 projectService 사용!) // 서비스에 insertAssignmentReq 메서드를 추가해야
+	 * 합니다. projectService.insertAssignmentReq(vo);
+	 * 
+	 * // 3. 결과 반환 Map<String, Object> result = new HashMap<>();
+	 * result.put("status", "success"); result.put("assignId", vo.getAssignId()); //
+	 * INSERT 후 생성된 ID
+	 * 
+	 * return result; }
+	 */
+    
+    
 }
