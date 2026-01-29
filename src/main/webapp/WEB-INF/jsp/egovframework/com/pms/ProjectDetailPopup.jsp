@@ -803,24 +803,23 @@
         var assignTitle = $("#assignTitle").val();     // 업무명
         var reqText = $("#assignReqSkills").val();     // 요구 기술 (textarea)
 
-        if(!assignTitle || !reqText) { 
-            alert("업무 명칭과 요구 기술을 입력해주세요."); 
-            return; 
-        }
+        if(!assignTitle) { alert("업무 명칭을 입력해주세요."); $("#assignTitle").focus(); return; }
+        if(!reqText) { alert("요구 기술 및 상세내용을 입력해주세요."); $("#assignReqSkills").focus(); return; }
 
         $('#aiMatchModal').show();
         
-        fn_run_ai_match_direct(assignTitle, reqText); 
+        fn_run_ai_match();
     }
 
     // 2. [AI 매칭 실행] : Python 서버(8000번)로 직접 요청
     function fn_run_ai_match() {
         var weight = $("#weightSlider").val();       // 가중치 값
+        var reqText = $("#assignReqSkills").val();
+        
         $("#aiResultBody").html('<tr><td colspan="7">...분석 중...</td></tr>');
 
         var param = {
-            "assign_title": title,
-            "req_skills": skills,
+            "req_skills": reqText,
             "ai_weight": parseInt(weight)
         };
 

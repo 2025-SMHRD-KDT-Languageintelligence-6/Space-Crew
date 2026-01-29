@@ -291,6 +291,7 @@
 	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
 	        , A.INPUT_RATE                        AS inputRate
 	        , A.TASK_GROUP_ID       			  AS taskGroupId
+	        , A.REQ_SKILLS                        AS reqSkills
 	    FROM TB_ASSIGNMENT A
 	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
 	    WHERE A.TASK_GROUP_ID = #{taskGroupId}
