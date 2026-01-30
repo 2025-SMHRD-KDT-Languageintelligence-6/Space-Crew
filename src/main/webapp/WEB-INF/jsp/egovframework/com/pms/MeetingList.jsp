@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <title>Space-PMS | 회의록 관리 센터</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/ProjectList.css'/>">
     <style>
@@ -41,6 +43,12 @@
                 <p class="text-slate-500 text-sm mt-1">일간/주간 정기 회의록을 업로드하고 관리하세요.</p>
             </div>
         </header>
+        
+        <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-slate-200 cursor-pointer" id="datePickerBtn">
+		    <i class="fas fa-calendar-alt text-blue-500"></i>
+		    <span id="selectedDateText" class="text-sm font-bold text-slate-700">날짜 이동</span>
+		</div>
+        
 		<input type="file" id="hiddenFileItem" style="display:none;" onchange="fn_start_upload(this)">
         <section>
             <div class="flex items-center gap-3 mb-6">
@@ -184,6 +192,16 @@
 	        }
 	        location.href = "${pageContext.request.contextPath}/pms/meetingDetail.do?meetId=" + meetId;
 	    }
+	    
+	    $(document).ready(function() {
+	        flatpickr("#datePickerBtn", {
+	            dateFormat: "Y-m-d",
+	            defaultDate: "${empty targetDate ? 'today' : targetDate}",
+	            onChange: function(selectedDates, dateStr) {
+	                location.href = "${pageContext.request.contextPath}/pms/meetingList.do?targetDate=" + dateStr;
+	            }
+	        });
+	    });
 	</script>
 </body>
 </html>

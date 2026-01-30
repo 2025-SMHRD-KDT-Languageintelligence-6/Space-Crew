@@ -40,21 +40,33 @@ public class MeetingController {
 	private EgovFileMngService fileMngService;
 	
 	@RequestMapping(value = "/pms/meetingList.do")
-	public String selectMeetingList(MeetingVO meetingVO, ModelMap model) throws Exception {
-
-	    List<MeetingVO> dbMeetingList = meetingService.selectMeetingList(meetingVO);
-
+	public String selectMeetingList(
+			@RequestParam(value = "targetDate", required = false) String targetDate,
+	        MeetingVO meetingVO, ModelMap model) throws Exception {
+		
 	    Calendar cal = Calendar.getInstance();
+	    SimpleDateFormat dbSdf = new SimpleDateFormat("yyyy-MM-dd");
 	    SimpleDateFormat sdf = new SimpleDateFormat("d");
 	    SimpleDateFormat fullSdf = new SimpleDateFormat("yyyyMMdd");
-	    SimpleDateFormat dbSdf = new SimpleDateFormat("yyyy-MM-dd");
-
+	    
+	    if (targetDate != null && !targetDate.isEmpty()) {
+	        cal.setTime(dbSdf.parse(targetDate));
+	    }
+	    
 	    int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	    cal.add(Calendar.DATE, (dayOfWeek - 1) * -1);
+	    
+	    Calendar searchCal = (Calendar) cal.clone();
+	    searchCal.add(Calendar.DATE, -7); 
+	    meetingVO.setSearchStartDt(dbSdf.format(searchCal.getTime()));
+	    
+	    searchCal.add(Calendar.DATE, 21); 
+	    meetingVO.setSearchEndDt(dbSdf.format(searchCal.getTime()));
+	    
+	    List<MeetingVO> dbMeetingList = meetingService.selectMeetingList(meetingVO);
 
 	    List<Map<String, Object>> weekDays = new ArrayList<>();
-	    Calendar today = Calendar.getInstance();
-	    String todayStr = fullSdf.format(today.getTime());
+	    String todayStr = fullSdf.format(new Date());
 
 	    for (int i = 0; i < 7; i++) {
 	        Map<String, Object> dayMap = new HashMap<>();
@@ -74,22 +86,18 @@ public class MeetingController {
 	                }
 	            }
 	        }
-	        
 	        weekDays.add(dayMap);
 	        cal.add(Calendar.DATE, 1);
 	    }
 
-	    cal.setTime(new Date());
+	    cal.setTime(targetDate != null && !targetDate.isEmpty() ? dbSdf.parse(targetDate) : new Date());
 	    List<Map<String, Object>> weeklyList = new ArrayList<>();
 
 	    for (int i = 0; i < 2; i++) {
 	        Map<String, Object> weekMap = new HashMap<>();
 
-	        int month = cal.get(Calendar.MONTH) + 1;
-	        int weekOfMonth = cal.get(Calendar.WEEK_OF_MONTH);
-	        
-	        weekMap.put("weekLabel", month + "월 " + weekOfMonth + "주차");
-	        weekMap.put("weekNum", weekOfMonth + "W");
+	        weekMap.put("weekLabel", (cal.get(Calendar.MONTH) + 1) + "월 " + cal.get(Calendar.WEEK_OF_MONTH) + "주차");
+	        weekMap.put("weekNum", cal.get(Calendar.WEEK_OF_MONTH) + "W");
 	        weekMap.put("isCurrent", (i == 0));
 	        
 	        Calendar tempCal = (Calendar) cal.clone();
@@ -112,7 +120,7 @@ public class MeetingController {
 
 	    model.addAttribute("weeklyList", weeklyList);
 	    model.addAttribute("weekDays", weekDays);
-	    model.addAttribute("currentMonth", today.get(Calendar.MONTH) + 1);
+	    model.addAttribute("targetDate", targetDate);
 	    
 	    return "egovframework/com/pms/MeetingList";
 	}
@@ -238,5 +246,7 @@ public class MeetingController {
 	        response.setStatus(404);
 	    }
 	}
+	
+	
 	
 }

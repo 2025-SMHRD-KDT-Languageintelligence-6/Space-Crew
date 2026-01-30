@@ -10,9 +10,12 @@
             , ATCH_FILE_ID AS atchFileId
         FROM TB_MEETING
         WHERE 1=1
-        <if test="searchKeyword != null and searchKeyword != ''">
-            AND MEET_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
-        </if>
+        <if test="searchStartDt != null and searchStartDt != ''">
+	        AND MEET_DT &gt;= #{searchStartDt}
+	    </if>
+	    <if test="searchEndDt != null and searchEndDt != ''">
+	        AND MEET_DT &lt;= #{searchEndDt}
+	    </if>
         ORDER BY MEET_DT DESC
     </select>
 	

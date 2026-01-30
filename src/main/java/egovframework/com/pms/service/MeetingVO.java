@@ -21,8 +21,8 @@ public class MeetingVO implements Serializable {
     private String lastUpdtPnttm;
     private String atchFileId;
     
-    
-    
-    
     private String searchKeyword;
+    
+    private String searchStartDt;
+    private String searchEndDt;
 }

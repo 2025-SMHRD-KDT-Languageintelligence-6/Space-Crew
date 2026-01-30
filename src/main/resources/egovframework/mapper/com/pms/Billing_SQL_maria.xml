@@ -26,6 +26,7 @@
 	    LEFT JOIN TB_CUSTOMER C ON S.CUST_ID = C.CUST_ID
 	    LEFT JOIN TB_BILLING B ON P.PROJ_ID = B.PROJ_ID AND B.DEL_YN = 'N'
 	    WHERE 1=1
+	    	AND P.DEL_YN = 'N'
 	    <if test="searchKeyword != null and searchKeyword != ''">
 	        AND P.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
 	    </if>
@@ -92,13 +93,14 @@
         )
     </insert>
 
-    <select id="selectBillingListTotCnt" resultType="int">
-        SELECT COUNT(*) FROM TB_BILLING
-        WHERE DEL_YN = 'N'
-        <if test="searchKeyword != null and searchKeyword != ''">
-            AND BILL_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
-        </if>
-    </select>
+    <select id="selectBillingListTotCnt" parameterType="egovframework.com.pms.service.BillingVO" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM TB_PROJECT P
+	    WHERE P.DEL_YN = 'N'
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND P.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
+	    </if>
+	</select>
     
     <update id="updateBilling" parameterType="egovframework.com.pms.service.BillingVO">
 	    UPDATE TB_BILLING

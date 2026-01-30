@@ -37,6 +37,18 @@
 	.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
 	.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
 	.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
+	.tab-container { display: flex; gap: 5px; margin-bottom: -2px; border-bottom: 1px solid #ddd; }
+	.tab-btn { 
+	    padding: 12px 25px; cursor: pointer; background: #f8f9fa; border: 1px solid #ddd; 
+	    border-radius: 8px 8px 0 0; font-weight: bold; color: #666; transition: all 0.3s;
+	}
+	.tab-btn.active { 
+	    background: #fff; border-bottom: 2px solid #fff; color: #2196F3; 
+	    border-top: 3px solid #2196F3; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+	}
+	.tab-content { display: none; padding: 20px; background: #fff; border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; }
+	.tab-content.active { display: block; }
+    
     </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 
@@ -55,7 +67,14 @@
     <div class="popup-header">
         <h2>📂 업무 정보 : ${projectVO.projNm}</h2>
     </div>
-
+	
+	<div class="tab-container">
+	    <div class="tab-btn active" onclick="fn_change_tab(0)">기본정보</div>
+	    <div class="tab-btn" onclick="fn_change_tab(1)">투입 인력 현황</div>
+	    <div class="tab-btn" onclick="fn_change_tab(2)">프로젝트 일정</div>
+	</div>
+	
+	<div id="tab0" class="tab-content active">
     <table class="w3-table-all">
         <colgroup>
             <col style="width:30%;">
@@ -149,9 +168,9 @@
 	        <c:param name="atchFileId" value="${projectVO.atchFileId}" />
 	    </c:import>
 	</div>
+	</div>
 
-
-
+	<div id="tab1" class="tab-content">
 	<div class="assign-section" style="margin-top:30px;">
 	    <h3>투입 인력 현황</h3>
 	    <table class="table" id="assignTable">
@@ -255,11 +274,14 @@
 	        </table>
 	    </div>
 	</div>
+	</div>
 
+
+	<div id="tab2" class="tab-content">
 	<div id='calendar-container' style="margin-top:30px; border:1px solid #ddd; padding:10px; background:#fff;">
 	    <div id='calendar'></div>
 	</div>
-
+	</div>
 
     <div class="btn-close">
     	<button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_s_blue">수정</button>
@@ -808,7 +830,20 @@
 	    });
 	});
 	
-	
+	function fn_change_tab(idx) {
+	    $(".tab-btn").removeClass("active");
+	    $(".tab-content").removeClass("active");
+
+	    $(".tab-btn").eq(idx).addClass("active");
+	    $("#tab" + idx).addClass("active");
+
+	    if(idx === 2 && calendar) {
+	        setTimeout(function() {
+	            calendar.render();
+	            calendar.updateSize();
+	        }, 10);
+	    }
+	}
 	
 	
 /* [Step 4-2] AI 매칭 시스템 로직 (수정 완료) */

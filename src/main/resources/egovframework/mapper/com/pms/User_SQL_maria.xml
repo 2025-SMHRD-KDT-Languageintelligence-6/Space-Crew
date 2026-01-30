@@ -24,7 +24,7 @@
         <if test="searchKeyword != null and searchKeyword != ''">
             AND EMP_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        ORDER BY JOIN_DT DESC
+        ORDER BY DEPT_NM ASC, EMP_NM ASC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 

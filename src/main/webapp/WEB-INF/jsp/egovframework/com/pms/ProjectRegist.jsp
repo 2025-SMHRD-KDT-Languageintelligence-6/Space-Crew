@@ -57,18 +57,20 @@
                 <tr>
 				    <th class="required">주담당자</th>
 				    <td>
-				        <form:select path="mainMgrNm" required="required">
-				            <form:option value="" label="-- 선택 --"/>
-				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        <form:select path="mainMgrId" required="required"> <form:option value="" label="-- 선택 --"/>
+				            <c:forEach var="user" items="${userList}">
+				                <form:option value="${user.userId}" label="${user.userNm} (${user.deptNm})"/>
+				            </c:forEach>
 				        </form:select>
 				    </td>
 				</tr>
                 <tr>
 				    <th class="required">부담당자</th>
 				    <td>
-				        <form:select path="subMgrNm" required="required">
-				            <form:option value="" label="-- 선택 --"/>
-				            <form:options items="${userList}" itemValue="userId" itemLabel="userNm"/>
+				        <form:select path="subMgrId" required="required"> <form:option value="" label="-- 선택 --"/>
+				            <c:forEach var="user" items="${userList}">
+				                <form:option value="${user.userId}" label="${user.userNm} (${user.deptNm})"/>
+				            </c:forEach>
 				        </form:select>
 				    </td>
 				</tr>
@@ -84,7 +86,7 @@
                 </tr>
                 <tr>
                 	<th>예상 인력</th>
-                	<td><form:input path="estEffort" type="number" style="width: 50px;" min="0"/>  M/M</td>
+                	<td><form:input path="estEffort" type="number" style="width: 50px;" min="0" value="${empty projectVO.estEffort ? 0 : projectVO.estEffort}"/> M/M</td>
                 </tr>
                 <tr>
                 	<th>요구 및 특이사항</th>
@@ -122,6 +124,21 @@
 	    });
 	
 	    $("form").submit(function(e) {
+	    	var mainMgr = $("select[name='mainMgrNm']").val();
+	        var subMgr = $("select[name='subMgrNm']").val();
+	        var estEffort = $("input[name='estEffort']").val();
+
+	        if (mainMgr && subMgr && mainMgr === subMgr) {
+	            alert("주담당자와 부담당자는 동일한 사람일 수 없습니다.");
+	            $("select[name='subMgrNm']").focus();
+	            e.preventDefault();
+	            return false;
+	        }
+
+	        if (!estEffort) {
+	            $("input[name='estEffort']").val(0);
+	        }
+	    	
 	        var startDate = $("input[name='startDt']").val();
 	        var endDate = $("input[name='endDt']").val();
 	

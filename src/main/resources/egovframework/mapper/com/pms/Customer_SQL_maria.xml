@@ -24,7 +24,7 @@
         <if test="searchKeyword != null and searchKeyword != ''">
             AND CUST_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        ORDER BY favYn DESC, A.CUST_ID DESC
+        ORDER BY favYn DESC, A.CUST_NM ASC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
