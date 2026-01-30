@@ -10,22 +10,15 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/dashboard.css'/>">
 
     <style>
-        /* 추가 애니메이션 및 세부 스타일 */
+        /* 애니메이션 및 공통 스타일 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-
         .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-
-        /* 알림창 슬라이드 효과 */
-        #notification-panel { transition: transform 0.3s ease-in-out; transform: translateX(100%); }
-        #notification-panel.open { transform: translateX(0); }
-
-        /* 모달 오버레이 */
         .modal-overlay { background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); }
+        .hidden-element { display: none !important; }
 
         /* 스위치 스타일 */
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
@@ -34,8 +27,6 @@
         .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #2563eb; }
         input:checked + .slider:before { transform: translateX(20px); }
-
-        .hidden-element { display: none !important; }
     </style>
 </head>
 <body class="bg-slate-50 flex min-h-screen">
@@ -129,28 +120,20 @@
                 <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-address-card"></i></div>
                 <h4 class="font-bold text-slate-700 text-xs">고객 관리</h4>
             </a>
-
             <a href="<c:url value='/pms/projectList.do'/>" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm card-hover text-center relative">
                 <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-project-diagram"></i></div>
                 <h4 class="font-bold text-slate-700 text-xs">프로젝트</h4>
-                <c:if test="${projectCount > 0}">
-                    <span class="absolute top-3 right-3 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${projectCount}</span>
-                </c:if>
+                <c:if test="${projectCount > 0}"><span class="absolute top-3 right-3 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${projectCount}</span></c:if>
             </a>
-
             <a href="<c:url value='/pms/billingList.do'/>" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm card-hover text-center relative">
                 <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-file-invoice-dollar"></i></div>
                 <h4 class="font-bold text-rose-500 text-xs">청구/정산</h4>
-                <c:if test="${billingCount > 0}">
-                    <span class="absolute top-3 right-3 bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${billingCount}</span>
-                </c:if>
+                <c:if test="${billingCount > 0}"><span class="absolute top-3 right-3 bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${billingCount}</span></c:if>
             </a>
-
             <a href="<c:url value='/pms/meetingList.do'/>" class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-lg card-hover text-center group">
                 <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl group-hover:scale-110 transition-transform">🎙️</div>
                 <h4 class="font-bold text-white text-xs">AI 회의록 분석</h4>
             </a>
-
             <a href="<c:url value='/pms/userList.do'/>" class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm card-hover text-center">
                 <div class="w-12 h-12 bg-slate-50 text-slate-500 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl"><i class="fas fa-user-tie"></i></div>
                 <h4 class="font-bold text-slate-700 text-xs">운영직 관리</h4>
@@ -158,22 +141,7 @@
         </section>
     </main>
 
-    <div id="notification-panel" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] border-l border-slate-100 flex flex-col">
-        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 class="font-bold text-slate-800 tracking-tighter uppercase underline decoration-blue-500 decoration-2 underline-offset-4">Notification Center</h3>
-            <button onclick="toggleNotifications()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fas fa-times text-lg"></i></button>
-        </div>
-        <div class="flex-1 overflow-y-auto p-5 space-y-4">
-            <div class="p-4 bg-red-50 rounded-[1.5rem] border border-red-100 animate-fade-in">
-                <p class="text-[10px] font-bold text-red-600 uppercase mb-2">High Risk</p>
-                <p class="text-[11px] text-red-800 font-bold leading-relaxed">Space-PMS 프로젝트가 목표 대비 12.5% 지연되었습니다. 리소스 재배치가 권장됩니다.</p>
-            </div>
-            <div class="p-4 bg-blue-50 rounded-[1.5rem] border border-blue-100 animate-fade-in">
-                <p class="text-[10px] font-bold text-blue-600 uppercase mb-2">AI Summary</p>
-                <p class="text-[11px] text-blue-800 font-medium leading-relaxed">금일 오전 주간 회의 요약 보고서가 생성되었습니다. (GPT-4o 모델 기반)</p>
-            </div>
-        </div>
-    </div>
+    <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/notification.jsp" />
 
     <div id="config-modal" class="hidden fixed inset-0 z-[110] modal-overlay flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden">
@@ -204,14 +172,17 @@
     <script>
         function openConfig() { document.getElementById('config-modal').classList.remove('hidden'); }
         function closeConfig() { document.getElementById('config-modal').classList.add('hidden'); }
-        function toggleNotifications() { document.getElementById('notification-panel').classList.toggle('open'); }
+
+        // 알림창 토글 (notification.jsp 내의 패널을 제어)
+        function toggleNotifications() {
+            const panel = document.getElementById('notification-panel');
+            if(panel) panel.classList.toggle('open');
+        }
 
         function updateView(id, checkbox) {
             const target = document.getElementById(id);
-            if(checkbox.checked) {
-                target.classList.remove('hidden-element');
-            } else {
-                target.classList.add('hidden-element');
+            if(target) {
+                checkbox.checked ? target.classList.remove('hidden-element') : target.classList.add('hidden-element');
             }
         }
 
