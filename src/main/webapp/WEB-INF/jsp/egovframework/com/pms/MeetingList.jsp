@@ -46,7 +46,7 @@
         
         <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl shadow-sm border border-slate-200 cursor-pointer" id="datePickerBtn">
 		    <i class="fas fa-calendar-alt text-blue-500"></i>
-		    <span id="selectedDateText" class="text-sm font-bold text-slate-700">날짜 이동</span>
+		    <span id="selectedDateText" class="text-sm font-bold text-slate-700">날짜 선택</span>
 		</div>
         
 		<input type="file" id="hiddenFileItem" style="display:none;" onchange="fn_start_upload(this)">

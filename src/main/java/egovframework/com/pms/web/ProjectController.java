@@ -67,11 +67,16 @@ public class ProjectController {
 
     @RequestMapping(value = "/pms/addProjectView.do")
     public String addProjectView(@ModelAttribute("projectVO") ProjectVO projectVO, Model model) throws Exception {
-    	List<ContractVO> contractList = contractService.selectContractList(new ContractVO());
+    	ContractVO contractSearchVO = new ContractVO();
+        contractSearchVO.setRecordCountPerPage(999);
+        contractSearchVO.setFirstIndex(0);
+        List<ContractVO> contractList = contractService.selectContractList(contractSearchVO);
+        
     	UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);
         userSearchVO.setFirstIndex(0);
         List<UserVO> userList = userService.selectUserList(userSearchVO);
+        
         model.addAttribute("projectVO", new ProjectVO());
         model.addAttribute("contractList", contractList);
         model.addAttribute("userList", userList);

@@ -136,13 +136,13 @@
 	    });
 	
 	    $("form").submit(function(e) {
-	    	var mainMgr = $("select[name='mainMgrNm']").val();
-	        var subMgr = $("select[name='subMgrNm']").val();
+	    	var mainMgr = $("select[name='mainMgrId']").val();
+	        var subMgr = $("select[name='subMgrId']").val();
 	        var estEffort = $("input[name='estEffort']").val();
 
 	        if (mainMgr && subMgr && mainMgr === subMgr) {
 	            alert("주담당자와 부담당자는 동일한 사람일 수 없습니다.");
-	            $("select[name='subMgrNm']").focus();
+	            $("select[name='subMgrId']").focus();
 	            e.preventDefault();
 	            return false;
 	        }

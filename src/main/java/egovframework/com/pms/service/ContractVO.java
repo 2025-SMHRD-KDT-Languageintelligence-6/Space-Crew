@@ -30,7 +30,7 @@ public class ContractVO extends ComDefaultVO implements Serializable {
     private String salesUserNm;
     private String custNm;
     
-    private String custId;
+    private Long custId;
     private String ceoNm;
     
     private String atchFileId;

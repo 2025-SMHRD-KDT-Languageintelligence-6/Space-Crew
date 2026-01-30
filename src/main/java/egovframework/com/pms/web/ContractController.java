@@ -68,6 +68,7 @@ public class ContractController {
         
     	SalesVO salesSearchVO = new SalesVO();
         salesSearchVO.setRecordCountPerPage(999);
+        salesSearchVO.setFirstIndex(0);
         List<SalesVO> salesList = salesService.selectSalesList(salesSearchVO);
         
         CustomerVO custSearchVO = new CustomerVO();
