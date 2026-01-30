@@ -312,6 +312,14 @@
                     <tr><td colspan="7" style="padding:20px;">데이터를 불러오는 중...</td></tr>
                 </tbody>
             </table>
+            <div style="text-align:center; margin-top:25px; border-top:1px solid #eee; padding-top:15px;">
+                <button type="button" 
+                        onclick="$('#aiMatchModal').hide();" 
+                        class="btn_s_gray" 
+                        style="width:120px; height:35px; font-weight:bold; cursor:pointer;">
+                    창 닫기
+                </button>
+            </div>
         </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -396,7 +404,9 @@
 	                    html += "    <span style='color:" + barColor + "; font-size:11px; font-weight:bold;'>" + rate + "%</span>";
 	                    html += "  </td>";
 	                    html += "  <td style='text-align:center;'>";
-	                    html += "    <button type='button' class='btn_s' onclick=\"fn_select_this_user('" + user.empId + "', '" + user.userNm + "')\">선택</button>";
+	                    //html += "    <button type='button' class='btn_s' onclick=\"fn_select_this_user('" + user.empId + "', '" + user.userNm + "')\">선택</button>";
+	                    var targetId = user.empId || user.userId;
+	                    html += " <button type='button' class='btn_s' onclick=\"fn_select_this_user('" + targetId + "', '" + user.userNm + "')\">선택</button>";
 	                    html += "  </td>";
 	                    html += "</tr>";
 	                });
@@ -825,7 +835,8 @@
 
         // [Python] FastAPI 서버 호출
         $.ajax({
-            url: "http://127.0.0.1:8000/api/match",
+            // url: "http://127.0.0.1:8000/api/match",
+            url: "<c:url value='/pms/proxyAiMatch.do'/>",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(param),
@@ -852,7 +863,8 @@
                         html += "  <td style='color:#2196F3; font-weight:bold; font-size:1.1em;'>" + item.total_score + "</td>";
                         html += "  <td>";
                         // [선택] 버튼: 누르면 인원 목록에 추가됨
-                        html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + (item.emp_id || item.userId) + "','" + item.name + "')\">선택</button>";
+                        html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + item.userId + "', '" + item.name + "')\">선택</button>";
+                        // html += " <button type='button' class='btn_s_blue' onclick=\"fn_confirm_assign_to_list('" + (item.emp_id || item.userId) + "','" + item.name + "')\">선택</button>";
                         html += "  </td>";
                         html += "</tr>";
                     });
@@ -874,20 +886,29 @@
     }
 
     // 4. [인원 선택] : AI 결과에서 '선택' 버튼 클릭 시 호출
-    function fn_confirm_assign_to_list(idFromAi, empName) {
+    function fn_confirm_assign_to_list(userId, empName) {
+    	console.log("AI 추천 데이터 (userId):", userId);
         // 이미 목록에 있는지 체크
-        if($("#user_row_" + idFromAi).length > 0) {
+        if($("#user_row_" + userId).length > 0) {
             alert(empName + " 님은 이미 투입 목록에 있습니다.");
             return;
         }
 
         // 기존에 있던 인원 추가 함수(fn_select_this_user)를 재사용하여 목록에 넣음
-        fn_select_this_user(idFromAi, empName);
+        fn_select_this_user(userId, empName);
 
         // 팝업 닫기
         $('#aiMatchModal').hide();
     }
-
+	
+    $(document).keydown(function(e) {
+        if (e.keyCode == 27) {
+            $('#aiMatchModal').hide();
+            $('#userSearchModal').hide();
+            $('#assignModal').hide();
+        }
+    });
+    
 	</script>
 </body>
 </html>

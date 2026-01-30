@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -302,7 +303,30 @@ public class ProjectController {
         return resultMap;
     }
     
+    
+    @ResponseBody
+    @RequestMapping(value = "/pms/proxyAiMatch.do", method = RequestMethod.POST)
+    public List<Map<String, Object>> proxyAiMatch(@RequestBody Map<String, Object> param) {
+        try {
+            // 1. 파이썬 서버 주소 (8000번)
+            String pythonUrl = "http://127.0.0.1:8000/api/match";
 
+            // 2. 자바가 직접 파이썬 호출 (이러면 CORS 안 뜸!)
+            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+            
+            // 3. 파이썬으로부터 리스트 형태로 결과 받아오기
+            List<Map<String, Object>> result = restTemplate.postForObject(pythonUrl, param, List.class);
+
+            System.out.println("✅ [AI Proxy] 파이썬 응답 성공! 데이터 개수: " + (result != null ? result.size() : 0));
+            return result;
+
+        } catch (Exception e) {
+            System.out.println("❌ [AI Proxy] 파이썬 호출 중 에러: " + e.getMessage());
+            e.printStackTrace();
+            return new java.util.ArrayList<>(); // 에러 시 빈 리스트 반환해서 JS 에러 방지
+        }
+    }
+    
 
     /**
      * [AI 매칭] 요구사항 텍스트 저장 -> assignId 반환
