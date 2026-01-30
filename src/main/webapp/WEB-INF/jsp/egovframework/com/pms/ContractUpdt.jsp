@@ -47,10 +47,7 @@
 						<select name="custId" id="custId" required="required" class="form-control">
 						    <option value="">-- 고객사 선택 --</option>
 						    <c:forEach var="cust" items="${customerList}">
-						        <option value="${cust.custId}" 
-						            <c:if test="${cust.custId == contractVO.custId}">selected="selected"</c:if>>
-						            ${cust.custNm}
-						        </option>
+						        <option value="${cust.custId}">${cust.custNm}</option>
 						    </c:forEach>
 						</select>
 				    </td>
@@ -189,18 +186,21 @@
 	    });
 	    
 	    $(document).ready(function() {
-	        var serverCustId = "${contractVO.custId}";
-	        if(serverCustId) {
-	            $("#custId").val(serverCustId).prop("selected", true);
+	    	var serverCustId = "${contractVO.custId}";
+	    	
+	    	if(serverCustId && serverCustId !== "0") {          
+	            $("#custId").val(serverCustId);
+	            
+	            if(!$("#custId").val()) {
+	                $("#custId option").each(function() {
+	                    if(String($(this).val()) === String(serverCustId)) {
+	                        $(this).prop("selected", true);
+	                    }
+	                });
+	            }
+	            
+	            $("#custId").trigger("change");
 	        }
-	    });
-	    
-	    $(document).ready(function() {
-	        var initStart = $("input[name='startDt']").val();
-	        var initEnd = $("input[name='endDt']").val();
-	        
-	        if (initStart) $("input[name='endDt']").attr("min", initStart);
-	        if (initEnd) $("input[name='startDt']").attr("max", initEnd);
 	    });
 	    
 	    

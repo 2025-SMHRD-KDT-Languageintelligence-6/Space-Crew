@@ -15,11 +15,11 @@
             , A.EMP_ID   AS picUserId
             , B.EMP_NM       AS picUserNm
             , A.CONT_STATUS   AS contStatus
-            , S.CUST_ID		  AS custId
+            , A.CUST_ID		  AS custId
             , C.CUST_NM		  as custNm
         FROM TB_CONTRACT A
         LEFT JOIN TB_SALES S    ON A.SALES_ID = S.SALES_ID
-        LEFT JOIN TB_CUSTOMER C ON S.CUST_ID = C.CUST_ID
+        LEFT JOIN TB_CUSTOMER C ON COALESCE(A.CUST_ID, S.CUST_ID) = C.CUST_ID
         LEFT JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
@@ -61,7 +61,7 @@
         LEFT JOIN TB_SALES B    ON A.SALES_ID = B.SALES_ID
         LEFT JOIN TB_EMP C     ON A.EMP_ID = C.EMP_ID
         LEFT JOIN TB_EMP D     ON B.EMP_ID = D.EMP_ID
-        LEFT JOIN TB_CUSTOMER E ON A.CUST_ID = E.CUST_ID 
+        LEFT JOIN TB_CUSTOMER E ON COALESCE(A.CUST_ID, B.CUST_ID) = E.CUST_ID 
         WHERE CONT_ID = #{contId}
         AND A.DEL_YN = 'N'
     </select>
@@ -86,6 +86,7 @@
             , CONT_STATUS = #{contStatus}
             , CONT_REMARK = #{contRemark}
             , LAST_UPDUSR_ID = #{lastUpdusrId}
+            , CUST_ID = #{custId}
         WHERE CONT_ID = #{contId}
     </update>
 
