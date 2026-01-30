@@ -242,9 +242,9 @@ function fnOnepassLogin() {
 		<img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image">
 		<div class="login_type">
 			<ul id="ulLoginType">
-				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title=""><spring:message code="comUatUia.loginForm.GNR"/></a></li> <!-- 일반 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title=""><spring:message code="comUatUia.loginForm.ENT"/></a></li> <!-- 기업 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title=""><spring:message code="comUatUia.loginForm.USR"/></a></li> <!-- 업무 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title="">일반직원<%--<spring:message code="comUatUia.loginForm.GNR"/>--%></a></li> <!-- 일반 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title="">관리직원<%--<spring:message code="comUatUia.loginForm.ENT"/>--%></a></li> <!-- 기업 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title="">대표<%--<spring:message code="comUatUia.loginForm.USR"/>--%></a></li> <!-- 업무 -->
 			</ul>
 		</div>
 	
@@ -276,13 +276,14 @@ function fnOnepassLogin() {
 						<li><a href="#" onclick="goFindId(); return false;"><spring:message code="comUatUia.loginForm.idPwSearch"/></a></li> <!-- 아이디/비밀번호 찾기 -->
 					</ul>
 				</li>
+				<%--
 				<li>
 					<ul class="btn_idpw" >
 						<li><a href="#" onclick="fnShowLogin(1);"><spring:message code="comUatUia.loginForm.login.gpki"/></a></li><!-- 인증서로그인 -->
 						<li><a href="<c:url value='/uat/uia/egovGpkiIssu.do'/>"><spring:message code="comUatUia.loginForm.gpki.info"/></a></li><!-- 인증서안내 -->
 					</ul>
 				</li>
-				
+				--%>
 			</ul>
 		</div>
 		
@@ -292,9 +293,11 @@ function fnOnepassLogin() {
 					<label for="password"><spring:message code="comUatUia.loginForm.pw"/></label><!-- 비밀번호 -->
 					<input type="password" name="pwd" id="" maxlength="20" title="${title} ${inputTxt}" placeholder="<spring:message code="comUatUia.loginForm.pw"/>"><!-- 비밀번호 -->
 				</li>
+
 				<li>
 					<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login.gpki"/>" onclick="actionLogin()"><!-- 인증서로그인 -->
 				</li>
+
 				<li>
 					<ul class="btn_idpw" >
 						<li><a href="#" onclick="fnShowLogin(0);"><spring:message code="comUatUia.loginForm.login.normal"/></a></li><!-- 일반로그인 -->
@@ -303,6 +306,7 @@ function fnOnepassLogin() {
 						<li>※ <spring:message code="comUatUia.loginForm.gpki.descrption"/></li>
 					</ul>
 				</li>
+
 			</ul>
 		</div>
 
@@ -311,7 +315,7 @@ function fnOnepassLogin() {
 	<input name="userSe" type="hidden" value="GNR"/>
 	<input name="j_username" type="hidden"/>
 	</form>
-
+<%--
 	<!-- 2021.05.30, 정진오, 디지털원패스 로그인 추가 -->
 	<div style="border:2px solid #e6e6e6; margin-top:20px;">
 		<form id="onepassForm" name="onepassForm" method="post">
@@ -324,7 +328,7 @@ function fnOnepassLogin() {
 			</li>
 		</ul>
 	</div>
-
+--%>
 </div>
 
 <!-- 팝업 폼 -->

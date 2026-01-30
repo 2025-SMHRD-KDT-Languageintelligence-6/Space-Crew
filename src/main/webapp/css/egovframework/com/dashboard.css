@@ -1,85 +1,132 @@
-/* 대시보드 레이아웃 */
+/* File Name: dashboard.css
+  Description: Space-PMS Intelligence Dashboard 전용 스타일
+  Update: 2026-01-30
+*/
+
+/* 1. 레이아웃 및 배경 리셋 */
 .content-page {
-    margin-left: 220px;
-    padding: 40px;
+    margin-left: 260px; /* 사이드바 폭에 맞춰 조정 */
+    padding: 2rem;
     min-height: 100vh;
-    box-sizing: border-box;
-    background-color: #e5e7eb;
+    background-color: #f8fafc; /* Slate-50: 훨씬 깨끗하고 현대적인 배경색 */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .container {
-    max-width: 1000px;
-    margin: auto;
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
-/* 헤더 영역 */
+/* 2. 헤더 섹션 */
 .header {
-    text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .header h1 {
-    font-size: 2.5em;
-    color: #2c3e50;
-
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1e293b;
+    letter-spacing: -0.05em;
+    margin-bottom: 0.5rem;
 }
 
-/* 그리드 시스템 */
+.header p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* 3. 대시보드 그리드 시스템 */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* 반응형 대응 */
+    gap: 1.5rem;
 }
 
-/* 카드 스타일 */
+/* 4. 카드 디자인 (Space-PMS 전용) */
 .card {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 1.5rem; /* 더 둥글게 만들어 부드러운 인상 */
+    border: 1px solid #e2e8f0;
     text-align: center;
     text-decoration: none;
-    color: #333;
-    transition: transform 0.2s, border 0.2s;
+    color: #334155;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
+/* 카드 호버 효과 */
 .card:hover {
-    transform: translateY(-5px);
-    border: 2px solid #007bff;
+    transform: translateY(-8px);
+    border-color: #2563eb;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(37, 99, 235, 0.04);
 }
 
+/* 카드 내부 텍스트 및 아이콘 */
 .card h3 {
-    margin-top: 0;
-    color: #007bff;
-    font-size: 1.25em;
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.15rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
+    gap: 0.75rem;
 }
 
 .card h3 i {
-    margin-right: 10px;
+    color: #3b82f6; /* 아이콘에 포인트 컬러 */
+    font-size: 1.4rem;
 }
-
 
 .card p {
-    font-size: 1.0em;
-    color: #666;
-    margin: 10px 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    margin: 0.75rem 0 0 0;
+    line-height: 1.5;
 }
 
-/* 통계 숫자 스타일 */
+/* 5. 통계 및 뱃지 스타일 */
 .stat {
-    font-size: 24px;
-    font-weight: bold;
-    color: #2c3e50;
-    display: block;
-    margin-top: 10px;
-    padding: 5px 15px;
-    background: #e9ecef;
-    border-radius: 20px;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    padding: 0.25rem 0.75rem;
+    background: #2563eb;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
 }
 
+/* 6. AI 전용 카드 특수 스타일 */
+.card-ai {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: none;
+}
+
+.card-ai h3, .card-ai p {
+    color: #f1f5f9;
+}
+
+.card-ai:hover {
+    box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.3);
+}
+
+/* 7. 알림 및 애니메이션 */
+@keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.animate-risk {
+    animation: pulse-soft 2s infinite;
+    color: #ef4444;
+}

@@ -64,6 +64,11 @@
                     <p>회의록 분석</p>
                 </a>
 
+                <a href="<c:url value='/pms/dashboard.do'/>" class="card">
+                    <h3>대시보드</h3>
+                    <p>대시보드</p>
+                </a>
+
 
 	        </div>
 	    </div>
