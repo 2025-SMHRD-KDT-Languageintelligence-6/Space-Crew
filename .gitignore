@@ -5,7 +5,6 @@ bin/
 *.war
 *.ear
 *.jar
-globals.properties
 
 # --- Eclipse/IDE Settings ---
 .settings/
@@ -34,3 +33,24 @@ __pycache__/
 Thumbs.db
 *.log
 tmp/
+
+# --- DB ---
+globals.properties
+**/main.py
+.env
+
+# 엑셀 파일 차단
+*.xlsx
+*.xls
+*.csv
+
+# 미디어 파일 차단
+*.mp3
+*.wav
+*.mp4
+*.m4a
+
+# 기타 무거운 바이너리
+*.zip
+*.7z
+*.rar
