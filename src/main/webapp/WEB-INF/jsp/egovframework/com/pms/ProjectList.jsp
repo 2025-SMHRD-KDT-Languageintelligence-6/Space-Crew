@@ -126,7 +126,7 @@
 	        function fn_open_project_popup(projId, projNm) {
 	            var windowName = "project_pop_" + projId;
 	            var url = "<c:url value='/pms/projectDetailPopup.do'/>?selectedId=" + projId;
-	            var options = "width=800, height=900, resizable=yes, scrollbars=yes, status=no";
+	            var options = "width=900, height=900, resizable=yes, scrollbars=yes, status=no";
 	            window.open(url, windowName, options);
 	        }
 	        

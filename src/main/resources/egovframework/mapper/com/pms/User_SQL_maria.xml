@@ -53,7 +53,10 @@
 	           FROM TB_ASSIGNMENT SUB 
 	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
 	             AND SUB.DEL_YN = 'N' 
-	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT) AS currentLoad
+	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT
+	             /*AND SUB.END_DT >= CURDATE()*/
+	             ) AS currentLoad
+	             
         FROM TB_EMP
         WHERE EMP_ID = #{userId}
         AND DEL_YN = 'N'

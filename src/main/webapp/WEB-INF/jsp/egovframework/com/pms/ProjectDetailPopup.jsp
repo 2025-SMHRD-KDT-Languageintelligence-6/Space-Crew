@@ -269,7 +269,13 @@
     <div id="aiMatchModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:850px; background:#fff; border:2px solid #333; padding:25px; z-index:9999; box-shadow: 0 0 20px rgba(0,0,0,0.5); max-height:90vh; overflow-y:auto; border-radius: 8px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">
                 <h3 style="margin:0; font-size:18px;">🤖 AI 인력 추천 결과</h3>
-                <button type="button" onclick="$('#aiMatchModal').hide();" style="border:none; background:none; font-size:24px; cursor:pointer;">&times;</button>
+                <button type="button" 
+				        onclick="$('#aiMatchModal').hide();" 
+				        style="border:none; background:none; font-size:28px; cursor:pointer; color:#333; font-weight:bold; line-height:1;"
+				        onmouseover="this.style.color='#f44336';" 
+				        onmouseout="this.style.color='#333';">
+				    &times;
+				</button>
             </div>
 
             <input type="hidden" id="currentReqId"> <div class="slider-container">
