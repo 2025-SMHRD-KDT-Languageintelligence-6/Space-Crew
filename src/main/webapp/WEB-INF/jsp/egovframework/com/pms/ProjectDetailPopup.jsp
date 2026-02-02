@@ -230,7 +230,7 @@
 	                <th>투입기간</th>
 	                <th>투입률(M/M)</th>
 	                <th>상태</th>
-	                <th>첨부문서</th>
+	                <th>첨부</th>
 	                <th>관리</th>
 	            </tr>
 	        </thead>

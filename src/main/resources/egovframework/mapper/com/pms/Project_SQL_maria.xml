@@ -376,33 +376,34 @@
 	<select id="selectProjectAssignListAjax" 
         parameterType="egovframework.com.pms.service.ProjectAssignVO" 
         resultType="egovframework.com.pms.service.ProjectAssignVO">
-	    SELECT 
-	        a.ASSIGN_ID,
-	        a.PROJ_ID,
-	        a.EMP_ID,
-	        e.EMP_NM AS userNm,
-	        a.ASSIGN_TITLE,
-	        DATE_FORMAT(a.START_DT, '%Y-%m-%d') AS startDate,
-	        DATE_FORMAT(a.END_DT, '%Y-%m-%d') AS endDate,
-	        a.INPUT_RATE,
-	        a.CONFIRM_YN,
-	        a.ATCH_FILE_ID,
-	        a.TASK_GROUP_ID
-	    FROM TB_ASSIGNMENT a
-	    LEFT JOIN TB_EMP e ON a.EMP_ID = e.EMP_ID
-	    WHERE a.PROJ_ID = #{projId}
-	      AND a.DEL_YN = 'N'
+	    SELECT
+	          ANY_VALUE(A.ASSIGN_ID)                           AS assignId
+	        , ANY_VALUE(A.PROJ_ID)                             AS projId
+	        , A.TASK_GROUP_ID                                  AS taskGroupId
+	        , ANY_VALUE(A.ASSIGN_TITLE)                        AS assignTitle
+	        , ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDate
+	        , ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
+	        , ANY_VALUE(A.ATCH_FILE_ID)                        AS atchFileId
+	        , GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
+	        , SUM(A.INPUT_RATE)                                AS inputRate
+	        , MAX(A.CONFIRM_YN)                                AS confirmYn
+	    FROM TB_ASSIGNMENT A
+	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
+	    WHERE A.PROJ_ID = #{projId}
+	      AND A.DEL_YN = 'N'
+	      AND B.IN_OFFICE = 'Y'
 	    
 	    <if test="searchUserNm != null and searchUserNm != ''">
-	      AND e.EMP_NM LIKE CONCAT('%', #{searchUserNm}, '%')
+	      AND B.EMP_NM LIKE CONCAT('%', #{searchUserNm}, '%')
 	    </if>
 	    <if test="searchAssignTitle != null and searchAssignTitle != ''">
-	      AND a.ASSIGN_TITLE LIKE CONCAT('%', #{searchAssignTitle}, '%')
+	      AND A.ASSIGN_TITLE LIKE CONCAT('%', #{searchAssignTitle}, '%')
 	    </if>
 	    <if test="searchConfirmYn != null and searchConfirmYn != ''">
-	      AND a.CONFIRM_YN = #{searchConfirmYn}
+	      AND A.CONFIRM_YN = #{searchConfirmYn}
 	    </if>
 	    
-	    ORDER BY a.START_DT DESC
+	    GROUP BY A.TASK_GROUP_ID
+ 	    ORDER BY ANY_VALUE(A.START_DT) DESC
 	</select>
 </mapper>
