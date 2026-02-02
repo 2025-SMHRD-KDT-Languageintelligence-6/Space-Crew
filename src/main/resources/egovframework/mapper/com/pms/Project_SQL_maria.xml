@@ -51,9 +51,9 @@
 	
 	<insert id="insertProject" parameterType="egovframework.com.pms.service.ProjectVO">
 	    INSERT INTO TB_PROJECT (
-	        PROJ_NM, PROJ_TYPE, STATUS, BILL_STEP, BILL_STATUS, START_DT, END_DT, EST_EFFORT, REQ_SKILLS, CONT_ID, M_EMP_ID, S_EMP_ID
+	        PROJ_NM, PROJ_TYPE, STATUS, BILL_STEP, BILL_STATUS, START_DT, END_DT, EST_EFFORT, PROJ_REMARK, CONT_ID, M_EMP_ID, S_EMP_ID
 	    ) VALUES (
-	        #{projNm}, #{projType}, #{status}, '청구전', '정상', NULLIF(#{startDt},''), NULLIF(#{endDt},''), #{estEffort}, #{reqSkills}, #{contId}, #{mainMgrId}, #{subMgrId}
+	        #{projNm}, #{projType}, #{status}, '청구전', '정상', NULLIF(#{startDt},''), NULLIF(#{endDt},''), #{estEffort}, #{projRemark}, #{contId}, #{mainMgrId}, #{subMgrId}
 	    )
 	</insert>
 	
@@ -68,7 +68,7 @@
 	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d')          AS startDt
 	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')            AS endDt
 	        , A.EST_EFFORT        AS estEffort
-	        , A.REQ_SKILLS        AS reqSkills
+	        , A.PROJ_REMARK       AS projRemark
 	        , A.CONT_ID			  AS contId
 	        , A.M_EMP_ID          AS mainMgrId
 	        , A.S_EMP_ID          AS subMgrId
@@ -82,10 +82,16 @@
 	        , B.CONT_AMT          AS contAmt
 	        , C.SALES_TITLE       AS salesTitle
 	        , D.CUST_NM           AS custNm
+	        
 	        , E.EMP_NM            AS picUserNm
 	        , F.EMP_NM            AS mainMgrNm
 	        , G.EMP_NM            AS salesUserNm
 	        , H.EMP_NM            AS subMgrNm
+	        , (SELECT GROUP_CONCAT(DISTINCT E2.EMP_NM SEPARATOR ', ')
+	           FROM TB_ASSIGNMENT ASGN
+	           INNER JOIN TB_EMP E2 ON ASGN.EMP_ID = E2.EMP_ID
+	           WHERE ASGN.PROJ_ID = A.PROJ_ID 
+	             AND ASGN.DEL_YN = 'N') AS participantNames
 	    FROM TB_PROJECT A
 	    LEFT JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
 	    LEFT JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
@@ -105,10 +111,11 @@
 	        , STATUS = #{status}
 	        , START_DT = NULLIF(#{startDt},'')
 	        , END_DT = NULLIF(#{endDt},'')
-	        , M_EMP_ID = #{mainMgrId}  , S_EMP_ID = #{subMgrId}
+	        , M_EMP_ID = #{mainMgrId}
+	        , S_EMP_ID = #{subMgrId}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
 	        , EST_EFFORT = #{estEffort}
-	        , REQ_SKILLS = #{reqSkills}
+	        , PROJ_REMARK = #{projRemark}
 	    WHERE PROJ_ID = #{projId}
 	</update>
 	
@@ -151,16 +158,21 @@
 	        START_DT, 
 	        END_DT, 
 	        INPUT_RATE,
-	        LAST_UPDUSR_ID
-	    ) VALUES (
+	        LAST_UPDUSR_ID,
+	        CONFIRM_YN
+	    ) VALUES
+	    <foreach collection="assignList" item="item" separator=",">
+	    (
 	        #{projId}, 
 	        #{userId}, 
 	        #{assignTitle}, 
 	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
 	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
 	        #{inputRate},
-	        #{lastUpdusrId}
+	        #{lastUpdusrId},
+	        IFNULL(#{confirmYn}, 'N')
 	    )
+	    </foreach>
 	</insert>
 
     <select id="selectProjectAssignList" parameterType="egovframework.com.pms.service.ProjectVO" resultType="egovframework.com.pms.service.ProjectAssignVO">
@@ -171,6 +183,7 @@
         	, ANY_VALUE(A.ASSIGN_TITLE)                        AS assignTitle
         	, ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDate
         	, ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
+        	, ANY_VALUE(A.ATCH_FILE_ID)                        AS atchFileId
         	, GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
         	, SUM(A.INPUT_RATE)                                AS inputRate
         	, MAX(A.CONFIRM_YN)                                AS confirmYn
@@ -263,7 +276,10 @@
 	        INPUT_RATE, 
 	        TASK_GROUP_ID,
 	        REQ_SKILLS,
-	        LAST_UPDUSR_ID
+	        ASSIGN_REMARK,
+	        LAST_UPDUSR_ID,
+	        CONFIRM_YN,
+	        ATCH_FILE_ID
 	    ) VALUES 
 	    <foreach collection="assignList" item="item" separator=",">
 	    (
@@ -275,7 +291,10 @@
 	        #{item.inputRate}, 
 	        #{taskGroupId},
 	        #{reqSkills},
-	        #{lastUpdusrId}
+	        #{assignRemark},
+	        #{lastUpdusrId},
+	        IFNULL(#{confirmYn}, 'N'),
+	        #{atchFileId}
 	    )
 	    </foreach>
 	</insert>
@@ -292,6 +311,9 @@
 	        , A.INPUT_RATE                        AS inputRate
 	        , A.TASK_GROUP_ID       			  AS taskGroupId
 	        , A.REQ_SKILLS                        AS reqSkills
+	        , A.CONFIRM_YN                        AS confirmYn
+	        , A.ASSIGN_REMARK                     AS assignRemark
+	        , A.ATCH_FILE_ID                      AS atchFileId
 	    FROM TB_ASSIGNMENT A
 	    INNER JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
 	    WHERE A.TASK_GROUP_ID = #{taskGroupId}
@@ -338,5 +360,49 @@
         ASSIGN_TITLE = #{assignTitle}
         WHERE ASSIGN_ID = #{assignId}
     </update>
-
+	
+	<update id="updateProjectTaskGroupInfo" parameterType="egovframework.com.pms.service.ProjectAssignVO">
+	    UPDATE TB_ASSIGNMENT SET
+	          ASSIGN_TITLE = #{assignTitle}
+	        , START_DT     = STR_TO_DATE(#{startDate}, '%Y-%m-%d')
+	        , END_DT       = STR_TO_DATE(#{endDate}, '%Y-%m-%d')
+	        , REQ_SKILLS   = #{reqSkills}
+	        , ASSIGN_REMARK  = #{assignRemark}
+	        , ATCH_FILE_ID   = #{atchFileId}
+	        , LAST_UPDUSR_ID = #{lastUpdusrId}
+	        WHERE TASK_GROUP_ID = #{taskGroupId}
+	</update>
+	
+	<select id="selectProjectAssignListAjax" 
+        parameterType="egovframework.com.pms.service.ProjectAssignVO" 
+        resultType="egovframework.com.pms.service.ProjectAssignVO">
+	    SELECT 
+	        a.ASSIGN_ID,
+	        a.PROJ_ID,
+	        a.EMP_ID,
+	        e.EMP_NM AS userNm,
+	        a.ASSIGN_TITLE,
+	        DATE_FORMAT(a.START_DT, '%Y-%m-%d') AS startDate,
+	        DATE_FORMAT(a.END_DT, '%Y-%m-%d') AS endDate,
+	        a.INPUT_RATE,
+	        a.CONFIRM_YN,
+	        a.ATCH_FILE_ID,
+	        a.TASK_GROUP_ID
+	    FROM TB_ASSIGNMENT a
+	    LEFT JOIN TB_EMP e ON a.EMP_ID = e.EMP_ID
+	    WHERE a.PROJ_ID = #{projId}
+	      AND a.DEL_YN = 'N'
+	    
+	    <if test="searchUserNm != null and searchUserNm != ''">
+	      AND e.EMP_NM LIKE CONCAT('%', #{searchUserNm}, '%')
+	    </if>
+	    <if test="searchAssignTitle != null and searchAssignTitle != ''">
+	      AND a.ASSIGN_TITLE LIKE CONCAT('%', #{searchAssignTitle}, '%')
+	    </if>
+	    <if test="searchConfirmYn != null and searchConfirmYn != ''">
+	      AND a.CONFIRM_YN = #{searchConfirmYn}
+	    </if>
+	    
+	    ORDER BY a.START_DT DESC
+	</select>
 </mapper>

@@ -31,7 +31,7 @@
 </head>
 <body class="billing-popup">
     <div class="popup-header">
-        <h2>📂 청구 정보 : ${summary.projNm}</h2>
+        <h2>📂 프로젝트명 : ${summary.projNm}</h2>
     </div>
 
     <table class="w3-table-all">
@@ -39,16 +39,33 @@
             <col style="width:30%;">
             <col style="width:70%;">
         </colgroup>
-        <tr><th>고객사명</th><td>${summary.custNm}</td></tr>
-        <tr><th>영업건명</th><td>${summary.salesTitle}</td></tr>
-        <tr><th>영업담당자</th><td>${summary.salesUserNm}</td></tr>
         <tr><th>계약명</th><td>${summary.contNm}</td></tr>
+        <tr><th>고객사명</th><td>${summary.custNm}</td></tr>
         <tr><th>계약담당자</th><td>${summary.picUserNm}</td></tr>
-        <tr><th>주담당자</th><td>${summary.mainMgrNm}</td></tr>
-        <tr><th>부담당자</th><td>${summary.subMgrNm}</td></tr>
-        <tr><th>계약금액</th><td><fmt:formatNumber value="${summary.totalAmt}" pattern="#,###"/>원</td></tr>
-        <tr><th>영업메모</th><td>${summary.salesContent}</td></tr>
-        <tr><th>업무메모</th><td>${summary.contRemark}</td></tr>
+        
+        <tr>
+	        <td colspan="2" style="padding:0;">
+	            <details style="padding: 10px; background: #f9f9f9; cursor: pointer;">
+	                <summary style="font-size: 12px; color: #666; font-weight: bold;">
+	                    더보기
+	                </summary>
+	                
+	                <table class="w3-table" style="margin-top: 10px; background: #fff; border: 1px solid #ddd;">
+	                    <colgroup>
+	                        <col style="width:29%;">
+	                        <col style="width:71%;">
+	                    </colgroup>
+				        <tr><th>영업건명</th><td>${summary.salesTitle}</td></tr>
+				        <tr><th>영업담당자</th><td>${summary.salesUserNm}</td></tr>
+				        <tr><th>프로젝트 주담당자</th><td>${summary.mainMgrNm}</td></tr>
+				        <tr><th>프로젝트 부담당자</th><td>${summary.subMgrNm}</td></tr>
+				        <tr><th>계약금액</th><td><fmt:formatNumber value="${summary.totalAmt}" pattern="#,###"/>원</td></tr>
+				        <tr><th>영업메모</th><td>${summary.salesContent}</td></tr>
+				        <tr><th>업무메모</th><td>${summary.contRemark}</td></tr>
+	        		</table>
+           	 </details>
+        	</td>
+	    </tr>
     </table>
 
     <div id="summaryArea" class="summary-box">

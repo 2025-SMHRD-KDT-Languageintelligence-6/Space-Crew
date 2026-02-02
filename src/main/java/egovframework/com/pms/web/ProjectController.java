@@ -180,18 +180,10 @@ public class ProjectController {
 
     @ResponseBody
     @RequestMapping(value = "/pms/selectProjectAssignListAjax.do")
-    // 1. int -> Long으로 변경 (DB의 PROJ_ID는 숫자가 커서 Long이 안전해)
-    public Map<String, Object> selectProjectAssignListAjax(@RequestParam("projId") Long projId) throws Exception {
+    public Map<String, Object> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
 
-        // 2. VO 객체 생성 (MyBatis는 VO로 받는 걸 좋아해)
-        ProjectVO projectVO = new ProjectVO();
-        projectVO.setProjId(projId); // 검색 조건 담기
-
-        // 3. 서비스에 VO를 통째로 넘기기
-        // (만약 서비스가 아직 int를 받는다면, 서비스 파일도 고쳐야 해!)
-        List<ProjectAssignVO> list = projectService.selectProjectAssignList(projectVO);
-
+        List<ProjectAssignVO> list = projectService.selectProjectAssignListAjax(vo);
         resultMap.put("list", list);
         return resultMap;
     }
@@ -332,7 +324,21 @@ public class ProjectController {
         }
     }
     
-
+    @RequestMapping("/pms/updateTaskGroupConfirmAjax.do")
+    @ResponseBody
+    public Map<String, Object> updateTaskGroupConfirmAjax(@RequestParam Map<String, Object> param) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        
+        try {
+            projectService.updateTaskGroupConfirm(param); 
+            resultMap.put("status", "SUCCESS");
+        } catch (Exception e) {
+            resultMap.put("status", "FAIL");
+            resultMap.put("message", e.getMessage());
+        }
+        
+        return resultMap;
+    }
     /**
      * [AI 매칭] 요구사항 텍스트 저장 -> assignId 반환
      * (기존 ProjectController에 통합)

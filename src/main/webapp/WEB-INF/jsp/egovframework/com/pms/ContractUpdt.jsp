@@ -131,7 +131,7 @@
 	            
 				if (!selectedId) {
 		            $("select[name='custId']").val("").change();
-		            $("select[name='picUserId']").val("").change();
+		            //$("select[name='picUserId']").val("").change();
 		            return;
 		        }
 	            
@@ -143,13 +143,16 @@
 	            	console.log("매칭된 데이터:", matched);
 	                
 	                var targetCustId = (matched.custId || "").trim();
-	                var targetPicId = (matched.salesUserId || "").trim();
+	                //var targetPicId = (matched.salesUserId || "").trim();
 
-	                $("select[name='custId']").val(targetCustId).prop("selected", true);
-	                $("select[name='picUserId']").val(targetPicId).prop("selected", true);
-
-	                if(targetCustId) $("select[name='custId']").val(targetCustId).trigger("change");
-	                if(targetPicId) $("select[name='picUserId']").val(targetPicId).trigger("change");
+	                //$("select[name='custId']").val(targetCustId).prop("selected", true);
+	                //$("select[name='picUserId']").val(targetPicId).prop("selected", true);
+	                
+	                if(targetCustId) {
+		                $("select[name='custId']").val(targetCustId).trigger("change");
+		            }
+	                //if(targetCustId) $("select[name='custId']").val(targetCustId).trigger("change");
+	                //if(targetPicId) $("select[name='picUserId']").val(targetPicId).trigger("change");
 	                // $("select[name='custId']").change(); 
 	            }
 	        });

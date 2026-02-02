@@ -26,5 +26,12 @@ public class ProjectAssignVO extends ComDefaultVO implements Serializable {
     private String confirmYn;
 
     private String reqSkills;
+    
+    private String assignRemark;
+    private String atchFileId;
+    
+    private String searchUserNm;
+    private String searchAssignTitle;
+    private String searchConfirmYn;
 }
 

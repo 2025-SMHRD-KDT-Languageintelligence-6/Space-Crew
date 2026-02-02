@@ -46,4 +46,6 @@ public interface ProjectService {
 
     /** [추가] AI 매칭용 요구사항 등록 (TB_ASSIGNMENT INSERT) */
     void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
+    
+    List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception;
 }

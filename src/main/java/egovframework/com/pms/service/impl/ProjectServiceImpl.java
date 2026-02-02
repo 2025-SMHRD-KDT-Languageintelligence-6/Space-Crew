@@ -139,4 +139,9 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
     public void insertAssignmentReq(ProjectAssignVO vo) throws Exception {
         projectMapper.insertAssignmentReq(vo);
     }
+
+	@Override
+	public List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception {
+		return projectMapper.selectProjectAssignListAjax(vo);
+	}
 }

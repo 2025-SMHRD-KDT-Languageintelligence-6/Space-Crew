@@ -54,4 +54,6 @@ public interface ProjectMapper {
 
     /** [추가] AI 매칭용 요구사항 INSERT */
     void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
+
+	List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo);
 }

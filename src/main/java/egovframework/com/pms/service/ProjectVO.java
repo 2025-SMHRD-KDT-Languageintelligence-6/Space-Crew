@@ -20,6 +20,8 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String lastUpdusrId;
     private String reqSkills;
     
+    private String projRemark;
+    
     private String contNm;
     private Long contAmt;
     private String salesTitle;
@@ -35,4 +37,6 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String atchFileId;
     
     private Integer progressRate;
+    
+    private String participantNames;
 }

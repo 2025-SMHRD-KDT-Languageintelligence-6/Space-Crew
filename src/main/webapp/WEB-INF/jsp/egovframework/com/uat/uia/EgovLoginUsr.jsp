@@ -242,9 +242,9 @@ function fnOnepassLogin() {
 		<img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image">
 		<div class="login_type">
 			<ul id="ulLoginType">
-				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title="">일반직원<%--<spring:message code="comUatUia.loginForm.GNR"/>--%></a></li> <!-- 일반 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title="">관리직원<%--<spring:message code="comUatUia.loginForm.ENT"/>--%></a></li> <!-- 기업 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title="">대표<%--<spring:message code="comUatUia.loginForm.USR"/>--%></a></li> <!-- 업무 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title="">Staff<%--<spring:message code="comUatUia.loginForm.GNR"/>--%></a></li> <!-- 일반 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title="">Manager<%--<spring:message code="comUatUia.loginForm.ENT"/>--%></a></li> <!-- 기업 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title="">Admin<%--<spring:message code="comUatUia.loginForm.USR"/>--%></a></li> <!-- 업무 -->
 			</ul>
 		</div>
 	

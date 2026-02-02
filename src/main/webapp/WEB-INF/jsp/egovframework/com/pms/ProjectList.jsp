@@ -33,7 +33,7 @@
                     <th width="30%">프로젝트명</th>
                     <!-- <th width="15%">고객사</th> -->
                     <th width="8%">주담당자</th>
-                    <th width="15%">경과율</th>
+                    <th width="15%">기간경과율</th>
                     <th width="15%">종료일</th>
                     <th width="10%">상태</th>
                     <th width="10%">관리</th>

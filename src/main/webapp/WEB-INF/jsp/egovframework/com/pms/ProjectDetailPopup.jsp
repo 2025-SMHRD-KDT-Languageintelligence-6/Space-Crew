@@ -49,13 +49,34 @@
 	.tab-content { display: none; padding: 20px; background: #fff; border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; }
 	.tab-content.active { display: block; }
     
+    @keyframes highlightFade {
+	    from { background-color: #fff9c4; }
+	    to { background-color: transparent; }
+	}
+	.new-row-highlight {
+	    animation: highlightFade 3s ease-in-out forwards;
+	}
+    .file-popover {
+    display: none; position: absolute; background: white; border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;
+    z-index: 9999; min-width: 200px;
+	}
+	.file-popover-close { float: right; cursor: pointer; color: #999; font-weight: bold; }
+	    
     </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 
 	<script type="text/javascript">
-	    function fn_egov_downFile(atchFileId, fileSn) {
-	        window.open("<c:url value='/cmm/fms/FileDown.do'/>?atchFileId="+atchFileId+"&fileSn="+fileSn);
+	function fn_egov_downFile(atchFileId, fileSn) {
+	    var downUrl = "<c:url value='/cmm/fms/FileDown.do'/>?atchFileId=" + atchFileId + "&fileSn=" + fileSn;
+	    
+	    var $iframe = $("#hiddenDownFrame");
+	    if ($iframe.length === 0) {
+	        $iframe = $("<iframe id='hiddenDownFrame' style='display:none;'></iframe>").appendTo("body");
 	    }
+	    
+	    $iframe.attr("src", downUrl);
+	}
 
 	    function fn_egov_deleteFile(atchFileId, fileSn) {
 	        if(confirm("삭제하시겠습니까?")) {
@@ -65,12 +86,12 @@
 </head>
 <body>
     <div class="popup-header">
-        <h2>📂 업무 정보 : ${projectVO.projNm}</h2>
+        <h2>📂 프로젝트명 : ${projectVO.projNm}</h2>
     </div>
 	
 	<div class="tab-container">
 	    <div class="tab-btn active" onclick="fn_change_tab(0)">기본정보</div>
-	    <div class="tab-btn" onclick="fn_change_tab(1)">투입 인력 현황</div>
+	    <div class="tab-btn" onclick="fn_change_tab(1)">세부 업무 목록</div>
 	    <div class="tab-btn" onclick="fn_change_tab(2)">프로젝트 일정</div>
 	</div>
 	
@@ -116,7 +137,20 @@
             <th>부담당자</th>
             <td>${projectVO.subMgrNm}</td>
         </tr>
-        	<th>경과율</th>
+        <tr>
+            <th>프로젝트 참여자</th>
+            <td style="font-size: 0.95em; color: #555;">
+		        <c:choose>
+		            <c:when test="${not empty projectVO.participantNames}">
+		                ${projectVO.participantNames}
+		            </c:when>
+		            <c:otherwise>
+		                <span style="color: #ccc;">현재 배정된 인원이 없습니다.</span>
+		            </c:otherwise>
+		        </c:choose>
+		    </td>
+        </tr>
+        	<th>기간경과율</th>
         	<td>
 		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
 		            <div id="elapsedProgressBar"
@@ -136,7 +170,7 @@
 		    </td>
 	    </tr>
         <tr>
-            <th>진행률</th>
+            <th>업무진행률</th>
             <td>
 		        <div style="width:100%; background:#eee; height:24px; border-radius:12px; overflow:hidden; position:relative;">
 				    <div id="planProgressBar" style="width:0%; background:rgba(76, 175, 80, 0.3); height:100%; position:absolute; top:0; left:0; transition:width 0.5s;"></div>
@@ -151,7 +185,11 @@
 				</div>
 		    </td>
         </tr>
-        </table>
+        <tr>
+        	<th>특이사항</th>
+        	<td>${projectVO.projRemark}</td>
+        </tr>
+       	</table>
 
     <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
 	    <h4 style="font-size:15px;"><i class="fa fa-upload"></i> 파일 업로드</h4>
@@ -172,7 +210,18 @@
 
 	<div id="tab1" class="tab-content">
 	<div class="assign-section" style="margin-top:30px;">
-	    <h3>투입 인력 현황</h3>
+	    <h3>세부 업무 목록</h3>
+	    <div class="search-bar" style="background:#f8f9fa; padding:15px; margin-bottom:15px; border-radius:8px; border:1px solid #ddd; display:flex; gap:10px;">
+		    <input type="text" id="searchUserNm" placeholder="성명" style="width:100px;">
+		    <input type="text" id="searchAssignTitle" placeholder="업무 내용" style="flex-grow:1;">
+		    <select id="searchConfirmYn" style="width:100px;">
+		        <option value="">전체상태</option>
+		        <option value="N">진행</option>
+		        <option value="R">확인필요</option>
+		        <option value="Y">완료</option>
+		    </select>
+		    <button type="button" class="btn_s_blue" onclick="fn_load_assign_list();">검색</button>
+		</div>
 	    <table class="table" id="assignTable">
 	        <thead>
 	            <tr>
@@ -181,6 +230,7 @@
 	                <th>투입기간</th>
 	                <th>투입률(M/M)</th>
 	                <th>상태</th>
+	                <th>첨부문서</th>
 	                <th>관리</th>
 	            </tr>
 	        </thead>
@@ -214,6 +264,16 @@
    				</td>
 	        </tr>
 	        <tr>
+			    <th>진행 상태</th>
+			    <td>
+			        <select id="assignConfirmYn" style="width:100%; height:28px;">
+			            <option value="N">🔵 진행 (Work in Progress)</option>
+			            <option value="R">🟣 확인필요 (Review Required)</option>
+			            <option value="Y">⚪ 완료 (Completed)</option>
+			        </select>
+			    </td>
+			</tr>
+	        <tr>
 	            <th>요구 기술<br>및 상세내용</th>
 	            <td>
 	                <textarea id="assignReqSkills" rows="3" 
@@ -221,6 +281,26 @@
 	                          placeholder="AI 추천을 위해 필요한 기술 스택을 입력하세요 (예: Java, React, Python)"></textarea>
 	            </td>
 	        </tr>
+	        <tr>
+			    <th>메모</th>
+			    <td>
+			        <textarea id="assignRemark" rows="3" 
+			                  style="width:100%; border:1px solid #ccc; padding:5px; resize:vertical; font-size:12px;" 
+			                  placeholder="메모를 입력하세요"></textarea>
+			    </td>
+			</tr>
+			<tr>
+			    <th>첨부파일</th>
+			    <td>
+			        <input type="file" id="assignFile" name="assignFile" style="width:70%;">
+			        <div id="fileListArea" style="font-size:12px; color:#666; margin-top:5px;">
+			            <c:if test="${not empty assignVO.atchFileId}">
+			                <span>등록된 파일 있음</span>
+			            </c:if>
+			        </div>
+			        <input type="hidden" id="assignAtchFileId" name="assignAtchFileId" value="${assignVO.atchFileId}">
+			    </td>
+			</tr>
 	    </table>
 	    <div style="margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">
 	        <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -241,7 +321,7 @@
 	        </table>
 	    </div>
 	    <div style="text-align:right; margin-top:15px;">
-	        <button type="button" class="btn_s" onclick="fn_save_task_group();">저장</button>
+	        <button type="button" class="btn_s" onclick="fn_save_task_with_file();">저장</button>
 	        <button type="button" class="btn_s" onclick="$('#assignModal').hide();">취소</button>
 	    </div>
 	</div>
@@ -349,7 +429,12 @@
                 </button>
             </div>
         </div>
-
+		
+		<div id="filePopover" class="file-popover">
+		    <span class="file-popover-close" onclick="$('#filePopover').hide();">&times;</span>
+		    <div id="popoverContent" style="margin-top:15px; font-size:12px;"></div>
+		</div>
+		
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/ko.global.min.js"></script>
@@ -473,7 +558,7 @@
 
 
 	function fn_save_task_group() {
-		
+		var targetGroupId = $("#taskGroupId").val();
 		var startDate = $("#assignStartDate").val();
 	    var endDate = $("#assignEndDate").val();
 		
@@ -503,6 +588,9 @@
 	        endDate: $("#assignEndDate").val(),
 	        taskGroupId: $("#taskGroupId").val(),
 	        reqSkills: $("#assignReqSkills").val(),
+	        confirmYn: $("#assignConfirmYn").val(),
+	        assignRemark: $("#assignRemark").val(),
+	        atchFileId: $("#assignAtchFileId").val(),
 	        assignList: assignList
 	    };
 
@@ -513,8 +601,13 @@
 	        data: JSON.stringify(sendData),
 	        success: function(data) {
 	            if(data.status === "SUCCESS") {
-	                alert("성공적으로 저장되었습니다.");
+	            	if(targetGroupId) {
+	                    sessionStorage.setItem("lastSavedGroupId", targetGroupId);
+	                }
+	            	alert("성공적으로 저장되었습니다.");
 	                $('#assignModal').hide();
+	                var currentUrl = location.href.split('#')[0];
+	                location.href = currentUrl + "#tab1";
 	                location.reload();
 	            } else {
 	                alert("오류 발생: " + data.message);
@@ -522,7 +615,9 @@
 	        }
 	    });
 	}
-
+	
+	var currentConfirmYn = 'N';
+	
 	function fn_edit_task_group(taskGroupId) {
 	    $.ajax({
 	        url: "<c:url value='/pms/selectTaskGroupDetailAjax.do'/>",
@@ -532,9 +627,17 @@
 	            $("#assignTitle").val(data.info.assignTitle);
 	            $("#assignStartDate").val(data.info.startDate);
 	            $("#assignEndDate").val(data.info.endDate);
-
 	            $("#assignReqSkills").val(data.info.reqSkills || "");
+	            $("#assignConfirmYn").val(data.info.confirmYn || 'N');
+	            $("#assignRemark").val(data.info.assignRemark || "");
+	            var fileId = data.info.atchFileId;
+	            $("#assignAtchFileId").val(fileId || "");
 	            
+	            if(fileId) {
+	                fn_load_task_files(fileId);
+	            } else {
+	                $("#fileListArea").html("<span style='color:#ccc;'>첨부된 파일 없음</span>");
+	            }
 	            $("#selectedUserListBody").empty();
 	            $.each(data.memberList, function(idx, mem) {
 	                var html = "<tr id='user_row_" + mem.userId + "'>";
@@ -585,13 +688,25 @@
 	}
 
 	function fn_load_assign_list() {
-	    $.ajax({
+	    
+		var searchUserNm = $("#searchUserNm").val();
+	    var searchAssignTitle = $("#searchAssignTitle").val();
+	    var searchConfirmYn = $("#searchConfirmYn").val();
+		
+		$.ajax({
 	        url: "<c:url value='/pms/selectProjectAssignListAjax.do'/>",
 	        type: "GET",
-	        data: { projId: "${projectVO.projId}" },
+	        data: { 
+	            projId: "${projectVO.projId}",
+	            searchUserNm: $("#searchUserNm").val(),
+	            searchAssignTitle: $("#searchAssignTitle").val(),
+	            searchConfirmYn: $("#searchConfirmYn").val()
+	        },
 	        dataType: "json",
 	        success: function(data) {
 	        	var html = "";
+	        	var highlightId = sessionStorage.getItem("lastSavedGroupId");
+	        	
 	            var totalActualEffort = 0;
 	            var totalPlanEffort = 0;
 
@@ -600,37 +715,40 @@
 
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
+	                	var highlightClass = (item.taskGroupId === highlightId) ? "class='new-row-highlight'" : "";
 	                    var fullValue = parseFloat(item.inputRate || 0);
 	                    totalPlanEffort += fullValue;
 	                    var isConfirmed = (item.confirmYn && item.confirmYn.trim().toUpperCase() === 'Y');
 	                    if (item.confirmYn === 'Y') {
 	                        totalActualEffort += fullValue;
 	                    }
-
-	                    html += "<tr>";
+	                    var fileHtml = "";
+	                    if(item.atchFileId) {
+	                    	fileHtml = " <span onclick=\"fn_open_file_popover(event, '" + item.atchFileId + "')\" " +
+	                        "       style='cursor:pointer; color:#2196F3; font-weight:bold;'>📎</span>";
+	    	        	}
+	                    html += "<tr " + highlightClass + ">";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
 	                    html += "  <td><strong>" + fullValue.toFixed(1) + " MM</strong></td>";
-
 	                    html += "  <td style='text-align:center;'>";
-
-	                    if (item.confirmYn === 'Y') {
-	                        html += "  <button type='button' class='btn_s_gray' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'N')\">완료</button>";
-	                    } else {
-	                        html += "  <button type='button' class='btn_s_blue' onclick=\"fn_toggle_confirm('" + item.taskGroupId + "', 'Y')\">진행</button>";
-	                    }
-
+	                    html += "    <select class='status-select' onchange=\"fn_change_status_ajax('" + item.taskGroupId + "', this.value)\" style='padding:2px; border-radius:4px; font-weight:bold; " + fn_get_status_style(item.confirmYn) + "'>";
+	                    html += "      <option value='N' " + (item.confirmYn === 'N' ? 'selected' : '') + ">진행</option>";
+	                    html += "      <option value='R' " + (item.confirmYn === 'R' ? 'selected' : '') + ">확인필요</option>";
+	                    html += "      <option value='Y' " + (item.confirmYn === 'Y' ? 'selected' : '') + ">완료</option>";
+	                    html += "    </select>";
 	                    html += "</td>";
-
+	                    html += "  <td style='text-align:center;'>" + fileHtml + "</td>";
 	                    html += "  <td>";
 	                    html += "    <button type='button' class='btn_blue' onclick=\"fn_edit_task_group('" + item.taskGroupId + "')\">수정</button>";
 	                    html += "    <button type='button' class='btn_s_red' onclick=\"fn_delete_task_group('" + item.taskGroupId + "')\">삭제</button>";
 	                    html += "  </td>";
 	                    html += "</tr>";
 	                });
+	                if(highlightId) sessionStorage.removeItem("lastSavedGroupId");
 	            } else {
-	                html = "<tr><td colspan='6'>배정된 인력이 없습니다.</td></tr>";
+	                html = "<tr><td colspan='7'>배정된 인력이 없습니다.</td></tr>";
 	            }
 
 	            $("#assignListBody").html(html);
@@ -652,6 +770,31 @@
 	            }
 
 	            if(calendar) {calendar.refetchEvents();}
+	        }
+	    });
+	}
+	
+	function fn_open_file_popover(e, atchFileId) {
+	    if(!atchFileId) return;
+	    if (e.stopPropagation) e.stopPropagation();
+
+	    var rect = e.target.getBoundingClientRect();
+	    $("#filePopover").css({
+	        top: (window.pageYOffset + rect.bottom + 5) + "px",
+	        left: (window.pageXOffset + rect.left - 100) + "px"
+	    }).show();
+
+	    $("#popoverContent").html("파일을 확인 중입니다");
+
+	    $.ajax({
+	        url: "<c:url value='/cmm/fms/selectFileInfs.do'/>",
+	        data: { "param_atchFileId": atchFileId },
+	        dataType: "html", 
+	        success: function(html) {
+	            $("#popoverContent").html(html);
+	        },
+	        error: function() {
+	            $("#popoverContent").html("파일 목록을 불러오지 못했습니다.");
 	        }
 	    });
 	}
@@ -815,6 +958,9 @@
 	}
 	
 	$(document).ready(function() {
+		if(location.hash === "#tab1") {
+	        fn_change_tab(1);
+	    }
 	    $("#assignStartDate").on("change", function() {
 	        var startVal = $(this).val();
 	        if (startVal) {
@@ -828,6 +974,17 @@
 	            $("#assignStartDate").attr("max", endVal);
 	        }
 	    });
+	    $(document).on("click", function(e) {
+	        if (!$(e.target).closest("#filePopover, span[onclick*='fn_open_file_popover']").length) {
+	            $("#filePopover").hide();
+	        }
+	    });
+	    $("#searchUserNm, #searchAssignTitle").on("keypress", function(e) {
+	        if(e.keyCode == 13) {
+	            fn_load_assign_list();
+	        }
+	    });
+	    fn_load_assign_list();
 	});
 	
 	function fn_change_tab(idx) {
@@ -950,6 +1107,92 @@
         }
     });
     
+    function fn_get_status_style(status) {
+        if (status === 'Y') return "background-color:#666666; color:white;";
+        if (status === 'R') return "background-color:#673AB7; color:white;";
+        return "background-color:#5998eb; color:white;";
+    }
+    
+    function fn_change_status_ajax(tGroupId, nextStatus) {
+        $.ajax({
+            url: "<c:url value='/pms/updateTaskGroupConfirmAjax.do'/>",
+            type: "POST",
+            data: { "taskGroupId": tGroupId, "confirmYn": nextStatus },
+            success: function(data) {
+                fn_load_assign_list();
+            },
+            error: function() {
+                alert("상태 변경 중 오류가 발생했습니다.");
+            }
+        });
+    }
+    
+    function fn_save_task_with_file() {
+    	var fileCheck = $("#assignFile")[0].files[0];
+        
+        if (fileCheck) {
+            var formData = new FormData();
+            formData.append("file_0", fileCheck);
+            formData.append("atchFileId", $("#assignAtchFileId").val() || "");
+            //formData.append("projId", "${projectVO.projId}");
+
+            $.ajax({
+                url: "<c:url value='/pms/uploadFileAjax.do'/>",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if(data.status === "success") {
+                        $("#assignAtchFileId").val(data.atchFileId);
+                        console.log("새 영수증 수거 완료: " + data.atchFileId);
+                        fn_save_task_group();
+                    } else {
+                        alert("파일 업로드 실패: " + data.message);
+                    }
+                }
+            });
+        } else {
+            fn_save_task_group();
+        }
+    }
+    
+    function fn_load_task_files(atchFileId) {
+        var $area = $("#fileListArea");
+        
+        if(!atchFileId) {
+            $area.html("<span style='color:#ccc;'>첨부된 파일 없음</span>");
+            return;
+        }
+
+        var html = "<div style='padding:10px; background:#f8f9fa; border:1px solid #e9ecef; border-radius:4px;'>";
+        html += "  <p style='margin:0; color:#2196F3; font-weight:bold;'>📎 등록된 파일이 있습니다.</p>";
+        html += "  <p style='margin:5px 0 0; font-size:11px; color:#666;'>상세 파일명 및 다운로드는<br><b>'세부 업무 목록' 표</b>에서 확인 가능합니다.</p>";
+        html += "</div>";
+        
+        $area.html(html);
+    }
+    
+    function fn_egov_downFile(atchFileId, fileSn) {
+        var downUrl = "<c:url value='/cmm/fms/FileDown.do'/>?atchFileId=" + atchFileId + "&fileSn=" + fileSn;
+        
+        var $iframe = $("#hiddenDownFrame");
+        if ($iframe.length === 0) {
+            $iframe = $("<iframe id='hiddenDownFrame' name='hiddenDownFrame' style='display:none;'></iframe>").appendTo("body");
+        }
+
+        var $form = $("<form>", {
+            "action": "<c:url value='/cmm/fms/FileDown.do'/>",
+            "method": "post",
+            "target": "hiddenDownFrame"
+        }).appendTo("body");
+
+        $form.append($("<input>", { "type": "hidden", "name": "atchFileId", "value": atchFileId }));
+        $form.append($("<input>", { "type": "hidden", "name": "fileSn", "value": fileSn }));
+
+        $form.submit();
+        $form.remove();
+    }
 	</script>
 </body>
 </html>

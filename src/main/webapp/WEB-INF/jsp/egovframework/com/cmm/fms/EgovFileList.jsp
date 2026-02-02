@@ -30,7 +30,26 @@
 <script type="text/javascript">
 
 	function fn_egov_downFile(atchFileId, fileSn){
-		window.open("<c:url value='/cmm/fms/FileDown.do?atchFileId="+atchFileId+"&fileSn="+fileSn+"'/>");
+		//window.open("<c:url value='/cmm/fms/FileDown.do?atchFileId="+atchFileId+"&fileSn="+fileSn+"'/>");
+		var downUrl = "<c:url value='/cmm/fms/FileDown.do'/>?atchFileId=" + atchFileId + "&fileSn=" + fileSn;
+
+	    var $iframe = parent.jQuery("#hiddenDownFrame").length ? parent.jQuery("#hiddenDownFrame") : jQuery("#hiddenDownFrame");
+	    
+	    if ($iframe.length === 0) {
+	        $iframe = jQuery("<iframe id='hiddenDownFrame' name='hiddenDownFrame' style='display:none;'></iframe>").appendTo("body");
+	    }
+
+	    var $form = jQuery("<form>", {
+	        "action": "<c:url value='/cmm/fms/FileDown.do'/>",
+	        "method": "post",
+	        "target": "hiddenDownFrame"
+	    }).appendTo("body");
+
+	    $form.append(jQuery("<input>", { "type": "hidden", "name": "atchFileId", "value": atchFileId }));
+	    $form.append(jQuery("<input>", { "type": "hidden", "name": "fileSn", "value": fileSn }));
+
+	    $form.submit();
+	    $form.remove();
 	}
 
 	function fn_egov_deleteFile(atchFileId, fileSn, delTrName) {

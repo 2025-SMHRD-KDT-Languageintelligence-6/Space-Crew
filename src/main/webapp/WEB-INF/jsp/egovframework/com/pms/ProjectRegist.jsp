@@ -89,8 +89,8 @@
                 	<td><form:input path="estEffort" type="number" style="width: 50px;" min="0" value="${empty projectVO.estEffort ? 0 : projectVO.estEffort}"/> M/M</td>
                 </tr>
                 <tr>
-                	<th>요구 및 특이사항</th>
-                	<td><form:textarea path="reqSkills" rows="4" placeholder="업무에 필요한 요구사항과 특이사항을 써주세요" /></td>
+                	<th>특이사항</th>
+                	<td><form:textarea path="projRemark" rows="4" placeholder="업무에 필요한 요구사항과 특이사항을 써주세요" /></td>
                 </tr>
             </table>
 
