@@ -417,7 +417,8 @@
  	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
         FROM TB_CONTRACT A
         LEFT JOIN TB_CUSTOMER C ON A.CUST_ID = C.CUST_ID
-        WHERE A.CONT_STATUS = '계약완료'
+        WHERE 1=1
+          AND TRIM(A.CONT_STATUS) = '계약완료'
           AND A.DEL_YN = 'N'
           AND NOT EXISTS (
               SELECT 1 
