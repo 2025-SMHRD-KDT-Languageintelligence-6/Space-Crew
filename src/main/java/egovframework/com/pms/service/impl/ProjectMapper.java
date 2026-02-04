@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 
+import egovframework.com.pms.service.ContractVO;
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectVO;
 
@@ -51,6 +52,8 @@ public interface ProjectMapper {
 	void updateTaskGroupConfirm(Map<String, Object> param) throws Exception;
 	
 	void updateProjectAtchFileId(Map<String, Object> map);
+	
+	List<ContractVO> selectAvailableContractList();
 
     /** [추가] AI 매칭용 요구사항 INSERT */
     void insertAssignmentReq(ProjectAssignVO vo) throws Exception;

@@ -14,10 +14,8 @@
     <div class="form-container">
         <h2>업무 수정</h2>
 
-        <%-- 주의: 수정 시에는 updateProject.do와 같은 수정 전용 액션 경로를 확인하세요 --%>
         <form:form modelAttribute="projectVO" action="${pageContext.request.contextPath}/pms/updateProject.do" method="post">
 
-            <%-- 필수: 데이터 수정을 위한 키 값 --%>
             <form:hidden path="projId" />
 
             <table>
@@ -31,12 +29,14 @@
                 <tr>
 				    <th class="required">계약명</th>
 				    <td>
-				        <form:select path="contId" required="required">
-				            <form:option value="" label="-- 연결할 계약을 선택하세요 --"/>
-				            <c:forEach var="contract" items="${contractList}">
-				                <form:option value="${contract.contId}" label="${contract.contNm} (${contract.custNm})" />
-				            </c:forEach>
-				        </form:select>
+				        <span class="readonly-text">
+				            <c:out value="${projectVO.contNm}"/> 
+				            <c:if test="${not empty projectVO.custNm}"> (<c:out value="${projectVO.custNm}"/>)</c:if>
+				        </span>
+				        
+				        <form:hidden path="contId" />
+				        
+				        <small style="color: #999; margin-left:10px;">연결된 계약 정보는 변경할 수 없습니다.</small>
 				    </td>
 				</tr>
                 <tr>
@@ -116,16 +116,16 @@
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $("input[name='startDt']").on("change", function() {
-	            var startDate = $(this).val();
-	            if (startDate) {
-	                $("input[name='endDt']").attr("min", startDate);
+	            var startDt = $(this).val();
+	            if (startDt) {
+	                $("input[name='endDt']").attr("min", startDt);
 	            }
 	        });
 	
 	        $("input[name='endDt']").on("change", function() {
-	            var endDate = $(this).val();
-	            if (endDate) {
-	                $("input[name='startDt']").attr("max", endDate);
+	            var endDt = $(this).val();
+	            if (endDt) {
+	                $("input[name='startDt']").attr("max", endDt);
 	            }
 	        });
 	
@@ -151,11 +151,11 @@
 	            $("input[name='estEffort']").val(0);
 	        }
 	    	
-	        var startDate = $("input[name='startDt']").val();
-	        var endDate = $("input[name='endDt']").val();
+	        var startDt = $("input[name='startDt']").val();
+	        var endDt = $("input[name='endDt']").val();
 	
-	        if (startDate && endDate) {
-	            if (startDate > endDate) {
+	        if (startDt && endDt) {
+	            if (startDt > endDt) {
 	                alert("수행 종료일은 시작일보다 빠를 수 없습니다.");
 	                $("input[name='endDt']").focus();
 	                e.preventDefault();

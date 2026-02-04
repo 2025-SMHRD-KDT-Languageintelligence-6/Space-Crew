@@ -41,10 +41,9 @@
                 <tr>
                     <th class="required">고객사</th>
                     <td>
-                        <form:select path="custId" required="required">
-                            <form:option value="" label="-- 고객사 선택 --"/>
-                            <form:options items="${customerList}" itemValue="custId" itemLabel="custNm"/>
-                        </form:select>
+                        <span class="readonly-text"><c:out value="${salesVO.custNm}"/></span>
+                        <form:hidden path="custId" />
+                        <small style="color: #999; margin-left:10px;">고객사 변경은 불가능합니다</small>
                     </td>
                 </tr>
 

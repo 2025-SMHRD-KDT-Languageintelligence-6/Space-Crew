@@ -70,7 +70,8 @@ public class ProjectController {
     	ContractVO contractSearchVO = new ContractVO();
         contractSearchVO.setRecordCountPerPage(999);
         contractSearchVO.setFirstIndex(0);
-        List<ContractVO> contractList = contractService.selectContractList(contractSearchVO);
+        //List<ContractVO> contractList = contractService.selectContractList(contractSearchVO);
+        List<ContractVO> contractList = projectService.selectAvailableContractList();
         
     	UserVO userSearchVO = new UserVO();
         userSearchVO.setRecordCountPerPage(999);

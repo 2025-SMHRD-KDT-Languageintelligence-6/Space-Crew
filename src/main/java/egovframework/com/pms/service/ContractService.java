@@ -18,4 +18,6 @@ public interface ContractService {
 	void deleteContract(ContractVO vo) throws Exception;
 
 	void updateContractStatus(Map<String, Object> param) throws Exception;
+	
+	List<SalesVO> selectAvailableSalesList() throws Exception;
 }

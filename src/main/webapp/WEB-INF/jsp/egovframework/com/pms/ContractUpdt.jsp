@@ -26,14 +26,18 @@
 				<tr>
 				    <th>연결된 영업건</th>
 				    <td>
-				        <form:select path="salesId">
-				            <form:option value="" label="-- 단독 계약 (영업 연동 없음) --"/>
-				            <c:forEach var="sales" items="${salesList}">
-				                <form:option value="${sales.salesId}">
-								    ${sales.salesTitle} (${sales.custNm}, ${sales.ceoNm})
-								</form:option>
-				            </c:forEach>
-				        </form:select>
+				        <c:choose>
+				            <c:when test="${not empty contractVO.salesTitle}">
+				                <span class="readonly-text">
+				                    <c:out value="${contractVO.salesTitle}"/> (<c:out value="${contractVO.custNm}"/>)
+				                </span>
+				            </c:when>
+				            <c:otherwise>
+				                <span class="readonly-text">단독 계약 (영업 연동 없음)</span>
+				            </c:otherwise>
+				        </c:choose>
+				        <form:hidden path="salesId" />
+				        <small style="color: #999; margin-left:10px;">영업 정보는 변경할 수 없습니다.</small>
 				    </td>
 				</tr>
                 <tr>
@@ -44,12 +48,8 @@
                 <tr>
                     <th class="required">고객사</th>
                     <td>
-						<select name="custId" id="custId" required="required" class="form-control">
-						    <option value="">-- 고객사 선택 --</option>
-						    <c:forEach var="cust" items="${customerList}">
-						        <option value="${cust.custId}">${cust.custNm}</option>
-						    </c:forEach>
-						</select>
+						<span class="readonly-text"><c:out value="${contractVO.custNm}"/></span>
+       					<form:hidden path="custId" />
 				    </td>
                 </tr>
 

@@ -625,8 +625,8 @@
 	        success: function(data) {
 	            $("#taskGroupId").val(taskGroupId);
 	            $("#assignTitle").val(data.info.assignTitle);
-	            $("#assignStartDate").val(data.info.startDate);
-	            $("#assignEndDate").val(data.info.endDate);
+	            $("#assignStartDate").val(data.info.startDt);
+	            $("#assignEndDate").val(data.info.endDt);
 	            $("#assignReqSkills").val(data.info.reqSkills || "");
 	            $("#assignConfirmYn").val(data.info.confirmYn || 'N');
 	            $("#assignRemark").val(data.info.assignRemark || "");
@@ -730,7 +730,7 @@
 	                    html += "<tr " + highlightClass + ">";
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
-	                    html += "  <td>" + item.startDate + " ~ " + item.endDate + "</td>";
+	                    html += "  <td>" + item.startDt + " ~ " + item.endDt + "</td>";
 	                    html += "  <td><strong>" + fullValue.toFixed(1) + " MM</strong></td>";
 	                    html += "  <td style='text-align:center;'>";
 	                    html += "    <select class='status-select' onchange=\"fn_change_status_ajax('" + item.taskGroupId + "', this.value)\" style='padding:2px; border-radius:4px; font-weight:bold; " + fn_get_status_style(item.confirmYn) + "'>";
@@ -835,8 +835,8 @@
                                 events.push({
                                     id: item.assignId,
                                     title: item.assignTitle + " [" + item.userNm + "]",
-                                    start: item.startDate,
-                                    end: item.endDate + "T23:59:59",
+                                    start: item.startDt,
+                                    end: item.endDt + "T23:59:59",
                                     color: (item.inputRate >= 1.0 ? '#f44336' : '#3788d8')
                                 });
                             });

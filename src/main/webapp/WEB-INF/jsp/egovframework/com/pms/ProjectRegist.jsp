@@ -77,6 +77,9 @@
                 <tr>
                     <th class="required">수행 기간</th>
                     <td>
+                    	<div id="contDateGuide" style="margin-top:5px; font-size:12px; color:#2196F3; font-weight:bold; display:none;">
+				            계약 기간: <span id="guideStart"></span> ~ <span id="guideEnd"></span>
+				        </div>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <form:input path="startDt" type="date" style="width: 180px;" />
                             <span>~</span>
@@ -104,16 +107,16 @@
 	<script type="text/javascript">
 	    $(document).ready(function() {
 	        $("input[name='startDt']").on("change", function() {
-	            var startDate = $(this).val();
-	            if (startDate) {
-	                $("input[name='endDt']").attr("min", startDate);
+	            var startDt = $(this).val();
+	            if (startDt) {
+	                $("input[name='endDt']").attr("min", startDt);
 	            }
 	        });
 	
 	        $("input[name='endDt']").on("change", function() {
-	            var endDate = $(this).val();
-	            if (endDate) {
-	                $("input[name='startDt']").attr("max", endDate);
+	            var endDt = $(this).val();
+	            if (endDt) {
+	                $("input[name='startDt']").attr("max", endDt);
 	            }
 	        });
 	
@@ -139,17 +142,57 @@
 	            $("input[name='estEffort']").val(0);
 	        }
 	    	
-	        var startDate = $("input[name='startDt']").val();
-	        var endDate = $("input[name='endDt']").val();
+	        $(this).find(":disabled").removeAttr("disabled");
+	        
+	        var startDt = $("input[name='startDt']").val();
+	        var endDt = $("input[name='endDt']").val();
 	
-	        if (startDate && endDate) {
-	            if (startDate > endDate) {
+	        if (startDt && endDt) {
+	            if (startDt > endDt) {
 	                alert("수행 종료일은 시작일보다 빠를 수 없습니다.");
 	                $("input[name='endDt']").focus();
 	                e.preventDefault();
 	                return false;
 	            }
 	        }
+	    });
+	    
+	    var contractInfoList = [];
+	    <c:forEach var="contract" items="${contractList}">
+	        contractInfoList.push({
+	            contId: "${contract.contId}",
+	            startDt: "${contract.startDt}",
+	            endDt: "${contract.endDt}",
+	            contNm: "${contract.contNm}"
+	        });
+	    </c:forEach>
+
+	    $(document).ready(function() {
+	        $("select[name='contId']").change(function() {
+	            var selectedId = $(this).val();
+	            var $guide = $("#contDateGuide");
+	            
+	            if (!selectedId) {
+	                $("input[name='startDt']").val("").removeAttr("max");
+	                $("input[name='endDt']").val("").removeAttr("min");
+	                return;
+	            }
+	            
+	            var matched = contractInfoList.find(function(item) {
+	                return String(item.contId) === String(selectedId);
+	            });
+
+	            if (matched && matched.startDt && matched.endDt) {
+	                $("#guideStart").text(matched.startDt);
+	                $("#guideEnd").text(matched.endDt);
+	                $guide.fadeIn();
+	                
+	                console.log("계약 기간 로드 성공: ", matched.startDt, "~", matched.endDt);
+	            } else {
+	                $guide.hide();
+	                console.log("계약 기간 데이터가 없습니다");
+	            }
+	        });
 	    });
 	</script>
 </body>

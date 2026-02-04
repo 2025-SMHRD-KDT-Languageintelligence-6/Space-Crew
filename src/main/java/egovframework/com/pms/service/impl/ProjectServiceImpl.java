@@ -10,6 +10,7 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import egovframework.com.pms.service.ContractVO;
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
@@ -143,5 +144,10 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Override
 	public List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception {
 		return projectMapper.selectProjectAssignListAjax(vo);
+	}
+
+	@Override
+	public List<ContractVO> selectAvailableContractList() {
+		return projectMapper.selectAvailableContractList();
 	}
 }

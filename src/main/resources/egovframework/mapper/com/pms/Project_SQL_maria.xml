@@ -166,8 +166,8 @@
 	        #{projId}, 
 	        #{userId}, 
 	        #{assignTitle}, 
-	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
-	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{startDt}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{endDt}, '%Y-%m-%d'), 
 	        #{inputRate},
 	        #{lastUpdusrId},
 	        IFNULL(#{confirmYn}, 'N')
@@ -181,8 +181,8 @@
        	    , ANY_VALUE(A.PROJ_ID)                             AS projId
        	    , A.TASK_GROUP_ID                                  AS taskGroupId
         	, ANY_VALUE(A.ASSIGN_TITLE)                        AS assignTitle
-        	, ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDate
-        	, ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
+        	, ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDt
+        	, ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDt
         	, ANY_VALUE(A.ATCH_FILE_ID)                        AS atchFileId
         	, GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
         	, SUM(A.INPUT_RATE)                                AS inputRate
@@ -222,7 +222,7 @@
 	        FROM TB_ASSIGNMENT
 	        WHERE EMP_ID = #{userId}
 	          AND DEL_YN = 'N'
-	          AND NOT (END_DT &lt; #{startDate} OR START_DT &gt; #{endDate})
+	          AND NOT (END_DT &lt; #{startDt} OR START_DT &gt; #{endDt})
 	        GROUP BY EMP_ID
 	    ) AS temp
 	</select>
@@ -252,8 +252,8 @@
 	          A.ASSIGN_ID      AS assignId
 	        , P.PROJ_NM        AS projNm
 	        , A.ASSIGN_TITLE   AS title
-	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
-	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
 	        , A.INPUT_RATE     AS inputRate
 	    FROM TB_ASSIGNMENT A
 	    INNER JOIN TB_PROJECT P ON A.PROJ_ID = P.PROJ_ID
@@ -286,8 +286,8 @@
 	        #{projId}, 
 	        #{item.userId}, 
 	        #{assignTitle}, 
-	        STR_TO_DATE(#{startDate}, '%Y-%m-%d'), 
-	        STR_TO_DATE(#{endDate}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{startDt}, '%Y-%m-%d'), 
+	        STR_TO_DATE(#{endDt}, '%Y-%m-%d'), 
 	        #{item.inputRate}, 
 	        #{taskGroupId},
 	        #{reqSkills},
@@ -306,8 +306,8 @@
 	        , A.EMP_ID                            AS userId
 	        , B.EMP_NM                            AS userNm
 	        , A.ASSIGN_TITLE                      AS assignTitle
-	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDate
-	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDate
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
 	        , A.INPUT_RATE                        AS inputRate
 	        , A.TASK_GROUP_ID       			  AS taskGroupId
 	        , A.REQ_SKILLS                        AS reqSkills
@@ -364,8 +364,8 @@
 	<update id="updateProjectTaskGroupInfo" parameterType="egovframework.com.pms.service.ProjectAssignVO">
 	    UPDATE TB_ASSIGNMENT SET
 	          ASSIGN_TITLE = #{assignTitle}
-	        , START_DT     = STR_TO_DATE(#{startDate}, '%Y-%m-%d')
-	        , END_DT       = STR_TO_DATE(#{endDate}, '%Y-%m-%d')
+	        , START_DT     = STR_TO_DATE(#{startDt}, '%Y-%m-%d')
+	        , END_DT       = STR_TO_DATE(#{endDt}, '%Y-%m-%d')
 	        , REQ_SKILLS   = #{reqSkills}
 	        , ASSIGN_REMARK  = #{assignRemark}
 	        , ATCH_FILE_ID   = #{atchFileId}
@@ -381,8 +381,8 @@
 	        , ANY_VALUE(A.PROJ_ID)                             AS projId
 	        , A.TASK_GROUP_ID                                  AS taskGroupId
 	        , ANY_VALUE(A.ASSIGN_TITLE)                        AS assignTitle
-	        , ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDate
-	        , ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDate
+	        , ANY_VALUE(DATE_FORMAT(A.START_DT, '%Y-%m-%d'))   AS startDt
+	        , ANY_VALUE(DATE_FORMAT(A.END_DT, '%Y-%m-%d'))     AS endDt
 	        , ANY_VALUE(A.ATCH_FILE_ID)                        AS atchFileId
 	        , GROUP_CONCAT(B.EMP_NM SEPARATOR ', ')            AS userNm
 	        , SUM(A.INPUT_RATE)                                AS inputRate
@@ -406,4 +406,25 @@
 	    GROUP BY A.TASK_GROUP_ID
  	    ORDER BY ANY_VALUE(A.START_DT) DESC
 	</select>
+	
+	<select id="selectAvailableContractList" resultType="egovframework.com.pms.service.ContractVO">
+        SELECT 
+              A.CONT_ID       AS contId
+            , A.CONT_NM       AS contNm
+            , C.CUST_NM       AS custNm
+            , A.CUST_ID       AS custId
+            , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+ 	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
+        FROM TB_CONTRACT A
+        LEFT JOIN TB_CUSTOMER C ON A.CUST_ID = C.CUST_ID
+        WHERE A.CONT_STATUS = '계약완료'
+          AND A.DEL_YN = 'N'
+          AND NOT EXISTS (
+              SELECT 1 
+              FROM TB_PROJECT P 
+              WHERE P.CONT_ID = A.CONT_ID 
+                AND P.DEL_YN = 'N'
+          )
+        ORDER BY A.CONT_ID DESC
+    </select>
 </mapper>

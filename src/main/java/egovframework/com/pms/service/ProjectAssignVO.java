@@ -14,8 +14,8 @@ public class ProjectAssignVO extends ComDefaultVO implements Serializable {
     private String userId;
     private String userNm;
     private String assignTitle;
-    private String startDate;
-    private String endDate;
+    private String startDt;
+    private String endDt;
     private Double inputRate;
     private String lastUpdusrId;
     private String delYn;

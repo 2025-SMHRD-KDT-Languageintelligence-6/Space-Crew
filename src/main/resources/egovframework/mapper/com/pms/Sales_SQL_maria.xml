@@ -66,8 +66,7 @@
 
     <update id="updateSales" parameterType="egovframework.com.pms.service.SalesVO">
         UPDATE TB_SALES SET
-              CUST_ID = #{custId}
-            , EMP_ID = #{salesUserId}
+              EMP_ID = #{salesUserId}
             , SALES_TITLE = #{salesTitle}
             , EXPECTED_AMT = #{expectedAmt}
             , EXPECTED_DT = NULLIF(#{expectedDt},'')

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 import egovframework.com.pms.service.ContractVO;
+import egovframework.com.pms.service.SalesVO;
 
 @Mapper("contractMapper")
 public interface ContractMapper {
@@ -16,4 +17,5 @@ public interface ContractMapper {
 	void deleteContract(ContractVO vo) throws Exception;
 	void updateContractStatus(Map<String, Object> param) throws Exception;
 	void updateContractAtchFileId(Map<String, Object> map);
+	List<SalesVO> selectAvailableSalesList();
 }

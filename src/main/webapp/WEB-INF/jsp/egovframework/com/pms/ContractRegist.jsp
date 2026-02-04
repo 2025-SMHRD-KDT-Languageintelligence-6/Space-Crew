@@ -121,8 +121,7 @@
 	            var selectedId = $(this).val();
 	            
 				if (!selectedId) {
-		            $("select[name='custId']").val("").change();
-		            //$("select[name='picUserId']").val("").change();
+					$("select[name='custId']").val("").prop("disabled", false);
 		            return;
 		        }
 	            
@@ -134,17 +133,12 @@
 	            	console.log("매칭된 데이터:", matched);
 	                
 	                var targetCustId = (matched.custId || "").trim();
-	                //var targetPicId = (matched.salesUserId || "").trim();
-
-	                //$("select[name='custId']").val(targetCustId).prop("selected", true);
-	                //$("select[name='picUserId']").val(targetPicId).prop("selected", true);
 	                
 	                if(targetCustId) {
-		                $("select[name='custId']").val(targetCustId).trigger("change");
-		            }
-	                //if(targetCustId) $("select[name='custId']").val(targetCustId).trigger("change");
-	                //if(targetPicId) $("select[name='picUserId']").val(targetPicId).trigger("change");
-	                // $("select[name='custId']").change(); 
+	                	$("select[name='custId']").val(targetCustId);
+			           
+			            $("select[name='custId']").prop("disabled", true);
+			        }
 	            }
 	        });
 	    });
@@ -166,6 +160,8 @@
 	    });
 	    
 	    $("form").submit(function(e) {
+	    	$(this).find(":disabled").removeAttr("disabled");
+	    	
 	        var startDate = $("input[name='startDt']").val();
 	        var endDate = $("input[name='endDt']").val();
 

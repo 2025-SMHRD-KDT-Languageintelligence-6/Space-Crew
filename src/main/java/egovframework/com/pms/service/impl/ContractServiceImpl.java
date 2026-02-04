@@ -9,6 +9,7 @@ import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 import egovframework.com.pms.service.ContractService;
 import egovframework.com.pms.service.ContractVO;
+import egovframework.com.pms.service.SalesVO;
 
 @Service("contractService")
 public class ContractServiceImpl extends EgovAbstractServiceImpl implements ContractService {
@@ -54,5 +55,10 @@ public class ContractServiceImpl extends EgovAbstractServiceImpl implements Cont
     public void updateContractStatus(Map<String, Object> param) throws Exception {
         contractMapper.updateContractStatus(param);
     }
+
+	@Override
+	public List<SalesVO> selectAvailableSalesList() throws Exception {
+		return contractMapper.selectAvailableSalesList();
+	}
     
 }
