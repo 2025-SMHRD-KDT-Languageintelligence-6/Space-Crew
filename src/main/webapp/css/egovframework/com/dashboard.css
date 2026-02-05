@@ -1,34 +1,25 @@
 /* File Name: dashboard.css
-   Description: Space-PMS Dashboard (final / card-hover only)
-   Update: 2026-02-04
+   Description: Space-PMS Dashboard (NO Tailwind / NO FontAwesome) - Final (No Duplicates)
+   Update: 2026-02-05
 */
+
 /* =========================
-   0) 페이지
+   0) Font (Optional)
+   - 외부 CDN(구글폰트)도 싫다면 이 @import 줄 삭제하세요.
 ========================= */
-
-/* 1. 레이아웃 및 배경 리셋 */
-.content-page {
-    margin-left: 260px; /* 사이드바 폭에 맞춰 조정 */
-    padding: 2rem;
-    min-height: 100vh;
-    background-color: #f8fafc; /* Slate-50: 훨씬 깨끗하고 현대적인 배경색 */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
-}
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;800&display=swap');
 
 /* =========================
-   0) Design Tokens
+   1) Tokens / Base
 ========================= */
 :root{
-  --bg: #f8fafc;
-  --border: #e2e8f0;
-  --text: #0f172a;
-  --muted: #64748b;
-  --primary: #2563eb;
+  --bg: #f8fafc;              /* slate-50 */
+  --panel: #ffffff;
+  --border: #e2e8f0;          /* slate-200 */
+  --text: #0f172a;            /* slate-900 */
+  --muted: #64748b;           /* slate-500 */
+  --primary: #2563eb;         /* blue-600 */
+  --danger: #ef4444;          /* red-500 */
 
   --r-card: 2rem;
   --r-pill: 999px;
@@ -41,8 +32,237 @@
   --shadow-hover: 0 18px 35px -18px rgba(15, 23, 42, .35);
 }
 
+*{ box-sizing: border-box; }
+
+html, body{ height: 100%; }
+
+body{
+  margin: 0;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
 /* =========================
-   1) Dashboard Grid
+   2) Layout (sidebar 고려)
+========================= */
+.content-page{
+  margin-left: 260px;            /* menu.jsp 사이드바 폭과 동일 */
+  padding: 2rem;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* =========================
+   3) Header (Title + Noti)
+========================= */
+.header{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1{
+  margin: 0 0 .35rem 0;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: #1e293b;
+}
+
+.header p{
+  margin: 0;
+  color: var(--muted);
+  font-size: .95rem;
+  font-style: italic;
+}
+
+/* --- Noti Bar --- */
+.noti-bar{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: var(--panel);
+  border: 1px solid #f1f5f9;
+  border-radius: var(--r-pill);
+  padding: .6rem .9rem;
+
+  box-shadow: 0 6px 16px -14px rgba(15, 23, 42, .35);
+}
+
+.noti-meta{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.noti-label{
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.noti-divider{
+  width: 1px;
+  height: 14px;
+  background: var(--border);
+  display: inline-block;
+}
+
+.noti-count{
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--primary);
+}
+
+.noti-btn{
+  position: relative;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 14px 26px -18px rgba(37, 99, 235, .85);
+  transition: transform var(--t-fast) var(--ease);
+  outline: none;
+}
+
+.noti-btn:hover{ transform: translateY(-1px); }
+.noti-btn:active{ transform: scale(.96); }
+
+.noti-dot{
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background: var(--danger);
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+/* =========================
+   4) Section Title
+========================= */
+.section{ margin-bottom: 2rem; }
+
+.section-title{
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+
+.section-bar{
+  width: 6px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 0 12px rgba(37, 99, 235, .35);
+}
+
+.section-title h2{
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* =========================
+   5) Widgets (Top 3)
+========================= */
+.widget-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1280px){
+  .widget-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.widget{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.widget-head{
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  background: rgba(37, 99, 235, .04);
+}
+
+.widget-head h3{
+  margin: 0;
+  font-size: .95rem;
+  font-weight: 800;
+  color: #1f2937;
+  font-style: italic;
+}
+
+.widget-body{ padding: 1.25rem; }
+
+.row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: .75rem;
+
+  font-size: .85rem;
+  color: #334155;
+  font-weight: 700;
+}
+
+.muted{
+  margin: 0;
+  color: var(--muted);
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.accent{
+  color: var(--primary);
+  font-weight: 900;
+}
+
+.progress{
+  width: 100%;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.progress-bar{
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--r-pill);
+}
+
+/* =========================
+   6) Dashboard Grid (Bottom Cards)
 ========================= */
 .dashboard-grid{
   display: grid;
@@ -51,12 +271,9 @@
   margin-top: 1.5rem;
 }
 
-/* =========================
-   2) Card (base only)
-========================= */
 .card{
   position: relative;
-  background: #fff;
+  background: var(--panel);
   padding: 1.75rem;
 
   border-radius: var(--r-card);
@@ -74,9 +291,40 @@
   box-shadow: var(--shadow-soft);
 }
 
+.card h3{
+  margin: 0;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.card p{
+  margin: .6rem 0 0 0;
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Badge */
+.stat{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+
+  padding: 6px 10px;
+  background: var(--primary);
+  border-radius: var(--r-pill);
+  box-shadow: 0 10px 22px -14px rgba(37, 99, 235, .9);
+}
+
 /* =========================
-   3) Hover Utility (ONLY)
-   - 상단 위젯 + 하단 카드 공통 사용
+   7) Hover Utility (ONLY)
+   - 위젯/카드 공통
 ========================= */
 .card-hover{
   transition:
@@ -92,62 +340,13 @@
 }
 
 /* =========================
-   4) Typography
-========================= */
-.card h3{
-  margin: 0;
-  color: var(--text);
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-
-  display: inline-flex;
-  align-items: center;
-  gap: .65rem;
-}
-
-.card h3 i{
-  color: var(--primary);
-  font-size: 1.15rem;
-}
-
-.card p{
-  margin: .6rem 0 0 0;
-  font-size: .875rem;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-/* =========================
-   5) Badge
-========================= */
-.stat{
-  position: absolute;
-  top: 14px;
-  right: 14px;
-
-  font-size: 11px;
-  font-weight: 900;
-  color: #fff;
-
-  padding: 6px 10px;
-  background: var(--primary);
-  border-radius: var(--r-pill);
-
-  box-shadow: 0 10px 22px -14px rgba(37, 99, 235, .9);
-}
-
-/* =========================
-   6) Modal / Overlay
+   8) Modal Overlay / Toast / Animations
 ========================= */
 .modal-overlay{
   background-color: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(8px);
 }
 
-/* =========================
-   7) Animations
-========================= */
 @keyframes fadeInUp{
   from{ opacity: 0; transform: translateY(10px); }
   to{ opacity: 1; transform: translateY(0); }
@@ -158,7 +357,7 @@
 }
 
 /* =========================
-   8) Notification Panel
+   9) Notification Panel (notification.jsp에서 사용)
 ========================= */
 #notification-panel{
   transform: translateX(100%);
@@ -169,7 +368,7 @@
 }
 
 /* =========================
-   9) Toggle Switch
+   10) Toggle Switch (Config modal)
 ========================= */
 .switch{
   position: relative;
@@ -177,11 +376,13 @@
   width: 44px;
   height: 24px;
 }
+
 .switch input{
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .slider{
   position: absolute;
   inset: 0;
@@ -190,6 +391,7 @@
   transition: .25s var(--ease);
   border-radius: var(--r-pill);
 }
+
 .slider:before{
   content: "";
   position: absolute;
@@ -201,9 +403,22 @@
   transition: .25s var(--ease);
   border-radius: 50%;
 }
-input:checked + .slider{
-  background-color: var(--primary);
+
+.switch input:checked + .slider{ background-color: var(--primary); }
+.switch input:checked + .slider:before{ transform: translateX(20px); }
+
+/* =========================
+   11) Utility
+========================= */
+.hidden{ display: none !important; }
+
+/* FontAwesome 아이콘 정렬/크기 */
+.noti-btn i{
+  font-size: 16px;
+  line-height: 1;
 }
-input:checked + .slider:before{
-  transform: translateX(20px);
+
+.np-close i{
+  font-size: 18px;
+  line-height: 1;
 }

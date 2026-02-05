@@ -8,7 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space-PMS | 지능형 통합 대시보드</title>
 
-    <!-- 외부 CDN 제거: Tailwind / FontAwesome 없음 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/dashboard.css'/>">
 </head>
 
@@ -34,12 +36,13 @@
                 </span>
             </div>
 
-            <button id="noti-btn" data-count="${notificationCount}" onclick="toggleNotifications()" class="noti-btn">
-                🔔
-                <c:if test="${notificationCount > 0}">
-                    <span class="noti-dot"></span>
-                </c:if>
+            <button id="noti-btn" data-count="${notificationCount}" onclick="toggleNotifications()" class="noti-btn" type="button">
+              <i class="fa-solid fa-bell"></i>
+              <c:if test="${notificationCount > 0}">
+                <span class="noti-dot"></span>
+              </c:if>
             </button>
+
         </div>
     </div>
 
