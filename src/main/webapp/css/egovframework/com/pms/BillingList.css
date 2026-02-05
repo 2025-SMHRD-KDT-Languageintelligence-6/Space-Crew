@@ -2,7 +2,7 @@
    1. 기본 레이아웃 (Common Layout)
    ================================================================= */
 body {
-    background-color: #f4f7f6;
+    background-color: #f8fafc;
     font-family: 'Pretendard', -apple-system, sans-serif;
     color: #333;
     margin: 0;
@@ -156,7 +156,7 @@ tr:hover td {
 /* 추가 강조 효과*/
 
 /* BillingList.css */
-body { background-color: #f4f7f6; font-family: 'Pretendard', sans-serif; margin: 0; }
+body { background-color: #f8fafc; font-family: 'Pretendard', sans-serif; margin: 0; }
 .content-page { margin-left: 240px; padding: 30px; min-height: 100vh; }
 h2 { font-size: 24px; font-weight: 700; color: #2c3e50; border-left: 5px solid #007bff; padding-left: 15px; margin-bottom: 25px; }
 

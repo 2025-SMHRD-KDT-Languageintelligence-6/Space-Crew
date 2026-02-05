@@ -58,11 +58,12 @@
     </div>
 
     <!-- 상단 위젯(기존 CSS에 없으므로, 최소구성으로만 유지) -->
+    <div class="section-title">
+        <span class="section-bar"></span>
+        <h2><i class="fa-solid fa-satellite-dish"></i> Space Work Scanner</h2>
+    </div>
     <section id="sec-process" class="section">
-        <div class="section-title">
-            <span class="section-bar"></span>
-            <h2><i class="fa-solid fa-satellite-dish"></i> Space Work Scanner</h2>
-        </div>
+
 
       <div class="widget-grid">
 
@@ -121,6 +122,11 @@
     </section>
 
     <!-- 하단 메뉴 카드 -->
+    <div class="section-title">
+        <span class="section-bar"></span>
+        <h2><i class="fa-solid fa-bolt"></i> Quick menu</h2>
+    </div>
+
     <div class="dashboard-grid">
         <a id="card-customer" href="<c:url value='/pms/customerList.do'/>" class="card card-hover">
           <h3><i class="fa-solid fa-address-card"></i> 고객 관리</h3>
