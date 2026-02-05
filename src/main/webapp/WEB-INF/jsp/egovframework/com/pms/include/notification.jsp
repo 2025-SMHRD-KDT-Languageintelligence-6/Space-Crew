@@ -10,7 +10,7 @@
         transform: translateX(0);
     }
 </style>
-
+<%-- --%>
 <div id="notification-panel" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-[100] border-l border-slate-100 flex flex-col">
     <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
         <h3 class="font-bold text-slate-800 tracking-tighter uppercase underline decoration-blue-500 decoration-2 underline-offset-4">Notification Center</h3>

@@ -49,7 +49,7 @@ function updateNotificationBadge(addCount) {
         }
     }
 }
-
+<%-- --%>
 
 // 우측 알림창에 카드 추가
 function appendNotificationCard(message) {
