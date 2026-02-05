@@ -415,6 +415,7 @@ body{
    11) Utility
 ========================= */
 .hidden{ display: none !important; }
+.hidden-element { display: none !important; }
 
 
 /* FontAwesome 아이콘 정렬/크기 */

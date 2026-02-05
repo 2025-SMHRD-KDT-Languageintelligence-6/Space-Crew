@@ -34,7 +34,7 @@
                 <div class="noti-meta">
                     <span class="noti-label">미확인 알림</span>
                     <span class="noti-divider"></span>
-                    <span class="noti-count">
+                    <span id="noti-badge" class="noti-count">
                         <c:out value="${notificationCount != null ? notificationCount : 0}" />
                     </span>
                 </div>
@@ -58,53 +58,60 @@
     </div>
 
     <!-- 상단 위젯(기존 CSS에 없으므로, 최소구성으로만 유지) -->
-    <section class="section">
+    <section id="sec-process" class="section">
         <div class="section-title">
             <span class="section-bar"></span>
-            <h2>지능형 프로세스 모니터링</h2>
+            <h2><i class="fa-solid fa-satellite-dish"></i> Space Work Scanner</h2>
         </div>
 
-        <div class="widget-grid">
-            <div id="w-sales" class="widget card-hover">
-                <div class="widget-head">
-                    <h3>Sales Intelligence</h3>
-                </div>
-                <div class="widget-body">
-                    <div class="row">
-                        <span>AI 통합 플랫폼 수주 확률</span>
-                        <span class="accent">85%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width:85%"></div>
-                    </div>
-                </div>
-            </div>
+      <div class="widget-grid">
 
-            <div id="w-contract" class="widget card-hover">
-                <div class="widget-head">
-                    <h3>Contract Status</h3>
-                </div>
-                <div class="widget-body">
-                    <p class="muted">최근 체결 완료</p>
-                    <p id="w-contract-detail" class="accent">전남 테크노파크 유지보수 계약</p>
-                </div>
+        <!-- Sales Intelligence -->
+        <div id="w-sales" class="widget card-hover">
+          <div class="widget-head">
+            <h3>Sales Intelligence</h3>
+          </div>
+          <div class="widget-body">
+            <div class="row">
+              <span>AI 통합 플랫폼 수주 확률</span>
+              <span class="accent">85%</span>
             </div>
-
-            <div id="w-project" class="widget card-hover">
-                <div class="widget-head">
-                    <h3>Project Analysis</h3>
-                </div>
-                <div class="widget-body">
-                    <div class="row">
-                        <span>Space-PMS 고도화</span>
-                        <span class="accent">72%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width:72%"></div>
-                    </div>
-                </div>
+            <div class="progress">
+              <div class="progress-bar" style="width:85%"></div>
             </div>
+          </div>
         </div>
+
+        <!-- Contract Status -->
+        <div id="w-contract" class="widget card-hover">
+          <div class="widget-head">
+            <h3>Contract Status</h3>
+          </div>
+          <div class="widget-body">
+            <p class="muted">최근 체결 완료</p>
+            <p id="w-contract-detail" class="accent">전남 테크노파크 유지보수 계약</p>
+          </div>
+        </div>
+
+        <!-- Project Analysis -->
+        <div id="w-project" class="widget card-hover">
+          <div class="widget-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <h3>Project Analysis</h3>
+          </div>
+
+          <div class="widget-body">
+            <!-- 더미 요약 -->
+            <div class="row" style="margin-bottom:10px;">
+              <span>전체 진행률(더미)</span>
+              <span class="accent" id="proj-avg">72%</span>
+            </div>
+
+            <!-- 더미 프로젝트 리스트가 렌더링될 곳 -->
+            <div id="proj-list" class="space-y-2"></div>
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <!-- 하단 메뉴 카드 -->

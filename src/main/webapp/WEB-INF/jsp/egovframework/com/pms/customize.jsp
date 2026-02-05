@@ -6,10 +6,14 @@
   <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeConfig()"></div>
 
   <!-- modal -->
-  <div class="relative mx-auto mt-[12vh] w-[92vw] max-w-md rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+  <div class="relative mx-auto mt-[10vh] w-[92vw] max-w-2xl rounded-3xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
     <!-- header -->
     <div class="flex items-center justify-between px-6 py-5 bg-slate-50 border-b border-slate-100">
-      <h3 class="text-base font-extrabold tracking-tight text-slate-800">대시보드 카드 설정</h3>
+      <div>
+        <h3 class="text-base font-extrabold tracking-tight text-slate-800">대시보드 카드 설정</h3>
+        <p class="text-xs text-slate-500 font-medium mt-1">체크를 해제하면 대시보드에서 숨겨집니다. 설정은 자동 저장됩니다.</p>
+      </div>
+
       <button type="button"
               onclick="closeConfig()"
               class="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-500 hover:text-red-500 hover:border-red-200 transition">
@@ -18,53 +22,150 @@
     </div>
 
     <!-- body -->
-    <div class="px-6 py-6 space-y-3">
-      <p class="text-xs text-slate-500 font-medium">
-        표시할 카드를 선택하세요. (즉시 반영)
-      </p>
+    <div class="px-6 py-6">
+      <!-- 3열 그리드 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 
-      <div class="grid grid-cols-2 gap-3 pt-2">
+        <!-- ===== Space Work Scanner ===== -->
+        <div class="md:col-span-3 flex items-center justify-between pt-1">
+          <p class="text-xs text-slate-500 font-extrabold tracking-wide">
+            <i class="fa-solid fa-satellite-dish"></i> Space Work Scanner
+          </p>
+          <span class="text-[11px] text-slate-400 font-semibold">Top Widgets</span>
+        </div>
 
+        <!-- Sales Intelligence -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-customer', this)"
+          <input type="checkbox" checked data-toggle-target="w-sales"
+                 onchange="toggleView('w-sales', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">고객 관리</span>
+          <span class="text-sm font-extrabold text-slate-700">Sales Intelligence</span>
         </label>
 
+        <!-- Contract Status -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-sales', this)"
+          <input type="checkbox" checked data-toggle-target="w-contract"
+                 onchange="toggleView('w-contract', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">영업 관리</span>
+          <span class="text-sm font-extrabold text-slate-700">Contract Status</span>
         </label>
 
+        <!-- Project Analysis -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-contract', this)"
+          <input type="checkbox" checked data-toggle-target="w-project"
+                 onchange="toggleView('w-project', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">계약 관리</span>
+          <span class="text-sm font-extrabold text-slate-700">Project Analysis</span>
         </label>
 
+        <!-- Project Analysis 보기 설정 (전체 폭) -->
+        <div id="proj-settings" class="md:col-span-3 p-4 rounded-2xl border border-slate-200 bg-slate-50">
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <p class="text-xs text-slate-600 font-extrabold">
+              <i class="fa-solid fa-diagram-project"></i> Project Analysis 보기 설정
+            </p>
+            <span class="text-[11px] text-slate-400 font-semibold">
+              * “1개만” 선택 시 개수 선택이 비활성화됩니다.
+            </span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-between gap-3 flex-wrap">
+            <div class="flex items-center gap-4">
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="projViewModeModal" value="one"
+                       onchange="setProjectViewMode('one')"
+                       class="w-4 h-4 accent-blue-600">
+                1개만
+              </label>
+
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="projViewModeModal" value="many"
+                       onchange="setProjectViewMode('many')"
+                       class="w-4 h-4 accent-blue-600">
+                여러개
+              </label>
+            </div>
+
+            <select id="proj-limit-modal"
+                    onchange="setProjectLimit(this.value)"
+                    class="text-[12px] font-extrabold border border-slate-200 rounded-xl px-3 py-2 text-slate-900 bg-white">
+              <option value="1">1개</option>
+              <option value="2">2개</option>
+              <option value="3">3개</option>
+              <option value="4">4개</option>
+              <option value="5">5개</option>
+              <option value="6">6개</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="md:col-span-3">
+          <div class="h-px bg-slate-200 my-2"></div>
+        </div>
+
+        <!-- ===== Quick menu ===== -->
+        <div class="md:col-span-3 flex items-center justify-between pt-1">
+          <p class="text-xs text-slate-500 font-extrabold tracking-wide">
+            <i class="fa-solid fa-bolt"></i> Quick menu
+          </p>
+          <span class="text-[11px] text-slate-400 font-semibold">Bottom Cards</span>
+        </div>
+
+        <!-- 고객 관리 -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-project', this)"
+          <input type="checkbox" checked data-toggle-target="card-customer"
+                 onchange="toggleView('card-customer', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">프로젝트</span>
+          <span class="text-sm font-extrabold text-slate-700">고객 관리</span>
         </label>
 
+        <!-- 영업 관리 -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-billing', this)"
+          <input type="checkbox" checked data-toggle-target="card-sales"
+                 onchange="toggleView('card-sales', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">청구/정산</span>
+          <span class="text-sm font-extrabold text-slate-700">영업 관리</span>
         </label>
 
+        <!-- 계약 관리 -->
         <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked onchange="toggleCard('card-user', this)"
+          <input type="checkbox" checked data-toggle-target="card-contract"
+                 onchange="toggleView('card-contract', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">직원 관리</span>
+          <span class="text-sm font-extrabold text-slate-700">계약 관리</span>
         </label>
 
-        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer col-span-2">
-          <input type="checkbox" checked onchange="toggleCard('card-meeting', this)"
+        <!-- 프로젝트 -->
+        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" checked data-toggle-target="card-project"
+                 onchange="toggleView('card-project', this)"
                  class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-bold text-slate-700">AI 회의록</span>
+          <span class="text-sm font-extrabold text-slate-700">프로젝트</span>
+        </label>
+
+        <!-- 청구/정산 -->
+        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" checked data-toggle-target="card-billing"
+                 onchange="toggleView('card-billing', this)"
+                 class="w-4 h-4 accent-blue-600">
+          <span class="text-sm font-extrabold text-slate-700">청구/정산</span>
+        </label>
+
+        <!-- 직원 관리 -->
+        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" checked data-toggle-target="card-user"
+                 onchange="toggleView('card-user', this)"
+                 class="w-4 h-4 accent-blue-600">
+          <span class="text-sm font-extrabold text-slate-700">직원 관리</span>
+        </label>
+
+        <!-- AI 회의록 (전체 폭 추천) -->
+        <label class="md:col-span-3 flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" checked data-toggle-target="card-meeting"
+                 onchange="toggleView('card-meeting', this)"
+                 class="w-4 h-4 accent-blue-600">
+          <span class="text-sm font-extrabold text-slate-700">AI 회의록</span>
         </label>
 
       </div>
@@ -77,6 +178,9 @@
               class="w-full rounded-2xl bg-blue-600 text-white font-extrabold py-4 shadow-xl hover:bg-blue-700 transition tracking-wide">
         설정 저장
       </button>
+
+        <!-- 설정은 브라우저에 저장되며( localStorage ), 같은 PC/브라우저에서 유지됩니다. -->
+
     </div>
   </div>
 </div>
