@@ -22,7 +22,7 @@ public class DashboardController {
     public String dashboardView(Model model) throws Exception {
         model.addAttribute("projectCount", 5);
         model.addAttribute("billingCount", 12);
-        return "egovframework/com/pms/MainDashboard";
+        return "egovframework/com/pms/MainIndex";
     }
 
     // 알림 데이터를 반환하는 API (통합 버전)

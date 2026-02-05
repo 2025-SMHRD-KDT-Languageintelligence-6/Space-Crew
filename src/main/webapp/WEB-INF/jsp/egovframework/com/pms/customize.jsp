@@ -27,6 +27,13 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 
         <!-- ===== Space Work Scanner ===== -->
+        <div class="md:col-span-3 flex items-center justify-between pt-1">
+          <p class="text-xs text-slate-500 font-extrabold tracking-wide">
+            <i class="fa-solid fa-satellite-dish"></i> Space Work Scanner
+          </p>
+          <span class="text-[11px] text-slate-400 font-semibold">top Cards</span>
+        </div>
+
         <!-- Widgets 보기 설정 (Sales / Contract / Project) -->
         <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3">
 

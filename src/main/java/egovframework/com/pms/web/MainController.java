@@ -28,7 +28,7 @@ public class MainController {
         int totalBillings = billingService.selectBillingListTotCnt(new BillingVO());
         model.addAttribute("billingCount", totalBillings);
 
-        return "egovframework/com/pms/MainIndex";
+        return "egovframework/com/pms/MainDashboard";
     }
 
     @RequestMapping(value = "/")
