@@ -10,7 +10,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<%-- --%>
+
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/dashboard.css'/>">
 </head>
 
@@ -22,28 +22,38 @@
 
     <!-- 헤더(기존 header 클래스 기반) -->
     <div class="header">
-        <div>
+        <div class="header-title">
             <h1>🚀 Space-PMS Dashboard</h1>
             <p>AI기반 지능형 프로젝트 관리 시스템</p>
         </div>
 
+
+        <div class="header-actions">
         <!-- 알림바(기능 유지: CSS로만 꾸미게 됨) -->
-        <div class="noti-bar">
-            <div class="noti-meta">
-                <span class="noti-label">미확인 알림</span>
-                <span class="noti-divider"></span>
-                <span class="noti-count">
-                    <c:out value="${notificationCount != null ? notificationCount : 0}" />
-                </span>
+            <div class="noti-bar">
+                <div class="noti-meta">
+                    <span class="noti-label">미확인 알림</span>
+                    <span class="noti-divider"></span>
+                    <span class="noti-count">
+                        <c:out value="${notificationCount != null ? notificationCount : 0}" />
+                    </span>
+                </div>
+
+                <button id="noti-btn" data-count="${notificationCount}" onclick="toggleNotifications()" class="noti-btn" type="button">
+                  <i class="fa-solid fa-bell"></i>
+                  <c:if test="${notificationCount > 0}">
+                    <span class="noti-dot"></span>
+                  </c:if>
+                </button>
+
+                <button type="button"
+                        class="config-btn"
+                        onclick="openConfig()"
+                        title="대시보드 설정">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
             </div>
-
-            <button id="noti-btn" data-count="${notificationCount}" onclick="toggleNotifications()" class="noti-btn" type="button">
-              <i class="fa-solid fa-bell"></i>
-              <c:if test="${notificationCount > 0}">
-                <span class="noti-dot"></span>
-              </c:if>
-            </button>
-
         </div>
     </div>
 
@@ -99,48 +109,48 @@
 
     <!-- 하단 메뉴 카드 -->
     <div class="dashboard-grid">
-        <a href="<c:url value='/pms/customerList.do'/>" class="card card-hover">
-            <h3>고객 관리</h3>
-            <p>고객사 정보 및 담당자 관리</p>
+        <a id="card-customer" href="<c:url value='/pms/customerList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-address-card"></i> 고객 관리</h3>
+          <p>고객사 정보 및 담당자 관리</p>
         </a>
 
-        <a href="<c:url value='/pms/salesList.do'/>" class="card card-hover">
-            <h3>영업 관리</h3>
-            <p>영업 기회 및 수주 확률 관리</p>
+        <a id="card-sales" href="<c:url value='/pms/salesList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-chart-line"></i> 영업 관리</h3>
+          <p>영업 기회 및 수주 확률 관리</p>
         </a>
 
-        <a href="<c:url value='/pms/contractList.do'/>" class="card card-hover">
-            <h3>계약 관리</h3>
-            <p>체결된 계약서 및 조건 관리</p>
+        <a id="card-contract" href="<c:url value='/pms/contractList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-file-signature"></i> 계약 관리</h3>
+          <p>체결된 계약서 및 조건 관리</p>
         </a>
 
-        <a href="<c:url value='/pms/projectList.do'/>" class="card card-hover">
-            <h3>프로젝트 관리</h3>
-            <p>수행 중인 프로젝트 현황</p>
-            <span class="stat">${projectCount}건</span>
+        <a id="card-project" href="<c:url value='/pms/projectList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-diagram-project"></i> 프로젝트 관리</h3>
+          <p>수행 중인 프로젝트 현황</p>
+          <span class="stat">${projectCount}건</span>
         </a>
 
-        <a href="<c:url value='/pms/billingList.do'/>" class="card card-hover">
-            <h3>청구/정산</h3>
-            <p>세금계산서 발행 및 입금 확인</p>
-            <span class="stat">${billingCount}건</span>
+        <a id="card-billing" href="<c:url value='/pms/billingList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-file-invoice-dollar"></i> 청구/정산</h3>
+          <p>세금계산서 발행 및 입금 확인</p>
+          <span class="stat">${billingCount}건</span>
         </a>
 
-        <a href="<c:url value='/pms/userList.do'/>" class="card card-hover">
-            <h3>직원 관리</h3>
-            <p>내부 인력 및 조직 관리</p>
+        <a id="card-user" href="<c:url value='/pms/userList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-user-tie"></i> 직원 관리</h3>
+          <p>내부 인력 및 조직 관리</p>
         </a>
 
-        <a href="<c:url value='/pms/meetingList.do'/>" class="card card-hover">
-            <h3>🎙️ AI 회의록 분석 바로가기</h3>
-            <p>회의록 분석</p>
+        <a id="card-meeting" href="<c:url value='/pms/meetingList.do'/>" class="card card-hover">
+          <h3><i class="fa-solid fa-microphone"></i> AI 회의록</h3>
+          <p>회의록 분석</p>
         </a>
-
 
     </div>
 </div>
 
 <c:import url="/WEB-INF/jsp/egovframework/com/pms/include/notification.jsp" />
+<c:import url="/WEB-INF/jsp/egovframework/com/pms/customize.jsp" />
 
 <script src="<c:url value='/js/egovframework/com/pms/dashboard.js'/>"></script>
 </body>

@@ -74,7 +74,10 @@
 	<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" id="jsonView">
 		<property name="contentType" value="application/json;charset=UTF-8"/>
 	</bean>
-	
+
+    <mvc:resources mapping="/css/**" location="/css/" />
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/images/**" location="/images/" />
 	<!-- Facebook 설정 -->
 	<mvc:default-servlet-handler/>
 	

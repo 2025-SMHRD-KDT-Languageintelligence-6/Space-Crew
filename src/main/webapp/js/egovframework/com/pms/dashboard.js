@@ -49,7 +49,7 @@ function updateNotificationBadge(addCount) {
         }
     }
 }
-<%-- --%>
+
 
 // 우측 알림창에 카드 추가
 function appendNotificationCard(message) {
@@ -160,3 +160,45 @@ window.onload = function() {
     // 10초마다 서버 확인 (테스트를 위해 10초로 설정하신 것을 유지했습니다)
     setInterval(fetchLatestNotifications, 10000);
 };
+
+
+/* =====================
+   대시보드 설정 모달
+===================== */
+
+function openConfig() {
+  document.getElementById('config-modal').classList.remove('hidden');
+}
+
+function closeConfig() {
+  document.getElementById('config-modal').classList.add('hidden');
+}
+
+/* 카드 ON/OFF */
+function toggleCard(cardId, checkbox) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+
+  card.style.display = checkbox.checked ? '' : 'none';
+  localStorage.setItem(cardId, checkbox.checked ? '1' : '0');
+}
+
+/* 저장 후 닫기 */
+function saveConfig() {
+  closeConfig();
+}
+
+/* 페이지 로드시 설정 복원 */
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.config-item input').forEach(input => {
+    const cardId = input.getAttribute('onchange')
+      .match(/'(.+?)'/)[1];
+
+    const saved = localStorage.getItem(cardId);
+    if (saved === '0') {
+      input.checked = false;
+      const card = document.getElementById(cardId);
+      if (card) card.style.display = 'none';
+    }
+  });
+});
