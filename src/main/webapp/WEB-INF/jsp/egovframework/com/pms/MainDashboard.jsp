@@ -80,6 +80,9 @@
               <div class="progress-bar" style="width:85%"></div>
             </div>
           </div>
+
+          <!-- 더미 리스트 렌더 영역 -->
+            <div id="sales-list" class="space-y-2 mt-3"></div>
         </div>
 
         <!-- Contract Status -->
@@ -90,6 +93,9 @@
           <div class="widget-body">
             <p class="muted">최근 체결 완료</p>
             <p id="w-contract-detail" class="accent">전남 테크노파크 유지보수 계약</p>
+
+            <!-- 더미 리스트 렌더 영역 -->
+          <div id="contract-list" class="space-y-2 mt-3"></div>
           </div>
         </div>
 

@@ -21,7 +21,7 @@ const VIEW_KEY_PREFIX = "view:";
 function openConfig() {
   const modal = document.getElementById("config-modal");
   if (modal) modal.classList.remove("hidden");
-  syncProjectControls();
+  syncWidgetControls();
 }
 
 function closeConfig() {
@@ -218,8 +218,10 @@ function initDashboard() {
     console.log("읽지 않은 초기 알림:", GLOBAL_NOTI_COUNT);
   }
 
-    syncProjectControls();
-    renderProjects();
+  syncWidgetControls();
+  renderSales();
+  renderContracts();
+  renderProjects();
 
   // (3) 폴링 시작(10초)
   setInterval(fetchLatestNotifications, 10000);
@@ -237,6 +239,147 @@ window.saveConfig = saveConfig;
 window.toggleNotifications = toggleNotifications;
 window.toggleView = toggleView;
 window.clearNotifications = clearNotifications;
+
+/* ==========================
+   Sales Intelligence (더미)
+========================== */
+const DUMMY_SALES = [
+  { id: 201, name: "전남 AI 통합 플랫폼", stage: "제안", win: 85, owner: "박현우", due: "2026-02-18" },
+  { id: 202, name: "공공 PMS 구축", stage: "미팅", win: 62, owner: "염해명", due: "2026-03-02" },
+  { id: 203, name: "데이터센터 고도화", stage: "협상", win: 48, owner: "신창용", due: "2026-03-10" },
+  { id: 204, name: "챗봇 도입", stage: "발굴", win: 30, owner: "정종혁", due: "2026-03-20" },
+];
+
+let salesViewMode = localStorage.getItem("sales:viewMode") || "one";
+let salesLimit = parseInt(localStorage.getItem("sales:limit") || "3", 10);
+
+function setSalesViewMode(mode){
+  salesViewMode = (mode === "many") ? "many" : "one";
+  localStorage.setItem("sales:viewMode", salesViewMode);
+  renderSales();
+}
+
+function setSalesLimit(limit){
+  const n = parseInt(limit, 10);
+  salesLimit = Number.isFinite(n) ? Math.max(1, Math.min(6, n)) : 3;
+  localStorage.setItem("sales:limit", String(salesLimit));
+  renderSales();
+}
+
+function renderSales(){
+  const listEl = document.getElementById("sales-list");
+  const avgEl = document.getElementById("sales-avg");
+  const barEl = document.getElementById("sales-bar");
+  if (!listEl) return;
+
+  const visibleCount = (salesViewMode === "one") ? 1 : salesLimit;
+  const items = DUMMY_SALES.slice(0, visibleCount);
+
+  // 요약: 첫번째 win을 대표값으로
+  const mainWin = items[0]?.win ?? 0;
+  if (avgEl) avgEl.innerText = mainWin + "%";
+  if (barEl) barEl.style.width = mainWin + "%";
+
+  listEl.innerHTML = items.map(s => `
+    <div class="p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+      <div style="display:flex; justify-content:space-between; gap:12px;">
+        <div>
+          <div style="font-weight:800; font-size:13px; color:#0f172a;">${escapeHtml(s.name)}</div>
+          <div style="margin-top:4px; font-size:11px; color:#64748b;">
+            단계: ${escapeHtml(s.stage)} · 담당: ${escapeHtml(s.owner)} · 마감: ${escapeHtml(s.due)}
+          </div>
+        </div>
+        <div style="font-weight:900; font-size:12px; color:#2563eb;">${s.win}%</div>
+      </div>
+    </div>
+  `).join("");
+
+  syncWidgetControls();
+}
+
+/* ==========================
+   Contract Status (더미)
+========================== */
+const DUMMY_CONTRACTS = [
+  { id: 301, name: "전남 테크노파크 유지보수", status: "체결 완료", amount: "32,000,000원", date: "2026-02-03" },
+  { id: 302, name: "Space-PMS 추가 개발", status: "검토중", amount: "18,000,000원", date: "2026-02-08" },
+  { id: 303, name: "OCR 모듈 라이선스", status: "협상중", amount: "9,500,000원", date: "2026-02-14" },
+];
+
+let contractViewMode = localStorage.getItem("contract:viewMode") || "one";
+let contractLimit = parseInt(localStorage.getItem("contract:limit") || "3", 10);
+
+function setContractViewMode(mode){
+  contractViewMode = (mode === "many") ? "many" : "one";
+  localStorage.setItem("contract:viewMode", contractViewMode);
+  renderContracts();
+}
+
+function setContractLimit(limit){
+  const n = parseInt(limit, 10);
+  contractLimit = Number.isFinite(n) ? Math.max(1, Math.min(6, n)) : 3;
+  localStorage.setItem("contract:limit", String(contractLimit));
+  renderContracts();
+}
+
+function renderContracts(){
+  const listEl = document.getElementById("contract-list");
+  const summaryEl = document.getElementById("contract-summary");
+  if (!listEl) return;
+
+  const visibleCount = (contractViewMode === "one") ? 1 : contractLimit;
+  const items = DUMMY_CONTRACTS.slice(0, visibleCount);
+
+  if (summaryEl) {
+    const top = items[0];
+    summaryEl.innerText = top ? `${top.status} · ${top.name}` : "-";
+  }
+
+  listEl.innerHTML = items.map(c => `
+    <div class="p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition">
+      <div style="font-weight:800; font-size:13px; color:#0f172a;">${escapeHtml(c.name)}</div>
+      <div style="margin-top:4px; font-size:11px; color:#64748b;">
+        상태: ${escapeHtml(c.status)} · 금액: ${escapeHtml(c.amount)} · 일자: ${escapeHtml(c.date)}
+      </div>
+    </div>
+  `).join("");
+
+  syncWidgetControls();
+}
+
+/* ==========================
+   위젯 컨트롤 동기화 (모달)
+========================== */
+function syncWidgetControls(){
+  // Sales
+  document.querySelectorAll("input[name='salesViewModeModal']").forEach(r => (r.checked = (r.value === salesViewMode)));
+  const salesLimitEl = document.getElementById("sales-limit-modal");
+  if (salesLimitEl){
+    salesLimitEl.value = String(salesLimit);
+    salesLimitEl.disabled = (salesViewMode === "one");
+    salesLimitEl.style.opacity = (salesViewMode === "one") ? "0.5" : "1";
+    salesLimitEl.style.cursor  = (salesViewMode === "one") ? "not-allowed" : "pointer";
+  }
+
+  // Contract
+  document.querySelectorAll("input[name='contractViewModeModal']").forEach(r => (r.checked = (r.value === contractViewMode)));
+  const contractLimitEl = document.getElementById("contract-limit-modal");
+  if (contractLimitEl){
+    contractLimitEl.value = String(contractLimit);
+    contractLimitEl.disabled = (contractViewMode === "one");
+    contractLimitEl.style.opacity = (contractViewMode === "one") ? "0.5" : "1";
+    contractLimitEl.style.cursor  = (contractViewMode === "one") ? "not-allowed" : "pointer";
+  }
+
+  // Project (기존 함수 재사용)
+  syncProjectControls();
+}
+
+/* 전역 노출 */
+window.setSalesViewMode = setSalesViewMode;
+window.setSalesLimit = setSalesLimit;
+window.setContractViewMode = setContractViewMode;
+window.setContractLimit = setContractLimit;
 
 /* ==========================
    Project Analysis (더미)

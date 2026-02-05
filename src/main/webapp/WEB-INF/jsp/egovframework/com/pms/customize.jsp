@@ -27,77 +27,86 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 
         <!-- ===== Space Work Scanner ===== -->
-        <div class="md:col-span-3 flex items-center justify-between pt-1">
-          <p class="text-xs text-slate-500 font-extrabold tracking-wide">
-            <i class="fa-solid fa-satellite-dish"></i> Space Work Scanner
-          </p>
-          <span class="text-[11px] text-slate-400 font-semibold">Top Widgets</span>
-        </div>
+        <!-- Widgets 보기 설정 (Sales / Contract / Project) -->
+        <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-3">
 
-        <!-- Sales Intelligence -->
-        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked data-toggle-target="w-sales"
-                 onchange="toggleView('w-sales', this)"
-                 class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-extrabold text-slate-700">Sales Intelligence</span>
-        </label>
-
-        <!-- Contract Status -->
-        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked data-toggle-target="w-contract"
-                 onchange="toggleView('w-contract', this)"
-                 class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-extrabold text-slate-700">Contract Status</span>
-        </label>
-
-        <!-- Project Analysis -->
-        <label class="flex items-center gap-2 p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer">
-          <input type="checkbox" checked data-toggle-target="w-project"
-                 onchange="toggleView('w-project', this)"
-                 class="w-4 h-4 accent-blue-600">
-          <span class="text-sm font-extrabold text-slate-700">Project Analysis</span>
-        </label>
-
-        <!-- Project Analysis 보기 설정 (전체 폭) -->
-        <div id="proj-settings" class="md:col-span-3 p-4 rounded-2xl border border-slate-200 bg-slate-50">
-          <div class="flex items-center justify-between gap-3 flex-wrap">
+          <!-- Sales 보기 설정 -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
             <p class="text-xs text-slate-600 font-extrabold">
-              <i class="fa-solid fa-diagram-project"></i> Project Analysis 보기 설정
+              <i class="fa-solid fa-chart-line"></i> Sales 보기 설정
             </p>
-            <span class="text-[11px] text-slate-400 font-semibold">
-              * “1개만” 선택 시 개수 선택이 비활성화됩니다.
-            </span>
-          </div>
 
-          <div class="mt-3 flex items-center justify-between gap-3 flex-wrap">
-            <div class="flex items-center gap-4">
+            <div class="mt-3 flex items-center gap-4">
               <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
-                <input type="radio" name="projViewModeModal" value="one"
-                       onchange="setProjectViewMode('one')"
-                       class="w-4 h-4 accent-blue-600">
+                <input type="radio" name="salesViewModeModal" value="one" onchange="setSalesViewMode('one')" class="w-4 h-4 accent-blue-600">
                 1개만
               </label>
-
               <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
-                <input type="radio" name="projViewModeModal" value="many"
-                       onchange="setProjectViewMode('many')"
-                       class="w-4 h-4 accent-blue-600">
+                <input type="radio" name="salesViewModeModal" value="many" onchange="setSalesViewMode('many')" class="w-4 h-4 accent-blue-600">
                 여러개
               </label>
             </div>
 
-            <select id="proj-limit-modal"
-                    onchange="setProjectLimit(this.value)"
-                    class="text-[12px] font-extrabold border border-slate-200 rounded-xl px-3 py-2 text-slate-900 bg-white">
-              <option value="1">1개</option>
-              <option value="2">2개</option>
-              <option value="3">3개</option>
-              <option value="4">4개</option>
-              <option value="5">5개</option>
-              <option value="6">6개</option>
+            <select id="sales-limit-modal" onchange="setSalesLimit(this.value)"
+                    class="mt-3 w-full text-[12px] font-extrabold border border-slate-200 rounded-xl px-3 py-2 text-slate-900 bg-white">
+              <option value="1">1개</option><option value="2">2개</option><option value="3">3개</option>
+              <option value="4">4개</option><option value="5">5개</option><option value="6">6개</option>
             </select>
+            <p class="text-[11px] text-slate-400 font-semibold mt-2">* 1개만 선택 시 비활성화</p>
           </div>
+
+          <!-- Contract 보기 설정 -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
+            <p class="text-xs text-slate-600 font-extrabold">
+              <i class="fa-solid fa-file-signature"></i> Contract 보기 설정
+            </p>
+
+            <div class="mt-3 flex items-center gap-4">
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="contractViewModeModal" value="one" onchange="setContractViewMode('one')" class="w-4 h-4 accent-blue-600">
+                1개만
+              </label>
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="contractViewModeModal" value="many" onchange="setContractViewMode('many')" class="w-4 h-4 accent-blue-600">
+                여러개
+              </label>
+            </div>
+
+            <select id="contract-limit-modal" onchange="setContractLimit(this.value)"
+                    class="mt-3 w-full text-[12px] font-extrabold border border-slate-200 rounded-xl px-3 py-2 text-slate-900 bg-white">
+              <option value="1">1개</option><option value="2">2개</option><option value="3">3개</option>
+              <option value="4">4개</option><option value="5">5개</option><option value="6">6개</option>
+            </select>
+            <p class="text-[11px] text-slate-400 font-semibold mt-2">* 1개만 선택 시 비활성화</p>
+          </div>
+
+          <!-- Project 보기 설정 -->
+          <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
+            <p class="text-xs text-slate-600 font-extrabold">
+              <i class="fa-solid fa-diagram-project"></i> Project 보기 설정
+            </p>
+
+            <div class="mt-3 flex items-center gap-4">
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="projViewModeModal" value="one" onchange="setProjectViewMode('one')" class="w-4 h-4 accent-blue-600">
+                1개만
+              </label>
+              <label class="flex items-center gap-2 text-[12px] font-extrabold text-slate-700">
+                <input type="radio" name="projViewModeModal" value="many" onchange="setProjectViewMode('many')" class="w-4 h-4 accent-blue-600">
+                여러개
+              </label>
+            </div>
+
+            <select id="proj-limit-modal" onchange="setProjectLimit(this.value)"
+                    class="mt-3 w-full text-[12px] font-extrabold border border-slate-200 rounded-xl px-3 py-2 text-slate-900 bg-white">
+              <option value="1">1개</option><option value="2">2개</option><option value="3">3개</option>
+              <option value="4">4개</option><option value="5">5개</option><option value="6">6개</option>
+            </select>
+            <p class="text-[11px] text-slate-400 font-semibold mt-2">* 1개만 선택 시 비활성화</p>
+          </div>
+
         </div>
+
 
         <!-- Divider -->
         <div class="md:col-span-3">

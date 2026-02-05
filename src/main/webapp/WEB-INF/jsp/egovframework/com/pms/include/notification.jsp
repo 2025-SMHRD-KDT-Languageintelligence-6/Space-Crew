@@ -31,6 +31,10 @@
         </div>
 
     <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
-        <button class="text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest">모든 알림 읽음 처리</button>
+         <button type="button"
+                 onclick="clearNotifications()"
+                 class="text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-widest">
+           모든 알림 읽음 처리
+         </button>
     </div>
 </div>
