@@ -5,6 +5,7 @@
         transition: transform 0.3s ease-in-out;
         transform: translateX(100%);
     }
+
     #notification-panel.open {
         transform: translateX(0);
     }
