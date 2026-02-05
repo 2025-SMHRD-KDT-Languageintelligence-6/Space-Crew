@@ -95,5 +95,12 @@
 	       SET ATCH_FILE_ID = #{atchFileId}
 	     WHERE SALES_ID = #{salesId}
 	</update>
+
+    <select id="selectNewSalesCount" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_SALES
+        WHERE LAST_UPDT_PNTTM > DATE_SUB(NOW(), INTERVAL 1 MINUTE)
+        AND DEL_YN = 'N'
+    </select>
 	
 </mapper>

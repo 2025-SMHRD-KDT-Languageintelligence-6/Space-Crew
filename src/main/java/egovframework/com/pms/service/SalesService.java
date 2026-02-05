@@ -19,4 +19,5 @@ public interface SalesService {
 
 	void updateSalesStatus(Map<String, Object> param) throws Exception;
 
+    int selectNewSalesCount() throws Exception;
 }

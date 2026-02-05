@@ -17,5 +17,7 @@ public interface SalesMapper {
 	void updateSalesStatus(Map<String, Object> param) throws Exception;
 	
 	void updateSalesAtchFileId(Map<String, Object> map);
+
+    int selectNewSalesCount() throws Exception;
 }
 

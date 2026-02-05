@@ -26,8 +26,17 @@ public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesSe
         return salesMapper.selectSalesListTotCnt(vo);
     }
 
+    /**
+     * 알림용: 1분 이내 신규 영업 건수 조회 (추가됨)
+     */
+    @Override
+    public int selectNewSalesCount() throws Exception {
+        return salesMapper.selectNewSalesCount();
+    }
+
     @Override
     public void saveSales(SalesVO vo) throws Exception {
+        // ID가 없으면 등록, 있으면 수정하는 로직은 아주 좋습니다.
         if (vo.getSalesId() == null || vo.getSalesId() == 0) {
             salesMapper.insertSales(vo);
         } else {
@@ -44,12 +53,12 @@ public class SalesServiceImpl extends EgovAbstractServiceImpl implements SalesSe
     public void deleteSales(SalesVO vo) throws Exception {
         salesMapper.deleteSales(vo);
     }
-    
+
     @Override
     public void updateSales(SalesVO vo) throws Exception {
         salesMapper.updateSales(vo);
     }
-    
+
     @Override
     public void updateSalesStatus(Map<String, Object> param) throws Exception {
         salesMapper.updateSalesStatus(param);

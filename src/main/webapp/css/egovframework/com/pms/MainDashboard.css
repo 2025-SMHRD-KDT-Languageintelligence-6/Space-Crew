@@ -1,89 +1,183 @@
+/*
 @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
 
-/* 공통 스타일 */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-fast: 160ms;
+  --t-base: 260ms;
+
+  --card-radius: 2rem;
+  --modal-radius: 3rem;
+
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #2563eb;
+
+  --shadow-soft: 0 10px 25px -15px rgba(15, 23, 42, .25);
+  --shadow-hover: 0 18px 35px -18px rgba(15, 23, 42, .35);
+}
+
 body {
-    font-family: 'Pretendard', sans-serif;
-    overflow-x: hidden;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  overflow-x: hidden;
+  color: var(--text);
 }
 
+*/
+/* 공통 hover 유틸 (Tailwind 카드에도 그대로 사용 가능) *//*
+
+.card-hover {
+  transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out), border-color var(--t-base) var(--ease-out);
+}
 .card-hover:hover {
-    transform: translateY(-5px);
-    transition: all 0.3s ease;
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
 }
 
-/* 모달 및 알림창 배경 블러 */
+*/
+/* (옵션) grid 카드 섹션을 유지할 때만 사용 *//*
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  position: relative;
+  background: #fff;
+  padding: 2rem;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border);
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  letter-spacing: -0.02em;
+}
+
+.card h3 i {
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.card p {
+  font-size: .875rem;
+  color: var(--muted);
+  margin: .75rem 0 0 0;
+  line-height: 1.6;
+}
+
+*/
+/* badge *//*
+
+.stat {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: .75rem;
+  font-weight: 800;
+  color: #fff;
+  padding: .25rem .75rem;
+  background: var(--primary);
+  border-radius: 999px;
+  box-shadow: 0 6px 14px -10px rgba(37, 99, 235, .8);
+}
+
+*/
+/* AI 카드 변형 *//*
+
+.card-ai {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: rgba(255,255,255,.08);
+}
+.card-ai h3,
+.card-ai p {
+  color: #f1f5f9;
+}
+
+*/
+/* 모달 overlay *//*
+
 .modal-overlay {
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(8px);
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
 }
 
-/* 요소 제어 클래스 */
-.hidden-element {
-    display: none !important;
+*/
+/* 애니메이션(하나로 통일) *//*
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeInUp .5s var(--ease-out) forwards;
 }
 
-/* 알림 센터 슬라이드 애니메이션 */
+*/
+/* 알림 패널 슬라이드 *//*
+
 #notification-panel {
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateX(100%);
+  transform: translateX(100%);
+  transition: transform .4s var(--ease-out);
 }
-
 #notification-panel.open {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
-/* 커스텀 토글 스위치 */
+*/
+/* 토글 스위치 *//*
+
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 20px;
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
 }
-
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
-
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e2e8f0;
-    transition: .3s;
-    border-radius: 20px;
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background: #cbd5e1;
+  transition: .25s var(--ease-out);
+  border-radius: 999px;
 }
-
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .3s;
-    border-radius: 50%;
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  transition: .25s var(--ease-out);
+  border-radius: 50%;
 }
-
 input:checked + .slider {
-    background-color: #3b82f6;
+  background: var(--primary);
 }
-
 input:checked + .slider:before {
-    transform: translateX(20px);
+  transform: translateX(20px);
 }
-
-/* 애니메이션 효과 */
-.animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .7; }
-}
+*/

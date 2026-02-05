@@ -19,12 +19,12 @@
     <div class="flex-1 overflow-y-auto p-5 space-y-4">
         <div class="p-4 bg-red-50 rounded-[1.5rem] border border-red-100 animate-fade-in">
             <p class="text-[10px] font-bold text-red-600 uppercase mb-2">High Risk</p>
-            <p class="text-[11px] text-red-800 font-bold leading-relaxed">Space-PMS 프로젝트가 목표 대비 12.5% 지연되었습니다. 리소스 재배치가 권장됩니다.</p>
+            <p class="text-[11px] text-red-800 font-bold leading-relaxed">더미)지연 키워드 저번 주 보다 증가</p>
         </div>
 
         <div class="p-4 bg-blue-50 rounded-[1.5rem] border border-blue-100 animate-fade-in">
-            <p class="text-[10px] font-bold text-blue-600 uppercase mb-2">AI Summary</p>
-            <p class="text-[11px] text-blue-800 font-medium leading-relaxed">금일 오전 주간 회의 요약 보고서가 생성되었습니다. (GPT-4o 모델 기반)</p>
+            <p class="text-[10px] font-bold text-blue-600 uppercase mb-2">AI 회의록</p>
+            <p class="text-[11px] text-blue-800 font-medium leading-relaxed">더미) 2026/01/03 분석이 완료 되었습니다.</p>
         </div>
 
         </div>
