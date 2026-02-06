@@ -19,5 +19,9 @@ public interface SalesMapper {
 	void updateSalesAtchFileId(Map<String, Object> map);
 
     int selectNewSalesCount() throws Exception;
+    
+    int selectSalesFavoriteCount(Map<String, Object> map);
+    void insertSalesFavorite(Map<String, Object> map);
+    void deleteSalesFavorite(Map<String, Object> map);
 }
 

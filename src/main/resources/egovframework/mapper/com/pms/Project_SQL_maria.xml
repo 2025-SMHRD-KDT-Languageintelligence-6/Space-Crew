@@ -22,19 +22,24 @@
 <!--        , C.USER_NM           AS mainMgrNm -->
             , D.CUST_NM           AS custNm
             , E.EMP_NM            AS mainMgrNm
+            , IF(F.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
 <!--    LEFT OUTER JOIN COMVNUSERMASTER C ON A.M_EMP_ID = C.ESNTL_ID -->
 		LEFT OUTER JOIN TB_SALES C    ON B.SALES_ID = C.SALES_ID
   		LEFT OUTER JOIN TB_CUSTOMER D ON C.CUST_ID = D.CUST_ID
    		LEFT OUTER JOIN TB_EMP E      ON A.M_EMP_ID = E.EMP_ID
+   		LEFT JOIN TB_FAVORITE F 
+	           ON A.PROJ_ID = F.TARGET_ID 
+	          AND F.TARGET_TYPE = 'PROJECT'
+	          AND F.EMP_ID = #{loginId}
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             <if test="searchCondition == 0">
                 AND A.PROJ_NM LIKE CONCAT('%', #{searchKeyword}, '%')
             </if>
         </if>
-        ORDER BY A.PROJ_ID DESC
+        ORDER BY favYn DESC, A.PROJ_ID DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
@@ -428,4 +433,24 @@
           )
         ORDER BY A.CONT_ID DESC
     </select>
+    
+    <select id="selectProjectFavoriteCount" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_FAVORITE
+	    WHERE EMP_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</select>
+	
+	<insert id="insertProjectFavorite" parameterType="map">
+	    INSERT INTO TB_FAVORITE (EMP_ID, TARGET_TYPE, TARGET_ID)
+	    VALUES (#{loginId}, #{targetType}, #{targetId})
+	</insert>
+	
+	<delete id="deleteProjectFavorite" parameterType="map">
+	    DELETE FROM TB_FAVORITE
+	    WHERE EMP_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</delete>
 </mapper>

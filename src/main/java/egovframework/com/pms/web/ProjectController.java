@@ -54,7 +54,12 @@ public class ProjectController {
         projectVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
         projectVO.setLastIndex(paginationInfo.getLastRecordIndex());
         projectVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
+        
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            projectVO.setLoginId(user.getUniqId());
+        }
+        
         List<?> list = projectService.selectProjectList(projectVO);
         model.addAttribute("resultList", list);
 

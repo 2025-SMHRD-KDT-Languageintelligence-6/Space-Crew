@@ -244,10 +244,10 @@ window.clearNotifications = clearNotifications;
    Sales Intelligence (더미)
 ========================== */
 const DUMMY_SALES = [
-  { id: 201, name: "전남 AI 통합 플랫폼", stage: "제안", win: 85, owner: "박현우", due: "2026-02-18" },
-  { id: 202, name: "공공 PMS 구축", stage: "미팅", win: 62, owner: "염해명", due: "2026-03-02" },
-  { id: 203, name: "데이터센터 고도화", stage: "협상", win: 48, owner: "신창용", due: "2026-03-10" },
-  { id: 204, name: "챗봇 도입", stage: "발굴", win: 30, owner: "정종혁", due: "2026-03-20" },
+  { id: 201, name: "전남 AI 통합 플랫폼", stage: "제안", win: 85, owner: "프론두", due: "2026-02-18" },
+  { id: 202, name: "공공 PMS 구축", stage: "미팅", win: 62, owner: "백매시", due: "2026-03-02" },
+  { id: 203, name: "데이터센터 고도화", stage: "협상", win: 48, owner: "신호우", due: "2026-03-10" },
+  { id: 204, name: "챗봇 도입", stage: "발굴", win: 30, owner: "정기획", due: "2026-03-20" },
 ];
 
 let salesViewMode = localStorage.getItem("sales:viewMode") || "one";
@@ -386,11 +386,11 @@ window.setContractLimit = setContractLimit;
 ========================== */
 const DUMMY_PROJECTS = [
   { id: 101, name: "Space-PMS 고도화", owner: "이수진", progress: 72, status: "진행중", due: "2026-03-15" },
-  { id: 102, name: "전남 테크노파크 유지보수", owner: "박현우", progress: 45, status: "진행중", due: "2026-02-28" },
-  { id: 103, name: "AI 회의록 고도화", owner: "정종혁", progress: 88, status: "리뷰중", due: "2026-02-20" },
-  { id: 104, name: "영업 대시보드 리뉴얼", owner: "염해명", progress: 33, status: "기획", due: "2026-03-05" },
-  { id: 105, name: "계약 OCR 파이프라인", owner: "신창용", progress: 60, status: "진행중", due: "2026-03-10" },
-  { id: 106, name: "알림 센터 개선", owner: "박현우", progress: 25, status: "백로그", due: "2026-03-25" },
+  { id: 102, name: "전남 테크노파크 유지보수", owner: "프론두", progress: 45, status: "진행중", due: "2026-02-28" },
+  { id: 103, name: "AI 회의록 고도화", owner: "정기획", progress: 88, status: "리뷰중", due: "2026-02-20" },
+  { id: 104, name: "영업 대시보드 리뉴얼", owner: "백매시", progress: 33, status: "기획", due: "2026-03-05" },
+  { id: 105, name: "계약 OCR 파이프라인", owner: "신호우", progress: 60, status: "진행중", due: "2026-03-10" },
+  { id: 106, name: "알림 센터 개선", owner: "프론두", progress: 25, status: "백로그", due: "2026-03-25" },
 ];
 
 let projectViewMode = localStorage.getItem("proj:viewMode") || "one"; // one | many

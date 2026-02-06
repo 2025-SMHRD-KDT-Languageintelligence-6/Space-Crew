@@ -47,7 +47,12 @@ public class SalesController {
         salesVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
         salesVO.setLastIndex(paginationInfo.getLastRecordIndex());
         salesVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
+        
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            salesVO.setLoginId(user.getUniqId());
+        }
+        
         List<?> list = salesService.selectSalesList(salesVO);
         model.addAttribute("resultList", list);
 

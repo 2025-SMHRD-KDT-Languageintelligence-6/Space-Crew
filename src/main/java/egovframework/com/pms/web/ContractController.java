@@ -51,7 +51,12 @@ public class ContractController {
         contractVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
         contractVO.setLastIndex(paginationInfo.getLastRecordIndex());
         contractVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-
+        
+        LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        if (user != null) {
+            contractVO.setLoginId(user.getUniqId());
+        }
+        
         List<?> list = contractService.selectContractList(contractVO);
         model.addAttribute("resultList", list);
 

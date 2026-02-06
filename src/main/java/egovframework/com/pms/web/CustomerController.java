@@ -106,7 +106,9 @@ public class CustomerController {
         
         LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
         param.put("loginId", user.getUniqId());
-        param.put("targetType", "CUSTOMER");
+        if (param.get("targetType") == null || param.get("targetType").toString().isEmpty()) {
+        	param.put("targetType", "CUSTOMER");
+        }
 
         try {
             int count = customerService.selectFavoriteCount(param);

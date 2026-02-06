@@ -18,4 +18,8 @@ public interface ContractMapper {
 	void updateContractStatus(Map<String, Object> param) throws Exception;
 	void updateContractAtchFileId(Map<String, Object> map);
 	List<SalesVO> selectAvailableSalesList();
+	
+	int selectContractFavoriteCount(Map<String, Object> map);
+	void insertContractFavorite(Map<String, Object> map);
+	void deleteContractFavorite(Map<String, Object> map);
 }

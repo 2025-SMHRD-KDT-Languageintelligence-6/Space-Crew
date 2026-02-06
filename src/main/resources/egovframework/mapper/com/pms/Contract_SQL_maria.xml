@@ -17,15 +17,20 @@
             , A.CONT_STATUS   AS contStatus
             , A.CUST_ID		  AS custId
             , C.CUST_NM		  as custNm
+            , IF(F.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
         FROM TB_CONTRACT A
         LEFT JOIN TB_SALES S    ON A.SALES_ID = S.SALES_ID
         LEFT JOIN TB_CUSTOMER C ON COALESCE(A.CUST_ID, S.CUST_ID) = C.CUST_ID
         LEFT JOIN TB_EMP B ON A.EMP_ID = B.EMP_ID
+        LEFT JOIN TB_FAVORITE F 
+	           ON A.CONT_ID = F.TARGET_ID 
+	          AND F.TARGET_TYPE = 'CONTRACT'
+	          AND F.EMP_ID = #{loginId}
         WHERE A.DEL_YN = 'N'
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>
-        ORDER BY A.CONT_ID DESC
+        ORDER BY favYn DESC, A.CONT_ID DESC
         LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
     </select>
 
@@ -125,4 +130,24 @@
           )
         ORDER BY S.SALES_ID DESC
     </select>
+    
+    <select id="selectContractFavoriteCount" parameterType="map" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_FAVORITE
+	    WHERE EMP_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</select>
+	
+	<insert id="insertContractFavorite" parameterType="map">
+	    INSERT INTO TB_FAVORITE (EMP_ID, TARGET_TYPE, TARGET_ID)
+	    VALUES (#{loginId}, #{targetType}, #{targetId})
+	</insert>
+	
+	<delete id="deleteContractFavorite" parameterType="map">
+	    DELETE FROM TB_FAVORITE
+	    WHERE EMP_ID = #{loginId}
+	      AND TARGET_TYPE = #{targetType}
+	      AND TARGET_ID = #{targetId}
+	</delete>
 </mapper>

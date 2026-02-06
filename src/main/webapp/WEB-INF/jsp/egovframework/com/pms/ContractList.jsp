@@ -7,6 +7,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style>
+		.fav-link {
+		    text-decoration: none;
+		    transition: transform 0.2s ease-in-out;
+		    display: inline-block;
+		}
+		
+		.fav-link:hover {
+		    transform: scale(1.2);
+		}
+	</style>
     <meta charset="UTF-8">
     <title>계약 관리 목록</title>
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ContractList.css'/>?v=1.1">
@@ -29,7 +40,8 @@
 	    <table>
             <thead>
                 <tr>
-                    <th width="30%">계약명</th>
+                	<th width="5%">즐겨찾기</th>
+                    <th width="25%">계약명</th>
                     <th width="15%">고객사</th>
                     <th width="12%">계약담당자</th>
                     <th width="18%">계약금액</th>
@@ -40,6 +52,20 @@
             <tbody>
                 <c:forEach var="result" items="${resultList}" varStatus="status">
                     <tr>
+                    	<td>
+						    <a href="javascript:void(0);"
+						       onclick="fn_toggle_favorite('${result.contId}', '${result.favYn}', 'CONTRACT');"
+						       id="fav_${result.contId}" class="fav-link">
+						        <c:choose>
+						            <c:when test="${result.favYn eq 'Y'}">
+						                <span style="color: #ffc107; font-size: 18px;">★</span>
+						            </c:when>
+						            <c:otherwise>
+						                <span style="color: #ccc; font-size: 18px;">☆</span>
+						            </c:otherwise>
+						        </c:choose>
+						    </a>
+						</td>
                         <td class="text-left">
                             <a href="javascript:void(0);" onclick="fn_open_contract_popup('${result.contId}', '${result.contNm}');"  style="font-weight:bold; color:#007bff;">
                                 <c:out value="${result.contNm}"/>
@@ -144,6 +170,28 @@
 	                error: function() { alert("서버 통신 오류"); }
 	            });
 	        }
+	        
+	        function fn_toggle_favorite(targetId, currentFavYn, targetType) {
+                $.ajax({
+                    url: "<c:url value='/pms/toggleCustomerFavoriteAjax.do'/>",
+                    type: "POST",
+                    data: { 
+                        "targetId": targetId, 
+                        "targetType": targetType
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status === "success") {
+                            location.reload(); 
+                        } else {
+                            alert("처리 중 문제가 발생했습니다: " + data.message);
+                        }
+                    },
+                    error: function() { 
+                        alert("서버 통신 중 오류가 발생했습니다."); 
+                    }
+                });
+            }
 	    </script>
     </div>
 </body>

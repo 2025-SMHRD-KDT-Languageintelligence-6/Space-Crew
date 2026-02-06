@@ -7,8 +7,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>업무 목록</title>
-<link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ProjectList.css'/>?v=1.1">
+	<style>
+		.fav-link {
+		    text-decoration: none;
+		    transition: transform 0.2s ease-in-out;
+		    display: inline-block;
+		}
+		
+		.fav-link:hover {
+		    transform: scale(1.2);
+		}
+	</style>
+	<title>업무 목록</title>
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ProjectList.css'/>?v=1.1">
 </head>
 <body>
 	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
@@ -29,8 +40,9 @@
 	    <table>
 	        <thead>
 	            <tr>
+	            	<th width="5%">즐겨찾기</th>
 	                <th width="7%">타입</th>
-                    <th width="30%">프로젝트명</th>
+                    <th width="25%">프로젝트명</th>
                     <!-- <th width="15%">고객사</th> -->
                     <th width="8%">주담당자</th>
                     <th width="15%">기간경과율</th>
@@ -42,6 +54,20 @@
 	        <tbody>
 	            <c:forEach var="result" items="${resultList}" varStatus="status">
 	                <tr>
+	                	<td>
+						    <a href="javascript:void(0);"
+						       onclick="fn_toggle_favorite('${result.projId}', '${result.favYn}', 'PROJECT');"
+						       id="fav_${result.projId}" class="fav-link">
+						        <c:choose>
+						            <c:when test="${result.favYn eq 'Y'}">
+						                <span style="color: #ffc107; font-size: 18px;">★</span>
+						            </c:when>
+						            <c:otherwise>
+						                <span style="color: #ccc; font-size: 18px;">☆</span>
+						            </c:otherwise>
+						        </c:choose>
+						    </a>
+						</td>
 	                    <td><c:out value="${result.projType}"/></td>
 	                    <td class="text-left">
 						    <a href="javascript:void(0);" onclick="fn_open_project_popup('${result.projId}', '${result.projNm}');" style="font-weight:bold; color:#007bff;">
@@ -177,6 +203,27 @@
 	            });
 	        }
 	        
+	        function fn_toggle_favorite(targetId, currentFavYn, targetType) {
+                $.ajax({
+                    url: "<c:url value='/pms/toggleCustomerFavoriteAjax.do'/>",
+                    type: "POST",
+                    data: { 
+                        "targetId": targetId, 
+                        "targetType": targetType
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        if(data.status === "success") {
+                            location.reload(); 
+                        } else {
+                            alert("처리 중 문제가 발생했습니다: " + data.message);
+                        }
+                    },
+                    error: function() { 
+                        alert("서버 통신 중 오류가 발생했습니다."); 
+                    }
+                });
+            }
 	    </script>
 	</div>
 </body>
