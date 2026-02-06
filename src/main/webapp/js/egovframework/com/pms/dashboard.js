@@ -219,15 +219,15 @@ function initDashboard() {
   }
 
   syncWidgetControls();
-  renderSales();
-  renderContracts();
-  renderProjects();
+  //renderSales();
+  //renderContracts();
+  //renderProjects();
 
   // (3) 폴링 시작(10초)
   setInterval(fetchLatestNotifications, 10000);
 }
 
-window.addEventListener("DOMContentLoaded", initDashboard);
+// window.addEventListener("DOMContentLoaded", initDashboard);
 
 /* ==========================
    전역 노출 (JSP inline 호출용)
@@ -243,7 +243,7 @@ window.clearNotifications = clearNotifications;
 /* ==========================
    Sales Intelligence (더미)
 ========================== */
-const DUMMY_SALES = [
+/*const DUMMY_SALES = [
   { id: 201, name: "전남 AI 통합 플랫폼", stage: "제안", win: 85, owner: "프론두", due: "2026-02-18" },
   { id: 202, name: "공공 PMS 구축", stage: "미팅", win: 62, owner: "백매시", due: "2026-03-02" },
   { id: 203, name: "데이터센터 고도화", stage: "협상", win: 48, owner: "신호우", due: "2026-03-10" },
@@ -297,9 +297,9 @@ function renderSales(){
   syncWidgetControls();
 }
 
-/* ==========================
+ ==========================
    Contract Status (더미)
-========================== */
+========================== 
 const DUMMY_CONTRACTS = [
   { id: 301, name: "전남 테크노파크 유지보수", status: "체결 완료", amount: "32,000,000원", date: "2026-02-03" },
   { id: 302, name: "Space-PMS 추가 개발", status: "검토중", amount: "18,000,000원", date: "2026-02-08" },
@@ -346,7 +346,7 @@ function renderContracts(){
 
   syncWidgetControls();
 }
-
+*/
 /* ==========================
    위젯 컨트롤 동기화 (모달)
 ========================== */
@@ -376,15 +376,15 @@ function syncWidgetControls(){
 }
 
 /* 전역 노출 */
-window.setSalesViewMode = setSalesViewMode;
+/*window.setSalesViewMode = setSalesViewMode;
 window.setSalesLimit = setSalesLimit;
 window.setContractViewMode = setContractViewMode;
 window.setContractLimit = setContractLimit;
-
+*/
 /* ==========================
    Project Analysis (더미)
 ========================== */
-const DUMMY_PROJECTS = [
+/*const DUMMY_PROJECTS = [
   { id: 101, name: "Space-PMS 고도화", owner: "이수진", progress: 72, status: "진행중", due: "2026-03-15" },
   { id: 102, name: "전남 테크노파크 유지보수", owner: "프론두", progress: 45, status: "진행중", due: "2026-02-28" },
   { id: 103, name: "AI 회의록 고도화", owner: "정기획", progress: 88, status: "리뷰중", due: "2026-02-20" },
@@ -449,7 +449,7 @@ function renderProjects() {
     // 모달 컨트롤 UI 동기화
     syncProjectControls();
 }
-
+*/
 // XSS 방지용 최소 escape
 function escapeHtml(str) {
   return String(str)
@@ -463,7 +463,7 @@ function escapeHtml(str) {
 
 
 /* 전역 노출 (JSP inline onchange에서 호출) */
-window.setProjectViewMode = setProjectViewMode;
+/*window.setProjectViewMode = setProjectViewMode;
 window.setProjectLimit = setProjectLimit;
 
 function syncProjectControls() {
@@ -479,4 +479,6 @@ function syncProjectControls() {
     limitModal.style.opacity = (projectViewMode === "one") ? "0.5" : "1";
     limitModal.style.cursor = (projectViewMode === "one") ? "not-allowed" : "pointer";
   }
-}
+}*/
+
+console.log("hard to fix");

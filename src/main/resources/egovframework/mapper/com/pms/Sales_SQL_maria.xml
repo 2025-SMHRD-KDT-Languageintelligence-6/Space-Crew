@@ -11,6 +11,7 @@
             , A.EXPECTED_AMT   AS expectedAmt
             , A.STATUS         AS status
             , A.PROBABILITY    AS probability
+            , DATE_FORMAT(A.EXPECTED_DT, '%Y-%m-%d')     AS expectedDt
             , B.CUST_NM        AS custNm
             , B.CEO_NM  	   AS ceoNm
             , C.EMP_NM         AS salesNm
@@ -23,6 +24,9 @@
 	          AND F.TARGET_TYPE = 'SALES'
 	          AND F.EMP_ID = #{loginId}
         WHERE A.DEL_YN = 'N'
+        <if test='favYn != null and favYn == "Y"'>
+            AND F.FAV_ID IS NOT NULL
+        </if>
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.SALES_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>

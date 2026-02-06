@@ -1,14 +1,21 @@
 package egovframework.com.pms.web;
 
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import egovframework.com.pms.service.ProjectService;
-import egovframework.com.pms.service.ProjectVO;
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.BillingService;
 import egovframework.com.pms.service.BillingVO;
+import egovframework.com.pms.service.ContractService;
+import egovframework.com.pms.service.ContractVO;
+import egovframework.com.pms.service.ProjectService;
+import egovframework.com.pms.service.ProjectVO;
+import egovframework.com.pms.service.SalesService;
+import egovframework.com.pms.service.SalesVO;
 
 @Controller
 public class MainController {
@@ -18,19 +25,47 @@ public class MainController {
 
     @Resource(name = "billingService")
     private BillingService billingService;
+    
+    @Resource(name = "salesService")
+    private SalesService salesService;
+    
+    @Resource(name = "contractService")
+    private ContractService contractService;
 
     @RequestMapping(value = "/pms/main.do")
     public String mainDashboard(Model model) throws Exception {
         
-        int totalProjects = projectService.selectProjectListTotCnt(new ProjectVO());
-        model.addAttribute("projectCount", totalProjects);
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        String loginId = user.getUniqId();
 
-        int totalBillings = billingService.selectBillingListTotCnt(new BillingVO());
-        model.addAttribute("billingCount", totalBillings);
+        SalesVO sVO = new SalesVO();
+        sVO.setLoginId(loginId);
+        sVO.setFavYn("Y"); 
+        sVO.setRecordCountPerPage(10);
+        sVO.setFirstIndex(0);
+        model.addAttribute("favSalesList", salesService.selectSalesList(sVO));
+
+        ContractVO cVO = new ContractVO();
+        cVO.setLoginId(loginId);
+        cVO.setFavYn("Y");
+        cVO.setRecordCountPerPage(10);
+        cVO.setFirstIndex(0);
+        model.addAttribute("favContractList", contractService.selectContractList(cVO));
+
+        ProjectVO pVO = new ProjectVO();
+        pVO.setLoginId(loginId);
+        pVO.setFavYn("Y");
+        pVO.setRecordCountPerPage(10);
+        pVO.setFirstIndex(0);
+        model.addAttribute("favProjectList", projectService.selectProjectList(pVO));
+        model.addAttribute("projectCount", projectService.selectProjectListTotCnt(new ProjectVO()));
+        model.addAttribute("billingCount", billingService.selectBillingListTotCnt(new BillingVO()));
 
         return "egovframework/com/pms/MainDashboard";
     }
-
+    
+    
+    
     @RequestMapping(value = "/")
     public String index() {
         return "redirect:/pms/main.do";

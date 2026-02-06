@@ -27,6 +27,9 @@
 	          AND F.TARGET_TYPE = 'CONTRACT'
 	          AND F.EMP_ID = #{loginId}
         WHERE A.DEL_YN = 'N'
+        <if test='favYn != null and favYn == "Y"'>
+            AND F.FAV_ID IS NOT NULL
+        </if>
         <if test="searchKeyword != null and searchKeyword != ''">
             AND A.CONT_NM LIKE CONCAT('%', #{searchKeyword}, '%')
         </if>

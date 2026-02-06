@@ -65,60 +65,77 @@
     <section id="sec-process" class="section">
 
 
-      <div class="widget-grid">
+    <div class="widget-grid">
 
         <!-- Sales Intelligence -->
         <div id="w-sales" class="widget card-hover">
-          <div class="widget-head">
+            <div class="widget-head">
             <h3>Sales Intelligence</h3>
-          </div>
-          <div class="widget-body">
-            <div class="row">
-              <span>AI 통합 플랫폼 수주 확률</span>
-              <span class="accent">85%</span>
-            </div>
-            <div class="progress">
-              <div class="progress-bar" style="width:85%"></div>
-            </div>
-          </div>
+        </div>
+        <div class="widget-body">
+		    <%-- <div class="row">
+		        <span id="top-sales-nm">
+		            <c:choose>
+		                <c:when test="${not empty favSalesList}">
+		                    <c:out value="${favSalesList[0].salesTitle}" />
+		                </c:when>
+		                <c:otherwise>영업 기회를 선택하세요</c:otherwise>
+		            </c:choose>
+		        </span>
+		        <span class="accent" id="top-sales-win">
+		            <c:out value="${not empty favSalesList ? favSalesList[0].probability : 0}" />%
+		        </span>
+		    </div>
+		    <div class="progress">
+		        <div class="progress-bar" id="top-sales-bar" style="width:${not empty favSalesList ? favSalesList[0].probability : 0}%"></div>
+		    </div> --%>
+		    <div id="sales-list" class="space-y-2 mt-3"></div>
+		</div>
 
           <!-- 더미 리스트 렌더 영역 -->
-            <div id="sales-list" class="space-y-2 mt-3"></div>
+            
         </div>
 
         <!-- Contract Status -->
         <div id="w-contract" class="widget card-hover">
-          <div class="widget-head">
+            <div class="widget-head">
             <h3>Contract Status</h3>
-          </div>
-          <div class="widget-body">
-            <p class="muted">최근 체결 완료</p>
-            <p id="w-contract-detail" class="accent">전남 테크노파크 유지보수 계약</p>
-
-            <!-- 더미 리스트 렌더 영역 -->
-          <div id="contract-list" class="space-y-2 mt-3"></div>
-          </div>
+        </div>
+        <div class="widget-body">
+        	<div id="contract-list" class="space-y-2 mt-3"></div>
+		    <%-- <p class="muted">최근 즐겨찾기 계약</p>
+		    <p id="top-contract-summary" class="accent">
+		        <c:choose>
+		            <c:when test="${not empty favContractList}">
+		                <c:out value="${favContractList[0].contStatus}" /> · <c:out value="${favContractList[0].contNm}" />
+		            </c:when>
+		            <c:otherwise>진행 중인 계약이 없습니다.</c:otherwise>
+		        </c:choose>
+		    </p> --%>
+		</div>
         </div>
 
         <!-- Project Analysis -->
         <div id="w-project" class="widget card-hover">
-          <div class="widget-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <div class="widget-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
             <h3>Project Analysis</h3>
-          </div>
-
-          <div class="widget-body">
-            <!-- 더미 요약 -->
-            <div class="row" style="margin-bottom:10px;">
-              <span>전체 진행률(더미)</span>
-              <span class="accent" id="proj-avg">72%</span>
-            </div>
-
-            <!-- 더미 프로젝트 리스트가 렌더링될 곳 -->
-            <div id="proj-list" class="space-y-2"></div>
-          </div>
         </div>
 
-      </div>
+        <div class="widget-body">
+        	<div id="proj-list" class="space-y-2 mt-3"></div>
+		    <%-- <div class="row" style="margin-bottom:10px;">
+		        <span>평균 기간 경과율</span>
+		        <span class="accent" id="proj-avg">
+		            <c:if test="${not empty favProjectList}">
+		                <c:out value="${favProjectList[0].progressRate}" />%
+		            </c:if>
+		            <c:if test="${empty favProjectList}">0%</c:if>
+		        </span>
+		    </div> --%>
+		</div>
+        </div>
+
+    </div>
     </section>
 
     <!-- 하단 메뉴 카드 -->
@@ -172,5 +189,136 @@
 <c:import url="/WEB-INF/jsp/egovframework/com/pms/customize.jsp" />
 
 <script src="<c:url value='/js/egovframework/com/pms/dashboard.js'/>"></script>
+<script>
+
+    const REAL_FAV_SALES = [
+        <c:forEach var="s" items="${favSalesList}" varStatus="status">
+        { 
+        	salesId: "${s.salesId}",
+        	title: "${s.salesTitle}", 
+            status: "${s.status}", 
+            due: "${s.expectedDt}",
+            win: "${s.probability != null ? s.probability : 0}"
+        }${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
+    
+    const REAL_FAV_CONTRACTS = [
+        <c:forEach var="c" items="${favContractList}" varStatus="status">
+        { 
+        	contId: "${c.contId}",
+        	contNm: "${c.contNm}", 
+            status: "${c.contStatus}", 
+            amt: "<fmt:formatNumber value='${c.contAmt}' type='number'/>",
+            date: "${c.endDt}" 
+        }${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
+    
+    const REAL_FAV_PROJECTS = [
+        <c:forEach var="p" items="${favProjectList}" varStatus="status">
+        { 
+            projId: "${p.projId}",
+        	projNm: "${p.projNm}", 
+            status: "${p.status}", 
+            pRate: "${p.progressRate != null ? p.progressRate : 0}", 
+            actualRate: "${p.actualProgressRate != null ? p.actualProgressRate : 0}", 
+            start: "${p.startDt}", 
+            end: "${p.endDt}" 
+        }${!status.last ? ',' : ''}
+        </c:forEach>
+    ];
+    
+    function renderSalesReal() {
+    	console.log("영업:", REAL_FAV_SALES);
+        var listEl = document.getElementById("sales-list");
+        var topNm = document.getElementById("top-sales-nm");
+        var topWin = document.getElementById("top-sales-win");
+        var topBar = document.getElementById("top-sales-bar");
+        if (!listEl) return;
+
+        if (REAL_FAV_SALES.length > 0) {
+            if(topNm) topNm.innerText = REAL_FAV_SALES[0].title;
+            if(topWin) topWin.innerText = REAL_FAV_SALES[0].win + "%";
+            if(topBar) topBar.style.width = REAL_FAV_SALES[0].win + "%";
+
+            var html = "";
+            for(var i=0; i<REAL_FAV_SALES.length; i++) {
+                var s = REAL_FAV_SALES[i];
+                html += '<div class="p-3 rounded-2xl border border-slate-200 bg-white mb-2 cursor-pointer hover:bg-blue-50 transition" ' +
+    					'     onclick="window.open(\'/pms/salesDetailPopup.do?selectedId=' + s.salesId + '\', \'sales_pop_' + s.salesId + '\', \'width=700,height=800,resizable=yes,scrollbars=yes\')">';
+                html += '  <div class="flex justify-between items-start">';
+                html += '    <div class="font-bold text-[13px] text-slate-900">' + s.title + '</div>';
+                html += '    <div class="text-[11px] font-black text-blue-600">예상 수주 확률 : ' + s.win + '%</div>';
+                html += '  </div>';
+                html += '  <div class="text-[11px] text-slate-500 mt-1">';
+                html += '    상태: <span class="text-orange-600 font-bold">' + s.status + '</span> · 마감: ' + s.due;
+                html += '  </div>';
+                html += '</div>';
+            }
+            listEl.innerHTML = html;
+        } else {
+            listEl.innerHTML = '<p class="text-[11px] text-slate-400 p-3 text-center">즐겨찾기한 영업 건이 없습니다.</p>';
+        }
+    }
+    
+    function renderContractsReal() {
+    	console.log("계약:", REAL_FAV_CONTRACTS);
+        var listEl = document.getElementById("contract-list");
+        var summary = document.getElementById("top-contract-summary");
+        if (!listEl) return;
+
+        if (REAL_FAV_CONTRACTS.length > 0) {
+            if(summary) summary.innerText = REAL_FAV_CONTRACTS[0].status + " · " + REAL_FAV_CONTRACTS[0].name;
+
+            var html = "";
+            for(var i=0; i<REAL_FAV_CONTRACTS.length; i++) {
+                var c = REAL_FAV_CONTRACTS[i];
+                html += '<div class="p-3 rounded-2xl border border-slate-200 bg-white mb-2 cursor-pointer hover:bg-blue-50 transition" ' +
+    					'     onclick="window.open(\'/pms/contractDetailPopup.do?selectedId=' + c.contId + '\', \'cont_pop_' + c.contId + '\', \'width=700,height=800,resizable=yes,scrollbars=yes\')">';
+                html += '  <div class="font-bold text-[13px] text-slate-900">' + c.contNm + '</div>';
+                html += '  <div class="text-[11px] text-slate-500 mt-1">';
+                html += '    상태: <span class="text-green-600 font-bold">' + c.status + '</span> · 금액: ' + c.amt + '원 · 마감일: ' + c.date;
+                html += '  </div>';
+                html += '</div>';
+            }
+            listEl.innerHTML = html;
+        } else {
+            listEl.innerHTML = '<p class="text-[11px] text-slate-400 p-3 text-center">즐겨찾기한 계약 건이 없습니다.</p>';
+        }
+    }
+    
+    function renderProjectsReal() {
+    	console.log("업무:", REAL_FAV_PROJECTS);
+        var listEl = document.getElementById("proj-list");
+        if (!listEl) return;
+        if (REAL_FAV_PROJECTS.length > 0) {
+            var html = "";
+            REAL_FAV_PROJECTS.forEach(p => {
+            	html += '<div class="p-3 rounded-2xl border border-slate-200 bg-white mb-2 cursor-pointer hover:bg-blue-50 transition" ' +
+            			'     onclick="window.open(\'/pms/projectDetailPopup.do?selectedId=' + p.projId + '\', \'proj_pop_' + p.projId + '\', \'width=700,height=900,resizable=yes,scrollbars=yes\')">';
+                html += '  <div class="flex justify-between items-center mb-1">';
+                html += '    <div class="font-bold text-[13px]">' + p.projNm + '</div>';
+                html += '    <div class="text-[11px] text-green-600 font-bold">진행 ' + (p.actualRate || 0) + '%</div>';
+                html += '  </div>';
+				html += '  <div class="text-[10px] text-slate-400">기간 경과: ' + p.pRate + '% | ' + p.start + ' ~ ' + p.end + '</div>';
+                html += '  <div class="mt-2 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">';
+                html += '    <div class="h-full bg-green-500" style="width: ' + (p.actualRate || 0) + '%"></div>';
+                html += '  </div>';
+                html += '</div>';
+            });
+            listEl.innerHTML = html;
+        }
+    }
+     
+
+    window.addEventListener("DOMContentLoaded", function() {
+        renderSalesReal();
+        renderContractsReal();
+        renderProjectsReal();
+    });
+    
+    
+</script>
 </body>
 </html>
