@@ -1,79 +1,82 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space-PMS | 지능형 통합 대시보드</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Space-PMS | 지능형 통합 대시보드</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <link rel="stylesheet" href="<c:url value='/css/egovframework/com/dashboard.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/css/egovframework/com/dashboard.css'/>">
 </head>
 
 
 <body>
-<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
+	<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/menu.jsp" />
 
-<div class="content-page animate-fade-in">
+	<div class="content-page animate-fade-in">
 
-    <!-- 헤더(기존 header 클래스 기반) -->
-    <div class="header">
-        <div class="header-title">
-            <h1>🚀 Space-PMS Dashboard</h1>
-            <p>AI기반 지능형 프로젝트 관리 시스템</p>
-        </div>
-
-
-        <div class="header-actions">
-        <!-- 알림바(기능 유지: CSS로만 꾸미게 됨) -->
-            <div class="noti-bar">
-                <div class="noti-meta">
-                    <span class="noti-label">미확인 알림</span>
-                    <span class="noti-divider"></span>
-                    <span id="noti-badge" class="noti-count">
-                        <c:out value="${notificationCount != null ? notificationCount : 0}" />
-                    </span>
-                </div>
-
-                <button id="noti-btn" data-count="${notificationCount}" onclick="toggleNotifications()" class="noti-btn" type="button">
-                  <i class="fa-solid fa-bell"></i>
-                  <c:if test="${notificationCount > 0}">
-                    <span class="noti-dot"></span>
-                  </c:if>
-                </button>
-
-                <button type="button"
-                        class="config-btn"
-                        onclick="openConfig()"
-                        title="대시보드 설정">
-                    <i class="fa-solid fa-gear"></i>
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- 상단 위젯(기존 CSS에 없으므로, 최소구성으로만 유지) -->
-    <div class="section-title">
-        <span class="section-bar"></span>
-        <h2><i class="fa-solid fa-satellite-dish"></i> Space Work Scanner</h2>
-    </div>
-    <section id="sec-process" class="section">
+		<!-- 헤더(기존 header 클래스 기반) -->
+		<div class="header">
+			<div class="header-title">
+				<h1>🚀 Space-PMS Dashboard</h1>
+				<p>AI기반 지능형 프로젝트 관리 시스템</p>
+			</div>
 
 
-    <div class="widget-grid">
+			<div class="header-actions">
+				<!-- 알림바(기능 유지: CSS로만 꾸미게 됨) -->
+				<div class="noti-bar">
+					<div class="noti-meta">
+						<span class="noti-label">미확인 알림</span> <span class="noti-divider"></span>
+						<span id="noti-badge" class="noti-count"> <c:out
+								value="${notificationCount != null ? notificationCount : 0}" />
+						</span>
+					</div>
 
-        <!-- Sales Intelligence -->
-        <div id="w-sales" class="widget card-hover">
-            <div class="widget-head">
-            <h3>Sales Intelligence</h3>
-        </div>
-        <div class="widget-body">
-		    <%-- <div class="row">
+					<button id="noti-btn" data-count="${notificationCount}"
+						onclick="toggleNotifications()" class="noti-btn" type="button">
+						<i class="fa-solid fa-bell"></i>
+						<c:if test="${notificationCount > 0}">
+							<span class="noti-dot"></span>
+						</c:if>
+					</button>
+
+					<button type="button" class="config-btn" onclick="openConfig()"
+						title="대시보드 설정">
+						<i class="fa-solid fa-gear"></i>
+					</button>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- 상단 위젯(기존 CSS에 없으므로, 최소구성으로만 유지) -->
+		<div class="section-title">
+			<span class="section-bar"></span>
+			<h2>
+				<i class="fa-solid fa-satellite-dish"></i> Space Work Scanner
+			</h2>
+		</div>
+		<section id="sec-process" class="section">
+
+
+			<div class="widget-grid">
+
+				<!-- Sales Intelligence -->
+				<div id="w-sales" class="widget card-hover">
+					<div class="widget-head">
+						<h3>Sales Intelligence</h3>
+					</div>
+					<div class="widget-body">
+						<%-- <div class="row">
 		        <span id="top-sales-nm">
 		            <c:choose>
 		                <c:when test="${not empty favSalesList}">
@@ -89,21 +92,21 @@
 		    <div class="progress">
 		        <div class="progress-bar" id="top-sales-bar" style="width:${not empty favSalesList ? favSalesList[0].probability : 0}%"></div>
 		    </div> --%>
-		    <div id="sales-list" class="space-y-2 mt-3"></div>
-		</div>
+						<div id="sales-list" class="space-y-2 mt-3"></div>
+					</div>
 
-          <!-- 더미 리스트 렌더 영역 -->
-            
-        </div>
+					<!-- 더미 리스트 렌더 영역 -->
 
-        <!-- Contract Status -->
-        <div id="w-contract" class="widget card-hover">
-            <div class="widget-head">
-            <h3>Contract Status</h3>
-        </div>
-        <div class="widget-body">
-        	<div id="contract-list" class="space-y-2 mt-3"></div>
-		    <%-- <p class="muted">최근 즐겨찾기 계약</p>
+				</div>
+
+				<!-- Contract Status -->
+				<div id="w-contract" class="widget card-hover">
+					<div class="widget-head">
+						<h3>Contract Status</h3>
+					</div>
+					<div class="widget-body">
+						<div id="contract-list" class="space-y-2 mt-3"></div>
+						<%-- <p class="muted">최근 즐겨찾기 계약</p>
 		    <p id="top-contract-summary" class="accent">
 		        <c:choose>
 		            <c:when test="${not empty favContractList}">
@@ -112,18 +115,19 @@
 		            <c:otherwise>진행 중인 계약이 없습니다.</c:otherwise>
 		        </c:choose>
 		    </p> --%>
-		</div>
-        </div>
+					</div>
+				</div>
 
-        <!-- Project Analysis -->
-        <div id="w-project" class="widget card-hover">
-            <div class="widget-head" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-            <h3>Project Analysis</h3>
-        </div>
+				<!-- Project Analysis -->
+				<div id="w-project" class="widget card-hover">
+					<div class="widget-head"
+						style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+						<h3>Project Analysis</h3>
+					</div>
 
-        <div class="widget-body">
-        	<div id="proj-list" class="space-y-2 mt-3"></div>
-		    <%-- <div class="row" style="margin-bottom:10px;">
+					<div class="widget-body">
+						<div id="proj-list" class="space-y-2 mt-3"></div>
+						<%-- <div class="row" style="margin-bottom:10px;">
 		        <span>평균 기간 경과율</span>
 		        <span class="accent" id="proj-avg">
 		            <c:if test="${not empty favProjectList}">
@@ -132,64 +136,74 @@
 		            <c:if test="${empty favProjectList}">0%</c:if>
 		        </span>
 		    </div> --%>
+					</div>
+				</div>
+
+			</div>
+		</section>
+
+		<!-- 하단 메뉴 카드 -->
+		<div class="section-title">
+			<span class="section-bar"></span>
+			<h2>
+				<i class="fa-solid fa-bolt"></i> Quick menu
+			</h2>
 		</div>
-        </div>
 
-    </div>
-    </section>
+		<div class="dashboard-grid">
+			<a id="card-customer" href="<c:url value='/pms/customerList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-address-card"></i> 고객 관리
+				</h3>
+				<p>고객사 정보 및 담당자 관리</p>
+			</a> <a id="card-sales" href="<c:url value='/pms/salesList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-chart-line"></i> 영업 관리
+				</h3>
+				<p>영업 기회 및 수주 확률 관리</p>
+			</a> <a id="card-contract" href="<c:url value='/pms/contractList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-file-signature"></i> 계약 관리
+				</h3>
+				<p>체결된 계약서 및 조건 관리</p>
+			</a> <a id="card-project" href="<c:url value='/pms/projectList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-diagram-project"></i> 프로젝트 관리
+				</h3>
+				<p>수행 중인 프로젝트 현황</p> <span class="stat">${projectCount}건</span>
+			</a> <a id="card-billing" href="<c:url value='/pms/billingList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-file-invoice-dollar"></i> 청구/정산
+				</h3>
+				<p>세금계산서 발행 및 입금 확인</p> <span class="stat">${billingCount}건</span>
+			</a> <a id="card-user" href="<c:url value='/pms/userList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-user-tie"></i> 직원 관리
+				</h3>
+				<p>내부 인력 및 조직 관리</p>
+			</a> <a id="card-meeting" href="<c:url value='/pms/meetingList.do'/>"
+				class="card card-hover">
+				<h3>
+					<i class="fa-solid fa-microphone"></i> AI 회의록
+				</h3>
+				<p>회의록 분석</p>
+			</a>
 
-    <!-- 하단 메뉴 카드 -->
-    <div class="section-title">
-        <span class="section-bar"></span>
-        <h2><i class="fa-solid fa-bolt"></i> Quick menu</h2>
-    </div>
+		</div>
+	</div>
 
-    <div class="dashboard-grid">
-        <a id="card-customer" href="<c:url value='/pms/customerList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-address-card"></i> 고객 관리</h3>
-          <p>고객사 정보 및 담당자 관리</p>
-        </a>
+	<c:import
+		url="/WEB-INF/jsp/egovframework/com/pms/include/notification.jsp" />
+	<c:import url="/WEB-INF/jsp/egovframework/com/pms/customize.jsp" />
 
-        <a id="card-sales" href="<c:url value='/pms/salesList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-chart-line"></i> 영업 관리</h3>
-          <p>영업 기회 및 수주 확률 관리</p>
-        </a>
-
-        <a id="card-contract" href="<c:url value='/pms/contractList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-file-signature"></i> 계약 관리</h3>
-          <p>체결된 계약서 및 조건 관리</p>
-        </a>
-
-        <a id="card-project" href="<c:url value='/pms/projectList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-diagram-project"></i> 프로젝트 관리</h3>
-          <p>수행 중인 프로젝트 현황</p>
-          <span class="stat">${projectCount}건</span>
-        </a>
-
-        <a id="card-billing" href="<c:url value='/pms/billingList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-file-invoice-dollar"></i> 청구/정산</h3>
-          <p>세금계산서 발행 및 입금 확인</p>
-          <span class="stat">${billingCount}건</span>
-        </a>
-
-        <a id="card-user" href="<c:url value='/pms/userList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-user-tie"></i> 직원 관리</h3>
-          <p>내부 인력 및 조직 관리</p>
-        </a>
-
-        <a id="card-meeting" href="<c:url value='/pms/meetingList.do'/>" class="card card-hover">
-          <h3><i class="fa-solid fa-microphone"></i> AI 회의록</h3>
-          <p>회의록 분석</p>
-        </a>
-
-    </div>
-</div>
-
-<c:import url="/WEB-INF/jsp/egovframework/com/pms/include/notification.jsp" />
-<c:import url="/WEB-INF/jsp/egovframework/com/pms/customize.jsp" />
-
-<script src="<c:url value='/js/egovframework/com/pms/dashboard.js'/>"></script>
-<script>
+	<script src="<c:url value='/js/egovframework/com/pms/dashboard.js'/>"></script>
+	<script>
 
     const REAL_FAV_SALES = [
         <c:forEach var="s" items="${favSalesList}" varStatus="status">
@@ -308,6 +322,8 @@
                 html += '</div>';
             });
             listEl.innerHTML = html;
+        }else {
+            listEl.innerHTML = '<p class="text-[11px] text-slate-400 p-3 text-center">즐겨찾기한 업무 건이 없습니다.</p>';
         }
     }
      

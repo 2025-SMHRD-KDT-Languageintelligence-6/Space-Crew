@@ -58,11 +58,16 @@ public interface ProjectMapper {
 	int selectProjectFavoriteCount(Map<String, Object> map);
 	void insertProjectFavorite(Map<String, Object> map);
 	void deleteProjectFavorite(Map<String, Object> map);
+	int selectProjectCount();
+	
+	
 	
     /** [추가] AI 매칭용 요구사항 INSERT */
     void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
 
 	List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo);
+
+	
 	
 	
 }

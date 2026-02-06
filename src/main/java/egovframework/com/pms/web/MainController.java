@@ -58,8 +58,8 @@ public class MainController {
         pVO.setRecordCountPerPage(10);
         pVO.setFirstIndex(0);
         model.addAttribute("favProjectList", projectService.selectProjectList(pVO));
-        model.addAttribute("projectCount", projectService.selectProjectListTotCnt(new ProjectVO()));
-        model.addAttribute("billingCount", billingService.selectBillingListTotCnt(new BillingVO()));
+        model.addAttribute("projectCount", projectService.selectProjectCount());
+        model.addAttribute("billingCount", billingService.selectBillingCount());
 
         return "egovframework/com/pms/MainDashboard";
     }

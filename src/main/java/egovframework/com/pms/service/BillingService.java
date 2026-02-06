@@ -23,4 +23,6 @@ public interface BillingService {
     void updateAutoProjectStatus(Long projId) throws Exception;
     
     void updateActualPayDt(BillingVO vo) throws Exception;
+
+	int selectBillingCount() throws Exception;
 }

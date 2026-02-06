@@ -464,4 +464,11 @@
 	      AND TARGET_TYPE = #{targetType}
 	      AND TARGET_ID = #{targetId}
 	</delete>
+	
+	<select id="selectProjectCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_PROJECT
+	    WHERE DEL_YN = 'N'
+	      AND STATUS IN ('진행중', '배정중') 
+	</select>
 </mapper>

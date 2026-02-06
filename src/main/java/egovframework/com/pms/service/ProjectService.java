@@ -50,4 +50,6 @@ public interface ProjectService {
     void insertAssignmentReq(ProjectAssignVO vo) throws Exception;
     
     List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception;
+
+	int selectProjectCount() throws Exception;
 }

@@ -201,4 +201,12 @@
 	     WHERE BILL_ID = #{billId}
 	</update>
 	
+	<select id="selectBillingCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM TB_PROJECT
+	    WHERE DEL_YN = 'N'
+	    AND BILL_STEP IN ('청구전', '청구진행중', '청구완료')
+	    /*AND BILL_STEP != '입금완료'*/
+	</select>
+	
 </mapper>

@@ -150,4 +150,9 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	public List<ContractVO> selectAvailableContractList() {
 		return projectMapper.selectAvailableContractList();
 	}
+
+	@Override
+	public int selectProjectCount() throws Exception {
+		return projectMapper.selectProjectCount();
+	}
 }

@@ -116,4 +116,9 @@ public class BillingServiceImpl extends EgovAbstractServiceImpl implements Billi
         
         this.updateAutoProjectStatus(vo.getProjId());
     }
+
+	@Override
+	public int selectBillingCount() throws Exception {
+		return billingMapper.selectBillingCount();
+	}
 }
