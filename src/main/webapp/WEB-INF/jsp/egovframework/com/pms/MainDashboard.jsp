@@ -244,7 +244,6 @@
     ];
     
     function renderSalesReal() {
-    	console.log("영업:", REAL_FAV_SALES);
         var listEl = document.getElementById("sales-list");
         var topNm = document.getElementById("top-sales-nm");
         var topWin = document.getElementById("top-sales-win");
@@ -277,7 +276,6 @@
     }
     
     function renderContractsReal() {
-    	console.log("계약:", REAL_FAV_CONTRACTS);
         var listEl = document.getElementById("contract-list");
         var summary = document.getElementById("top-contract-summary");
         if (!listEl) return;
@@ -303,21 +301,36 @@
     }
     
     function renderProjectsReal() {
-    	console.log("업무:", REAL_FAV_PROJECTS);
         var listEl = document.getElementById("proj-list");
         if (!listEl) return;
         if (REAL_FAV_PROJECTS.length > 0) {
             var html = "";
             REAL_FAV_PROJECTS.forEach(p => {
+            	const periodRate = parseFloat(p.pRate) || 0;
+                const progressRate = parseFloat(p.actualRate) || 0;
+                const diff = periodRate - progressRate;
+
+                let barColor = "bg-green-500";
+                let statusText = "text-green-600";
+
+                if (diff >= 30) {
+                    barColor = "bg-red-500 animate-pulse";
+                    statusText = "text-red-600 font-black";
+                } else if (diff >= 10) {
+                    barColor = "bg-amber-500";
+                    statusText = "text-amber-600 font-bold";
+                }
+                
             	html += '<div class="p-3 rounded-2xl border border-slate-200 bg-white mb-2 cursor-pointer hover:bg-blue-50 transition" ' +
             			'     onclick="window.open(\'/pms/projectDetailPopup.do?selectedId=' + p.projId + '\', \'proj_pop_' + p.projId + '\', \'width=700,height=900,resizable=yes,scrollbars=yes\')">';
                 html += '  <div class="flex justify-between items-center mb-1">';
                 html += '    <div class="font-bold text-[13px]">' + p.projNm + '</div>';
-                html += '    <div class="text-[11px] text-green-600 font-bold">진행 ' + (p.actualRate || 0) + '%</div>';
+                html += '    <div class="text-[11px] ' + statusText + '">진행 ' + progressRate + '%</div>';
                 html += '  </div>';
-				html += '  <div class="text-[10px] text-slate-400">기간 경과: ' + p.pRate + '% | ' + p.start + ' ~ ' + p.end + '</div>';
+				html += '  <div class="text-[10px] text-slate-400">기간 경과: ' + periodRate + '% | ' + p.start + ' ~ ' + p.end + '</div>';
                 html += '  <div class="mt-2 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">';
-                html += '    <div class="h-full bg-green-500" style="width: ' + (p.actualRate || 0) + '%"></div>';
+                
+                html += '    <div class="h-full ' + barColor + '" style="width: ' + progressRate + '%"></div>';
                 html += '  </div>';
                 html += '</div>';
             });

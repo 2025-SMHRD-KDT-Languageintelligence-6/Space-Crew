@@ -8,7 +8,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
 /* [사이드바 자간 & 정렬 리셋] */
-.sidebar, .sidebar * {
+.sidebar, .sidebar :not(i) {
+	font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif !important;
     /* 1. 자간을 강제로 0(표준)으로 고정 */
     letter-spacing: 0px !important; 
     
@@ -17,7 +18,30 @@
     -webkit-font-smoothing: auto !important;
     
     /* 3. 줄 높이(Line-height)를 픽셀 단위로 강제 고정 */
-    line-height: 1.2 !important; 
+    line-height: 1.2 !important;
+    font-weight: 500;
+}
+
+/* [💡 아이콘 전용 폰트 강제 복구] */
+.sidebar i {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+.sidebar .logo a {
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
+}
+
+/* 메뉴 링크 텍스트 정밀 교정 */
+.sidebar ul.nav li a {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
 }
 
 /* [부모 메뉴 정렬 정밀 교정] */
@@ -157,8 +181,21 @@
 		        <li><a href="<c:url value='/pms/updateMeetingView.do'/>"><i class="fas fa-magic mr-2"></i> AI 회의 분석</a></li>
 		    </ul>
 		</li>
+		<c:if test="${loginVO.id == 'webmaster' || loginVO.userSe == 'USR'}">
+		    <li class="has-sub" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+		        <a href="javascript:void(0);" class="parent-menu" style="color: #f87171 !important;"> <span><i class="fas fa-user-shield mr-3" style="width:20px; text-align:center;"></i> 권한 관리 센터</span>
+		            <i class="fas fa-chevron-right sub-arrow" style="font-size:0.7em; opacity:0.5;"></i>
+		        </a>
+		        <ul class="sub-nav-floating">
+		        	<%-- <li><a href="<c:url value='/uss/umt/EgovMberManage.do'/>"><i class="fas fa-users mr-2"></i> Staff 권한</a></li> --%>
+		            <li><a href="<c:url value='/uss/umt/EgovEntrprsMberManage.do'/>"><i class="fas fa-building mr-2"></i> Manager 권한</a></li>
+		            <li><a href="<c:url value='/uss/umt/EgovUserManage.do'/>"><i class="fas fa-user-cog mr-2"></i> Admin 권한</a></li>
+		        </ul>
+		    </li>
+		</c:if>
     </ul>
-    <div class="current-time-box" style="text-align: center; margin: auto 15px 20px 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #fff;">
+    
+	    <div class="current-time-box" style="text-align: center; margin: auto 15px 20px 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; color: #fff;">
 	    <div id="sidebarDate" style="font-size: 1em; opacity: 0.8; margin-bottom: 5px;">0000-00-00</div>
 	    
 	    <!-- <i class="far fa-clock"></i>  -->

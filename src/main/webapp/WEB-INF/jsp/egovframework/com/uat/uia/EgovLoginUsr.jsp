@@ -173,7 +173,7 @@ function fnInit() {
     
     getid(document.loginForm);
     
-    fnLoginTypeSelect("typeGnr");
+    fnLoginTypeSelect("typeEnt");
 
     <c:if test="${not empty fn:trim(loginMessage) &&  loginMessage ne ''}">
     alert("loginMessage:<c:out value='${loginMessage}'/>");
@@ -186,18 +186,23 @@ function fnInit() {
 }
 
 function fnLoginTypeSelect(objName){
-
+		
+		if(objName == "typeGnr"){
+	        alert("Staff 권한은 현재 접근이 제한되었습니다. Manager 또는 Admin을 이용하세요.");
+	        return; // 여기서 튕겨버리기!
+	    }
 		document.getElementById("typeGnr").className = "";
 		document.getElementById("typeEnt").className = "";
 		document.getElementById("typeUsr").className = "";
 		
 		document.getElementById(objName).className = "on";
 		
-		if(objName == "typeGnr"){ //일반회원
-			document.loginForm.userSe.value = "GNR";
-		}else if(objName == "typeEnt"){	//기업회원
+		//if(objName == "typeGnr"){ //일반회원
+		//	document.loginForm.userSe.value = "GNR";
+		//}else
+		if(objName == "typeEnt"){	//Manager
 			 document.loginForm.userSe.value = "ENT";
-		}else if(objName == "typeUsr"){	//업무사용자
+		}else if(objName == "typeUsr"){	//Admin
 			 document.loginForm.userSe.value = "USR";
 		}
 	
@@ -226,6 +231,14 @@ function fnOnepassLogin() {
 	}
 }
 </script>
+<style>
+	#typeGnr {
+    background-color: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed !important;
+    text-decoration: line-through; /* 바이든의 상징 */
+	}
+</style>
 </head>
 <body onLoad="fnInit();">
 
@@ -242,9 +255,9 @@ function fnOnepassLogin() {
 		<img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image">
 		<div class="login_type">
 			<ul id="ulLoginType">
-				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title="">Staff<%--<spring:message code="comUatUia.loginForm.GNR"/>--%></a></li> <!-- 일반 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title="">Manager<%--<spring:message code="comUatUia.loginForm.ENT"/>--%></a></li> <!-- 기업 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title="">Admin<%--<spring:message code="comUatUia.loginForm.USR"/>--%></a></li> <!-- 업무 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title="">Staff<%--<spring:message code="comUatUia.loginForm.GNR"/>--%></a></li> <!-- 직원 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title="">Manager<%--<spring:message code="comUatUia.loginForm.ENT"/>--%></a></li> <!-- 매니저 -->
+				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title="">Admin<%--<spring:message code="comUatUia.loginForm.USR"/>--%></a></li> <!-- 어드민 -->
 			</ul>
 		</div>
 	

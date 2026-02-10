@@ -182,6 +182,13 @@ public class MeetingController {
 	            vo.setContentSum((String) aiData.get("summary"));
 	            vo.setActionItems((String) aiData.get("action_items"));
 	            
+	            egovframework.com.cmm.LoginVO user = (egovframework.com.cmm.LoginVO) egovframework.com.cmm.util.EgovUserDetailsHelper.getAuthenticatedUser();
+	            if (user != null) {
+	                vo.setLastUpdusrId(user.getUniqId());
+	            } else {
+	                vo.setLastUpdusrId("SYSTEM");
+	            }
+	            
 	            meetingService.insertMeeting(vo);
 
 	            resultMap.put("status", "success");
