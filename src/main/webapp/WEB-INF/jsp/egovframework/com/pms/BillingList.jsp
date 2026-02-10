@@ -81,14 +81,18 @@
 						        </c:otherwise>
 						    </c:choose>
 						
-						    <span class="status-badge ${stepClass}">
+						    <span class="billing-badge
+						    ${stepClass}">
 						        <c:out value="${empty result.billStep ? '청구전' : result.billStep}"/>
 						    </span>
                         </td>
                         <td style="position: relative;">
 						    <div class="status-container">
 						        <a href="javascript:void(0);" 
-						           class="status-badge ${result.billStatus eq '정상' ? 'status-won' : result.billStatus eq '보류' ? 'status-ing' : 'status-lost'}"
+						           class="status-badge
+						           ${result.billStatus eq '정상' ? 'status-progress'
+						           : result.billStatus eq '보류' ? 'status-hold'
+						           : 'status-cancel'}"
 						           onclick="fn_toggle_status_menu('${result.projId}', event);"
 						           style="cursor:pointer; text-decoration:none; display:inline-block;">
 						            ${result.billStatus} ▼

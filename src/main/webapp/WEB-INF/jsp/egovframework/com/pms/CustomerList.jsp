@@ -74,7 +74,20 @@
 
                         <td><c:out value="${result.picTel}"/></td>
 
-                        <td><c:out value="${result.custGrade}"/></td>
+                        <td>
+                          <c:choose>
+                            <c:when test="${result.custGrade eq 'S'}">
+                              <span class="grade-badge grade-S">S</span>
+                            </c:when>
+                            <c:when test="${result.custGrade eq 'A'}">
+                              <span class="grade-badge grade-A">A</span>
+                            </c:when>
+                            <c:otherwise>
+                              <span class="grade-badge grade-N">N</span>
+                            </c:otherwise>
+                          </c:choose>
+                        </td>
+
 
                         <td>
                            <a href="<c:url value='/pms/updateCustomerView.do'/>?selectedId=${result.custId}"

@@ -98,7 +98,12 @@
 						<td style="position: relative;">
 						    <div class="status-container">
 						        <a href="javascript:void(0);" 
-						           class="status-badge ${result.status eq '완료' ? 'status-won' : result.status eq '진행중' ? 'status-ing' : 'status-lost'}"
+						           class="status-badge
+						           ${result.status eq '업무완료' ? 'status-done'
+						           : result.status eq '진행중' ? 'status-progress'
+						           : result.status eq '배정중' ? 'status-assigning'
+						           : result.status eq '보류' ? 'status-hold'
+						           : 'status-cancel'}"
 						           onclick="fn_toggle_status_menu('${result.projId}', event);"
 						           style="cursor:pointer; text-decoration:none; display:inline-block;">
 						            ${result.status} ▼

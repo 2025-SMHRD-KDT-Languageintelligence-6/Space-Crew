@@ -151,10 +151,7 @@ tr:hover td {
     background: #c82333;
 }
 
-.btn-sm {
-    padding: 4px 8px;
-    font-size: 12px;
-}
+.btn-sm { padding: 5px 10px; font-size: 12px; }
 
 /* =================================================================
    5. 유틸리티 (Utilities)

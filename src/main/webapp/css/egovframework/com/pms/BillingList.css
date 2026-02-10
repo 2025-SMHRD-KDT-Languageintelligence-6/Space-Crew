@@ -87,36 +87,7 @@ tr:hover td {
     background-color: #fdfdfd;
 }
 
-/* =================================================================
-   4. 정산 상태 배지 및 금액 (Status & Amount)
-   ================================================================= */
-/* 공통 배지 스타일 */
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500; /* 약간의 두께감을 주어 가독성 향상 */
-    display: inline-block;
-    white-space: nowrap;
-}
 
-/* 정산완료 (Blue) */
-.status-paid {
-    background-color: #e7f3ff;
-    color: #007bff; /* 텍스트가 너무 흐릿하면 대비를 위해 추가 권장 */
-}
-
-/* 입금대기 (Yellow/Brown) */
-.status-waiting {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-/* 청구진행중 (Red) */
-.status-pending {
-    background-color: #fff0f0;
-    color: #d11d1d; /* 기존에 없던 텍스트 색상을 추가해 경고 의미 강조 */
-}
 
 /* =================================================================
    5. 버튼 스타일 (Buttons)
@@ -171,10 +142,114 @@ th { background-color: #f8f9fa; color: #495057; font-size: 13px; padding: 15px; 
 td { padding: 15px; border-bottom: 1px solid #f1f3f5; text-align: center; font-size: 14px; }
 tr:hover td { background-color: #fdfdfd; }
 
+
+/* =================================================================
+   4. 정산 상태 배지 및 금액 (Status & Amount)
+   ================================================================= */
+
 /* 정산 상태 배지 */
-.status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block; }
-.status-paid { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; } /* 입금완료 */
-.status-unpaid { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; } /* 미납 */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none !important;
+}
+
+/* 🔵 영업완료 (블루) */
+.status-done {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+/* 🟢 영업중 (그린) */
+.status-progress {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+}
+
+/* 🟣 인원 배정중 (퍼플) */
+.status-assigning {
+    background-color: #f3e8ff;   /* 연보라 */
+    color: #6b21a8;              /* 딥 퍼플 */
+    border-color: #e9d5ff;
+}
+
+
+
+/* 🔴 영업취소 (레드) */
+.status-cancel {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+    border-color: #fecaca;
+}
+
+/* 🟡 보류 (옐로우) */
+.status-hold {
+    background-color: #fff7ed;
+    color: #92400e;
+    border-color: #fed7aa;
+}
+
+/* 호버 효과 */
+.status-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+/* =================================================================
+   청구 상태 배지 (billing-badge)
+   ================================================================= */
+
+.billing-badge {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+/* ⚪ 청구전 */
+.status-default {
+    background-color: #f1f5f9;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+/* 🟠 청구진행중 */
+.status-pending {
+    background-color: #fff7ed;
+    color: #9a3412;
+    border-color: #fed7aa;
+}
+
+/* 🟢 입금완료 */
+.status-paid {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+}
+
+/* 🔵 청구완료 (최종) */
+.status-waiting {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+
 
 /* 텍스트 스타일 */
 .text-left { text-align: left !important; }
@@ -251,50 +326,7 @@ tr:hover td { background-color: #fdfdfd; }
     background-color: #e9ecef;
 }
 
-.status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    display: inline-block;
-}
 
-/* 정상 (초록) */
-.status-won { background-color: #28a745 !important; }
-
-/* 보류 (주황) */
-.status-ing { background-color: #ffc107 !important; color: #000 !important; }
-
-/* 파기/실패 (빨강) */
-.status-lost { background-color: #dc3545 !important; }
-
-
-.status-badge.status-default {
-    background-color: #6c757d !important;
-    color: #ffffff !important;
-    border: 1px solid #5a6268 !important;
-    display: inline-block !important;
-    visibility: visible !important;
-}
-
-/* 2. 입금완료 (초록/파랑계열) */
-.status-badge.status-paid {
-    background-color: #28a745 !important;
-    color: #ffffff !important;
-}
-
-/* 3. 청구완료 (노랑계열) */
-.status-badge.status-waiting {
-    background-color: #ffc107 !important;
-    color: #212529 !important;
-}
-
-/* 4. 청구진행중 (빨강계열) */
-.status-badge.status-pending {
-    background-color: #dc3545 !important;
-    color: #ffffff !important;
-}
 
 /* 페이지네이션 wrapper 안의 ul, li 초기화 */
 .pagination-wrapper ul {

@@ -162,10 +162,7 @@ tr:hover td {
 }
 
 /* 목록 내 작은 버튼용 (수정/삭제 칸 전용) */
-.btn-sm {
-    padding: 5px 10px;
-    font-size: 12px;
-}
+.btn-sm { padding: 5px 10px; font-size: 12px; }
 
 /* 버튼들을 감싸는 그룹 (가운데 정렬 보조) */
 .btn-group {
@@ -305,4 +302,51 @@ tr:hover td {
     border-color: #afcdfa;
     color: #afcdfa;
     background-color: #eff6ff;
+}
+
+/* =================================================================
+   고객 등급 배지 (N / S / A) - CustomerList 전용
+   ================================================================= */
+.grade-badge{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    line-height: 1;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    user-select: none;
+}
+
+/* N: Normal */
+.grade-N{
+    background: #f1f5f9;         /* slate-100 느낌 */
+    color: #475569;              /* slate-600 */
+    border-color: #e2e8f0;        /* slate-200 */
+}
+
+/* S: Special (우수) */
+.grade-S{
+    background: #e0f2fe;         /* sky-100 */
+    color: #075985;              /* sky-800 */
+    border-color: #bae6fd;       /* sky-200 */
+}
+
+/* A: A급 (핵심) */
+.grade-A{
+    background: #fff7ed;         /* orange-50 */
+    color: #9a3412;              /* orange-800 */
+    border-color: #fed7aa;       /* orange-200 */
+}
+
+/* 호버 시 살짝 “떠오르는” 느낌 */
+tr:hover .grade-badge{
+    transform: translateY(-1px);
+    transition: transform 0.15s ease;
 }

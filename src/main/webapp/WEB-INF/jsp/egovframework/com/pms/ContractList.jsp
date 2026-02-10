@@ -83,7 +83,11 @@
                         <td style="position: relative;">
                             <div class="status-container">
                                 <a href="javascript:void(0);"
-                                   class="status-badge ${result.contStatus eq '계약완료' ? 'status-won' : result.contStatus eq '계약중' ? 'status-ing' : 'status-lost'}"
+                                   class="status-badge
+                                   ${result.contStatus eq '계약완료' ? 'status-done'
+                                   : result.contStatus eq '계약중' ? 'status-progress'
+                                   : result.contStatus eq '보류' ? 'status-hold'
+                                   : 'status-cancel'}"
                                    onclick="fn_toggle_status_menu('${result.contId}', event);">
                                     ${result.contStatus} ▼
                                 </a>

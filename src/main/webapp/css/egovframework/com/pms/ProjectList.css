@@ -91,20 +91,62 @@ tr:hover td {
    3. 프로젝트 상태 배지 (Status Badges)
    ================================================================= */
 .status-badge {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
     font-weight: 700;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    text-decoration: none !important;
 }
 
-/* 상태별 색상 (예시: 대기, 진행, 완료, 지연) */
-.status-ready { background-color: #e2e3e5; color: #383d41; }
-.status-ing { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-.status-done { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.status-delay { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-.status-won { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.status-lost { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+/* 🔵 영업완료 (블루) */
+.status-done {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+/* 🟢 영업중 (그린) */
+.status-progress {
+    background-color: #dcfce7;
+    color: #166534;
+    border-color: #86efac;
+}
+
+/* 🟣 인원 배정중 (퍼플) */
+.status-assigning {
+    background-color: #f3e8ff;   /* 연보라 */
+    color: #6b21a8;              /* 딥 퍼플 */
+    border-color: #e9d5ff;
+}
+
+
+
+/* 🔴 영업취소 (레드) */
+.status-cancel {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+    border-color: #fecaca;
+}
+
+/* 🟡 보류 (옐로우) */
+.status-hold {
+    background-color: #fff7ed;
+    color: #92400e;
+    border-color: #fed7aa;
+}
+
+/* 호버 효과 */
+.status-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
 /* =================================================================
    4. 버튼 스타일 (Buttons)
    ================================================================= */
@@ -151,10 +193,7 @@ tr:hover td {
     background: #c82333;
 }
 
-.btn-sm {
-    padding: 4px 8px;
-    font-size: 12px;
-}
+.btn-sm { padding: 5px 10px; font-size: 12px; }
 
 /* =================================================================
    5. 유틸리티 (Utilities)

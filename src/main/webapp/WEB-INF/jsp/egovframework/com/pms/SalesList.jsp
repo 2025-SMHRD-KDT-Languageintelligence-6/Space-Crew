@@ -99,10 +99,15 @@
                                <c:choose>
                                    <c:when test="${not empty result.status}">
                                        <a href="javascript:void(0);"
-                                          class="status-badge ${result.status eq '영업중' ? 'status-won' : result.status eq '수주완료' ? 'status-negotiating' : 'status-lost'}"
+                                          class="status-badge
+                                          ${result.status eq '영업완료' ? 'status-done'
+                                          : result.status eq '영업중' ? 'status-progress'
+                                          : result.status eq '보류' ? 'status-hold'
+                                          : 'status-cancel'}"
                                           onclick="fn_toggle_status_menu('${result.salesId}', event);">
                                            <c:out value="${result.status}"/> ▼
                                        </a>
+
                                        <div id="status_menu_${result.salesId}" class="status-menu-layer" style="display:none;">
                                            <ul>
                                                <li><a href="javascript:void(0);" onclick="fn_update_sales_status('${result.salesId}', '영업중')">영업중</a></li>
