@@ -584,8 +584,8 @@
 	    var sendData = {
 	        projId: "${projectVO.projId}",
 	        assignTitle: $("#assignTitle").val(),
-	        startDate: $("#assignStartDate").val(),
-	        endDate: $("#assignEndDate").val(),
+	        startDt: $("#assignStartDate").val(),
+	        endDt: $("#assignEndDate").val(),
 	        taskGroupId: $("#taskGroupId").val(),
 	        reqSkills: $("#assignReqSkills").val(),
 	        confirmYn: $("#assignConfirmYn").val(),
