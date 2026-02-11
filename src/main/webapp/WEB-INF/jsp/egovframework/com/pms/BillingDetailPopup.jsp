@@ -14,6 +14,18 @@
 		.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
 		.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
 		.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
+    .file-popover {
+	    display: none; 
+	    position: absolute; 
+	    background: white; 
+	    border: 1px solid #ccc;
+	    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+	    border-radius: 8px; 
+	    padding: 10px;
+	    z-index: 9999; 
+	    min-width: 250px;
+	}
+	.file-popover-close { float: right; cursor: pointer; color: #999; font-weight: bold; }    
     </style>
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 	
@@ -130,7 +142,7 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td>
+                    <%-- <td>
 					    <div id="file_list_${bill.billId}">
 					        <c:import url="/cmm/fms/selectFileInfs.do" charEncoding="utf-8">
 					            <c:param name="param_atchFileId" value="${bill.atchFileId}" />
@@ -140,8 +152,15 @@
 					    
 					    <button type="button" class="btn_blue" style="font-size:11px; padding:2px 5px;"
 					            onclick="fn_prepare_upload('${bill.billId}', '${bill.atchFileId}')">파일첨부</button>
+					</td> --%>
+                    <td>
+					    <c:if test="${not empty bill.atchFileId}">
+					        <span onclick="fn_open_file_popover(event, '${bill.atchFileId}')" 
+					              style="cursor:pointer; color:#2196F3; font-weight:bold; font-size:16px;" title="파일보기">📎</span>
+					    </c:if>
+					    <button type="button" class="btn_s_purple" style="font-size:10px; padding:1px 4px; margin-left:5px;"
+					            onclick="fn_prepare_upload('${bill.billId}', '${bill.atchFileId}')">추가</button>
 					</td>
-                    
                     <td>
                         <button type="button" class="btn_yellow" style="padding:2px 5px; font-size:11px;"
                                onclick="fn_edit_billing('${bill.billId}', '${bill.billTitle}', '${bill.billAmt}', '${bill.taxBillDt}', '${bill.payDt}')">수정</button>
@@ -198,6 +217,13 @@
     	
         <button type="button" onclick="window.close();" class="btn_s_gray">닫기</button>
     </div>
+	
+	<div id="filePopover" class="file-popover">
+	    <span class="file-popover-close" onclick="$('#filePopover').hide();">&times;</span>
+	    <div id="popoverContent" style="margin-top:15px; font-size:12px;"></div>
+	</div>
+	
+	<iframe id="hiddenDownFrame" name="hiddenDownFrame" style="display:none;"></iframe>
 	
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js'></script>
@@ -352,6 +378,36 @@
             });
         }
         
+        function fn_open_file_popover(e, atchFileId) {
+            if(!atchFileId || atchFileId === "") return;
+            if (e.stopPropagation) e.stopPropagation();
+
+            var rect = e.target.getBoundingClientRect();
+            $("#filePopover").css({
+                top: (window.pageYOffset + rect.bottom + 5) + "px",
+                left: (window.pageXOffset + rect.left - 150) + "px"
+            }).show();
+
+            $("#popoverContent").html("<div style='text-align:center; padding:10px;'>불러오는 중...</div>");
+
+            $.ajax({
+                url: "<c:url value='/cmm/fms/selectFileInfs.do'/>",
+                data: { "param_atchFileId": atchFileId },
+                dataType: "html", 
+                success: function(html) {
+                    $("#popoverContent").html(html);
+                },
+                error: function() {
+                    $("#popoverContent").html("파일 목록을 불러오지 못했습니다.");
+                }
+            });
+        }
+
+        $(document).on("click", function(e) {
+            if (!$(e.target).closest("#filePopover, span[onclick*='fn_open_file_popover']").length) {
+                $("#filePopover").hide();
+            }
+        });
     </script>
     <input type="file" id="commonFileInput" style="display:none;" onchange="fn_handle_file_change();" multiple>
 </body>
