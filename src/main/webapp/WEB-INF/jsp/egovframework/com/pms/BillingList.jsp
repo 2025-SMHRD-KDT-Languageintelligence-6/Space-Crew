@@ -130,13 +130,6 @@
             document.listForm.submit();
         }
         
-        function fn_open_billing_popup(projId) {
-            var windowName = "billing_pop_" + projId;
-            var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
-            var options = "width=850, height=700, resizable=yes, scrollbars=yes";
-            window.open(url, windowName, options);
-        }
-        
         function fn_egov_link_page(pageNo){
             document.listForm.pageIndex.value = pageNo;
             document.listForm.submit();
@@ -144,7 +137,7 @@
 
         function fn_open_billing_popup(projId) {
             var url = "<c:url value='/pms/billingDetailPopup.do'/>?projId=" + projId;
-            window.open(url, "billing_pop_" + projId, "width=900, height=750, resizable=yes, scrollbars=yes");
+            window.open(url, "billing_pop_" + projId, "width=1000, height=800, resizable=yes, scrollbars=yes");
         }
         
         function fn_toggle_status_menu(projId, event) {
