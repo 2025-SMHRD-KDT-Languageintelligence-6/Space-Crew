@@ -11,4 +11,6 @@ public interface MeetingService {
     void insertMeeting(MeetingVO vo) throws Exception;
 
 	MeetingVO selectMeetingById(MeetingVO vo) throws Exception;
+
+    RiskAnalysisVO detectProjectRisk(RiskAnalysisVO vo) throws Exception;
 }
