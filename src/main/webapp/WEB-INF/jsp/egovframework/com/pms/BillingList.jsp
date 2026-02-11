@@ -30,14 +30,14 @@
 	    <table>
 	        <thead>
 	            <tr>
-		            <th width="27%">프로젝트명</th>
+		            <th width="26%">프로젝트명</th>
 		            <th width="10">고객사</th>
-		            <th width="12%">계약금액</th>
-		            <th width="12%">누적청구액</th>
-		            <th width="12%">실수금합계</th>
-		            <th width="12%">미수금잔액</th>
-		            <th width="8%">청구상태</th>
-		            <th width="7%">정산상태</th>
+		            <th width="11%">계약금액</th>
+		            <th width="11%">누적청구액</th>
+		            <th width="11%">실수금합계</th>
+		            <th width="11%">미수금잔액</th>
+		            <th width="10%">청구상태</th>
+		            <th width="10%">정산상태</th>
 		            
 	            </tr>
 	        </thead>

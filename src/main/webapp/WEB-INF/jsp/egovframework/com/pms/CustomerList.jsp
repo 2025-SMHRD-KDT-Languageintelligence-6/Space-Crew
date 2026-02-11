@@ -82,6 +82,9 @@
                             <c:when test="${result.custGrade eq 'A'}">
                               <span class="grade-badge grade-A">A</span>
                             </c:when>
+                            <c:when test="${result.custGrade eq 'B'}">
+                              <span class="grade-badge grade-B">B</span>
+                            </c:when>
                             <c:otherwise>
                               <span class="grade-badge grade-N">N</span>
                             </c:otherwise>

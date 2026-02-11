@@ -44,11 +44,12 @@
             , BIZ_REG_NO    AS bizRegNo
             , CEO_NM        AS ceoNm
             , PIC_NM        AS picNm
-            , PIC_CONTACT       AS picTel
+            , PIC_CONTACT   AS picTel
             , PIC_EMAIL     AS picEmail
             , CUST_ADDR     AS custAddr
             , CUST_REMARK   AS custRemark
             , ATCH_FILE_ID  AS atchFileId
+            , CUST_GRADE    AS custGrade
         FROM TB_CUSTOMER 
         WHERE CUST_ID = #{custId}
         AND DEL_YN = 'N'
