@@ -13,4 +13,6 @@ public interface MeetingService {
 	MeetingVO selectMeetingById(MeetingVO vo) throws Exception;
 
     RiskAnalysisVO detectProjectRisk(RiskAnalysisVO vo) throws Exception;
+    
+    void insertLog(LogVO vo) throws Exception;
 }

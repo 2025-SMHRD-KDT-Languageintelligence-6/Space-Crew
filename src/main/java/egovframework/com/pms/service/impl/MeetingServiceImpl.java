@@ -7,13 +7,12 @@ import javax.annotation.Resource;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate; // 통신 도구
 
+import egovframework.com.pms.service.LogVO;
 import egovframework.com.pms.service.MeetingService;
 import egovframework.com.pms.service.MeetingVO;
-
 import egovframework.com.pms.service.RiskAnalysisVO; // 우리가 만든 VO
-import org.springframework.web.client.RestTemplate; // 통신 도구
-import org.springframework.http.ResponseEntity;    // 응답 객체
 
 @Service("meetingService")
 public class MeetingServiceImpl extends EgovAbstractServiceImpl implements MeetingService {
@@ -61,4 +60,10 @@ public class MeetingServiceImpl extends EgovAbstractServiceImpl implements Meeti
             throw new Exception("AI 분석 서버와의 통신에 실패했습니다. 관리자에게 문의하세요.");
         }
     }
+
+	@Override
+	public void insertLog(LogVO vo) throws Exception {
+		meetingMapper.insertLog(vo);
+		
+	}
 }

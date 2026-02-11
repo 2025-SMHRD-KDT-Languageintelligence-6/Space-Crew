@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
 import egovframework.com.cmm.service.FileVO;
+import egovframework.com.pms.service.LogVO;
 import egovframework.com.pms.service.MeetingService;
 import egovframework.com.pms.service.MeetingVO;
 
@@ -137,6 +138,9 @@ public class MeetingController {
 	    
 	    String meetDt = multiRequest.getParameter("meetDt");
 	    
+	    String projIdStr = multiRequest.getParameter("projId");
+	    Integer pId = (projIdStr == null || projIdStr.isEmpty() || "null".equals(projIdStr)) ? 1 : Integer.parseInt(projIdStr);
+	    
 	    Map<String, MultipartFile> files = multiRequest.getFileMap();
 	    
 	    if (files.isEmpty()) {
@@ -162,7 +166,11 @@ public class MeetingController {
 	        headers.setContentType(org.springframework.http.MediaType.MULTIPART_FORM_DATA);
 
 	        org.springframework.util.MultiValueMap<String, Object> body = new org.springframework.util.LinkedMultiValueMap<>();
+	        
 	        body.add("file", new org.springframework.core.io.FileSystemResource(tempFile));
+	        
+	        body.add("project_id", pId);
+	        body.add("report_id", 1001);
 
 	        org.springframework.http.HttpEntity<org.springframework.util.MultiValueMap<String, Object>> requestEntity = 
 	            new org.springframework.http.HttpEntity<>(body, headers);
@@ -253,7 +261,81 @@ public class MeetingController {
 	        response.setStatus(404);
 	    }
 	}
-	
-	
+
+	@RequestMapping(value = "/pms/analyzeRiskDocument.do")
+	@ResponseBody
+	public Map<String, Object> analyzeRiskDocument(final MultipartHttpServletRequest multiRequest) throws Exception {
+	    Map<String, Object> resultMap = new HashMap<>();
+	    
+	    String projIdStr = multiRequest.getParameter("projId");
+	    Integer pId = (projIdStr == null || projIdStr.isEmpty() || "null".equals(projIdStr)) ? 1 : Integer.parseInt(projIdStr);
+	    
+	    Map<String, MultipartFile> files = multiRequest.getFileMap();
+	    MultipartFile mFile = files.get("uploadDoc");
+
+	    if (mFile == null || mFile.isEmpty()) {
+	        resultMap.put("status", "error");
+	        resultMap.put("message", "분석할 문서 파일이 없습니다.");
+	        return resultMap;
+	    }
+
+	    try {
+	        List<FileVO> result = fileUtil.parseFileInf(files, "RISK_", 0, "", "");
+	        String atchFileId = fileMngService.insertFileInfs(result);
+	        
+	        String tempDir = System.getProperty("java.io.tmpdir");
+	        File tempFile = new File(tempDir + File.separator + mFile.getOriginalFilename());
+	        mFile.transferTo(tempFile);
+
+	        org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+	        String pythonUrl = "http://127.0.0.1:8000/api/v1/analyze/risk";
+
+	        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+	        headers.setContentType(org.springframework.http.MediaType.MULTIPART_FORM_DATA);
+
+	        org.springframework.util.MultiValueMap<String, Object> body = new org.springframework.util.LinkedMultiValueMap<>();
+	        body.add("file", new org.springframework.core.io.FileSystemResource(tempFile));
+	        body.add("project_id", pId);
+	        body.add("report_id", 1001);
+
+	        org.springframework.http.HttpEntity<org.springframework.util.MultiValueMap<String, Object>> requestEntity = 
+	            new org.springframework.http.HttpEntity<>(body, headers);
+
+	        org.springframework.http.ResponseEntity<Map> response = 
+	            restTemplate.postForEntity(pythonUrl, requestEntity, Map.class);
+
+	        if (response.getStatusCode() == org.springframework.http.HttpStatus.OK) {
+	            Map<String, Object> aiRes = (Map<String, Object>) response.getBody();
+	            
+	            LogVO logVO = new LogVO();
+	            logVO.setProjId(pId);
+	            logVO.setFileId(atchFileId);
+	            logVO.setAiCategory("RISK");
+	            logVO.setInputData("파일명: " + mFile.getOriginalFilename());
+	            logVO.setOutputData(aiRes.toString());
+	            
+	            Object riskScore = aiRes.get("risk_score");
+	            logVO.setConfidenceIndex(new java.math.BigDecimal(riskScore != null ? riskScore.toString() : "0"));
+	            logVO.setReasoning((String) aiRes.get("analysis_summary"));
+
+	            egovframework.com.cmm.LoginVO user = (egovframework.com.cmm.LoginVO) egovframework.com.cmm.util.EgovUserDetailsHelper.getAuthenticatedUser();
+	            logVO.setLastUpdusrId(user != null ? user.getUniqId() : "AI_SYSTEM");
+
+	            meetingService.insertLog(logVO);
+
+	            resultMap.put("status", "success");
+	            resultMap.put("data", aiRes);
+	        }
+
+	        if (tempFile.exists()) tempFile.delete();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        resultMap.put("status", "error");
+	        resultMap.put("message", "리스크 분석 중 오류: " + e.getMessage());
+	    }
+
+	    return resultMap;
+	}
 	
 }

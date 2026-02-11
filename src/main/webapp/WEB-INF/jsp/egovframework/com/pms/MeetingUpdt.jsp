@@ -239,6 +239,91 @@
     function fn_download_excel(path) {
         location.href = "<c:url value='/pms/downloadExcel.do'/>?filePath=" + encodeURIComponent(path);
     }
+    
+    $('#docUpload').on('change', function() {
+        var fileField = this;
+        if (fileField.files.length === 0) return;
+
+        var formData = new FormData();
+        formData.append("uploadDoc", fileField.files[0]);
+        formData.append("projId", "${summary.projId}");
+
+        $('#statusText').html('<i class="fas fa-microchip animate-pulse mr-2"></i> 리스크 분석 모델 가동 중...');
+        $('#progressContainer').fadeIn();
+
+        $.ajax({
+            url: "<c:url value='/pms/analyzeRiskDocument.do'/>",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(res) {
+            	if(res.status === "success") {
+
+                    var html = `
+                        <div class="mt-8 bg-white rounded-[2.5rem] border-2 border-red-500/20 overflow-hidden shadow-2xl result-fade-in relative">
+                            <div class="absolute top-6 right-6 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter 
+                                \${res.data.risk_level === 'DANGER' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600'}">
+                                \${res.data.risk_level}
+                            </div>
+
+                            <div class="bg-slate-900 text-white p-6">
+                                <h3 class="font-bold italic flex items-center gap-2 text-sm">
+                                    <i class="fas fa-shield-virus text-red-500"></i> AI PROJECT RISK DIAGNOSIS
+                                </h3>
+                            </div>
+                            
+                            <div class="p-8 space-y-8">
+                                <div class="flex items-start gap-10">
+                                    <div class="relative flex-shrink-0">
+                                        <svg class="w-24 h-24 transform -rotate-90">
+                                            <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-100" />
+                                            <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="8" fill="transparent" 
+                                                stroke-dasharray="\${2 * Math.PI * 40}" 
+                                                stroke-dashoffset="\${2 * Math.PI * 40 * (1 - res.data.risk_score/100)}" 
+                                                class="\${res.data.risk_score > 70 ? 'text-red-500' : 'text-amber-500'}" />
+                                        </svg>
+                                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span class="text-2xl font-black text-slate-800">\${res.data.risk_score}</span>
+                                            <span class="text-[8px] font-bold text-slate-400 uppercase">Score</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <h4 class="text-[11px] font-black text-slate-400 uppercase mb-2 tracking-widest">Analysis Summary</h4>
+                                        <p class="text-slate-600 text-sm leading-relaxed font-medium">
+                                            \${res.data.analysis_summary}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4 border-t border-slate-100">
+                                    <h4 class="text-[11px] font-black text-slate-400 uppercase mb-4 tracking-widest">Detected Risk Keywords</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        \${res.data.risk_keywords.map(k => `
+                                            <span class="px-4 py-1.5 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-[11px] font-bold hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all">
+                                                # \${k}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    //$('#resultArea').prepend(html).show(); 
+                    $('#resultArea').html(html).show();
+                    $('#progressBar').css('width', '100%');
+                    $('#percentText').text('100%');
+                    $('#statusText').html('<i class="fas fa-check-circle text-emerald-500 mr-2"></i> 리스크 진단 완료!');
+                    
+                    setTimeout(() => $('#progressContainer').fadeOut(), 3000);
+                } else {
+                    alert("분석 실패: " + res.message);
+                }
+            }
+        });
+    });
 </script>
 </body>
 </html>

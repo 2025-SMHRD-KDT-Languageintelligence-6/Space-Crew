@@ -52,4 +52,15 @@
 	    WHERE MEET_ID = #{meetId}
     </select>
 	
+	<insert id="insertLog" parameterType="egovframework.com.pms.service.LogVO">
+	    INSERT INTO TB_LOG (
+	        PROJ_ID, REF_ID, FILE_ID, AI_CATEGORY, 
+	        INPUT_DATA, OUTPUT_DATA, REASONING, 
+	        CONFIDENCE_INDEX, LAST_UPDUSR_ID, LAST_UPDT_PNTTM
+	    ) VALUES (
+	        #{projId}, #{refId}, #{fileId}, #{aiCategory}, 
+	        #{inputData}, #{outputData}, #{reasoning}, 
+	        #{confidenceIndex}, #{lastUpdusrId}, NOW()
+	    )
+	</insert>
 </mapper>
