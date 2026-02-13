@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.com.pms.service.impl.DeleteListMapper">
+	<select id="selectDeleteList" resultType="egovframework.com.pms.service.DeleteListVO">
+	    SELECT * FROM (
+		    SELECT 'PROJECT' AS targetType, PROJ_ID AS targetId, PROJ_NM AS title, 
+		           LAST_UPDT_PNTTM AS delDt, LAST_UPDUSR_ID AS delUsrId
+		    FROM TB_PROJECT WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'CONTRACT', CONT_ID, CONT_NM, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_CONTRACT WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'CUSTOMER', CUST_ID, CUST_NM, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_CUSTOMER WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'ASSIGNMENT', ASSIGN_ID, ASSIGN_TITLE, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_ASSIGNMENT WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'BILLING', BILL_ID, BILL_TITLE, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_BILLING WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'EMP', EMP_ID, EMP_NM, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_EMP WHERE DEL_YN = 'Y'
+		    
+		    UNION ALL
+		    
+		    SELECT 'SALES', SALES_ID, SALES_TITLE, LAST_UPDT_PNTTM, LAST_UPDUSR_ID
+		    FROM TB_SALES WHERE DEL_YN = 'Y'
+	    ) AS TEMP
+	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+	    </if>
+	    <if test="targetType != null and targetType != ''">
+	        AND targetType = #{targetType}
+	    </if>
+	    ORDER BY delDt DESC
+	    
+	    LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+	
+	<update id="restoreData">
+	    <choose>
+	        <when test="targetType == 'PROJECT'">
+	            UPDATE TB_PROJECT SET DEL_YN = 'N' WHERE PROJ_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'CONTRACT'">
+	            UPDATE TB_CONTRACT SET DEL_YN = 'N' WHERE CONT_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'CUSTOMER'">
+	            UPDATE TB_CUSTOMER SET DEL_YN = 'N' WHERE CUST_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'ASSIGNMENT'">
+	            UPDATE TB_ASSIGNMENT SET DEL_YN = 'N' WHERE ASSIGN_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'BILLING'">
+	            UPDATE TB_BILLING SET DEL_YN = 'N' WHERE BILL_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'EMP'">
+	            UPDATE TB_EMP SET DEL_YN = 'N' WHERE EMP_ID = #{targetId}
+	        </when>
+	        <when test="targetType == 'SALES'">
+	            UPDATE TB_SALES SET DEL_YN = 'N' WHERE SALES_ID = #{targetId}
+	        </when>
+	    </choose>
+	</update>
+	
+	<select id="selectDeleteListTotCnt" parameterType="egovframework.com.pms.service.DeleteListVO" resultType="int">
+	    SELECT COUNT(*) FROM (
+	        SELECT 'PROJECT' AS targetType, PROJ_NM AS title FROM TB_PROJECT WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'CONTRACT', CONT_NM FROM TB_CONTRACT WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'CUSTOMER', CUST_NM FROM TB_CUSTOMER WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'ASSIGNMENT', ASSIGN_TITLE FROM TB_ASSIGNMENT WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'BILLING', BILL_TITLE FROM TB_BILLING WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'EMP', EMP_NM FROM TB_EMP WHERE DEL_YN = 'Y'
+	        UNION ALL
+	        SELECT 'SALES', SALES_TITLE FROM TB_SALES WHERE DEL_YN = 'Y'
+	    ) AS TOTAL
+	    WHERE 1=1
+	    <if test="searchKeyword != null and searchKeyword != ''">
+	        AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+	    </if>
+	    <if test="targetType != null and targetType != ''">
+	        AND targetType = #{targetType}
+	    </if>
+	</select>
+
+
+</mapper>

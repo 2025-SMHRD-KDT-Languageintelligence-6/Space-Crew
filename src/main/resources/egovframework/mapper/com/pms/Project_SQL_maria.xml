@@ -277,10 +277,12 @@
 	      AND A.DEL_YN = 'N'
 	</select>
 	
-	<delete id="deleteProjectTaskGroup" parameterType="String">
-	    DELETE FROM TB_ASSIGNMENT 
+	<update id="deleteProjectTaskGroup" parameterType="map">
+	   UPDATE TB_ASSIGNMENT 
+	      SET DEL_YN = 'Y',
+	          LAST_UPDUSR_ID = #{lastUpdusrId}
 	    WHERE TASK_GROUP_ID = #{taskGroupId}
-	</delete>
+	</update>
 	
 	<insert id="insertProjectTaskGroup" parameterType="egovframework.com.pms.service.ProjectAssignVO">
 	    INSERT INTO TB_ASSIGNMENT (

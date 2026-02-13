@@ -277,7 +277,7 @@ public class ProjectController {
     public Map<String, Object> deleteProjectTaskGroupAjax(@RequestParam("taskGroupId") String taskGroupId) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            projectService.deleteProjectTaskGroup(taskGroupId); 
+        	projectService.deleteProjectTaskGroup(taskGroupId); 
             resultMap.put("status", "SUCCESS");
         } catch (Exception e) {
             resultMap.put("status", "ERROR");

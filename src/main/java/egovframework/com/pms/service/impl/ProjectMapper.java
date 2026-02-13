@@ -41,7 +41,7 @@ public interface ProjectMapper {
 
 	void saveProjectTaskGroup(ProjectAssignVO vo) throws Exception;
 
-	void deleteProjectTaskGroup(String taskGroupId) throws Exception;
+	void deleteProjectTaskGroup(Map<String, Object> param) throws Exception;
 
 	void insertProjectTaskGroup(ProjectAssignVO vo) throws Exception;
 

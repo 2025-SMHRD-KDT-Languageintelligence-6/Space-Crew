@@ -92,7 +92,7 @@
     position: absolute;
     left: 215px;      /* 사이드바와 25px 겹쳐서 마우스 이동 통로 확보 */
     top: 0;
-    width: 170px;
+    width: 195px;
     background: #0f172a !important; /* 사이드바 배경색과 일치 */
     border-radius: 0 12px 12px 0;
     box-shadow: 10px 5px 20px rgba(0,0,0,0.4);
@@ -183,13 +183,18 @@
 		</li>
 		<c:if test="${loginVO.id == 'webmaster' || loginVO.userSe == 'USR'}">
 		    <li class="has-sub" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-		        <a href="javascript:void(0);" class="parent-menu" style="color: #f87171 !important;"> <span><i class="fas fa-user-shield mr-3" style="width:20px; text-align:center;"></i> 권한 관리 센터</span>
+		        <a href="javascript:void(0);" class="parent-menu" style="color: #f87171 !important;"> <span><i class="fas fa-user-shield mr-3" style="width:20px; text-align:center;"></i> 관리자 센터</span>
 		            <i class="fas fa-chevron-right sub-arrow" style="font-size:0.7em; opacity:0.5;"></i>
 		        </a>
 		        <ul class="sub-nav-floating">
-		        	<%-- <li><a href="<c:url value='/uss/umt/EgovMberManage.do'/>"><i class="fas fa-users mr-2"></i> Staff 권한</a></li> --%>
-		            <li><a href="<c:url value='/uss/umt/EgovEntrprsMberManage.do'/>"><i class="fas fa-building mr-2"></i> Manager 권한</a></li>
-		            <li><a href="<c:url value='/uss/umt/EgovUserManage.do'/>"><i class="fas fa-user-cog mr-2"></i> Admin 권한</a></li>
+		        	<%-- <li><a href="<c:url value='/uss/umt/EgovMberManage.do'/>"><i class="fas fa-users mr-2"></i> Staff 권한 관리</a></li> --%>
+		            <li><a href="<c:url value='/uss/umt/EgovEntrprsMberManage.do'/>"><i class="fas fa-building mr-2"></i> Manager 권한 관리</a></li>
+		            <li><a href="<c:url value='/uss/umt/EgovUserManage.do'/>"><i class="fas fa-user-cog mr-2"></i> Admin 권한 관리</a></li>
+		            <li style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 5px;">
+		                <a href="<c:url value='/pms/deleteList.do'/>" style="color: #60a5fa !important;">
+		                    <i class="fas fa-trash-restore mr-2"></i> 데이터 복구 센터
+		                </a>
+		            </li>
 		        </ul>
 		    </li>
 		</c:if>

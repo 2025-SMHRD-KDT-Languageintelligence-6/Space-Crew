@@ -1,5 +1,6 @@
 package egovframework.com.pms.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import org.egovframe.rte.psl.dataaccess.util.EgovMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.ContractVO;
 import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.ProjectService;
@@ -106,7 +109,11 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Transactional(rollbackFor = Exception.class)
 	public void saveProjectTaskGroup(ProjectAssignVO vo) throws Exception {
 		if (vo.getTaskGroupId() != null && !vo.getTaskGroupId().isEmpty()) {
-	        projectMapper.deleteProjectTaskGroup(vo.getTaskGroupId());
+			Map<String, Object> param = new HashMap<>();
+	        param.put("taskGroupId", vo.getTaskGroupId());
+	        param.put("lastUpdusrId", vo.getLastUpdusrId());
+	        
+	        projectMapper.deleteProjectTaskGroup(param);
 	    }
 	    projectMapper.insertProjectTaskGroup(vo);
 	}
@@ -119,7 +126,13 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void deleteProjectTaskGroup(String taskGroupId) throws Exception {
-		projectMapper.deleteProjectTaskGroup(taskGroupId);
+		LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+		
+		Map<String, Object> param = new HashMap<>();
+	    param.put("taskGroupId", taskGroupId);
+	    param.put("lastUpdusrId", user != null ? user.getId() : "SYSTEM");
+		
+		projectMapper.deleteProjectTaskGroup(param);
 	}
 
 	@Override
