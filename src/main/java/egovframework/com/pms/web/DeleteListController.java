@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.DeleteListService;
 import egovframework.com.pms.service.DeleteListVO;
 
@@ -23,6 +25,11 @@ public class DeleteListController {
     @RequestMapping("/pms/restoreDataAjax.do")
     @ResponseBody
     public String restoreDataAjax(@ModelAttribute("vo") DeleteListVO vo) {
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+    	if (user == null || !"webmaster".equals(user.getId())) {
+            return "NO_AUTHORITY";
+        }
+    	
         try {
             deleteListService.restoreData(vo);
             return "SUCCESS";
@@ -35,6 +42,12 @@ public class DeleteListController {
     @RequestMapping("/pms/deleteList.do")
     public String selectDeleteList(@ModelAttribute("searchVO") DeleteListVO vo, ModelMap model) throws Exception {
         
+    	LoginVO user = (LoginVO) EgovUserDetailsHelper.getAuthenticatedUser();
+        
+        if (user == null || !"webmaster".equals(user.getId())) { 
+            return "redirect:/pms/main.do";
+        }
+    	
         PaginationInfo paginationInfo = new PaginationInfo();
         paginationInfo.setCurrentPageNo(vo.getPageIndex());
         paginationInfo.setRecordCountPerPage(vo.getPageUnit());

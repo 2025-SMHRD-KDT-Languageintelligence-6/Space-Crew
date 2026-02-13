@@ -52,6 +52,8 @@ public class AdminAccessInterceptor implements HandlerInterceptor {
             || uri.contains("/sym/")
             || uri.contains("/uat/uap/")
             || uri.contains("/cop/ems/")
-            || uri.contains("/uss/umt/");
+            || uri.contains("/uss/umt/")
+	        || uri.contains("/pms/deleteList.do")
+	        || uri.contains("/pms/restoreDataAjax.do");
     }
 }
