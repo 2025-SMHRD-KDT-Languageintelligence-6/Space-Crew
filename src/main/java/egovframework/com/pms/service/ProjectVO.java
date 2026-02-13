@@ -44,4 +44,7 @@ public class ProjectVO extends ComDefaultVO implements Serializable {
     private String loginId;
     
     private String actualProgressRate;
+    
+    private String contStartDt;
+    private String contEndDt;
 }

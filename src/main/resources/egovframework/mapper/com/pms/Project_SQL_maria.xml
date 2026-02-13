@@ -96,6 +96,8 @@
 			  END                 AS progressRate
 	        , B.CONT_NM			  AS contNm
 	        , B.CONT_AMT          AS contAmt
+	        , DATE_FORMAT(B.START_DT, '%Y-%m-%d') AS contStartDt
+        	, DATE_FORMAT(B.END_DT, '%Y-%m-%d')   AS contEndDt
 	        , C.SALES_TITLE       AS salesTitle
 	        , D.CUST_NM           AS custNm
 	        

@@ -63,10 +63,21 @@
                 <tr><th>보유스택</th><td>${userVO.skillDesc}</td></tr>
             </table>
         </div>
-        <div class="info-photo-wrapper">
-            <img src="<c:url value='/images/bul_i.jpg'/>" alt="직원 사진" onerror="this.style.display='none';">
-            <div class="no-photo-text">사원 사진 미등록</div>
-        </div>
+        <div class="info-photo-wrapper" style="text-align:center; padding:10px; border:1px solid #ddd; background:#fff;">
+		    <c:choose>
+		        <c:when test="${not empty userVO.atchFileId}">
+		            <img src="<c:url value='/cmm/fms/getImage.do'/>?atchFileId=${userVO.atchFileId}&fileSn=0" 
+		                 alt="직원 사진" 
+		                 style="width:150px; height:180px; object-fit:cover; border:1px solid #ccc;">
+		        </c:when>
+		        <c:otherwise>
+		            <img src="<c:url value='/images/egovframework/com/cmm/icon/no_image.gif'/>" 
+		                 alt="사진 미등록" 
+		                 style="width:150px; height:180px; opacity:0.5;">
+		            <div class="no-photo-text" style="margin-top:5px; color:#999; font-size:12px;">사원 사진 미등록</div>
+		        </c:otherwise>
+		    </c:choose>
+		</div>
     </div>
 
     <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">
@@ -125,8 +136,8 @@
                                var eventColor = colorList[item.assignId % colorList.length];
                                return {
                                    title: "[" + item.projNm + "] " + item.title + " (" + (item.inputRate * 100) + "%)",
-                                   start: item.startDate,
-                                   end: item.endDate + "T23:59:59",
+                                   start: item.startDt,
+                                   end: item.endDt + "T23:59:59",
                                    color: eventColor,
                                    borderColor: (item.inputRate >= 1.0) ? '#ff0000' : eventColor,
                                    borderWidth: (item.inputRate >= 1.0) ? '3px' : '1px'

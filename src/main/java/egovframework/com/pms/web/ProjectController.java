@@ -311,7 +311,12 @@ public class ProjectController {
     @RequestMapping(value = "/pms/proxyAiMatch.do", method = RequestMethod.POST)
     public List<Map<String, Object>> proxyAiMatch(@RequestBody Map<String, Object> param) {
         try {
-            // 1. 파이썬 서버 주소 (8000번)
+        	if (param.containsKey("ai_weight")) {
+                int weight = Integer.parseInt(param.get("ai_weight").toString());
+                param.put("ai_weight", Math.max(10, Math.min(90, weight)));
+            }
+        	
+        	// 1. 파이썬 서버 주소 (8000번)
             String pythonUrl = "http://127.0.0.1:8000/api/match";
 
             // 2. 자바가 직접 파이썬 호출 (이러면 CORS 안 뜸!)

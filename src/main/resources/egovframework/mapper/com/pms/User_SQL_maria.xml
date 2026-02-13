@@ -99,5 +99,18 @@
 	       SET ATCH_FILE_ID = #{atchFileId}
 	     WHERE EMP_ID = #{userId}
 	</update>
-
+	
+	<select id="selectUserAssignListAjax" parameterType="string" resultType="egovMap">
+	    SELECT 
+	          A.ASSIGN_ID      AS assignId
+	        , P.PROJ_NM        AS projNm
+	        , A.ASSIGN_TITLE   AS title
+	        , DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS startDt
+	        , DATE_FORMAT(A.END_DT, '%Y-%m-%d')   AS endDt
+	        , A.INPUT_RATE     AS inputRate
+	    FROM TB_ASSIGNMENT A
+	    INNER JOIN TB_PROJECT P ON A.PROJ_ID = P.PROJ_ID
+	    WHERE A.EMP_ID = #{userId}
+	      AND A.DEL_YN = 'N'
+	</select>
 </mapper>
