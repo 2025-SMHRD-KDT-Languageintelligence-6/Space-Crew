@@ -2,6 +2,8 @@ package egovframework.com.pms.service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+
 import egovframework.com.cmm.ComDefaultVO;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +26,8 @@ public class UserVO extends ComDefaultVO implements Serializable {
     private String skillDesc;
     
     private String atchFileId;
+    
+    private double remainingMM;
+    
+    private List<ProjectAssignVO> assignmentList;
 }

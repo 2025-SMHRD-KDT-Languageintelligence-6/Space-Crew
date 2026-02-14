@@ -210,9 +210,12 @@ public class ProjectController {
     
     @ResponseBody
     @RequestMapping(value = "/pms/searchUserAjax.do")
-    public Map<String, Object> searchUserAjax(@RequestParam("searchNm") String searchNm) throws Exception {
+    public Map<String, Object> searchUserAjax(
+    		@RequestParam("searchNm") String searchNm,
+    		@RequestParam(value="startDt", required=false) String startDt,
+            @RequestParam(value="endDt", required=false) String endDt) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        List<Map<String, Object>> userList = projectService.selectUserListForPopup(searchNm);
+        List<Map<String, Object>> userList = projectService.selectUserListForPopupWithPeriod(searchNm, startDt, endDt);
         resultMap.put("userList", userList);
         return resultMap;
     }
@@ -318,9 +321,9 @@ public class ProjectController {
         	
         	// 1. 파이썬 서버 주소 (8000번)
             String pythonUrl = "http://127.0.0.1:8000/api/match";
-
+            RestTemplate restTemplate = new RestTemplate();
             // 2. 자바가 직접 파이썬 호출 (이러면 CORS 안 뜸!)
-            org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
+            //org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
             
             // 3. 파이썬으로부터 리스트 형태로 결과 받아오기
             List<Map<String, Object>> result = restTemplate.postForObject(pythonUrl, param, List.class);

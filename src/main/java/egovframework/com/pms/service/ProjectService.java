@@ -52,4 +52,6 @@ public interface ProjectService {
     List<ProjectAssignVO> selectProjectAssignListAjax(ProjectAssignVO vo) throws Exception;
 
 	int selectProjectCount() throws Exception;
+
+	List<Map<String, Object>> selectUserListForPopupWithPeriod(String searchNm, String startDt, String endDt) throws Exception;
 }

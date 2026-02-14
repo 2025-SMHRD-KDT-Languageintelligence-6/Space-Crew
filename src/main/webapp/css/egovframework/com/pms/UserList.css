@@ -283,3 +283,11 @@ tr:hover td {
     color: #afcdfa;
     background-color: #eff6ff;
 }
+
+.load-optimal { 
+    background-color: #28a745 !important; /* 70~100% 구간: 건강한 초록색 */
+}
+
+.load-low { background-color: #28a745; }    /* 0~40%: 초록 (혹은 파랑으로 취향껏) */
+.load-medium { background-color: #ffc107; } /* 41~69%: 노랑 */
+.load-high { background-color: #dc3545; }   /* 100% 초과: 빨강 */

@@ -475,4 +475,17 @@
 	    WHERE DEL_YN = 'N'
 	      AND STATUS IN ('진행중', '배정중') 
 	</select>
+	
+	<select id="selectActiveAssignments" parameterType="java.lang.String" resultType="egovframework.com.pms.service.ProjectAssignVO">
+	    SELECT 
+	          PROJ_ID as projId
+	        , EMP_ID as userId
+	        , DATE_FORMAT(START_DT, '%Y-%m-%d') AS startDt
+	        , DATE_FORMAT(END_DT, '%Y-%m-%d')   AS endDt
+	        , INPUT_RATE as inputRate
+	    FROM TB_ASSIGNMENT
+	    WHERE EMP_ID = #{userId}
+	      AND DEL_YN = 'N'
+	      AND CONFIRM_YN != 'Y'
+	</select>
 </mapper>

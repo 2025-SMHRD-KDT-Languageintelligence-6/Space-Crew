@@ -2,6 +2,8 @@ package egovframework.com.pms.service.impl;
 
 import java.util.List;
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
+
+import egovframework.com.pms.service.ProjectAssignVO;
 import egovframework.com.pms.service.UserVO;
 
 @Mapper("userMapper")
@@ -12,5 +14,6 @@ public interface UserMapper {
     void insertUser(UserVO vo) throws Exception;
     void updateUser(UserVO vo) throws Exception;
 	void deleteUser(UserVO vo) throws Exception;
-	void updateUserAtchFileId(UserVO vo) throws Exception;;
+	void updateUserAtchFileId(UserVO vo) throws Exception;
+	List<ProjectAssignVO> selectActiveAssignments(String userId) throws Exception;
 }

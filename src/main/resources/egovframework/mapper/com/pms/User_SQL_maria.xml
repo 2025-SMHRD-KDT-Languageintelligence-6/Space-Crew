@@ -11,12 +11,8 @@
             , JOB_ROLE      AS jobRole
             , POSITION_NM   AS positionNm
             , CAREER_YEARS  AS careerYears
-            , (SELECT FLOOR(IFNULL(SUM(SUB.INPUT_RATE), 0) * 100)
-	           FROM TB_ASSIGNMENT SUB 
-	           WHERE SUB.EMP_ID = TB_EMP.EMP_ID
-	             AND SUB.DEL_YN = 'N' 
-	             AND CURDATE() BETWEEN SUB.START_DT AND SUB.END_DT
-       		  )				AS currentLoad
+            , 0            AS remainingMM 
+      		, 0            AS currentLoad
             , DATE_FORMAT(JOIN_DT, '%Y-%m-%d')       AS joinDt
             , IN_OFFICE        AS useYn
         FROM TB_EMP
@@ -112,5 +108,18 @@
 	    INNER JOIN TB_PROJECT P ON A.PROJ_ID = P.PROJ_ID
 	    WHERE A.EMP_ID = #{userId}
 	      AND A.DEL_YN = 'N'
+	</select>
+	
+	<select id="selectActiveAssignments" parameterType="java.lang.String" resultType="egovframework.com.pms.service.ProjectAssignVO">
+	    SELECT 
+	          PROJ_ID as projId
+	        , EMP_ID as userId
+	        , DATE_FORMAT(START_DT, '%Y-%m-%d') AS startDt
+	        , DATE_FORMAT(END_DT, '%Y-%m-%d')   AS endDt
+	        , INPUT_RATE as inputRate
+	    FROM TB_ASSIGNMENT
+	    WHERE EMP_ID = #{userId}
+	      AND DEL_YN = 'N'
+	      AND CONFIRM_YN != 'Y'
 	</select>
 </mapper>

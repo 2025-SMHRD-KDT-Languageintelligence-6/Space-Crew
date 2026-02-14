@@ -34,7 +34,7 @@
                     <th width="15%">부서</th>
                     <th width="15%">직무</th>
                     <th width="13%">직급</th>
-                    <th width="18%">업무부하량</th>
+                    <th width="18%">잔여 업무량 및 월 가동률</th>
                     <th width="15%">관리</th>
                 </tr>
             </thead>
@@ -51,25 +51,45 @@
                         <td><c:out value="${result.jobRole}"/></td>
                         <td><c:out value="${result.positionNm}"/></td>
                         <td>
-                            <div class="${result.currentLoad > 100 ? 'text-danger-bold' : ''}" style="font-size: 13px; margin-bottom: 3px;">
-                                <fmt:formatNumber value="${result.currentLoad}" pattern="#" />%
-                            </div>
+                        	<c:set var="remMM" value="${result.remainingMM}" />
+                            <c:set var="remLoad" value="${result.currentLoad}" />
+    
+						    <div style="margin-bottom: 5px;">
+						        <span class="${remLoad > 100 ? 'text-danger-bold' : 'text-success-bold'}" style="font-size: 14px;">
+						            <fmt:formatNumber value="${remMM}" pattern="#,##0.00" /> MM
+						        </span>
+						        <span style="font-size: 11px; color: #888; margin-left: 3px;">
+						            (<fmt:formatNumber value="${remLoad}" pattern="#" />%)
+						        </span>
+						    </div>
+						
+						    <div class="load-container" title="잔여 업무량 기반 가동률">
+						        <c:set var="intLoad" value="${remLoad + 0}" /> 
+						        
+						        <c:set var="baseWidth" value="${intLoad > 100 ? 100 : intLoad}" />
 
-                            <div class="load-container">
-                            	<fmt:parseNumber var="intLoad" value="${result.currentLoad}" integerOnly="true" />
-                            	
-                                <c:set var="baseWidth" value="${intLoad > 100 ? 100 : intLoad}" />
-                                <c:set var="loadType" value="load-low" />
-                                <c:if test="${intLoad > 40}"><c:set var="loadType" value="load-medium" /></c:if>
-                                <c:if test="${intLoad > 75}"><c:set var="loadType" value="load-high" /></c:if>
-
-                                <div class="load-bar-base ${loadType}" style="width: ${baseWidth}%"></div>
-
-                                <c:if test="${intLoad > 100}">
-                                    <c:set var="overWidth" value="${intLoad - 100}" />
-                                    <div class="load-bar-over" style="width: ${overWidth}%"></div>
-                                </c:if>
-                            </div>
+						        <c:choose>
+						            <c:when test="${intLoad > 100}">
+						                <c:set var="loadType" value="load-high" />
+						            </c:when>
+						            <c:when test="${intLoad >= 70}">
+						                <c:set var="loadType" value="load-optimal" />
+						            </c:when>
+						            <c:when test="${intLoad >= 40}">
+						                <c:set var="loadType" value="load-medium" />
+						            </c:when>
+						            <c:otherwise>
+						                <c:set var="loadType" value="load-low" />
+						            </c:otherwise>
+						        </c:choose>
+						
+						        <div class="load-bar-base ${loadType}" style="width: ${baseWidth}%"></div>
+						
+						        <c:if test="${intLoad > 100}">
+						            <c:set var="overWidth" value="${intLoad - 100 > 100 ? 100 : intLoad - 100}" />
+						            <div class="load-bar-over" style="width: ${overWidth}%"></div>
+						        </c:if>
+						    </div>
                         </td>
                         
                         <td>

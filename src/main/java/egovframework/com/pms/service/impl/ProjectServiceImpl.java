@@ -1,5 +1,6 @@
 package egovframework.com.pms.service.impl;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -167,5 +168,58 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	@Override
 	public int selectProjectCount() throws Exception {
 		return projectMapper.selectProjectCount();
+	}
+
+	@Override
+	public List<Map<String, Object>> selectUserListForPopupWithPeriod(String searchNm, String startDt, String endDt) throws Exception {
+	    List<Map<String, Object>> userList = projectMapper.selectUserListForPopup(searchNm);
+
+	    LocalDate targetStart = (startDt != null && !startDt.isEmpty()) ? LocalDate.parse(startDt) : LocalDate.now();
+	    LocalDate targetEnd = (endDt != null && !endDt.isEmpty()) ? LocalDate.parse(endDt) : targetStart.plusDays(30);
+
+	    long totalWorkingDays = countWorkingDays(targetStart, targetEnd);
+
+	    for (Map<String, Object> user : userList) {
+	        if (totalWorkingDays <= 0) {
+	            user.put("currentLoad", 0);
+	            continue; 
+	        }
+
+	        String userId = (String) user.get("userId");
+	        List<ProjectAssignVO> assignments = projectMapper.selectActiveAssignments(userId);
+	        
+	        double accumulatedScore = 0.0;
+
+	        for (ProjectAssignVO assign : assignments) {
+	            if (assign.getStartDt() == null || assign.getEndDt() == null) continue;
+	            try {
+	                LocalDate taskStart = LocalDate.parse(assign.getStartDt());
+	                LocalDate taskEnd = LocalDate.parse(assign.getEndDt());
+	                
+	                LocalDate overlapStart = taskStart.isBefore(targetStart) ? targetStart : taskStart;
+	                LocalDate overlapEnd = taskEnd.isAfter(targetEnd) ? targetEnd : taskEnd;
+	                
+	                if (!overlapStart.isAfter(overlapEnd)) {
+	                    long workingDays = countWorkingDays(overlapStart, overlapEnd);
+	                    double rate = (assign.getInputRate() != null) ? assign.getInputRate() : 0.0;
+	                    accumulatedScore += (rate * workingDays);
+	                }
+	            } catch (Exception e) { continue; }
+	        }
+
+	        double loadPercent = (accumulatedScore / (double) totalWorkingDays); 
+	        
+	        user.put("currentLoad", Math.round(loadPercent));
+	    }
+	    return userList;
+	}
+	
+	private long countWorkingDays(LocalDate start, LocalDate end) {
+	    return start.datesUntil(end.plusDays(1))
+	                .filter(date -> {
+	                    java.time.DayOfWeek day = date.getDayOfWeek();
+	                    return day != java.time.DayOfWeek.SATURDAY && day != java.time.DayOfWeek.SUNDAY;
+	                })
+	                .count();
 	}
 }

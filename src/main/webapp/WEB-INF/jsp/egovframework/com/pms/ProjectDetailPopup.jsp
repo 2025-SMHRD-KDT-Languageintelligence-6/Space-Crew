@@ -187,7 +187,7 @@
 				</div>
 				<div style="margin-top:5px; font-size:11px; color:#666; display:flex; justify-content:space-between;">
 				    <span>현재 : <span id="currentTotalEffort">0</span> MM</span>
-				    <span>예약 : <span id="planTotalEffort">0</span> MM / 목표 : ${projectVO.estEffort} MM</span>
+				    <span>예약 : <span id="planTotalEffort">0</span> MM / 목표 : <span class="targetMMDisplay">${projectVO.estEffort}</span> MM</span>
 				</div>
 		    </td>
         </tr>
@@ -318,7 +318,7 @@
 	            <thead>
 	                <tr style="background:#f9f9f9;">
 	                    <th>성명</th>
-	                    <th>투입률(MM)</th>
+	                    <th>가동률</th>
 	                    <th>삭제</th>
 	                </tr>
 	            </thead>
@@ -499,11 +499,17 @@
 
 	function fn_pop_search_user() {
 	    var searchNm = $("#popSearchNm").val();
+	    var startDt = $("#assignStartDate").val();
+	    var endDt = $("#assignEndDate").val();
 	    if(!searchNm) { alert("검색어를 입력하세요."); return; }
 
 	    $.ajax({
 	        url: "<c:url value='/pms/searchUserAjax.do'/>",
-	        data: { "searchNm": searchNm },
+	        data: {
+	        	"searchNm": searchNm,
+	        	"startDt": startDt,
+	            "endDt": endDt
+	        },
 	        success: function(data) {
 	            var html = "";
 	            if(data.userList && data.userList.length > 0) {
@@ -552,17 +558,20 @@
 
 	    var html = "<tr id='user_row_" + userId + "'>";
 	    html += "  <td>" + userNm + "<input type='hidden' class='selectedUserId' value='" + userId + "'></td>";
-	    html += "  <td><input type='number' class='selectedInputRate' step='0.1' min='0.1' max='1.0' value='1.0' " +
-	    		"      style='width:60px;' " +
-	    		"      oninput=\"if(this.value < 0) this.value = Math.abs(this.value); if(this.value == '0') this.value = '0.1';\" " +
-        		"      onchange='fn_calculate_total_mm()' onkeyup='fn_calculate_total_mm()'> MM</td>";
-	    html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
+	    html += "  <td>";
+	    html += "    <input type='number' class='selectedInputPercent' step='10' min='10' max='100' value='100' ";
+	    html += "           style='width:60px;' oninput='fn_calculate_mm_from_percent(this)'> % ";
+	    html += "    <span class='calculatedMM' style='font-size:11px; color:#666; margin-left:5px;'>(계산 중...)</span>";
+	    html += "    <input type='hidden' class='selectedInputRate' value='1.0'>";
+	    html += "  </td>";
+	    html += "  <td><button type='button' class='btn_s_red' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
 	    html += "</tr>";
 
 	    $("#selectedUserListBody").append(html);
 	    $('#userSearchModal').hide();
-
-	    fn_calculate_total_mm();
+		
+	    fn_calculate_mm_from_percent($("#user_row_" + userId).find(".selectedInputPercent"));
+	    /* fn_calculate_total_mm(); */
 	}
 
 
@@ -661,16 +670,21 @@
 	            }
 	            $("#selectedUserListBody").empty();
 	            $.each(data.memberList, function(idx, mem) {
+	            	var currentRate = parseFloat(mem.inputRate || 1.0);
+	                var currentPercent = (currentRate * 100).toFixed(0);
+	                
 	                var html = "<tr id='user_row_" + mem.userId + "'>";
 	                html += "  <td>" + mem.userNm + "<input type='hidden' class='selectedUserId' value='" + mem.userId + "'></td>";
-	                
-	                html += "  <td><input type='number' class='selectedInputRate' step='0.1' value='" + mem.inputRate + "' " +
-                    "      style='width:60px;' " +
-                    "      oninput=\"if(this.value < 0) this.value = Math.abs(this.value); if(this.value == '0') this.value = '0.1';\" " +
-                    "      onchange='fn_calculate_total_mm()' onkeyup='fn_calculate_total_mm()'> MM</td>";
-	                html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
+	                html += "  <td>";
+	                html += "    <input type='number' class='selectedInputPercent' step='10' min='10' max='100' value='" + currentPercent + "' ";
+	                html += "           style='width:60px;' oninput='fn_calculate_mm_from_percent(this)'> % ";
+	                html += "    <span class='calculatedMM' style='font-size:11px; color:#666; margin-left:5px;'>(계산 중...)</span>";
+	                html += "    <input type='hidden' class='selectedInputRate' value='" + currentRate + "'>";
+	                html += "  </td>";
+	                html += "  <td><button type='button' class='btn_s_red' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
 	                html += "</tr>";
 	                $("#selectedUserListBody").append(html);
+	                fn_calculate_mm_from_percent($("#user_row_" + mem.userId).find(".selectedInputPercent"));
 	            });
 	            fn_calculate_total_mm();
 	            $('#assignModal').show();
@@ -693,19 +707,36 @@
 	}
 
 	function fn_calculate_total_mm() {
-	    var total = 0;
-	    $(".selectedInputRate").each(function() {
-	        var val = parseFloat($(this).val());
-	        if (!isNaN(val)) {
-	            total += val;
+		var totalWeightedMM = 0;
+	    var start = $("#assignStartDate").val();
+	    var end = $("#assignEndDate").val();
+
+	    $(".selectedInputPercent").each(function() {
+	        var percent = parseFloat($(this).val()) || 0;
+	        var rateForDB = (percent / 100).toFixed(1);
+	        
+	        if(!start || !end) {
+	            totalWeightedMM += parseFloat(rateForDB);
+	        } else {
+	            var startDate = new Date(start);
+	            var endDate = new Date(end);
+	            var workingDays = 0;
+	            var tempDate = new Date(startDate);
+	            while (tempDate <= endDate) {
+	                var dayOfWeek = tempDate.getDay();
+	                if (dayOfWeek !== 0 && dayOfWeek !== 6) workingDays++;
+	                tempDate.setDate(tempDate.getDate() + 1);
+	            }
+
+	            totalWeightedMM += (rateForDB * (workingDays / 20));
 	        }
 	    });
 
-	    var formattedTotal = total.toFixed(1);
+	    var formattedTotal = totalWeightedMM.toFixed(2);
 	    $("#totalInputRateDisplay").text(formattedTotal);
 	    $("#totalInputRate").val(formattedTotal);
 
-	    if (total > 1.0) {
+	    if (totalWeightedMM > 1.0) {
 	        $("#totalInputRateDisplay").css("color", "#f44336");
 	    } else {
 	        $("#totalInputRateDisplay").css("color", "#2196F3");
@@ -740,13 +771,29 @@
 
 	            if(data.list && data.list.length > 0) {
 	                $.each(data.list, function(idx, item) {
-	                	var highlightClass = (item.taskGroupId === highlightId) ? "class='new-row-highlight'" : "";
-	                    var fullValue = parseFloat(item.inputRate || 0);
-	                    totalPlanEffort += fullValue;
-	                    var isConfirmed = (item.confirmYn && item.confirmYn.trim().toUpperCase() === 'Y');
-	                    if (item.confirmYn === 'Y') {
-	                        totalActualEffort += fullValue;
+	                	var dbRate = parseFloat(item.inputRate || 0);
+	                    var effectiveMM = dbRate;
+	                    
+	                    if(item.startDt && item.endDt) {
+	                        var sDate = new Date(item.startDt);
+	                        var eDate = new Date(item.endDt);
+	                        var wDays = 0;
+	                        var temp = new Date(sDate);
+	                        while(temp <= eDate) {
+	                            var day = temp.getDay();
+	                            if(day !== 0 && day !== 6) wDays++;
+	                            temp.setDate(temp.getDate() + 1);
+	                        }
+	                        effectiveMM = (dbRate * (wDays / 20));
 	                    }
+	                    
+	                	var highlightClass = (item.taskGroupId === highlightId) ? "class='new-row-highlight'" : "";
+
+	                	totalPlanEffort += effectiveMM;
+	                    if (item.confirmYn === 'Y') {
+	                    	totalActualEffort += effectiveMM;
+	                    }
+	                    
 	                    var fileHtml = "";
 	                    if(item.atchFileId) {
 	                    	fileHtml = " <span onclick=\"fn_open_file_popover(event, '" + item.atchFileId + "')\" " +
@@ -756,7 +803,7 @@
 	                    html += "  <td>" + item.userNm + "</td>";
 	                    html += "  <td>" + item.assignTitle + "</td>";
 	                    html += "  <td>" + item.startDt + " ~ " + item.endDt + "</td>";
-	                    html += "  <td><strong>" + fullValue.toFixed(1) + " MM</strong></td>";
+	                    html += "  <td><strong>" + effectiveMM.toFixed(2) + " MM</strong></td>";
 	                    html += "  <td style='text-align:center;'>";
 	                    html += "    <select class='status-select' onchange=\"fn_change_status_ajax('" + item.taskGroupId + "', this.value)\" style='padding:2px; border-radius:4px; font-weight:bold; " + fn_get_status_style(item.confirmYn) + "'>";
 	                    html += "      <option value='N' " + (item.confirmYn === 'N' ? 'selected' : '') + ">진행</option>";
@@ -778,16 +825,19 @@
 
 	            $("#assignListBody").html(html);
 
-	            var actualPercent = target > 0 ? ((totalActualEffort / target) * 100).toFixed(1) : 0;
-	            var planPercent = target > 0 ? ((totalPlanEffort / target) * 100).toFixed(1) : 0;
-
+	            var actualPercent = target > 0 ? Math.round((totalActualEffort / target) * 100) : 0;
+	            var planPercent = target > 0 ? Math.round((totalPlanEffort / target) * 100) : 0;
+	            
 	            $("#mainProgressBar").css("width", (actualPercent > 100 ? 100 : actualPercent) + "%");
 	            $("#planProgressBar").css("width", (planPercent > 100 ? 100 : planPercent) + "%");
 	            $("#mainProgressText").text(actualPercent + "%");
 
-	            $("#currentTotalEffort").text(totalActualEffort.toFixed(1));
-	            $("#planTotalEffort").text(totalPlanEffort.toFixed(1));
-
+	            $("#currentTotalEffort").text(totalActualEffort.toFixed(2));
+	            $("#planTotalEffort").text(totalPlanEffort.toFixed(2));
+				
+	            var formattedTarget = target.toFixed(2);
+	            $(".targetMMDisplay").text(formattedTarget);
+	            
 	            if(parseFloat(planPercent) > 100) {
 	                $("#planProgressBar").css("background", "rgba(244, 67, 54, 0.5)");
 	            } else {
@@ -1048,12 +1098,16 @@
     function fn_run_ai_match() {
         var weight = $("#weightSlider").val();       // 가중치 값
         var reqText = $("#assignReqSkills").val();
+        var startDt = $("#assignStartDate").val();
+        var endDt = $("#assignEndDate").val();
         
         $("#aiResultBody").html('<tr><td colspan="7">...분석 중...</td></tr>');
 
         var param = {
             "req_skills": reqText,
-            "ai_weight": parseInt(weight)
+            "ai_weight": parseInt(weight),
+            "start_dt": startDt,
+            "end_dt": endDt
         };
 
         // [Python] FastAPI 서버 호출
@@ -1217,6 +1271,42 @@
 
         $form.submit();
         $form.remove();
+    }
+    
+    function fn_calculate_mm_from_percent(obj) {
+        var percent = parseFloat($(obj).val()) || 0;
+        var rateForDB = (percent / 100).toFixed(1);
+        
+        $(obj).siblings(".selectedInputRate").val(rateForDB);
+
+        var start = $("#assignStartDate").val();
+        var end = $("#assignEndDate").val();
+        
+        if(!start || !end) {
+            $(obj).siblings(".calculatedMM").text("(" + rateForDB + " MM 기준)");
+            fn_calculate_total_mm();
+            return;
+        }
+
+        var startDate = new Date(start);
+        var endDate = new Date(end);
+        var workingDays = 0;
+        
+        var tempDate = new Date(startDate);
+        while (tempDate <= endDate) {
+            var dayOfWeek = tempDate.getDay();
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) { workingDays++; }
+            tempDate.setDate(tempDate.getDate() + 1);
+        }
+
+        var totalContribution = (rateForDB * (workingDays / 20)).toFixed(2);
+
+        $(obj).siblings(".calculatedMM").html(
+            "<span style='color:#4CAF50; font-weight:bold;'>→ " + totalContribution + " MM </span>" +
+            "<span style='font-size:10px; color:#999;'>(평일 " + workingDays + "일 분량)</span>"
+        );
+        
+        fn_calculate_total_mm();
     }
 	</script>
 </body>
