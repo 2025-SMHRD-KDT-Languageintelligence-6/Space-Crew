@@ -15,4 +15,6 @@ public interface MeetingService {
     RiskAnalysisVO detectProjectRisk(RiskAnalysisVO vo) throws Exception;
     
     void insertLog(LogVO vo) throws Exception;
+    
+    List<LogVO> selectRecentRiskAlert() throws Exception;
 }

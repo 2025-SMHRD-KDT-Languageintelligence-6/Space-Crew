@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <style>
     /* 알림창 전용 스타일 */
     #notification-panel {
@@ -18,17 +22,37 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-5 space-y-4">
-        <div class="p-4 bg-red-50 rounded-[1.5rem] border border-red-100 animate-fade-in">
-            <p class="text-[10px] font-bold text-red-600 uppercase mb-2">High Risk</p>
-            <p class="text-[11px] text-red-800 font-bold leading-relaxed">더미)지연 키워드 저번 주 보다 증가</p>
-        </div>
-
-        <div class="p-4 bg-blue-50 rounded-[1.5rem] border border-blue-100 animate-fade-in">
-            <p class="text-[10px] font-bold text-blue-600 uppercase mb-2">AI 회의록</p>
-            <p class="text-[11px] text-blue-800 font-medium leading-relaxed">더미) 2026/01/03 분석이 완료 되었습니다.</p>
-        </div>
-
-        </div>
+	    <c:choose>
+	        <c:when test="${not empty riskAlertList}">
+	            <c:forEach var="risk" items="${riskAlertList}">
+	                <div class="p-4 ${risk.confidenceIndex >= 70 ? 'bg-red-50 border-red-100' : 'bg-amber-50 border-amber-100'} rounded-[1.5rem] border animate-fade-in mb-4">
+	                    <div class="flex justify-between items-center mb-2">
+	                        <p class="text-[10px] font-bold ${risk.confidenceIndex >= 70 ? 'text-red-600' : 'text-amber-600'} uppercase">
+	                            ${risk.confidenceIndex >= 70 ? 'High Risk' : 'Caution'} (${risk.confidenceIndex}점)
+	                        </p>
+	                        <p class="text-[9px] text-slate-400 font-bold">
+						        ${risk.docDt} 
+						        <c:if test="${not empty risk.inputData}">
+						            <c:set var="fileName" value="${fn:replace(risk.inputData, '파일명: ', '')}" />
+						            <c:set var="dotIndex" value="${fn:indexOf(fileName, '.')}" />
+						            | <i class="fas fa-file-alt ml-1"></i> 
+						            ${dotIndex != -1 ? fn:substring(fileName, 0, dotIndex) : fileName}
+						        </c:if>
+						    </p>
+                        </div>
+	                    <p class="text-[11px] ${risk.confidenceIndex >= 70 ? 'text-red-800' : 'text-amber-800'} font-bold leading-relaxed">
+	                        ${risk.reasoning}
+	                    </p>
+	                </div>
+	            </c:forEach>
+	        </c:when>
+	        <c:otherwise>
+	            <div class="p-8 text-center text-slate-400 text-xs font-medium">
+	                분석된 리스크 알림이 없습니다.
+	            </div>
+	        </c:otherwise>
+	    </c:choose>
+	</div>
 
     <div class="p-4 bg-slate-50 border-t border-slate-100 text-center">
          <button type="button"

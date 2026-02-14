@@ -20,4 +20,6 @@ public interface MeetingMapper {
 	
 	void insertLog(LogVO vo) throws Exception;
 
+	List<LogVO> selectRecentRiskAlert() throws Exception;
+
 }

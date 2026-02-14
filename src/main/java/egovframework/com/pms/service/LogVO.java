@@ -22,5 +22,5 @@ public class LogVO implements Serializable {
     private BigDecimal confidenceIndex;
     private String lastUpdusrId;
 
-
+    private String docDt;
 }

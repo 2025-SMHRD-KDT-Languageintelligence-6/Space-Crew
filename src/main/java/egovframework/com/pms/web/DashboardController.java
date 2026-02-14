@@ -1,27 +1,41 @@
 package egovframework.com.pms.web;
 
-import egovframework.com.pms.service.impl.SalesMapper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
+import egovframework.com.pms.service.LogVO;
+import egovframework.com.pms.service.impl.SalesMapper;
 
 @Controller
 public class DashboardController {
 
     @Autowired
     private SalesMapper salesMapper; // Mapper 주입을 상단으로 통합
-
+    
+    @Autowired
+    private egovframework.com.pms.service.impl.MeetingMapper meetingMapper;
+    
+    @Autowired
+    private egovframework.com.pms.service.MeetingService meetingService;
+    
     // 대시보드 화면 호출
     @RequestMapping(value = "/pms/dashboard.do")
     public String dashboardView(Model model) throws Exception {
-        model.addAttribute("projectCount", 5);
-        model.addAttribute("billingCount", 12);
+
+    	List<LogVO> riskAlertList = meetingMapper.selectRecentRiskAlert();
+    	
+        model.addAttribute("riskAlertList", riskAlertList);
+        model.addAttribute("notificationCount", riskAlertList.size());
+        
         return "egovframework/com/pms/MainIndex";
     }
 

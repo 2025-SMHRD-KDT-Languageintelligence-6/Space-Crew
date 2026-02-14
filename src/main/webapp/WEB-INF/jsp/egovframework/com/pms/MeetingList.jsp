@@ -69,20 +69,22 @@
 				            <c:if test="${item.isToday}"><span class="text-[8px] ml-1 opacity-70">(Today)</span></c:if>
 				        </span>
 				        
-				        <div class="flex flex-col gap-1">
+				        <%-- <div class="flex flex-col gap-1"> --%>
+				        <div class="w-full aspect-square mt-2">
 				            <c:choose>
 				                <c:when test="${not empty item.atchFileId}">
-				                    <div class="bg-emerald-50 py-2 rounded-xl border border-emerald-100 text-center mb-1">
+				                    <%-- <div class="bg-emerald-50 py-2 rounded-xl border border-emerald-100 text-center mb-1"> --%>
+				                    <div class="bg-emerald-50 h-full w-full flex items-center justify-center rounded-xl border border-emerald-100 text-center">
 				                        <i class="fas fa-check text-emerald-500 text-[10px]"></i>
 				                    </div>
-				                    <button onclick="fn_go_detail('${item.meetId}')" 
+				                    <%-- <button onclick="fn_go_detail('${item.meetId}')" 
 				                            class="w-full py-1.5 text-[10px] font-bold text-slate-400 hover:text-blue-600 border border-slate-100 rounded-lg transition-all">
 				                        수정/보기
-				                    </button>
+				                    </button> --%>
 				                </c:when>
 				                <c:otherwise>
 				                    <button onclick="fn_go_analysis_with_date('${item.fullDate}', this)" 
-				                            class="w-full aspect-square flex flex-col items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 transition-all group/btn">
+				                            class="w-full h-full flex flex-col items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl hover:bg-blue-50 hover:border-blue-300 transition-all group/btn">
 				                        <i class="fas fa-plus text-slate-300 group-hover/btn:text-blue-400"></i>
 				                        <span class="text-[9px] font-bold text-slate-400 mt-2 tracking-tighter">업로드</span>
 				                    </button>
@@ -94,6 +96,7 @@
 			</div>
         </section>
 
+                    <i class="fas fa-check-circle text-emerald-500 text-lg mb-1"></i>
         <section class="pb-20">
 		    <div class="flex items-center gap-3 mb-6">
 		        <div class="w-1.5 h-6 bg-blue-600 rounded-full"></div>
@@ -113,20 +116,20 @@
 		                <div class="flex gap-3">
 						    <c:choose>
 						        <c:when test="${not empty week.meetId}">
-						            <button onclick="fn_go_detail('${week.meetId}')" 
+						            <%-- <button onclick="fn_go_detail('${week.meetId}')" 
 						                    class="bg-white border border-slate-200 text-slate-500 px-8 py-3.5 rounded-2xl text-xs font-bold hover:bg-slate-50 transition-all">
 						                상세보기
-						            </button>
-						            <button class="bg-slate-200 text-slate-500 px-10 py-3.5 rounded-2xl text-xs font-bold transition-all">
+						            </button> --%>
+						            <button class="bg-slate-200 text-slate-500 min-w-[140px] px-10 py-3.5 rounded-2xl text-xs font-bold transition-all">
 						                업로드 완료
 						            </button>
 						        </c:when>
 						        <c:otherwise>
-						            <button class="bg-white border border-slate-200 text-slate-300 px-8 py-3.5 rounded-2xl text-xs font-bold cursor-not-allowed">
+						            <%-- <button class="bg-white border border-slate-200 text-slate-300 px-8 py-3.5 rounded-2xl text-xs font-bold cursor-not-allowed">
 						                수정불가
-						            </button>
+						            </button> --%>
 						            <button onclick="fn_go_weekly_analysis('${week.representativeDate}', this)" 
-						                    class="bg-blue-600 text-white px-10 py-3.5 rounded-2xl text-xs font-bold shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
+						                    class="bg-blue-600 text-white min-w-[140px] px-10 py-3.5 rounded-2xl text-xs font-bold shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
 						                업로드
 						            </button>
 						        </c:otherwise>

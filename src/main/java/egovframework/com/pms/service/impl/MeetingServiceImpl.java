@@ -41,6 +41,12 @@ public class MeetingServiceImpl extends EgovAbstractServiceImpl implements Meeti
 		return meetingMapper.selectMeetingDetail(vo);
 	}
 
+	@Override
+	public List<LogVO> selectRecentRiskAlert() throws Exception {
+	    return meetingMapper.selectRecentRiskAlert();
+	}
+
+	
     @Override
     public RiskAnalysisVO detectProjectRisk(RiskAnalysisVO vo) throws Exception {
         // 1. 통신 도구 생성 (실제로는 공통 빈으로 등록해서 쓰는 게 좋지만, 우선 직접 생성합니다)
@@ -64,6 +70,5 @@ public class MeetingServiceImpl extends EgovAbstractServiceImpl implements Meeti
 	@Override
 	public void insertLog(LogVO vo) throws Exception {
 		meetingMapper.insertLog(vo);
-		
 	}
 }

@@ -268,6 +268,7 @@ public class MeetingController {
 	    Map<String, Object> resultMap = new HashMap<>();
 	    
 	    String projIdStr = multiRequest.getParameter("projId");
+	    String docDt = multiRequest.getParameter("docDt");
 	    Integer pId = (projIdStr == null || projIdStr.isEmpty() || "null".equals(projIdStr)) ? 1 : Integer.parseInt(projIdStr);
 	    
 	    Map<String, MultipartFile> files = multiRequest.getFileMap();
@@ -317,7 +318,7 @@ public class MeetingController {
 	            Object riskScore = aiRes.get("risk_score");
 	            logVO.setConfidenceIndex(new java.math.BigDecimal(riskScore != null ? riskScore.toString() : "0"));
 	            logVO.setReasoning((String) aiRes.get("analysis_summary"));
-
+	            logVO.setDocDt(docDt);
 	            egovframework.com.cmm.LoginVO user = (egovframework.com.cmm.LoginVO) egovframework.com.cmm.util.EgovUserDetailsHelper.getAuthenticatedUser();
 	            logVO.setLastUpdusrId(user != null ? user.getUniqId() : "AI_SYSTEM");
 

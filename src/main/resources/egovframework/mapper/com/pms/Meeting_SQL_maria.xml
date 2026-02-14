@@ -56,11 +56,25 @@
 	    INSERT INTO TB_LOG (
 	        PROJ_ID, REF_ID, FILE_ID, AI_CATEGORY, 
 	        INPUT_DATA, OUTPUT_DATA, REASONING, 
-	        CONFIDENCE_INDEX, LAST_UPDUSR_ID, LAST_UPDT_PNTTM
+	        CONFIDENCE_INDEX, LAST_UPDUSR_ID, LAST_UPDT_PNTTM, DOC_DT
 	    ) VALUES (
 	        #{projId}, #{refId}, #{fileId}, #{aiCategory}, 
 	        #{inputData}, #{outputData}, #{reasoning}, 
-	        #{confidenceIndex}, #{lastUpdusrId}, NOW()
+	        #{confidenceIndex}, #{lastUpdusrId}, NOW(), STR_TO_DATE(#{docDt}, '%Y-%m-%d')
 	    )
 	</insert>
+	
+	<select id="selectRecentRiskAlert" resultType="egovframework.com.pms.service.LogVO">
+	    SELECT 
+	          AI_CATEGORY       AS aiCategory
+	        , REASONING         AS reasoning         
+	        , CONFIDENCE_INDEX  AS confidenceIndex  
+	        , DATE_FORMAT(DOC_DT, '%Y-%m-%d') AS docDt
+	        , INPUT_DATA        AS inputData
+	    FROM TB_LOG
+	    WHERE AI_CATEGORY = 'RISK'
+	      AND CONFIDENCE_INDEX > 0
+	    ORDER BY DOC_DT DESC, LAST_UPDT_PNTTM DESC
+	    LIMIT 5
+	</select>
 </mapper>

@@ -63,7 +63,7 @@
                 <tr><th>보유스택</th><td>${userVO.skillDesc}</td></tr>
             </table>
         </div>
-        <div class="info-photo-wrapper" style="text-align:center; padding:10px; border:1px solid #ddd; background:#fff;">
+        <%-- <div class="info-photo-wrapper" style="text-align:center; padding:10px; border:1px solid #ddd; background:#fff;">
 		    <c:choose>
 		        <c:when test="${not empty userVO.atchFileId}">
 		            <img src="<c:url value='/cmm/fms/getImage.do'/>?atchFileId=${userVO.atchFileId}&fileSn=0" 
@@ -77,7 +77,7 @@
 		            <div class="no-photo-text" style="margin-top:5px; color:#999; font-size:12px;">사원 사진 미등록</div>
 		        </c:otherwise>
 		    </c:choose>
-		</div>
+		</div> --%>
     </div>
 
     <div class="file-upload-wrapper" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border: 1px dashed #ccc;">

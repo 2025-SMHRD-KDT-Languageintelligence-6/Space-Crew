@@ -118,10 +118,9 @@
             <td>${projectVO.contNm}</td>
         </tr>
         <tr>
-		    <th>계약명</th>
+		    <th>계약기간</th>
 		    <td>
-		        ${projectVO.contNm} <br>
-		        <span style="font-size:12px; color:#666;">(계약기간: ${projectVO.contStartDt} ~ ${projectVO.contEndDt})</span>
+		        ${projectVO.contStartDt} ~ ${projectVO.contEndDt} <br>
 		    </td>
 		</tr>
         <tr>
@@ -572,6 +571,18 @@
 		var startDate = $("#assignStartDate").val();
 	    var endDate = $("#assignEndDate").val();
 		
+	    var isNegative = false;
+	    $(".selectedInputRate").each(function() {
+	        if(parseFloat($(this).val()) <= 0) {
+	            isNegative = true;
+	        }
+	    });
+	    
+	    if(isNegative) {
+	        alert("투입률(M/M)은 0보다 커야 합니다.");
+	        return;
+	    }
+	    
 	    if(!$("#assignTitle").val()) { alert("프로젝트명을 입력하세요."); return; }
 	    if(!startDate || !endDate) { alert("기간을 입력하세요."); return; }
 	    
@@ -652,8 +663,12 @@
 	            $.each(data.memberList, function(idx, mem) {
 	                var html = "<tr id='user_row_" + mem.userId + "'>";
 	                html += "  <td>" + mem.userNm + "<input type='hidden' class='selectedUserId' value='" + mem.userId + "'></td>";
-	                html += "  <td><input type='number' class='selectedInputRate' step='0.1' value='" + mem.inputRate + "' style='width:60px;'> MM</td>";
-	                html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove();\">X</button></td>";
+	                
+	                html += "  <td><input type='number' class='selectedInputRate' step='0.1' value='" + mem.inputRate + "' " +
+                    "      style='width:60px;' " +
+                    "      oninput=\"if(this.value < 0) this.value = Math.abs(this.value); if(this.value == '0') this.value = '0.1';\" " +
+                    "      onchange='fn_calculate_total_mm()' onkeyup='fn_calculate_total_mm()'> MM</td>";
+	                html += "  <td><button type='button' onclick=\"$(this).closest('tr').remove(); fn_calculate_total_mm();\">X</button></td>";
 	                html += "</tr>";
 	                $("#selectedUserListBody").append(html);
 	            });

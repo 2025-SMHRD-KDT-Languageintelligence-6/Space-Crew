@@ -1,5 +1,7 @@
 package egovframework.com.pms.web;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -9,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import egovframework.com.cmm.LoginVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.com.pms.service.BillingService;
-import egovframework.com.pms.service.BillingVO;
 import egovframework.com.pms.service.ContractService;
 import egovframework.com.pms.service.ContractVO;
+import egovframework.com.pms.service.LogVO;
+import egovframework.com.pms.service.MeetingService;
 import egovframework.com.pms.service.ProjectService;
 import egovframework.com.pms.service.ProjectVO;
 import egovframework.com.pms.service.SalesService;
@@ -32,6 +35,9 @@ public class MainController {
     @Resource(name = "contractService")
     private ContractService contractService;
 
+    @Resource(name = "meetingService")
+    private MeetingService meetingService;
+    
     @RequestMapping(value = "/pms/main.do")
     public String mainDashboard(Model model) throws Exception {
         
@@ -58,9 +64,14 @@ public class MainController {
         pVO.setRecordCountPerPage(10);
         pVO.setFirstIndex(0);
         model.addAttribute("favProjectList", projectService.selectProjectList(pVO));
+        
         model.addAttribute("projectCount", projectService.selectProjectCount());
         model.addAttribute("billingCount", billingService.selectBillingCount());
-
+        
+        List<LogVO> riskAlertList = meetingService.selectRecentRiskAlert();
+        model.addAttribute("riskAlertList", riskAlertList);
+        model.addAttribute("notificationCount", riskAlertList.size());
+        
         return "egovframework/com/pms/MainDashboard";
     }
     

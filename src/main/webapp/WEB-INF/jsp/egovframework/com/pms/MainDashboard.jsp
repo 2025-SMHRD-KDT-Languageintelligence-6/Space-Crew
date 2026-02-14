@@ -204,6 +204,9 @@
 
 	<script src="<c:url value='/js/egovframework/com/pms/dashboard.js'/>"></script>
 	<script>
+	    console.log("리스크 알림 데이터 존재 여부: ${not empty riskAlertList}");
+	</script>
+	<script>
 
     const REAL_FAV_SALES = [
         <c:forEach var="s" items="${favSalesList}" varStatus="status">

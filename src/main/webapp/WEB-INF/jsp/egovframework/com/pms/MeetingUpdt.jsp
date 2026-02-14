@@ -92,9 +92,17 @@
                 <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center text-sm">
                     <i class="fas fa-file-alt"></i>
                 </div>
+                <div class="w-full max-w-md mx-auto mb-6 text-left">
+				    <label class="block text-[11px] font-black text-red-400 uppercase tracking-[0.2em] mb-3 ml-2">Analysis Target Date</label>
+				    <div class="relative">
+				        <input type="date" id="riskDocDt" 
+				               class="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] p-4 text-sm font-bold text-slate-700 focus:border-red-300 focus:bg-white outline-none transition-all shadow-inner">
+				    </div>
+				    <small class="text-[10px] text-slate-400 mt-2 ml-2">* 미선택 시 오늘 날짜로 자동 기록됩니다.</small>
+				</div>
                 <div>
                     <h4 class="font-bold text-slate-700 text-sm">작성 문서 직접 업로드</h4>
-                    <p class="text-[10px] text-slate-400">PDF, Word 또는 스캔 이미지 파일 등록</p>
+                    <p class="text-[10px] text-slate-400">한글, Word, 텍스트 파일 등록</p>
                 </div>
             </div>
             <input type="file" id="docUpload" class="hidden">
@@ -243,10 +251,20 @@
     $('#docUpload').on('change', function() {
         var fileField = this;
         if (fileField.files.length === 0) return;
+		
+        var riskDate = $('#riskDocDt').val(); 
 
+        if (!riskDate) {
+            alert("분석 기준 날짜를 선택해 주세요!");
+            $(this).val('');
+            return;
+        }
+        
         var formData = new FormData();
         formData.append("uploadDoc", fileField.files[0]);
         formData.append("projId", "${summary.projId}");
+        
+        formData.append("docDt", riskDate);
 
         $('#statusText').html('<i class="fas fa-microchip animate-pulse mr-2"></i> 리스크 분석 모델 가동 중...');
         $('#progressContainer').fadeIn();
