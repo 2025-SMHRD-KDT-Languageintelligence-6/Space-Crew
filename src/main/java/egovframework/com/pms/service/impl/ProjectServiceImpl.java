@@ -207,9 +207,11 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 	            } catch (Exception e) { continue; }
 	        }
 
-	        double loadPercent = (accumulatedScore / (double) totalWorkingDays); 
-	        
-	        user.put("currentLoad", Math.round(loadPercent));
+
+	        double loadPercent = (accumulatedScore / (double) totalWorkingDays);
+	        //user.put("currentLoad", Math.round(loadPercent));
+	        user.put("currentLoad", loadPercent);
+
 	    }
 	    return userList;
 	}
