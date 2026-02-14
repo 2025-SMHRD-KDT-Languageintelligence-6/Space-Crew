@@ -27,6 +27,19 @@
         min-height: 100vh;
         background-color: #f8fafc;
     	}
+    	.file-popover {
+		    display: none; 
+		    position: absolute; 
+		    background: white; 
+		    border: 1px solid #e2e8f0;
+		    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); 
+		    border-radius: 1.5rem; 
+		    padding: 1.5rem;
+		    z-index: 9999; 
+		    min-width: 280px;
+		}
+		.file-popover-close { float: right; cursor: pointer; color: #cbd5e1; font-weight: bold; font-size: 1.2rem; }
+		.file-popover-close:hover { color: #ef4444; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -74,9 +87,10 @@
 				            <c:choose>
 				                <c:when test="${not empty item.atchFileId}">
 				                    <%-- <div class="bg-emerald-50 py-2 rounded-xl border border-emerald-100 text-center mb-1"> --%>
-				                    <div class="bg-emerald-50 h-full w-full flex items-center justify-center rounded-xl border border-emerald-100 text-center">
-				                        <i class="fas fa-check text-emerald-500 text-[10px]"></i>
-				                    </div>
+				                    <div onclick="fn_open_meeting_files(event, '${item.atchFileId}')" 
+								         class="emerald-btn bg-emerald-50 h-full w-full flex items-center justify-center rounded-xl border border-emerald-100 text-center cursor-pointer hover:bg-emerald-100 transition-all">
+								        <i class="fas fa-check text-emerald-500 text-[10px]"></i>
+								    </div>
 				                    <%-- <button onclick="fn_go_detail('${item.meetId}')" 
 				                            class="w-full py-1.5 text-[10px] font-bold text-slate-400 hover:text-blue-600 border border-slate-100 rounded-lg transition-all">
 				                        수정/보기
@@ -205,6 +219,42 @@
 	            }
 	        });
 	    });
+	    
+	    function fn_open_meeting_files(e, atchFileId) {
+	        if(!atchFileId || atchFileId === "") return;
+	        if (e.stopPropagation) e.stopPropagation();
+
+	        var rect = e.currentTarget.getBoundingClientRect();
+	        $("#filePopover").css({
+	            top: (window.pageYOffset + rect.bottom + 10) + "px",
+	            left: (window.pageXOffset + rect.left - 120) + "px"
+	        }).show();
+
+	        $("#popoverContent").html("<div class='text-center py-4 text-slate-400 text-[10px] animate-pulse'>불러오는 중...</div>");
+
+	        $.ajax({
+	            url: "<c:url value='/cmm/fms/selectFileInfs.do'/>",
+	            data: { "param_atchFileId": atchFileId },
+	            dataType: "html", 
+	            success: function(html) {
+	                $("#popoverContent").html(html);
+	            },
+	            error: function() {
+	                $("#popoverContent").html("<div class='text-[10px] text-red-400'>파일 목록을 불러오지 못했습니다.</div>");
+	            }
+	        });
+	    }
+
+	    $(document).on("click", function(e) {
+	        if (!$(e.target).closest("#filePopover, .emerald-btn").length) {
+	            $("#filePopover").hide();
+	        }
+	    });
 	</script>
+	<div id="filePopover" class="file-popover result-fade-in">
+	    <span class="file-popover-close" onclick="$('#filePopover').hide();">&times;</span>
+	    <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Meeting Archives</h4>
+	    <div id="popoverContent" class="space-y-2"></div>
+	</div>
 </body>
 </html>
