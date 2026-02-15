@@ -325,7 +325,7 @@
                 }
                 
             	html += '<div class="p-3 rounded-2xl border border-slate-200 bg-white mb-2 cursor-pointer hover:bg-blue-50 transition" ' +
-            			'     onclick="window.open(\'/pms/projectDetailPopup.do?selectedId=' + p.projId + '\', \'proj_pop_' + p.projId + '\', \'width=700,height=900,resizable=yes,scrollbars=yes\')">';
+            			'     onclick="window.open(\'/pms/projectDetailPopup.do?selectedId=' + p.projId + '\', \'proj_pop_' + p.projId + '\', \'width=1000,height=900,resizable=yes,scrollbars=yes\')">';
                 html += '  <div class="flex justify-between items-center mb-1">';
                 html += '    <div class="font-bold text-[13px]">' + p.projNm + '</div>';
                 html += '    <div class="text-[11px] ' + statusText + '">진행 ' + progressRate + '%</div>';

@@ -212,6 +212,9 @@
 	        <c:param name="atchFileId" value="${projectVO.atchFileId}" />
 	    </c:import>
 	</div>
+		<div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+	        <button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_s_blue">수정</button>
+	    </div>
 	</div>
 
 	<div id="tab1" class="tab-content">
@@ -370,7 +373,7 @@
 	</div>
 
     <div class="btn-close">
-    	<button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_s_blue">수정</button>
+    	<%-- <button type="button" onclick="fn_go_update_page('${projectVO.projId}');" class="btn_s_blue">수정</button> --%>
         <button type="button" onclick="window.close();" class="btn_s_gray">닫기</button>
     </div>
 

@@ -159,8 +159,12 @@
 }
 </style>
 <div class="sidebar">
-    <div class="logo">
-        <a href="<c:url value='/pms/main.do'/>">🚀 Space PMS</a>
+    <div class="logo" style="margin-bottom: 25px;">
+        <a href="<c:url value='/pms/main.do'/>" style="display: block;">🚀 Space PMS
+	        <span style="display: block; font-size: 10px; font-weight: 400; opacity: 0.4; margin-top: 4px; color: #fff;">
+	            HOME | DASHBOARD
+	        </span>
+        </a>
     </div>
     <ul class="nav">
         <li><a href="<c:url value='/pms/customerList.do'/>"><i class="fas fa-address-card mr-3"></i> 고객 관리</a></li>
@@ -188,8 +192,16 @@
 		        </a>
 		        <ul class="sub-nav-floating">
 		        	<%-- <li><a href="<c:url value='/uss/umt/EgovMberManage.do'/>"><i class="fas fa-users mr-2"></i> Staff 권한 관리</a></li> --%>
-		            <li><a href="<c:url value='/uss/umt/EgovEntrprsMberManage.do'/>"><i class="fas fa-building mr-2"></i> Manager 권한 관리</a></li>
-		            <li><a href="<c:url value='/uss/umt/EgovUserManage.do'/>"><i class="fas fa-user-cog mr-2"></i> Admin 권한 관리</a></li>
+		            <li>
+				        <a href="javascript:void(0);" onclick="fn_open_admin_popup('<c:url value='/uss/umt/EgovEntrprsMberManage.do'/>', 'manager_pop')">
+				            <i class="fas fa-building mr-2"></i> Manager 권한 관리
+				        </a>
+				    </li>
+				    <li>
+				        <a href="javascript:void(0);" onclick="fn_open_admin_popup('<c:url value='/uss/umt/EgovUserManage.do'/>', 'admin_pop')">
+				            <i class="fas fa-user-cog mr-2"></i> Admin 권한 관리
+				        </a>
+				    </li>
 		            <li style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 5px; padding-top: 5px;">
 		                <a href="<c:url value='/pms/deleteList.do'/>" style="color: #60a5fa !important;">
 		                    <i class="fas fa-trash-restore mr-2"></i> 데이터 복구 센터
@@ -234,19 +246,36 @@
 	    });
 	});
     
-	    function updateSidebarClock() {
-	        const now = new Date();
-	        const week = ['일', '월', '화', '수', '목', '금', '토'];
-	        const dayOfWeek = week[now.getDay()];
-	        const hours = String(now.getHours()).padStart(2, '0');
-	        const minutes = String(now.getMinutes()).padStart(2, '0');
-	        const year = now.getFullYear();
-	        const month = String(now.getMonth() + 1).padStart(2, '0');
-	        const day = String(now.getDate()).padStart(2, '0');
-	        document.getElementById('sidebarDate').innerText = year + "-" + month + "-" + day + " (" + dayOfWeek + ")";
-	        document.getElementById('sidebarClock').innerText = hours + ":" + minutes;
-	    }
-	    updateSidebarClock();
-	    setInterval(updateSidebarClock, 60000); 
-
+    function updateSidebarClock() {
+        const now = new Date();
+        const week = ['일', '월', '화', '수', '목', '금', '토'];
+        const dayOfWeek = week[now.getDay()];
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        document.getElementById('sidebarDate').innerText = year + "-" + month + "-" + day + " (" + dayOfWeek + ")";
+        document.getElementById('sidebarClock').innerText = hours + ":" + minutes;
+    }
+    updateSidebarClock();
+    setInterval(updateSidebarClock, 60000); 
+		
+    function fn_open_admin_popup(url, name) {
+        const width = 800;
+        const height = 1000;
+        //const left = (window.screen.width / 2) - (width / 2);
+        //const top = (window.screen.height / 2) - (height / 2);
+        //const options = "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top +
+        const options = "width=" + width + ",height=" + height + 
+                        ",resizable=yes,scrollbars=yes,status=no,toolbar=no";
+        
+        window.open(url, name, options);
+        
+        if (win) {
+            win.focus();
+        } else {
+            alert("팝업 차단이 설정되어 있습니다. 해제 후 다시 시도해주세요.");
+        }
+    }
 </script>
