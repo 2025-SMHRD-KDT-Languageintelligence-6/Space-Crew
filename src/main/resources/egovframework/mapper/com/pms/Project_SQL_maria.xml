@@ -7,6 +7,7 @@
         SELECT 
               A.PROJ_ID           AS projId
             , A.PROJ_NM           AS projNm
+            , A.EST_EFFORT        AS estEffort
             , A.PROJ_TYPE         AS projType
             , A.STATUS            AS status
             , A.BILL_STATUS       AS billStatus
@@ -23,14 +24,14 @@
             , D.CUST_NM           AS custNm
             , E.EMP_NM            AS mainMgrNm
             , IF(F.FAV_ID IS NOT NULL, 'Y', 'N') AS favYn
-            , (SELECT 
+            <!-- , (SELECT 
                     IFNULL(
                         ROUND((SUM(IF(T.CONFIRM_YN = 'Y', T.INPUT_RATE, 0)) / NULLIF(A.EST_EFFORT, 0)) * 100, 1), 
                         0
                     )
                FROM TB_ASSIGNMENT T 
                WHERE T.PROJ_ID = A.PROJ_ID
-              ) AS actualProgressRate
+              ) AS actualProgressRate -->
         FROM TB_PROJECT A
         LEFT OUTER JOIN TB_CONTRACT B ON A.CONT_ID = B.CONT_ID
 <!--    LEFT OUTER JOIN COMVNUSERMASTER C ON A.M_EMP_ID = C.ESNTL_ID -->

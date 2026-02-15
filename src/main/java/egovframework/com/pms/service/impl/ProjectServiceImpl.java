@@ -27,7 +27,54 @@ public class ProjectServiceImpl extends EgovAbstractServiceImpl implements Proje
 
     @Override
     public List<ProjectVO> selectProjectList(ProjectVO vo) throws Exception {
-        return projectMapper.selectProjectList(vo);
+    	List<ProjectVO> projectList = projectMapper.selectProjectList(vo);
+        
+		/*
+		 * System.out.println(">>> [DashCalc] 조회된 프로젝트 수: " + (projectList != null ?
+		 * projectList.size() : 0));
+		 */
+    	
+        for (ProjectVO project : projectList) {
+            double targetEffort = 0.0;
+            if (project.getEstEffort() != null) {
+                targetEffort = project.getEstEffort();
+            }
+
+            if (targetEffort <= 0) continue;
+
+            List<ProjectAssignVO> assignments = projectMapper.selectProjectAssignList(project);
+            
+            double totalActualMM = 0.0;
+
+            for (ProjectAssignVO assign : assignments) {
+
+                if ("Y".equals(assign.getConfirmYn()) && assign.getStartDt() != null && assign.getEndDt() != null) {
+                    try {
+                        LocalDate start = LocalDate.parse(assign.getStartDt());
+                        LocalDate end = LocalDate.parse(assign.getEndDt());
+                        
+                        long workingDays = countWorkingDays(start, end);
+                        double rate = (assign.getInputRate() != null) ? assign.getInputRate() : 0.0;
+                        
+                        double effectiveRate = rate; 
+                        
+                        totalActualMM += (effectiveRate * (workingDays / 20.0));
+                    } catch (Exception e) { continue; }
+                }
+            }
+
+            int refinedProgress = (int) Math.round((totalActualMM / targetEffort) * 100);
+            
+			/*
+			 * System.out.println(">>> [DashCalc] 프로젝트: " + project.getProjNm() +
+			 * " | 실적MM: " + totalActualMM + " | 목표MM: " + targetEffort + " | 최종진행률: " +
+			 * refinedProgress + "%");
+			 */
+            
+            project.setActualProgressRate(String.valueOf(refinedProgress));
+        }
+        
+        return projectList;
     }
 
     @Override

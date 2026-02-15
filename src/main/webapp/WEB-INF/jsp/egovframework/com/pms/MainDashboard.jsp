@@ -239,7 +239,7 @@
         	projNm: "${p.projNm}", 
             status: "${p.status}", 
             pRate: "${p.progressRate != null ? p.progressRate : 0}", 
-            actualRate: "${p.actualProgressRate != null ? p.actualProgressRate : 0}", 
+            actualRate: "${not empty p.actualProgressRate ? p.actualProgressRate : 0}",
             start: "${p.startDt}", 
             end: "${p.endDt}" 
         }${!status.last ? ',' : ''}
