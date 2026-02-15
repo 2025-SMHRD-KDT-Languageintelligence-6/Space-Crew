@@ -131,22 +131,47 @@
                        type: 'POST',
                        data: { "userId": "${userVO.userId}" },
                        success: function(data) {
+                    	   if(data.list && data.list.length > 0) {
+                    	        var firstItem = data.list[0];
+                    	        console.log("=== [시작] ===");
+                    	        for (var key in firstItem) {
+                    	            console.log("Key: [" + key + "] / Value: " + firstItem[key]);
+                    	        }
+                    	        console.log("=== [종료] ===");
+                    	    }
+                    	   
                            var events = data.list.map(function(item) {
                                var colorList = ['#3498db', '#1abc9c', '#9b59b6', '#f1c40f', '#e67e22', '#34495e', '#27ae60'];
                                var eventColor = colorList[item.assignId % colorList.length];
+                               
+                               var pId = item.projId || item.PROJID || item.PROJ_ID;
+                               
                                return {
                                    title: "[" + item.projNm + "] " + item.title + " (" + (item.inputRate * 100) + "%)",
                                    start: item.startDt,
                                    end: item.endDt + "T23:59:59",
                                    color: eventColor,
                                    borderColor: (item.inputRate >= 1.0) ? '#ff0000' : eventColor,
-                                   borderWidth: (item.inputRate >= 1.0) ? '3px' : '1px'
+                                   borderWidth: (item.inputRate >= 1.0) ? '3px' : '1px',
+                                   extendedProps: {
+                                	   projId: pId
+                                   }
                                };
                            });
                            successCallback(events);
                        }
                    });
-               }
+               },
+               eventClick: function(info) {
+            	    var projId = info.event.extendedProps.projId;
+            	    if (projId) {
+            	        var url = "<c:url value='/pms/projectDetailPopup.do'/>?selectedId=" + projId;
+            	        var name = "proj_pop_" + projId;
+            	        var specs = "width=1100,height=900,resizable=yes,scrollbars=yes";
+            	        
+            	        window.open(url, name, specs);
+            	    }
+            	}
            });
            userCalendar.render();
        });
