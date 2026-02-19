@@ -258,13 +258,25 @@
 	            <td><input type="text" id="assignTitle" style="width:100%;"></td>
 	        </tr>
 	        <tr>
-	            <th>시작일</th>
-	            <td><input type="date" id="assignStartDate"></td>
-	        </tr>
-	        <tr>
-	            <th>종료일</th>
-	            <td><input type="date" id="assignEndDate"></td>
-	        </tr>
+			    <th style="padding-top:15px; vertical-align:middle;">시작일</th>
+			    <td style="padding-top:10px; text-align:left;">
+			        <div style="display:inline-block; width:95%; position:relative;">
+			            <input type="date" id="assignStartDate" 
+			                   class="bg-slate-50 border-2 border-slate-100 rounded-lg p-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-300 transition-all"
+			                   style="width:100%; box-sizing:border-box; display:block;">
+			        </div>
+			    </td>
+			</tr>
+			<tr>
+			    <th style="padding-top:15px; vertical-align:middle;">종료일</th>
+			    <td style="padding-top:10px; text-align:left;">
+			        <div style="display:inline-block; width:95%; position:relative;">
+			            <input type="date" id="assignEndDate" 
+			                   class="bg-slate-50 border-2 border-slate-100 rounded-lg p-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-300 transition-all"
+			                   style="width:100%; box-sizing:border-box; display:block;">
+			        </div>
+			    </td>
+			</tr>
 	        <tr>
 	            <th>투입률</th>
 	            <td>
@@ -495,6 +507,11 @@
 	    $("#assignStartDate").val("");
 	    $("#assignEndDate").val("");
 	    $("#assignReqSkills").val("");
+	    $("#assignConfirmYn").val("N");
+	    $("#assignRemark").val("");
+	    $("#assignAtchFileId").val("");
+	    $("#fileListArea").html("<span style='color:#ccc;'>첨부된 파일 없음</span>");
+	    $("#assignFile").val("");
 	    $("#selectedUserListBody").empty();
 	    $("#totalInputRateDisplay").text("0.0");
 	    $('#assignModal').show();
