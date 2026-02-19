@@ -7,17 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<style>
-		.fav-link {
-		    text-decoration: none;
-		    transition: transform 0.2s ease-in-out;
-		    display: inline-block;
-		}
-		
-		.fav-link:hover {
-		    transform: scale(1.2);
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/UserList.css'/>?v=1.1">
 	<title>데이터 복구</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='/css/egovframework/com/pms/ProjectList.css'/>?v=1.1">
 </head>

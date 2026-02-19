@@ -31,6 +31,8 @@
 <title>${pageTitle} <spring:message code="title.list" /></title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css' />">
+<!-- 메니저 권한 디자인 css 추가  -->
+<link rel="stylesheet" href="<c:url value='/css/egovframework/com/manage.css'/>">
 <script type="text/javaScript" language="javascript" defer="defer">
 <!--
 function fncCheckAll() {
@@ -129,50 +131,92 @@ function fnViewCheck(){
 
 <form name="listForm" action="<c:url value='/uss/umt/EgovUserManage.do'/>" method="post"> 
 <div class="board">
-	<h1>${pageTitle} <spring:message code="title.list" /></h1>
+	<!-- 제목 -->
+      <div class="page-head">
+        <h1 class="page-title">${pageTitle} <spring:message code="title.list" /></h1>
+      </div>
 	
 	<!-- 검색영역 -->
-	<div class="search_box" title="<spring:message code="common.searchCondition.msg" />">
-		<ul>
-			<li style="margin:3px 0 0 0;"><div>사용자수 <strong><c:out value="${paginationInfo.totalRecordCount}"/></strong></div></li>
-			<li><!-- 상태-->
-                <select name="sbscrbSttus" id="sbscrbSttus" title="<spring:message code="comUssUmt.userManageSsearch.sbscrbSttusTitle" />">
-                    <option value="0" <c:if test="${empty mberVO.sbscrbSttus || mberVO.sbscrbSttus == '0'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.sbscrbSttusAll" /></option><!-- 상태(전체) -->
-                    <option value="A" <c:if test="${mberVO.sbscrbSttus == 'A'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.sbscrbSttusA" /></option><!-- 가입신청 -->
-                    <option value="D" <c:if test="${mberVO.sbscrbSttus == 'D'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.sbscrbSttusD" /></option><!-- 삭제 -->
-                    <option value="P" <c:if test="${mberVO.sbscrbSttus == 'P'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.sbscrbSttusP" /></option><!-- 승인 -->
-                </select>
-			</li>
-			<li><!-- 조건 -->
-                <select name="searchCondition" id="searchCondition" title="<spring:message code="comUssUmt.userManageSsearch.searchConditioTitle" />"><!--  -->
-                    <option value="0" <c:if test="${mberVO.searchCondition == '0'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.searchConditionId" /></option><!-- ID  -->
-                    <option value="1" <c:if test="${empty mberVO.searchCondition || mberVO.searchCondition == '1'}">selected="selected"</c:if> ><spring:message code="comUssUmt.userManageSsearch.searchConditionName" /></option><!-- Name -->
-                </select>
-			</li>
-			<!-- 검색키워드 및 조회버튼 -->
-			<li>
-				<input class="s_input" name="searchKeyword" type="text"  size="35" title="<spring:message code="title.search" /> <spring:message code="input.input" />" value='<c:out value="${userSearchVO.searchKeyword}"/>'  maxlength="255" >
-				<input type="submit" class="s_btn" value="<spring:message code="button.inquire" />" title="<spring:message code="title.inquire" /> <spring:message code="input.button" />" />
-				<input type="button" class="s_btn" onClick="fnDeleteUser(); return false;" value="<spring:message code="title.delete" />" title="<spring:message code="title.delete" /> <spring:message code="input.button" />" />
-				<span class="btn_b"><a href="<c:url value='/uss/umt/EgovUserInsertView.do'/>" onClick="fnAddUserView(); return false;"  title="<spring:message code="button.create" /> <spring:message code="input.button" />"><spring:message code="button.create" /></a></span>
-			</li>
-		</ul>
-	</div>
+      <div class="search_box" title="<spring:message code='common.searchCondition.msg' />">
 
+    <!-- 1줄: 요약 + 필터 -->
+    <div class="search-row">
+      <div class="search-meta">
+        사용자수 <strong><c:out value="${paginationInfo.totalRecordCount}"/></strong>
+      </div>
 
-	<table class="board_list" summary="<spring:message code="common.summary.list" arguments="${pageTitle}" />">
-	<caption>${pageTitle} <spring:message code="title.list" /></caption>
+      <div class="search-filters">
+        <!-- 상태 -->
+        <select name="sbscrbSttus" id="sbscrbSttus"
+                title="<spring:message code='comUssUmt.userManageSsearch.sbscrbSttusTitle' />">
+          <option value="0" <c:if test="${empty mberVO.sbscrbSttus || mberVO.sbscrbSttus == '0'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.sbscrbSttusAll" />
+          </option>
+          <option value="A" <c:if test="${mberVO.sbscrbSttus == 'A'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.sbscrbSttusA" />
+          </option>
+          <option value="D" <c:if test="${mberVO.sbscrbSttus == 'D'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.sbscrbSttusD" />
+          </option>
+          <option value="P" <c:if test="${mberVO.sbscrbSttus == 'P'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.sbscrbSttusP" />
+          </option>
+        </select>
+
+			<!-- 조건 -->
+        <select name="searchCondition" id="searchCondition"
+                title="<spring:message code='comUssUmt.userManageSsearch.searchConditioTitle' />">
+          <option value="0" <c:if test="${mberVO.searchCondition == '0'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.searchConditionId" />
+          </option>
+          <option value="1" <c:if test="${empty mberVO.searchCondition || mberVO.searchCondition == '1'}">selected="selected"</c:if>>
+            <spring:message code="comUssUmt.userManageSsearch.searchConditionName" />
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 2줄: 검색어 + 버튼 -->
+    <div class="search-row">
+      <div class="search-inputs">
+        <input class="s_input" name="searchKeyword" type="text" size="35"
+               title="<spring:message code='title.search' /> <spring:message code='input.input' />"
+               value="<c:out value='${userSearchVO.searchKeyword}'/>"
+               maxlength="255" />
+      </div>
+
+      <div class="search-actions">
+        <input type="submit" class="s_btn" value="<spring:message code='button.inquire' />" />
+        <input type="button" class="s_btn" onclick="fnDeleteUser(); return false;"
+               value="<spring:message code='title.delete' />" />
+        <span class="btn_b">
+          <a href="<c:url value='/uss/umt/EgovUserInsertView.do'/>"
+             onclick="fnAddUserView(); return false;">
+            <spring:message code="button.create" />
+          </a>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 리스트 테이블 래퍼 (가로 넘침/말줄임 처리용) -->
+  <div class="board_list_wrap">
+	<table class="board_list" summary="<spring:message code='common.summary.list' arguments='${pageTitle}' />">
+      <caption>${pageTitle} <spring:message code="title.list" /></caption>
+
 	<colgroup>
-		<col style="width: 5%;">
-		<col style="width: 3%;">
+		<col style="width: 5%;"> <!-- 번호 -->
+		<col style="width: 3%;"> <!-- 체크 -->
 		
-		<col style="width: 15%;">
-		<col style="width: 15%;">
-		<col style="width: 20%;">
-		<col style="width: 13%;">
-		<col style="width: 10%;">
-		<col style="width: ;">
+		<col style="width: 15%;"> <!-- ID -->
+		<col style="width: 15%;"> <!-- 이름 -->
+		<col style="width: 20%;"> <!-- 이메일 -->
+		<col style="width: 13%;"> <!-- 전화번호 -->
+		<col style="width: 10%;"> <!-- 등록일 -->
+		<col> <!-- 가입상태 -->
 	</colgroup>
+
 	<thead>
 	<tr>
 		<th><spring:message code="table.num" /></th><!-- 번호 -->
@@ -203,8 +247,12 @@ function fnViewCheck(){
 	    <td><a href="<c:url value='/uss/umt/EgovMberSelectUpdtView.do'/>?selectedId=<c:out value="${result.uniqId}"/>"  onclick="javascript:fnSelectUser('<c:out value="${result.userTy}"/>:<c:out value="${result.uniqId}"/>'); return false;"><c:out value="${result.userId}"/></a></td>
 	    <td><c:out value="${result.userNm}"/></td>
 	    <td><c:out value="${result.emailAdres}"/></td>
-	    <td><c:out value="${result.areaNo}"/>)<c:out value="${result.middleTelno}"/>-<c:out value="${result.endTelno}"/></td>
-	    <td><c:out value="${fn:substring(result.sbscrbDe,0,10)}"/></td>
+	    <td title="<c:out value='${result.areaNo}'/>-<c:out value='${result.middleTelno}'/>-<c:out value='${result.endTelno}'/>">
+                      <c:out value="${result.areaNo}"/>)<c:out value="${result.middleTelno}"/>-<c:out value="${result.endTelno}"/>
+                    </td>
+	    <td title="<c:out value='${fn:substring(result.sbscrbDe,0,10)}'/>">
+                      <c:out value="${fn:substring(result.sbscrbDe,0,10)}"/>
+                    </td>
 	    <td>
           <c:forEach var="emplyrSttusCode_result" items="${emplyrSttusCode_result}" varStatus="status">
               <c:if test="${result.sttus == emplyrSttusCode_result.code}"><c:out value="${emplyrSttusCode_result.codeNm}"/></c:if>
