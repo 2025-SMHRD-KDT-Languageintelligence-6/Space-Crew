@@ -8,24 +8,9 @@
     <title>직원 상세 정보</title>
     <%-- 기존 공통 CSS --%>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
-	<style>
-		.fc-event {
-		    border: none !important;
-		}
-		.fc-event-title, 
-		.fc-event-main,
-		.fc-event-main-frame {
-		    color: #ffffff !important;
-		    font-weight: bold !important;
-		}
-		.fc-event:hover {
-		    color: #ffffff !important;
-		}
-		.btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
-		.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
-		.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
-		.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
-	</style>
+    <%-- space-pms 공통 CSS --%>
+    <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/popup.css'/>">
+
 	<script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 	
 	<script type="text/javascript">

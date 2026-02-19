@@ -9,61 +9,8 @@
 <head>
     <title>업무 상세 정보</title>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
-    <style>
-        body { padding: 20px; font-family: 'Malgun Gothic'; }
-        .popup-header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .btn-close { margin-top: 20px; text-align: center; }
-        .fc-event {
-		    border: none !important;
-		}
-		.fc-event-title,
-		.fc-event-main,
-		.fc-event-main-frame {
-		    color: #ffffff !important;
-		    font-weight: bold !important;
-		}
-		.fc-event:hover {
-		    color: #ffffff !important;
-		}
-
-	.req-item { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 4px; position: relative; }
-    .req-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #555; font-weight: bold; }
-    .slider-container { padding: 20px; background: #f1f3f5; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 1px solid #e9ecef; }
-    input[type=range] { width: 90%; margin: 15px 0; cursor: pointer; }
-    .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: #666; padding: 0 10px; }
-    .score-txt { font-weight: bold; color: #2196F3; font-size: 1.1em; }
-    .badge-ai { background-color: #673AB7; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; }
-	.btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
-	.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
-	.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
-	.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
-	.tab-container { display: flex; gap: 5px; margin-bottom: -2px; border-bottom: 1px solid #ddd; }
-	.tab-btn { 
-	    padding: 12px 25px; cursor: pointer; background: #f8f9fa; border: 1px solid #ddd; 
-	    border-radius: 8px 8px 0 0; font-weight: bold; color: #666; transition: all 0.3s;
-	}
-	.tab-btn.active { 
-	    background: #fff; border-bottom: 2px solid #fff; color: #2196F3; 
-	    border-top: 3px solid #2196F3; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-	}
-	.tab-content { display: none; padding: 20px; background: #fff; border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; }
-	.tab-content.active { display: block; }
-    
-    @keyframes highlightFade {
-	    from { background-color: #fff9c4; }
-	    to { background-color: transparent; }
-	}
-	.new-row-highlight {
-	    animation: highlightFade 3s ease-in-out forwards;
-	}
-    .file-popover {
-    display: none; position: absolute; background: white; border: 1px solid #ccc;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;
-    z-index: 9999; min-width: 200px;
-	}
-	.file-popover-close { float: right; cursor: pointer; color: #999; font-weight: bold; }
-	    
-    </style>
+    <%-- space-pms 공통 CSS --%>
+    <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/popup.css'/>">
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 
 	<script type="text/javascript">
@@ -258,13 +205,25 @@
 	            <td><input type="text" id="assignTitle" style="width:100%;"></td>
 	        </tr>
 	        <tr>
-	            <th>시작일</th>
-	            <td><input type="date" id="assignStartDate"></td>
-	        </tr>
-	        <tr>
-	            <th>종료일</th>
-	            <td><input type="date" id="assignEndDate"></td>
-	        </tr>
+			    <th style="padding-top:15px; vertical-align:middle;">시작일</th>
+			    <td style="padding-top:10px; text-align:left;">
+			        <div style="display:inline-block; width:95%; position:relative;">
+			            <input type="date" id="assignStartDate" 
+			                   class="bg-slate-50 border-2 border-slate-100 rounded-lg p-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-300 transition-all"
+			                   style="width:100%; box-sizing:border-box; display:block;">
+			        </div>
+			    </td>
+			</tr>
+			<tr>
+			    <th style="padding-top:15px; vertical-align:middle;">종료일</th>
+			    <td style="padding-top:10px; text-align:left;">
+			        <div style="display:inline-block; width:95%; position:relative;">
+			            <input type="date" id="assignEndDate" 
+			                   class="bg-slate-50 border-2 border-slate-100 rounded-lg p-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-300 transition-all"
+			                   style="width:100%; box-sizing:border-box; display:block;">
+			        </div>
+			    </td>
+			</tr>
 	        <tr>
 	            <th>투입률</th>
 	            <td>
@@ -495,6 +454,11 @@
 	    $("#assignStartDate").val("");
 	    $("#assignEndDate").val("");
 	    $("#assignReqSkills").val("");
+	    $("#assignConfirmYn").val("N");
+	    $("#assignRemark").val("");
+	    $("#assignAtchFileId").val("");
+	    $("#fileListArea").html("<span style='color:#ccc;'>첨부된 파일 없음</span>");
+	    $("#assignFile").val("");
 	    $("#selectedUserListBody").empty();
 	    $("#totalInputRateDisplay").text("0.0");
 	    $('#assignModal').show();

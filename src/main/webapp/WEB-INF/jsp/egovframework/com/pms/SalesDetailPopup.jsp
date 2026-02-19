@@ -6,15 +6,9 @@
 <head>
     <title>영업 상세 정보</title>
     <link rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css'/>">
-    <style>
-        body { padding: 20px; font-family: 'Malgun Gothic'; }
-        .popup-header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .btn-close { margin-top: 20px; text-align: center; }
-        .btn_s_blue { background: #5998eb !important; color: white !important; border: none !important; }
-		.btn_s_red  { background: #f7928b !important; color: white !important; border: none !important; }
-		.btn_s_gray { background: #666666 !important; color: white !important; border: none !important; }
-		.btn_s_purple { background: #673AB7 !important; color: white !important; border: none !important; }
-    </style>
+    <%-- space-pms 공통 CSS --%>
+    <link rel="stylesheet" href="<c:url value='/css/egovframework/com/pms/popup.css'/>">
+
     <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/fms/EgovMultiFile.js'/>"></script>
 	
 	<script type="text/javascript">

@@ -1,0 +1,250 @@
+/* ==========================================================
+   Space-PMS Popup Unified Style
+   popup.css
+   2026
+   ========================================================== */
+
+/* ===============================
+   1. 팝업 기본 레이아웃 초기화
+   =============================== */
+
+body {
+    margin: 0 !important;
+    padding: 25px !important;
+    background: #f1f5f9 !important;
+    font-family: 'Malgun Gothic', sans-serif !important;
+    font-size: 14px !important;
+    color: #334155 !important;
+}
+
+/* ===============================
+   2. 팝업 헤더
+   =============================== */
+
+.popup-header {
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 12px;
+    margin-bottom: 25px;
+}
+
+.popup-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* ===============================
+   3. 공통 테이블 스타일
+   =============================== */
+
+table.w3-table-all,
+.assign-section table,
+.pop-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+table.w3-table-all th,
+.assign-section table th,
+.pop-table th {
+    background: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+table.w3-table-all td,
+.assign-section table td,
+.pop-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+}
+
+table.w3-table-all tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===============================
+   4. 상단 정보 영역 (직원 팝업용)
+   =============================== */
+
+.main-info-container {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.info-table-wrapper {
+    flex: 7;
+}
+
+.info-photo-wrapper {
+    flex: 3;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.info-photo-wrapper img {
+    max-width: 100%;
+    border-radius: 6px;
+}
+
+/* ===============================
+   5. 파일 업로드 영역
+   =============================== */
+
+.file-upload-wrapper {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+    margin-bottom: 25px;
+}
+
+.file-upload-wrapper h4 {
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.file-upload-wrapper input[type="file"] {
+    padding: 6px;
+}
+
+/* ===============================
+   6. 버튼 통합 스타일
+   =============================== */
+
+.btn_s_blue,
+.btn_s_red,
+.btn_s_gray,
+.btn_s_purple,
+.btn_s {
+    padding: 8px 18px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: 0.2s ease;
+}
+
+/* 색상 */
+.btn_s_blue { background: #2563eb !important; color: white !important; }
+.btn_s_red { background: #ef4444 !important; color: white !important; }
+.btn_s_gray { background: #64748b !important; color: white !important; }
+.btn_s_purple { background: #7c3aed !important; color: white !important; }
+
+/* hover */
+.btn_s_blue:hover { background: #1d4ed8 !important; }
+.btn_s_red:hover { background: #dc2626 !important; }
+.btn_s_gray:hover { background: #475569 !important; }
+.btn_s_purple:hover { background: #6d28d9 !important; }
+
+/* 하단 버튼 영역 */
+.btn-close {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ===============================
+   7. 탭 UI (프로젝트 상세용)
+   =============================== */
+
+.tab-container {
+    display: flex;
+    gap: 5px;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 15px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background: #f1f5f9;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    border-bottom: 2px solid white;
+    color: #2563eb;
+    border-top: 3px solid #2563eb;
+}
+
+.tab-content {
+    display: none;
+    background: #ffffff;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===============================
+   8. 캘린더 영역
+   =============================== */
+
+.calendar-section {
+    margin-top: 40px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* FullCalendar 이벤트 텍스트 */
+.fc-event {
+    border: none !important;
+    font-weight: bold !important;
+}
+
+.fc-event-title {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   9. 모달 공통 (AI, 인력검색 등)
+   =============================== */
+
+.modal-box {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* ===============================
+   10. 부드러운 애니메이션
+   =============================== */
+
+.new-row-highlight {
+    animation: highlightFade 2s ease forwards;
+}
+
+@keyframes highlightFade {
+    from { background-color: #fef9c3; }
+    to { background-color: transparent; }
+}

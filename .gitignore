@@ -54,3 +54,8 @@ globals.properties
 *.zip
 *.7z
 *.rar
+
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next

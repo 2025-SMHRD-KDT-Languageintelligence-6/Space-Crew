@@ -12,11 +12,11 @@
     
     <!-- 메일 연동 인터페이스에서 첨부파일 미사용 -->
     <bean id="EMSMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" 
-        p:host="STMP서버주소" 
+        p:host="localhostSMTP" 
         p:port="465"  
         p:protocol="smtps" 
-        p:username="아이디" 
-        p:password="비밀번호"> 
+        p:username="admin" 
+        p:password="password"> 
         <property name="javaMailProperties"> 
             <props> 
                 <prop key="mail.smtps.auth">true</prop> 
@@ -28,20 +28,20 @@
      
     <!-- 메일 연동 인터페이스에서 첨부파일 사용 -->
 	<bean id="egovMultiPartEmail" class="egovframework.com.cop.ems.service.EgovMultiPartEmail"
-		p:host="이메일SMTP주소"
+		p:host="localhostSMTP"
 		p:port="587"
-		p:id="아이디"
-		p:password="비밀번호"
+		p:id="admin"
+		p:password="password"
 		p:senderName="System"
-		p:emailAddress="이메일주소" />
+		p:emailAddress="test@spacepms.com" />
 	  
     <!-- 모니터링 서비스에서 사용 gmail, hanmail 용 -->
     <bean id="mntrngMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" 
-        p:host="이메일SMTP주소"
+        p:host="localhostSMTP"
         p:port="587"
         p:protocol="smtp"
-        p:username="아이디" 
-        p:password="비밀번호">
+        p:username="admin" 
+        p:password="password">
         <property name="javaMailProperties"> 
             <props>
                 <prop key="mail.smtps.auth">true</prop> 
