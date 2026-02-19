@@ -30,7 +30,7 @@
 	        , ATCH_FILE_ID
 	    ) VALUES (
 	          #{meetTitle}
-	        , STR_TO_DATE(#{meetDt}, '%Y-%m-%d')  
+	        , STR_TO_DATE(NULLIF(#{meetDt}, ''), '%Y-%m-%d') 
 	        , #{contentFull}
 	        , #{contentSum}
 	        , #{actionItems}
@@ -60,7 +60,7 @@
 	    ) VALUES (
 	        #{projId}, #{refId}, #{fileId}, #{aiCategory}, 
 	        #{inputData}, #{outputData}, #{reasoning}, 
-	        #{confidenceIndex}, #{lastUpdusrId}, NOW(), STR_TO_DATE(#{docDt}, '%Y-%m-%d')
+	        #IFNULL(#{confidenceIndex}, 0), #{lastUpdusrId}, NOW(), STR_TO_DATE(NULLIF(#{docDt}, ''), '%Y-%m-%d')
 	    )
 	</insert>
 	

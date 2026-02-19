@@ -38,7 +38,7 @@
         INSERT INTO TB_SALES (
             CUST_ID, EMP_ID, SALES_TITLE, EXPECTED_AMT, EXPECTED_DT, PROBABILITY, STATUS, SALES_CONTENT
         ) VALUES (
-            #{custId}, #{salesUserId}, #{salesTitle}, #{expectedAmt}, NULLIF(#{expectedDt},''), #{probability}, #{status}, #{salesContent}
+            #{custId}, #{salesUserId}, #{salesTitle}, IFNULL(#{expectedAmt}, 0), NULLIF(#{expectedDt},''), #{probability}, #{status}, #{salesContent}
         )
     </insert>
 	
@@ -77,7 +77,7 @@
         UPDATE TB_SALES SET
               EMP_ID = #{salesUserId}
             , SALES_TITLE = #{salesTitle}
-            , EXPECTED_AMT = #{expectedAmt}
+            , EXPECTED_AMT = IFNULL(#{expectedAmt}, 0)
             , EXPECTED_DT = NULLIF(#{expectedDt},'')
             , PROBABILITY = #{probability}
             , STATUS = #{status}

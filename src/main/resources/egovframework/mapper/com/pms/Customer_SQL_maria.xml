@@ -59,7 +59,7 @@
         INSERT INTO TB_CUSTOMER (
             CUST_NM, BIZ_REG_NO, CEO_NM, PIC_NM, PIC_CONTACT, PIC_EMAIL, CUST_ADDR, CUST_REMARK, CUST_GRADE
         ) VALUES (
-            #{custNm}, #{bizRegNo}, #{ceoNm}, #{picNm}, #{picTel}, #{picEmail}, #{custAddr}, #{custRemark}, #{custGrade}
+            #{custNm}, #{bizRegNo}, #{ceoNm}, #{picNm}, #{picTel}, #{picEmail}, #{custAddr}, #{custRemark}, IFNULL(#{custGrade}, 'C')
         )
     </insert>
 

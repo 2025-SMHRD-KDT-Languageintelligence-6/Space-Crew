@@ -70,7 +70,7 @@
 	    INSERT INTO TB_PROJECT (
 	        PROJ_NM, PROJ_TYPE, STATUS, BILL_STEP, BILL_STATUS, START_DT, END_DT, EST_EFFORT, PROJ_REMARK, CONT_ID, M_EMP_ID, S_EMP_ID
 	    ) VALUES (
-	        #{projNm}, #{projType}, #{status}, '청구전', '정상', NULLIF(#{startDt},''), NULLIF(#{endDt},''), #{estEffort}, #{projRemark}, #{contId}, #{mainMgrId}, #{subMgrId}
+	        #{projNm}, #{projType}, #{status}, '청구전', '정상', NULLIF(#{startDt},''), NULLIF(#{endDt},''), IFNULL(#{estEffort}, 0), #{projRemark}, #{contId}, #{mainMgrId}, #{subMgrId}
 	    )
 	</insert>
 	
@@ -133,7 +133,7 @@
 	        , M_EMP_ID = #{mainMgrId}
 	        , S_EMP_ID = #{subMgrId}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
-	        , EST_EFFORT = #{estEffort}
+	        , EST_EFFORT = IFNULL(#{estEffort}, 0)
 	        , PROJ_REMARK = #{projRemark}
 	    WHERE PROJ_ID = #{projId}
 	</update>
@@ -308,9 +308,9 @@
 	        #{projId}, 
 	        #{item.userId}, 
 	        #{assignTitle}, 
-	        STR_TO_DATE(#{startDt}, '%Y-%m-%d'), 
-	        STR_TO_DATE(#{endDt}, '%Y-%m-%d'), 
-	        #{item.inputRate}, 
+	        STR_TO_DATE(NULLIF(#{startDt}, ''), '%Y-%m-%d'), 
+	        STR_TO_DATE(NULLIF(#{endDt}, ''), '%Y-%m-%d'), 
+	        IFNULL(#{item.inputRate}, 0),
 	        #{taskGroupId},
 	        #{reqSkills},
 	        #{assignRemark},

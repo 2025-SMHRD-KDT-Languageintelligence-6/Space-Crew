@@ -84,7 +84,7 @@
         ) VALUES (
 	          #{projId}
 	        , #{billTitle}
-	        , #{billAmt}
+	        , IFNULL(#{billAmt}, 0)
 	        , NULLIF(#{taxBillDt}, '')
 	        , NULLIF(#{payDt}, '')
 	        , NULLIF(#{actualPayDt}, '')
@@ -107,7 +107,7 @@
 	    <set>
 	        <if test="projId != null">PROJ_ID = #{projId},</if>
 	        <if test="billTitle != null">BILL_TITLE = #{billTitle},</if>
-	        <if test="billAmt != null and billAmt != 0">BILL_AMT = #{billAmt},</if>
+	        <if test="billAmt != null">BILL_AMT = IFNULL(#{billAmt}, 0),</if>
 	        <if test="taxBillDt != null">TAX_BILL_DT = NULLIF(#{taxBillDt}, ''),</if>
 	        <if test="payDt != null">PAY_DT = NULLIF(#{payDt}, ''),</if>
 	        <if test="actualPayDt != null">ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, ''),</if>
@@ -191,7 +191,7 @@
    	
    	<update id="updateActualPayDt">
 	    UPDATE TB_BILLING
-	       SET ACTUAL_PAY_DT = #{actualPayDt}
+	       SET ACTUAL_PAY_DT = NULLIF(#{actualPayDt}, '')
 	     WHERE BILL_ID = #{billId}
 	</update>
 	

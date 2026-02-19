@@ -78,14 +78,14 @@
         INSERT INTO TB_CONTRACT (
             SALES_ID, CONT_NM, CONT_AMT, START_DT, END_DT, CONT_DT, EMP_ID, CONT_STATUS, CONT_REMARK, CUST_ID
         ) VALUES (
-            #{salesId}, #{contNm}, #{contAmt}, NULLIF(#{startDt},''), NULLIF(#{endDt},''), NULLIF(#{contDt},''), #{picUserId}, #{contStatus}, #{contRemark}, #{custId}
+            #{salesId}, #{contNm}, IFNULL(#{contAmt}, 0), NULLIF(#{startDt},''), NULLIF(#{endDt},''), NULLIF(#{contDt},''), #{picUserId}, #{contStatus}, #{contRemark}, #{custId}
         )
     </insert>
 
     <update id="updateContract" parameterType="egovframework.com.pms.service.ContractVO">
         UPDATE TB_CONTRACT SET
               CONT_NM = #{contNm}
-            , CONT_AMT = #{contAmt}
+            , CONT_AMT = IFNULL(#{contAmt}, 0)
             , START_DT = NULLIF(#{startDt}, '')
             , END_DT = NULLIF(#{endDt}, '')
             , CONT_DT = NULLIF(#{contDt}, '')

@@ -64,7 +64,7 @@
             CAREER_YEARS, JOB_FIELD, JOIN_DT, IN_OFFICE, SKILL_DESC
         ) VALUES (
             #{userId}, #{userNm}, #{deptNm}, #{jobRole}, #{positionNm}, 
-            #{careerYears}, #{jobField}, #{joinDt}, #{useYn}, #{skillDesc}
+            IFNULL(#{careerYears}, 0), #{jobField}, NULLIF(#{joinDt}, ''), #{useYn}, #{skillDesc}
         )
     </insert>
     
@@ -74,7 +74,7 @@
 	        , DEPT_NM        = #{deptNm}
 	        , JOB_ROLE       = #{jobRole}
 	        , POSITION_NM    = #{positionNm}
-	        , CAREER_YEARS   = #{careerYears}
+	        , CAREER_YEARS   = IFNULL(#{careerYears}, 0)
 	        , JOB_FIELD      = #{jobField}
 	        , IN_OFFICE      = #{useYn}
 	        , LAST_UPDUSR_ID = #{lastUpdusrId}
