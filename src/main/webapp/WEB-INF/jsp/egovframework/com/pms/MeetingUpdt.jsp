@@ -88,26 +88,33 @@
         </section>
 
         <section class="bg-white rounded-[2rem] border border-slate-200 p-6 flex justify-between items-center opacity-80 hover:opacity-100 transition-opacity">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center text-sm">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="w-full max-w-md mx-auto mb-6 text-left">
-				    <label class="block text-[11px] font-black text-red-400 uppercase tracking-[0.2em] mb-3 ml-2">Analysis Target Date</label>
-				    <div class="relative">
-				        <input type="date" id="riskDocDt" 
-				               class="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] p-4 text-sm font-bold text-slate-700 focus:border-red-300 focus:bg-white outline-none transition-all shadow-inner">
-				    </div>
-				    <small class="text-[10px] text-slate-400 mt-2 ml-2">* 미선택 시 오늘 날짜로 자동 기록됩니다.</small>
-				</div>
-                <div>
-                    <h4 class="font-bold text-slate-700 text-sm">작성 문서 직접 업로드</h4>
-                    <p class="text-[10px] text-slate-400">한글, Word, 텍스트 파일 등록</p>
-                </div>
-            </div>
-            <input type="file" id="docUpload" class="hidden">
-            <button onclick="$('#docUpload').click()" class="px-5 py-2 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-500 hover:bg-slate-50 transition-all">파일 선택</button>
-        </section>
+    
+		    <div class="flex items-center gap-4">
+		        <div class="w-10 h-10 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center text-sm shrink-0">
+		            <i class="fas fa-file-alt"></i>
+		        </div>
+		        <div class="text-left">
+		            <label class="block text-[11px] font-black text-red-400 uppercase tracking-[0.2em] mb-2 ml-2">Analysis Target Date</label>
+		            <div class="relative w-64"> <input type="date" id="riskDocDt" 
+		                       class="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] p-3 text-sm font-bold text-slate-700 focus:border-red-300 focus:bg-white outline-none transition-all shadow-inner">
+		            </div>
+		            <small class="text-[9px] text-slate-400 mt-1 ml-2">* 미선택 시 오늘 날짜로 자동 등록됩니다.</small>
+		        </div>
+		    </div>
+		
+		    <div class="flex items-center gap-8 shadow-sm px-6 py-2 rounded-2xl bg-slate-50/50">
+		        <div class="text-right">
+		            <h4 class="font-bold text-slate-700 text-sm">작성 문서 업로드</h4>
+		            <p class="text-[10px] text-slate-400 font-medium">한글, Word, 텍스트 파일 등록</p>
+		        </div>
+		        <div class="h-8 w-[1px] bg-slate-200"></div> <input type="file" id="docUpload" class="hidden">
+		        <button onclick="$('#docUpload').click()" 
+		                class="px-6 py-2.5 bg-white border border-slate-200 rounded-xl text-[11px] font-black text-slate-500 hover:bg-slate-100 hover:text-red-500 transition-all shadow-sm">
+		            파일 선택
+		        </button>
+		    </div>
+
+		</section>
 
         <div id="resultArea" class="result-fade-in hidden pb-20">
         	<div class="mt-8 bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm">
