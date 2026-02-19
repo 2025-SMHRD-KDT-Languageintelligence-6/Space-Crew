@@ -289,7 +289,7 @@ public class MeetingController {
 	        mFile.transferTo(tempFile);
 
 	        org.springframework.web.client.RestTemplate restTemplate = new org.springframework.web.client.RestTemplate();
-	        String pythonUrl = "http://127.0.0.1:8000/api/v1/analyze/risk";
+	        String pythonUrl = "http://127.0.0.1:8002/api/v1/analyze/risk";
 
 	        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
 	        headers.setContentType(org.springframework.http.MediaType.MULTIPART_FORM_DATA);
