@@ -35,8 +35,6 @@ Thumbs.db
 tmp/
 
 # --- DB ---
-globals.properties
-**/main.py
 .env
 
 # 엑셀 파일 차단
