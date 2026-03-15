@@ -13,4 +13,4 @@ SBERT 업무-담당자 간 매칭
 
 - 지능형 Dashboard  
 OPENAI API 리스크 탐지 및 알림  
-경영 정보 통합관리 Dash-Board 구축
+경영 정보 통합관리 Dashboard 구축
